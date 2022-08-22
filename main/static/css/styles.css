@@ -1,0 +1,64 @@
+/*Main template*/
+
+body{
+    margin: 0;
+    padding: 0;
+    position: relative;
+	min-height: 100vh;
+	padding-bottom: 200px;
+}
+
+.footer-position{
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+}
+/*End main template*/
+
+/*Content */
+
+.section-title{
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+/*End content*/
+
+
+/*Index*/
+.banner-item{
+    background-color: #EBDE50;
+    text-align: center;
+}
+
+.banner-item img{
+    height: 80vh;
+    
+    display: inline-block;
+}
+/*End index*/
+
+/*Login*/
+.access-container{
+	display: block;
+	width: 400px;
+	text-align: center;
+	margin: auto;
+	margin-top: 30px;
+	background-color: #fff;
+	border-radius: 10px;
+}
+
+.access-container a{
+	text-decoration: none;
+}
+/*End login*/
+
+
+.cuadrado{
+    height: 100px;
+    width: 100px;
+    background-color: aqua;
+    display: none;
+}
