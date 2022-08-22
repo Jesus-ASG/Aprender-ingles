@@ -8,7 +8,7 @@
 <div class="access-container" id="access_container">
     <div class="row">
         <div class="mt-4 mb-2">
-            <h2>Acceso</h2>
+            <h2>Registro</h2>
         </div>
         <div class="px-5">
             <form id="form_login" autocomplete="off">
@@ -22,16 +22,20 @@
                         <input name="password" class="form-control" type="password" placeholder="Contraseña" required>
                     </div>
                     <div class="mb-2">
+                        <label for="password">Confirmar contraseña</label>
+                        <input name="password2" class="form-control" type="password" placeholder="Confirmar contraseña" required>
+                    </div>
+                    <div class="mb-2">
                         <div id="form_message">
                             
                         </div>
                     </div>
                     <hr>
                 </div>
-                <button type="submit" class="btn btn-primary">Entrar</button>
+                <button type="submit" class="btn btn-primary">Registrarse</button>
             </form>
             <hr>
-            <p>¿Aún no estás registrado? <a href="{% url 'sign_in' %}" id="sign_in" class="text-primary">Regístrate</a></p>
+            <p>¿Ya tiene una cuenta? <a href="{% url 'login' %}" id="sign_in" class="text-primary">Iniciar sesión</a></p>
             <br>
         </div>
     </div>

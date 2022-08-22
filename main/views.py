@@ -8,3 +8,6 @@ def index(request):
 
 def login(request):
     return render(request, 'urls/login.html')
+
+def sign_in(request):
+    return render(request, 'urls/sign_in.html')
