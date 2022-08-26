@@ -1,0 +1,15 @@
+# Create virtual environment
+python3 -m venv env
+
+# Activate virtual environment
+source env/bin/activate
+# Deactivate virtual environment
+deactivate
+
+# Install inside virtual environment
+# pip3 install ...
+asgiref==3.5.2
+Django==4.1
+Pillow==9.2.0
+PyMySQL==1.0.2
+sqlparse==0.4.2
