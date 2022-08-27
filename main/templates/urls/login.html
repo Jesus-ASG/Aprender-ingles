@@ -11,7 +11,8 @@
             <h2>Acceso</h2>
         </div>
         <div class="px-5">
-            <form id="form_login" autocomplete="off">
+            <form id="form_login" autocomplete="off" method="post">
+                {% csrf_token %}
                 <div>
                     <div class="mb-2 mt-2">
                         <label for="username">Nombre de usuario</label>
