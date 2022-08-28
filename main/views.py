@@ -55,20 +55,28 @@ class Logout(APIView):
             if request.user.auth_token is not None:
                 request.user.auth_token.delete()
                 logout(request)
-                return HttpResponseRedirect(reverse_lazy('login'))
+                return HttpResponseRedirect(reverse_lazy('index'))
         except AttributeError:
             # if there aren't a token send 404 not found
             return HttpResponseNotFound('')
     
+class Index(APIView):
+    def get(self, request, format = None):
+        try:
+            # if a token exists return data
+            if request.user.auth_token is not None:
+                return render(request, 'urls/home.html') 
+        except AttributeError:
+            # if a token doesn't exists return mainpage
+            return render(request, 'urls/index.html') 
 
-
-def index(request):
+#def index(request):
     #aux = Logout()
     # if nobody is authenticated send to main page
     #if request.auth is None:
     #    return render(request, 'urls/index.html')
     # if somebody is authenticated send user's data and profile
-    return render(request, 'urls/home.html')
+#    return render(request, 'urls/home.html')
 
 # def login(request):
 #     return render(request, 'urls/login.html')

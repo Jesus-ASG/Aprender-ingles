@@ -1,0 +1,28 @@
+{% extends 'main_template.html' %}
+{% load static %}
+
+
+{% block title %} Aplicación X {% endblock %}
+
+{% block user_controlls %}
+<li class="d-flex m-1">
+    <button class="btn btn-outline-light" id="btn_view_profile" role="button">
+        <i class="fa fa-user fa-2x" aria-hidden="true"></i>
+    </button>
+</li>
+
+<li class="d-flex m-1">
+    <a href="{% url 'logout' %}" class="btn btn-outline-light" id="btn_sign_out">
+        <i class="fa fa-sign-out fa-2x" aria-hidden="true"></i>
+    </a>
+</li>
+{% endblock %}
+
+{% block content %} 
+<div class="section-title">
+    <h1>Bienvenido, usuario logueado</h1>
+</div>
+
+<br><br>
+
+{% endblock %}
