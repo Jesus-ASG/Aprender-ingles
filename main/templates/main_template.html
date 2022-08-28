@@ -50,17 +50,7 @@
                   </li>
               </ul>
   
-              <li class="d-flex m-1">
-                  <button hidden class="btn btn-outline-light" id="btn_view_profile" role="button">
-                      <i class="fa fa-user fa-2x" aria-hidden="true"></i>
-                  </button>
-              </li>
-  
-              <li class="d-flex m-1">
-                  <button hidden class="btn btn-outline-light" id="btn_sign_out" type="submit">
-                      <i class="fa fa-sign-out fa-2x" aria-hidden="true"></i>
-                  </button>
-              </li>
+              {% block user_controlls %} {% endblock %}
           </div>
       </div>
   </nav>
