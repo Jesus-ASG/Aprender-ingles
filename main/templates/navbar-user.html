@@ -16,15 +16,15 @@
             </ul>
 
             <li class="d-flex m-1">
-                <div class="yellow-btn href-btn hover-orange">
-                    <a href="{% url 'login' %}">Iniciar sesión</a>
-                </div>
+                <a class="yellow-icon-btn" id="btn_view_profile" role="button">
+                    <i class="fa fa-user fa-2x" aria-hidden="true"></i>
+                </a>
             </li>
 
             <li class="d-flex m-1">
-                <div class="yellow-light-btn href-btn hover-orange">
-                    <a href="{% url 'register' %}">Registrarse</a>
-                </div>
+                <a href="{% url 'logout' %}" class="yellow-icon-btn" id="btn_sign_out">
+                    <i class="fa fa-sign-out fa-2x" aria-hidden="true"></i>
+                </a>
             </li>
         </div>
     </div>

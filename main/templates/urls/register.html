@@ -2,20 +2,7 @@
 
 {% block title %} Crea una cuenta {% endblock %}
 
-{% block controlls %}
-    <li class="d-flex m-1">
-        <div class="login-btn">
-            <a href="{% url 'login' %}">Iniciar sesión</a>
-        </div>
-    </li>
-
-    <li class="d-flex m-1">
-        <div class="register-btn">
-            <a href="{% url 'register' %}">Registrarse</a>
-        </div>
-
-    </li>
-{% endblock %}
+{% block navbar %} {% include 'navbar.html' %} {% endblock %}
 
 {% block content %}
 <!-- REGISTER FORM -->

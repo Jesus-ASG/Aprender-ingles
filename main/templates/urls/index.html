@@ -4,19 +4,7 @@
 
 {% block title %} Aplicación X {% endblock %}
 
-{% block controlls %}
-    <li class="d-flex m-1">
-        <div class="yellow-btn href-btn">
-            <a href="{% url 'login' %}">Iniciar sesión</a>
-        </div>
-    </li>
-
-    <li class="d-flex m-1">
-        <div class="yellow-light-btn href-btn">
-            <a href="{% url 'register' %}">Registrarse</a>
-        </div>
-    </li>
-{% endblock %}
+{% block navbar %} {% include 'navbar.html' %} {% endblock %}
 
 {% block content %} 
 <div class="section-title">
