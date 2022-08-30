@@ -1,5 +1,5 @@
 from http.client import HTTPResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from rest_framework import generics
 from .models import User
@@ -21,12 +21,16 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 
+from .forms import NewUserForm
+from django.contrib import messages
+
 
 class UsersList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
-    #authentication_classes = (TokenAuthentication,)
+    # authentication_classes = (TokenAuthentication,)
+
 
 class Login(FormView):
     template_name = 'urls/login.html'
@@ -40,16 +44,19 @@ class Login(FormView):
             return HttpResponseRedirect(self.get_success_url())
         else:
             return super(Login, self).dispatch(request, *args, *kwargs)
-    
+
     def form_valid(self, form):
-        user = authenticate(username = form.cleaned_data['username'], password = form.cleaned_data['password'])
-        token, _ = Token.objects.get_or_create(user = user)
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(username=username, password=password)
+        token, _ = Token.objects.get_or_create(user=user)
         if token:
             login(self.request, form.get_user())
             return super(Login, self).form_valid(form)
 
+
 class Logout(APIView):
-    def get(self, request, format = None):
+    def get(self, request, format=None):
         # if a token auth exists, leave session and delete token
         try:
             if request.user.auth_token is not None:
@@ -59,27 +66,40 @@ class Logout(APIView):
         except AttributeError:
             # if there aren't a token send 404 not found
             return HttpResponseNotFound('')
-    
+
+
 class Index(APIView):
-    def get(self, request, format = None):
+    def get(self, request, format=None):
         try:
             # if a token exists return data
             if request.user.auth_token is not None:
-                return render(request, 'urls/home.html') 
+                return render(request, 'urls/home.html')
         except AttributeError:
             # if a token doesn't exists return mainpage
-            return render(request, 'urls/index.html') 
+            return render(request, 'urls/index.html')
 
-#def index(request):
-    #aux = Logout()
-    # if nobody is authenticated send to main page
-    #if request.auth is None:
-    #    return render(request, 'urls/index.html')
-    # if somebody is authenticated send user's data and profile
-#    return render(request, 'urls/home.html')
 
-# def login(request):
-#     return render(request, 'urls/login.html')
+def register(request):
+    if request.method == 'POST':
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            user_auth = authenticate(username=username, password=password)
+            token, _ = Token.objects.get_or_create(user=user_auth)
+            if token:
+                login(request, user)
 
-def sign_in(request):
-    return render(request, 'urls/sign_in.html')
+            #auth = authenticate(form.cleaned_data['username'], form.cleaned_data['password'])
+            #token, _ = Token.objects.get_or_create(user=auth)
+            #if token:
+            #    login(request, user)
+
+            # return redirect("index")
+            # 1 = state
+            #render(request, 'urls/register.html', {'state': '1'})
+                return HttpResponseRedirect(reverse_lazy('index'))
+
+    form = NewUserForm()
+    return render(request, 'urls/register.html', {'register_form': form})

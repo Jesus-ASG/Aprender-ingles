@@ -2,8 +2,22 @@
 
 {% block title %} Iniciar sesión {% endblock %}
 
-{% block content %} 
+{% block controlls %}
+    <li class="d-flex m-1">
+        <div class="login-btn">
+            <a href="{% url 'login' %}">Iniciar sesión</a>
+        </div>
+    </li>
 
+    <li class="d-flex m-1">
+        <div class="register-btn">
+            <a href="{% url 'register' %}">Registrarse</a>
+        </div>
+
+    </li>
+{% endblock %}
+
+{% block content %}
 <!-- INDEX LOGIN -->
 <div class="access-container" id="access_container">
     <div class="row">
@@ -32,7 +46,7 @@
                 <button type="submit" class="btn btn-primary">Entrar</button>
             </form>
             <hr>
-            <p>¿Aún no estás registrado? <a href="{% url 'sign_in' %}" id="sign_in" class="text-primary">Regístrate</a></p>
+            <p>¿Aún no estás registrado? <a href="{% url 'register' %}" class="text-primary">Regístrate</a></p>
             <br>
         </div>
     </div>

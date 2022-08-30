@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'crispy_forms',
+    'crispy_bootstrap5',
     'main',
 ]
 
@@ -60,6 +62,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'app.wsgi.application'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+CRYSPY_TEMPLATE_PACK = 'bootstrap5'
 
 
 # Database

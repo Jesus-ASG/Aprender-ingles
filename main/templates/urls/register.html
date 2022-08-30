@@ -1,0 +1,71 @@
+{% extends 'main_template.html' %}
+
+{% block title %} Crea una cuenta {% endblock %}
+
+{% block controlls %}
+    <li class="d-flex m-1">
+        <div class="login-btn">
+            <a href="{% url 'login' %}">Iniciar sesión</a>
+        </div>
+    </li>
+
+    <li class="d-flex m-1">
+        <div class="register-btn">
+            <a href="{% url 'register' %}">Registrarse</a>
+        </div>
+
+    </li>
+{% endblock %}
+
+{% block content %}
+<!-- REGISTER FORM -->
+<div class="access-container" id="access_container">
+    <div class="row">
+        <div class="mt-4 mb-2">
+            <h2>Crea una cuenta</h2>
+        </div>
+        <div class="px-5">
+            <form id="form_login" autocomplete="off" method="POST">
+                {% csrf_token %}
+
+                <div>
+                    <div class="mb-2 mt-2">
+                        <label for="username" class="mb-1">Nombre de usuario</label>
+                        <input name="username" class="form-control" type="text" placeholder="Nombre de usuario" required>
+                    </div>
+                    <div class="mb-2 mt-2">
+                        <label for="email" class="mb-1">Correo electrónico</label>
+                        <input name="email" class="form-control" type="email" placeholder="correo@mail.com" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="password" class="mb-1">Contraseña</label>
+                        <input name="password1" class="form-control" type="password" placeholder="Contraseña" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="password" class="mb-1">Confirmar contraseña</label>
+                        <input name="password2" class="form-control" type="password" placeholder="Confirmar contraseña" required>
+                    </div>
+
+                    <div class="mb-2">
+                        <div id="form_message">
+                            {% if state == '1' %}
+                            <div class="alert alert-success">
+                                Registro exitoso
+                            </div>
+                            {% else %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+            </form>
+            <hr>
+            <p>¿Ya tiene una cuenta? <a href="{% url 'login' %}" id="sign_in" class="text-primary">Iniciar sesión</a></p>
+            <br>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

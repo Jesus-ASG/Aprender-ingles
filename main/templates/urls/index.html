@@ -4,6 +4,20 @@
 
 {% block title %} Aplicación X {% endblock %}
 
+{% block controlls %}
+    <li class="d-flex m-1">
+        <div class="yellow-btn href-btn">
+            <a href="{% url 'login' %}">Iniciar sesión</a>
+        </div>
+    </li>
+
+    <li class="d-flex m-1">
+        <div class="yellow-light-btn href-btn">
+            <a href="{% url 'register' %}">Registrarse</a>
+        </div>
+    </li>
+{% endblock %}
+
 {% block content %} 
 <div class="section-title">
     <h1>¡La mejor aplicación para aprender inglés!</h1>
@@ -17,7 +31,7 @@
         <button type="button" data-bs-target="#MiCarrusel" data-bs-slide-to="2" class="active" arial-label="Slide 3"></button>
     </div>
     <div class="carousel-inner">
-        <div class="carousel-item active banner-item" id="banner_item_1">
+        <div class="carousel-item active banner-item">
             <img src="{% static 'img/banner/b3.jpg' %}">
             <div class="container">
                 <div class="carousel-caption text-start">
@@ -29,7 +43,7 @@
                 </div>
             </div>						
         </div>
-        <div class="carousel-item banner-item" id="banner_item_1">
+        <div class="carousel-item banner-item">
             <img src="{% static 'img/banner/b2.jpg' %}">
             <div class="container">
                 <div class="carousel-caption">
@@ -41,7 +55,7 @@
                 </div>
             </div>						
         </div>
-        <div class="carousel-item banner-item" id="banner_item_1">
+        <div class="carousel-item banner-item">
             <img src="{% static 'img/banner/b4.jpg' %}">
             <div class="container">
                 <div class="carousel-caption text-end">
@@ -64,10 +78,5 @@
     </button>
 </div>
 <hr>
-<!--
-<p><a href="{% url 'login' %}" class="btn btn-sm btn-primary">Acceder ahora</a></p>
--->
-<br>
-
 
 {% endblock %}
