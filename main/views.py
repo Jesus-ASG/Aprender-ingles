@@ -73,6 +73,9 @@ class Index(APIView):
         try:
             # if a token exists return data
             if request.user.auth_token is not None:
+
+                if request.user.is_superuser:
+                    return render(request, 'urls/home_admin.html')
                 return render(request, 'urls/home.html')
         except AttributeError:
             # if a token doesn't exists return mainpage

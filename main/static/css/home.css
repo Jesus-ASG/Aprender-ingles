@@ -1,0 +1,33 @@
+.add-unit {
+    background-color: #f0f0f0;
+    border: 1px solid #000;
+    font-size: 1.5em;
+    border-radius: 10px;
+    display: inline-block;
+    margin-bottom: 10px;
+    margin-top: 50px;
+}
+
+.add-unit-menu{
+    width: 100%;
+    display: flex;
+    border-top: 1px solid #000;
+}
+
+.add-unit-item{
+    background-color: #e0e0e0;
+    display: inline-block;
+    text-align: center;
+}
+
+.sizing{
+    width: 100px;
+    background-color: #c0c0c0;
+    height: 30px;
+}
+
+
+
+.units{
+    border: 1px solid #000;
+}

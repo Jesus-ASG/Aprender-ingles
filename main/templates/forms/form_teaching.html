@@ -1,0 +1,41 @@
+<div class="form-container-teaching">
+    <form action="POST">
+        <div>
+            <p>Ayuda <i class="fa fa-question-circle"></i></p>
+        </div>
+        <div class="mb-2 mt-2">
+            <label for="title">Título de la unidad</label>
+            <input type="text" name="title" id="title" class="" placeholder="Título de la unidad" required>
+        </div>
+        <div class="mb-2 mt-2">
+            <label for="description">Descripción (opcional)</label>
+            <textarea name="description" id="description"
+                      placeholder="Inserta una descripción de lo que tratará la unidad (recomendado)"></textarea>
+        </div>
+
+        <div class="form-additional-element" id="form_additional_elements">
+
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                Seleccione para agregar
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a onclick="add_plain_text()" class="dropdown-item" href="#" id="btn_plain_text">Texto plano</a>
+                </li>
+                <li><a class="dropdown-item" href="#">Arrastrar y soltar</a></li>
+                <li><a class="dropdown-item" href="#">Completar frase</a></li>
+                <li><a class="dropdown-item" href="#">Repetir frase</a></li>
+            </ul>
+        </div>
+
+        <br><br>
+
+        <br><br><br><br><br>
+        <button type="submit">Agregar</button>
+
+    </form>
+
+</div>

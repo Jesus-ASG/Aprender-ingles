@@ -1,0 +1,42 @@
+{% extends 'main_template.html' %}
+{% load static %}
+
+
+{% block title %} Aplicación X {% endblock %}
+
+{% block navbar %} {% include 'navbar-user.html' %} {% endblock %}
+
+{% block content %}
+<div class="section-title">
+    <h1>Esta es la página de administración</h1>
+    <hr>
+    <div class="home_admin_content">
+        <br><br><br>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#id-form-teaching" role="tab"
+                   aria-controls="teaching" aria-selected="true">Agregar unidad de aprendizaje</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#id-form-training" role="tab"
+                   aria-controls="training" aria-selected="false">Agregar ejercicio</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="id-form-teaching" role="tabpanel" aria-labelledby="training-tab">
+                {% include 'forms/form_teaching.html' %}
+            </div>
+            <div class="tab-pane fade" id="id-form-training" role="tabpanel" aria-labelledby="training-tab">
+                {% include 'forms/form_training.html' %}
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <h2>Unidades cargadas aquí</h2>
+    <!--Cargar todas las unidades de la base de datos-->
+
+</div>
+
+<br><br>
+{% endblock %}
