@@ -1,42 +1,52 @@
 {% extends 'main_template.html' %}
 
+{% load static %}
+
 {% block title %} Iniciar sesión {% endblock %}
 
 {% block navbar %} {% include 'navbar.html' %} {% endblock %}
 
 {% block content %}
 <!-- INDEX LOGIN -->
-<div class="access-container" id="access_container">
-    <div class="row">
-        <div class="mt-4 mb-2">
-            <h2>Iniciar sesión</h2>
-        </div>
-        <div class="px-5">
-            <form id="form_login" autocomplete="off" method="post">
-                {% csrf_token %}
-                <div>
-                    <div class="mb-2 mt-2">
-                        <label for="username">Nombre de usuario</label>
-                        <input name="username" class="form-control" type="text" placeholder="Nombre de usuario" required>
-                    </div>
-                    <div class="mb-2">
-                        <label for="password">Contraseña</label>
-                        <input name="password" class="form-control" type="password" placeholder="Contraseña" required>
-                    </div>
-                    <div class="mb-2">
-                        <div id="form_message">
-                            
-                        </div>
-                    </div>
-                    <hr>
+
+<div class="row main-form-container">
+    <div class="mt-4 mb-2 center">
+        <h2>Iniciar sesión</h2>
+    </div>
+    <div class="px-5">
+        <form id="form_login" autocomplete="off" method="post">
+            {% csrf_token %}
+            <div>
+                <div class="mb-2 mt-2">
+                    <label for="username">Nombre de usuario</label>
+                    <input name="username" class="form-control" type="text" placeholder="Nombre de usuario" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Entrar</button>
-            </form>
-            <hr>
-            <p>¿Aún no estás registrado? <a href="{% url 'register' %}" class="text-primary">Regístrate</a></p>
-            <br>
-        </div>
+                <div class="mb-2">
+                    <label for="password" class="mb-1">Contraseña</label>
+                    <div class="form-control pass">
+                        <input name="password" class="" type="password" placeholder="Contraseña" id="password" required>
+                        <span id="btn_eye1">
+                            <i class="fa fa-eye-slash" id="eye_1"></i>
+                            <!--<i class="fa-solid fa-eye"></i>-->
+                        </span>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <div id="form_message">
+
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <button type="submit" class="btn btn-primary">Entrar</button>
+        </form>
+        <hr>
+        <p>¿Aún no estás registrado? <a href="{% url 'register' %}" class="text-primary">Regístrate</a></p>
+        <br>
     </div>
 </div>
+
+
+<script src="{% static 'js/login.js' %}"></script>
 
 {% endblock %}

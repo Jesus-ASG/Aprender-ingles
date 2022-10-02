@@ -1,12 +1,22 @@
 /*Main template*/
 
 body{
+    font-family: 'Muli', Sans-Serif;
+}
+h1, h2, h3, h4, h5 {
+    font-weight: bold;
+}
+/*h1 { font-family: Muli; font-size: 24px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 26.4px; } h3 { font-family: Muli; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 15.4px; } p { font-family: Muli; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 20px; } blockquote { font-family: Muli; font-size: 21px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 30px; } pre { font-family: Muli; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 18.5714px; }
+*/
+body{
     margin: 0;
     padding: 0;
     position: relative;
 	min-height: 100vh;
 	padding-bottom: 200px;
+	background-color: #fff;
 }
+
 
 .footer-position{
 	position: absolute;
@@ -82,19 +92,41 @@ body{
 /*End index*/
 
 /*Login*/
-.access-container{
+.main-form-container{
 	display: block;
 	width: 400px;
-	text-align: center;
+	text-align: left;
 	margin: auto;
 	margin-top: 30px;
 	background-color: #fff;
 	border-radius: 10px;
 }
 
-.access-container a{
+.main-form-container a{
 	text-decoration: none;
 }
+
+.pass input{
+    outline: none;
+    border: none;
+    width: 90%;
+}
+.pass span{
+    background-color: #fff;
+    border: none;
+    text-align: right;
+    display: inline-block;
+}
+.pass span:hover{
+    cursor: pointer;
+}
+
+.error-pass{
+    font-weight: bold;
+    color: red;
+}
+
+
 /*End login*/
 
 
@@ -103,4 +135,9 @@ body{
     width: 100px;
     background-color: aqua;
     display: none;
+}
+
+
+.center{
+    text-align: center;
 }
