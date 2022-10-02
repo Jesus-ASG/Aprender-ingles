@@ -24,6 +24,9 @@ from rest_framework.response import Response
 from .forms import NewUserForm
 from django.contrib import messages
 
+from .models import Categorias
+from .forms import CategoriasForm
+
 
 class UsersList(generics.ListCreateAPIView):
     queryset = User.objects.all()
@@ -96,6 +99,28 @@ class IndexAdmin(APIView):
 def agregarHistorias(request):
     return render(request, 'urls/agregar_historias.html')
 
+
+def verCategorias(request):
+    categorias = Categorias.objects.all()
+    return render(request, 'categorias/ver_categorias.html', {'categorias': categorias})
+
+def agregarCategorias(request):
+    formulario = CategoriasForm(request.POST or None)
+    if formulario.is_valid():
+        formulario.save()
+    return render(request, 'categorias/agregar_categorias.html', {'formulario': formulario})
+
+def editarCategoria(request, id):
+    categoria = Categorias.objects.get(id=id)
+    formulario = CategoriasForm(request.POST or None, instance=categoria)
+    if formulario.is_valid() and request.POST:
+        formulario.save()
+    return render(request, 'categorias/editar_categoria.html', {'formulario': formulario})
+
+def eliminarCategoria(request, id):
+    categoria = Categorias.objects.get(id=id)
+    categoria.delete()
+    return redirect('ver_categorias')
 
 def register(request):
     if request.method == 'POST':

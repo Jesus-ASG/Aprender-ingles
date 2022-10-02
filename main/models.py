@@ -8,3 +8,9 @@ class User(models.Model):
     def __str__(self) -> str:
         return f'id: {self.id}\nusername: {self.username}\npassword: {self.password}'
 
+
+class Categorias(models.Model):
+    id = models.AutoField(primary_key = True)
+    nombre = models.CharField(max_length = 100, verbose_name='nombre')
+    
+
