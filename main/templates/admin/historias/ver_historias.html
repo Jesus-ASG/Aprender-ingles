@@ -1,0 +1,48 @@
+{% extends 'main_template.html' %}
+{% load static %}
+
+{% block title %} Aplicación X {% endblock %}
+
+{% block navbar %} {% include '../navbar-admin.html' %} {% endblock %}
+
+{% block content %}
+
+<div class="card mt-3">
+    <div class="card-header">
+        <a name="" id="" class="btn btn-success" href="{% url 'agregar_historias' %}" role="button">Agregar historias</a>
+    </div>
+    <div class="card-body">
+        <h4 class="card-title">Historias</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Portada</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for historia in historias %}
+                <tr>
+                    <td>{{ historia.id }}</td>
+                    <td>{{ historia.titulo }}</td>
+                    <td>
+                        <img src="{{ historia.portada.url }}" height="100" alt="{{ historia.portada }}">
+                    </td>
+                    <td>{{ historia.descripcion }}</td>
+                    <td> 
+                        <a name="" id="" class="btn btn-info" href="{% url 'editar_historia' historia.id %}" role="button">Editar</a>
+                        |
+                        <a name="" id="" class="btn btn-danger" href="{% url 'eliminar_historia' historia.id %}" role="button">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer text-muted"></div>
+</div> 
+
+{% endblock %}

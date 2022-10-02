@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Categorias
+from .models import Categoria, Historia
 
 
 class NewUserForm(UserCreationForm):
@@ -18,7 +18,13 @@ class NewUserForm(UserCreationForm):
 			user.save()
 		return user
 
-class CategoriasForm(forms.ModelForm):
+class CategoriaForm(forms.ModelForm):
 	class Meta:
-		model = Categorias
+		model = Categoria
+		fields = '__all__'
+
+
+class HistoriaForm(forms.ModelForm):
+	class Meta:
+		model = Historia
 		fields = '__all__'

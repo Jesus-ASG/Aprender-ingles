@@ -6,9 +6,9 @@
 
         {% if campo.field.widget.input_type == 'file' and campo.value %}
           <br>
-          <img src="{{ MEDIA_URL }}/imagenes/{{ campo.value }}" alt="No se pudo cargar imagen" height="100">
+          <img src="{{ campo.value.url }}" alt="No se pudo cargar imagen" height="100">
         {% endif %}
-        
+
         <input 
         type="{{ campo.field.widget.input_type }}"
         class="form-control" 
@@ -23,6 +23,6 @@
     {% endfor %}
 
     <input name="" id="" class="btn btn-success" type="submit" value="Enviar información">
-    <a name="" id="" class="btn btn-primary" href="{% url 'ver_categorias' %}" role="button">Cancelar</a>
+    <a name="" id="" class="btn btn-primary" href="{% url 'ver_historias' %}" role="button">Cancelar</a>
 
 </form>
