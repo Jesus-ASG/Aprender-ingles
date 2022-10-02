@@ -90,37 +90,15 @@ class IndexAdmin(APIView):
             # if a token exists return data
             if request.user.auth_token is not None:
                 if request.user.is_superuser:
-                    return render(request, 'urls/home_admin.html')
+                    return render(request, 'admin/home_admin.html')
                 return render(request, 'urls/home.html')
         except AttributeError:
             # if a token doesn't exists return mainpage
             return render(request, 'urls/index.html')
 
 def agregarHistorias(request):
-    return render(request, 'urls/agregar_historias.html')
+    return render(request, 'admin/historias/agregar_historias.html')
 
-
-def verCategorias(request):
-    categorias = Categorias.objects.all()
-    return render(request, 'categorias/ver_categorias.html', {'categorias': categorias})
-
-def agregarCategorias(request):
-    formulario = CategoriasForm(request.POST or None)
-    if formulario.is_valid():
-        formulario.save()
-    return render(request, 'categorias/agregar_categorias.html', {'formulario': formulario})
-
-def editarCategoria(request, id):
-    categoria = Categorias.objects.get(id=id)
-    formulario = CategoriasForm(request.POST or None, instance=categoria)
-    if formulario.is_valid() and request.POST:
-        formulario.save()
-    return render(request, 'categorias/editar_categoria.html', {'formulario': formulario})
-
-def eliminarCategoria(request, id):
-    categoria = Categorias.objects.get(id=id)
-    categoria.delete()
-    return redirect('ver_categorias')
 
 def register(request):
     if request.method == 'POST':
@@ -146,3 +124,30 @@ def register(request):
 
     form = NewUserForm()
     return render(request, 'urls/register.html', {'register_form': form})
+
+
+# Categorías
+
+def verCategorias(request):
+    categorias = Categorias.objects.all()
+    return render(request, 'admin/categorias/ver_categorias.html', {'categorias': categorias})
+
+def agregarCategorias(request):
+    formulario = CategoriasForm(request.POST or None)
+    if formulario.is_valid():
+        formulario.save()
+    return render(request, 'admin/categorias/agregar_categorias.html', {'formulario': formulario})
+
+def editarCategoria(request, id):
+    categoria = Categorias.objects.get(id=id)
+    formulario = CategoriasForm(request.POST or None, instance=categoria)
+    if formulario.is_valid() and request.POST:
+        formulario.save()
+    return render(request, 'admin/categorias/editar_categoria.html', {'formulario': formulario})
+
+def eliminarCategoria(request, id):
+    categoria = Categorias.objects.get(id=id)
+    categoria.delete()
+    return redirect('ver_categorias')
+
+
