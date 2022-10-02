@@ -93,6 +93,9 @@ class IndexAdmin(APIView):
             # if a token doesn't exists return mainpage
             return render(request, 'urls/index.html')
 
+def agregarHistorias(request):
+    return render(request, 'urls/agregar_historias.html')
+
 
 def register(request):
     if request.method == 'POST':

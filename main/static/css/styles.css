@@ -92,19 +92,41 @@ body{
 /*End index*/
 
 /*Login*/
-.access-container{
+.main-form-container{
 	display: block;
 	width: 400px;
-	text-align: center;
+	text-align: left;
 	margin: auto;
 	margin-top: 30px;
 	background-color: #fff;
 	border-radius: 10px;
 }
 
-.access-container a{
+.main-form-container a{
 	text-decoration: none;
 }
+
+.pass input{
+    outline: none;
+    border: none;
+    width: 90%;
+}
+.pass span{
+    background-color: #fff;
+    border: none;
+    text-align: right;
+    display: inline-block;
+}
+.pass span:hover{
+    cursor: pointer;
+}
+
+.error-pass{
+    font-weight: bold;
+    color: red;
+}
+
+
 /*End login*/
 
 
@@ -113,4 +135,9 @@ body{
     width: 100px;
     background-color: aqua;
     display: none;
+}
+
+
+.center{
+    text-align: center;
 }
