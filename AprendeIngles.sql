@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 02-10-2022 a las 07:16:34
--- Versión del servidor: 10.4.24-MariaDB
--- Versión de PHP: 8.1.6
+-- Tiempo de generación: 06-10-2022 a las 19:13:20
+-- Versión del servidor: 10.4.25-MariaDB
+-- Versión de PHP: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -124,7 +124,15 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (41, 'Can add categorias', 11, 'add_categorias'),
 (42, 'Can change categorias', 11, 'change_categorias'),
 (43, 'Can delete categorias', 11, 'delete_categorias'),
-(44, 'Can view categorias', 11, 'view_categorias');
+(44, 'Can view categorias', 11, 'view_categorias'),
+(45, 'Can add historia', 12, 'add_historia'),
+(46, 'Can change historia', 12, 'change_historia'),
+(47, 'Can delete historia', 12, 'delete_historia'),
+(48, 'Can view historia', 12, 'view_historia'),
+(49, 'Can add categoria', 11, 'add_categoria'),
+(50, 'Can change categoria', 11, 'change_categoria'),
+(51, 'Can delete categoria', 11, 'delete_categoria'),
+(52, 'Can view categoria', 11, 'view_categoria');
 
 -- --------------------------------------------------------
 
@@ -222,7 +230,10 @@ INSERT INTO `django_admin_log` (`id`, `action_time`, `object_id`, `object_repr`,
 (17, '2022-08-30 01:25:11.500545', '13', 'dfaf', 3, '', 4, 1),
 (18, '2022-08-30 01:25:11.501808', '12', 'kkn', 3, '', 4, 1),
 (19, '2022-08-30 01:25:11.504515', '14', 'kljhjvb', 3, '', 4, 1),
-(20, '2022-08-30 01:25:11.506051', '9', 'u', 3, '', 4, 1);
+(20, '2022-08-30 01:25:11.506051', '9', 'u', 3, '', 4, 1),
+(21, '2022-10-06 12:54:19.516168', '3', '3 mkmkm', 2, '[{\"changed\": {\"fields\": [\"Id categoria\"]}}]', 12, 1),
+(22, '2022-10-06 13:13:44.094234', '3', '3 Historia 2', 2, '[{\"changed\": {\"fields\": [\"Titulo\", \"Descripcion\"]}}]', 12, 1),
+(23, '2022-10-06 13:15:32.519675', '4', '4 Historia nueva', 1, '[{\"added\": {}}]', 12, 1);
 
 -- --------------------------------------------------------
 
@@ -248,7 +259,8 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (8, 'authtoken', 'token'),
 (9, 'authtoken', 'tokenproxy'),
 (5, 'contenttypes', 'contenttype'),
-(11, 'main', 'categorias'),
+(11, 'main', 'categoria'),
+(12, 'main', 'historia'),
 (10, 'main', 'myuser'),
 (7, 'main', 'user'),
 (6, 'sessions', 'session');
@@ -297,7 +309,15 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (24, 'main', '0003_alter_myuser_email', '2022-08-28 16:10:31.625997'),
 (25, 'main', '0004_delete_user', '2022-08-28 16:10:31.633226'),
 (26, 'main', '0005_user_delete_myuser', '2022-08-28 16:10:31.649172'),
-(27, 'main', '0002_categorias', '2022-10-02 04:23:17.930305');
+(27, 'main', '0002_categorias', '2022-10-02 04:23:17.930305'),
+(28, 'main', '0003_historia_rename_categorias_categoria', '2022-10-06 04:41:11.223810'),
+(29, 'main', '0004_categoriadehistoria', '2022-10-06 04:41:11.232860'),
+(30, 'main', '0005_alter_categoriadehistoria_id_categoria_and_more', '2022-10-06 04:41:11.239259'),
+(31, 'main', '0006_alter_historia_descripcion_alter_historia_portada', '2022-10-06 04:41:11.261538'),
+(32, 'main', '0007_delete_categoriadehistoria_historia_id_categoria', '2022-10-06 04:41:11.314552'),
+(33, 'main', '0008_alter_historia_id_categoria', '2022-10-06 13:18:13.500125'),
+(34, 'main', '0009_alter_historia_id_categoria', '2022-10-06 13:18:55.369804'),
+(35, 'main', '0010_alter_historia_portada', '2022-10-06 14:32:26.224368');
 
 -- --------------------------------------------------------
 
@@ -322,22 +342,61 @@ INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALU
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `main_categorias`
+-- Estructura de tabla para la tabla `main_categoria`
 --
 
-CREATE TABLE `main_categorias` (
+CREATE TABLE `main_categoria` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `main_categorias`
+-- Volcado de datos para la tabla `main_categoria`
 --
 
-INSERT INTO `main_categorias` (`id`, `nombre`) VALUES
+INSERT INTO `main_categoria` (`id`, `nombre`) VALUES
 (1, 'misterio'),
 (2, 'comedia'),
 (3, 'terror');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `main_historia`
+--
+
+CREATE TABLE `main_historia` (
+  `id` int(11) NOT NULL,
+  `titulo` varchar(100) NOT NULL,
+  `portada` varchar(100) NOT NULL,
+  `descripcion` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `main_historia`
+--
+
+INSERT INTO `main_historia` (`id`, `titulo`, `portada`, `descripcion`) VALUES
+(8, 'desc1', 'imagenes/portadas/landscape.jpg', 'desc');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `main_historia_id_categoria`
+--
+
+CREATE TABLE `main_historia_id_categoria` (
+  `id` bigint(20) NOT NULL,
+  `historia_id` int(11) NOT NULL,
+  `categoria_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `main_historia_id_categoria`
+--
+
+INSERT INTO `main_historia_id_categoria` (`id`, `historia_id`, `categoria_id`) VALUES
+(11, 8, 1);
 
 -- --------------------------------------------------------
 
@@ -443,10 +502,24 @@ ALTER TABLE `django_session`
   ADD KEY `django_session_expire_date_a5c62663` (`expire_date`);
 
 --
--- Indices de la tabla `main_categorias`
+-- Indices de la tabla `main_categoria`
 --
-ALTER TABLE `main_categorias`
+ALTER TABLE `main_categoria`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `main_historia`
+--
+ALTER TABLE `main_historia`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `main_historia_id_categoria`
+--
+ALTER TABLE `main_historia_id_categoria`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `main_historia_id_categor_historia_id_categoria_id_4ae0f7bc_uniq` (`historia_id`,`categoria_id`),
+  ADD KEY `main_historia_id_cat_categoria_id_38ef862e_fk_main_cate` (`categoria_id`);
 
 --
 -- Indices de la tabla `main_user`
@@ -474,7 +547,7 @@ ALTER TABLE `auth_group_permissions`
 -- AUTO_INCREMENT de la tabla `auth_permission`
 --
 ALTER TABLE `auth_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT de la tabla `auth_user`
@@ -498,25 +571,37 @@ ALTER TABLE `auth_user_user_permissions`
 -- AUTO_INCREMENT de la tabla `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `django_content_type`
 --
 ALTER TABLE `django_content_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
--- AUTO_INCREMENT de la tabla `main_categorias`
+-- AUTO_INCREMENT de la tabla `main_categoria`
 --
-ALTER TABLE `main_categorias`
+ALTER TABLE `main_categoria`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `main_historia`
+--
+ALTER TABLE `main_historia`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT de la tabla `main_historia_id_categoria`
+--
+ALTER TABLE `main_historia_id_categoria`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `main_user`
@@ -567,6 +652,13 @@ ALTER TABLE `auth_user_user_permissions`
 ALTER TABLE `django_admin_log`
   ADD CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   ADD CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
+
+--
+-- Filtros para la tabla `main_historia_id_categoria`
+--
+ALTER TABLE `main_historia_id_categoria`
+  ADD CONSTRAINT `main_historia_id_cat_categoria_id_38ef862e_fk_main_cate` FOREIGN KEY (`categoria_id`) REFERENCES `main_categoria` (`id`),
+  ADD CONSTRAINT `main_historia_id_cat_historia_id_2fc7a487_fk_main_hist` FOREIGN KEY (`historia_id`) REFERENCES `main_historia` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

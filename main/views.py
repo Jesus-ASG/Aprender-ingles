@@ -24,8 +24,8 @@ from rest_framework.response import Response
 from .forms import NewUserForm
 from django.contrib import messages
 
-from .models import Categoria, Historia, CategoriaDeHistoria
-from .forms import CategoriaForm, HistoriaForm, CategoriaDeHistoriaForm
+from .models import Categoria, Historia
+from .forms import CategoriaForm, HistoriaForm
 
 
 class UsersList(generics.ListCreateAPIView):
@@ -160,7 +160,7 @@ def verHistorias(request):
 def agregarHistorias(request):
     # formulario para agregar historias
     formulario = HistoriaForm(request.POST or None, request.FILES or None)
-    form_cat = CategoriaDeHistoriaForm(request.POST or None)
+    
     # obtener todas las categorías
     categorias = Categoria.objects.all()
 
@@ -168,7 +168,7 @@ def agregarHistorias(request):
         formulario.save()
         return redirect('ver_historias')
     return render(request, 'admin/historias/agregar_historias.html', 
-    {'formulario': formulario, 'categorias': categorias, 'form_cat': form_cat})
+    {'formulario': formulario, 'categorias': categorias})
 
 def editarHistoria(request, id):
     historia = Historia.objects.get(id=id)
