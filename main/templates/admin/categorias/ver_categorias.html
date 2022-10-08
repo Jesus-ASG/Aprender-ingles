@@ -1,0 +1,42 @@
+{% extends 'main_template.html' %}
+{% load static %}
+
+{% block title %} Aplicación X {% endblock %}
+
+{% block navbar %} {% include '../navbar-admin.html' %} {% endblock %}
+
+{% block content %}
+
+<div class="card mt-3">
+    <div class="card-header">
+        <a name="" id="" class="btn btn-success" href="{% url 'agregar_categorias' %}" role="button">Agregar categorías</a>
+    </div>
+    <div class="card-body">
+        <h4 class="card-title">Categorías</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for categoria in categorias %}
+                <tr>
+                    <td>{{ categoria.id }}</td>
+                    <td>{{ categoria.nombre }}</td>
+                    <td> 
+                        <a name="" id="" class="btn btn-info" href="{% url 'editar_categoria' categoria.id %}" role="button">Editar</a>
+                        |
+                        <a name="" id="" class="btn btn-danger" href="{% url 'eliminar_categoria' categoria.id %}" role="button">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer text-muted"></div>
+</div> 
+
+{% endblock %}

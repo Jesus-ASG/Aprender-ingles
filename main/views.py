@@ -24,6 +24,9 @@ from rest_framework.response import Response
 from .forms import NewUserForm
 from django.contrib import messages
 
+from .models import Categoria, Historia
+from .forms import CategoriaForm, HistoriaForm
+
 
 class UsersList(generics.ListCreateAPIView):
     queryset = User.objects.all()
@@ -87,14 +90,13 @@ class IndexAdmin(APIView):
             # if a token exists return data
             if request.user.auth_token is not None:
                 if request.user.is_superuser:
-                    return render(request, 'urls/home_admin.html')
+                    return render(request, 'admin/home_admin.html')
                 return render(request, 'urls/home.html')
         except AttributeError:
             # if a token doesn't exists return mainpage
             return render(request, 'urls/index.html')
 
-def agregarHistorias(request):
-    return render(request, 'urls/agregar_historias.html')
+
 
 
 def register(request):
@@ -121,3 +123,70 @@ def register(request):
 
     form = NewUserForm()
     return render(request, 'urls/register.html', {'register_form': form})
+
+# ADMIN #
+
+# Categorías
+
+def verCategorias(request):
+    categorias = Categoria.objects.all()
+    return render(request, 'admin/categorias/ver_categorias.html', {'categorias': categorias})
+
+def agregarCategorias(request):
+    formulario = CategoriaForm(request.POST or None)
+    if formulario.is_valid():
+        formulario.save()
+    return render(request, 'admin/categorias/agregar_categorias.html', {'formulario': formulario})
+
+def editarCategoria(request, id):
+    categoria = Categoria.objects.get(id=id)
+    formulario = CategoriaForm(request.POST or None, instance=categoria)
+    if formulario.is_valid() and request.POST:
+        formulario.save()
+    return render(request, 'admin/categorias/editar_categoria.html', {'formulario': formulario})
+
+def eliminarCategoria(request, id):
+    categoria = Categoria.objects.get(id=id)
+    categoria.delete()
+    return redirect('ver_categorias')
+
+
+# Historias
+
+def verHistorias(request):
+    historias = Historia.objects.all()
+    return render(request, 'admin/historias/ver_historias.html', {'historias': historias})
+
+def agregarHistorias(request):
+    # formulario para agregar historias
+    formulario = HistoriaForm(request.POST or None, request.FILES or None)
+    
+    # obtener todas las categorías
+    categorias = Categoria.objects.all()
+
+    if formulario.is_valid():
+        formulario.save()
+        return redirect('ver_historias')
+    return render(request, 'admin/historias/agregar_historias.html', 
+    {'formulario': formulario, 'categorias': categorias})
+
+def editarHistoria(request, id):
+    historia = Historia.objects.get(id=id)
+    # obtiene la portada original
+    port1 = historia.get_portada()
+    formulario = HistoriaForm(request.POST or None, request.FILES or None, instance=historia)
+    if formulario.is_valid() and request.POST:
+        # obtiene la portada del formulario
+        port2 = historia.get_portada()
+        # si las portadas son diferentes, entonces borra la anterior
+        if port1 != port2:
+            historia.del_portada(port1)
+        # guarda los datos
+        formulario.save()
+        return redirect('ver_historias')
+    return render(request, 'admin/historias/editar_historia.html', {'formulario': formulario})
+
+def eliminarHistoria(request, id):
+    historia = Historia.objects.get(id=id)
+    historia.delete()
+    return redirect('ver_historias')

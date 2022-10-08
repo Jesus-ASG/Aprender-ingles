@@ -1,0 +1,19 @@
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+  {% csrf_token %}
+
+  {% for campo in formulario%}
+  <div class="mb-3">
+    <label for="" class="form-label">{{ campo.label }}</label>
+
+    {% if campo.field.widget.input_type == 'file' and campo.value.url %} <br>
+    <img src="{{ campo.value.url }}" alt="No se pudo cargar imagen" height="100">
+    {% endif %}
+
+    {{ campo }}
+  </div>
+  {% endfor %}
+
+  <input class="btn btn-success" type="submit" value="Enviar información">
+  <a class="btn btn-primary" href="{% url 'ver_historias' %}" role="button">Cancelar</a>
+
+</form>

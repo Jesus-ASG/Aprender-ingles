@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .models import Categoria, Historia
 
 
 class NewUserForm(UserCreationForm):
@@ -16,3 +17,28 @@ class NewUserForm(UserCreationForm):
 		if commit:
 			user.save()
 		return user
+
+class CategoriaForm(forms.ModelForm):
+	class Meta:
+		model = Categoria
+		fields = '__all__'
+
+
+class HistoriaForm(forms.ModelForm):
+	class Meta:
+		model = Historia
+		fields = '__all__'
+
+		widgets = {
+			'titulo': forms.TextInput(attrs={'class': 'form-control'}),
+			'portada': forms.FileInput(attrs={'class': 'form-control'}),
+			'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
+		}
+
+	id_categoria = forms.ModelMultipleChoiceField(
+		queryset=Categoria.objects.all(),
+		widget=forms.CheckboxSelectMultiple(attrs={'class': ''}),
+		required=False,
+		label = 'Id categoría',
+	)
+
