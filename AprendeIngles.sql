@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 06-10-2022 a las 19:13:20
+-- Tiempo de generación: 08-10-2022 a las 08:06:45
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -233,7 +233,13 @@ INSERT INTO `django_admin_log` (`id`, `action_time`, `object_id`, `object_repr`,
 (20, '2022-08-30 01:25:11.506051', '9', 'u', 3, '', 4, 1),
 (21, '2022-10-06 12:54:19.516168', '3', '3 mkmkm', 2, '[{\"changed\": {\"fields\": [\"Id categoria\"]}}]', 12, 1),
 (22, '2022-10-06 13:13:44.094234', '3', '3 Historia 2', 2, '[{\"changed\": {\"fields\": [\"Titulo\", \"Descripcion\"]}}]', 12, 1),
-(23, '2022-10-06 13:15:32.519675', '4', '4 Historia nueva', 1, '[{\"added\": {}}]', 12, 1);
+(23, '2022-10-06 13:15:32.519675', '4', '4 Historia nueva', 1, '[{\"added\": {}}]', 12, 1),
+(24, '2022-10-06 21:50:00.912960', '8', '8 desc1', 2, '[{\"changed\": {\"fields\": [\"Id categoria\"]}}]', 12, 1),
+(25, '2022-10-07 23:21:51.168694', '14', '14 hist', 1, '[{\"added\": {}}]', 12, 1),
+(26, '2022-10-08 00:07:18.051907', '16', '16 h1', 1, '[{\"added\": {}}]', 12, 1),
+(27, '2022-10-08 00:07:39.638943', '17', '17 h2', 1, '[{\"added\": {}}]', 12, 1),
+(28, '2022-10-08 00:44:24.825096', '22', '22 l54', 1, '[{\"added\": {}}]', 12, 1),
+(29, '2022-10-08 01:41:29.298926', '26', '26 m', 2, '[{\"changed\": {\"fields\": [\"Id categoria\"]}}]', 12, 1);
 
 -- --------------------------------------------------------
 
@@ -317,7 +323,8 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (32, 'main', '0007_delete_categoriadehistoria_historia_id_categoria', '2022-10-06 04:41:11.314552'),
 (33, 'main', '0008_alter_historia_id_categoria', '2022-10-06 13:18:13.500125'),
 (34, 'main', '0009_alter_historia_id_categoria', '2022-10-06 13:18:55.369804'),
-(35, 'main', '0010_alter_historia_portada', '2022-10-06 14:32:26.224368');
+(35, 'main', '0010_alter_historia_portada', '2022-10-06 14:32:26.224368'),
+(36, 'main', '0011_alter_historia_descripcion_and_more', '2022-10-08 02:38:13.752716');
 
 -- --------------------------------------------------------
 
@@ -357,7 +364,8 @@ CREATE TABLE `main_categoria` (
 INSERT INTO `main_categoria` (`id`, `nombre`) VALUES
 (1, 'misterio'),
 (2, 'comedia'),
-(3, 'terror');
+(3, 'terror'),
+(6, 'cotidiano');
 
 -- --------------------------------------------------------
 
@@ -377,7 +385,8 @@ CREATE TABLE `main_historia` (
 --
 
 INSERT INTO `main_historia` (`id`, `titulo`, `portada`, `descripcion`) VALUES
-(8, 'desc1', 'imagenes/portadas/landscape.jpg', 'desc');
+(8, 'desc1', 'imagenes/portadas/landscape.jpg', 'desc'),
+(28, 'Historia prueba 1', 'imagenes/portadas/book-default.png', NULL);
 
 -- --------------------------------------------------------
 
@@ -396,7 +405,11 @@ CREATE TABLE `main_historia_id_categoria` (
 --
 
 INSERT INTO `main_historia_id_categoria` (`id`, `historia_id`, `categoria_id`) VALUES
-(11, 8, 1);
+(33, 8, 3),
+(34, 8, 6),
+(35, 28, 1),
+(36, 28, 2),
+(37, 28, 6);
 
 -- --------------------------------------------------------
 
@@ -571,7 +584,7 @@ ALTER TABLE `auth_user_user_permissions`
 -- AUTO_INCREMENT de la tabla `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `django_content_type`
@@ -583,25 +596,25 @@ ALTER TABLE `django_content_type`
 -- AUTO_INCREMENT de la tabla `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT de la tabla `main_categoria`
 --
 ALTER TABLE `main_categoria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `main_historia`
 --
 ALTER TABLE `main_historia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `main_historia_id_categoria`
 --
 ALTER TABLE `main_historia_id_categoria`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT de la tabla `main_user`

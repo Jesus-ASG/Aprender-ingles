@@ -28,3 +28,17 @@ class HistoriaForm(forms.ModelForm):
 	class Meta:
 		model = Historia
 		fields = '__all__'
+
+		widgets = {
+			'titulo': forms.TextInput(attrs={'class': 'form-control'}),
+			'portada': forms.FileInput(attrs={'class': 'form-control'}),
+			'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
+		}
+
+	id_categoria = forms.ModelMultipleChoiceField(
+		queryset=Categoria.objects.all(),
+		widget=forms.CheckboxSelectMultiple(attrs={'class': ''}),
+		required=False,
+		label = 'Id categoría',
+	)
+
