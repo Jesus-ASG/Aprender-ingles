@@ -1,0 +1,19 @@
+* Tener python 3.10 o superior
+* Tener un gestor de bd como xampp o wamp
+* Importar la base de datos "AprendeIngles.sql"
+* Crear un entorno virtual:
+  * python -m venv env
+* Activar el entorno virtual:
+  * windows: .\env\Scripts\activate
+  * linux: source env/bin/activate
+  ---- se sale con 'deactivate'
+* Cargar requerimientos:
+  * pip install -r requirements.txt
+* Cargar el server:
+  * python manage.py runserver
+
+
+Notas:
+Cuenta de admin
+jesus
+123
