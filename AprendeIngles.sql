@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 08-10-2022 a las 08:06:45
+-- Tiempo de generación: 15-10-2022 a las 02:43:39
 -- Versión del servidor: 10.4.25-MariaDB
 -- Versión de PHP: 8.1.10
 
@@ -132,7 +132,11 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (49, 'Can add categoria', 11, 'add_categoria'),
 (50, 'Can change categoria', 11, 'change_categoria'),
 (51, 'Can delete categoria', 11, 'delete_categoria'),
-(52, 'Can view categoria', 11, 'view_categoria');
+(52, 'Can view categoria', 11, 'view_categoria'),
+(53, 'Can add pagina', 13, 'add_pagina'),
+(54, 'Can change pagina', 13, 'change_pagina'),
+(55, 'Can delete pagina', 13, 'delete_pagina'),
+(56, 'Can view pagina', 13, 'view_pagina');
 
 -- --------------------------------------------------------
 
@@ -239,7 +243,13 @@ INSERT INTO `django_admin_log` (`id`, `action_time`, `object_id`, `object_repr`,
 (26, '2022-10-08 00:07:18.051907', '16', '16 h1', 1, '[{\"added\": {}}]', 12, 1),
 (27, '2022-10-08 00:07:39.638943', '17', '17 h2', 1, '[{\"added\": {}}]', 12, 1),
 (28, '2022-10-08 00:44:24.825096', '22', '22 l54', 1, '[{\"added\": {}}]', 12, 1),
-(29, '2022-10-08 01:41:29.298926', '26', '26 m', 2, '[{\"changed\": {\"fields\": [\"Id categoria\"]}}]', 12, 1);
+(29, '2022-10-08 01:41:29.298926', '26', '26 m', 2, '[{\"changed\": {\"fields\": [\"Id categoria\"]}}]', 12, 1),
+(30, '2022-10-14 02:43:17.947165', '1', 'Pagina object (1)', 1, '[{\"added\": {}}]', 13, 1),
+(31, '2022-10-14 02:43:25.506363', '2', 'Pagina object (2)', 1, '[{\"added\": {}}]', 13, 1),
+(32, '2022-10-14 02:43:45.100029', '8', '8 desc1', 2, '[{\"changed\": {\"fields\": [\"Pagina\"]}}]', 12, 1),
+(33, '2022-10-14 02:43:58.702567', '28', '28 Historia prueba 1', 2, '[{\"changed\": {\"fields\": [\"Pagina\"]}}]', 12, 1),
+(34, '2022-10-14 02:50:44.338262', '2', 'Pagina object (2)', 2, '[{\"changed\": {\"fields\": [\"Historia\"]}}]', 13, 1),
+(35, '2022-10-14 02:51:04.667004', '1', 'Pagina object (1)', 2, '[{\"changed\": {\"fields\": [\"Historia\"]}}]', 13, 1);
 
 -- --------------------------------------------------------
 
@@ -268,6 +278,7 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (11, 'main', 'categoria'),
 (12, 'main', 'historia'),
 (10, 'main', 'myuser'),
+(13, 'main', 'pagina'),
 (7, 'main', 'user'),
 (6, 'sessions', 'session');
 
@@ -324,7 +335,10 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (33, 'main', '0008_alter_historia_id_categoria', '2022-10-06 13:18:13.500125'),
 (34, 'main', '0009_alter_historia_id_categoria', '2022-10-06 13:18:55.369804'),
 (35, 'main', '0010_alter_historia_portada', '2022-10-06 14:32:26.224368'),
-(36, 'main', '0011_alter_historia_descripcion_and_more', '2022-10-08 02:38:13.752716');
+(36, 'main', '0011_alter_historia_descripcion_and_more', '2022-10-08 02:38:13.752716'),
+(37, 'main', '0012_pagina', '2022-10-14 02:08:05.630944'),
+(38, 'main', '0013_historia_pagina', '2022-10-14 02:40:01.351827'),
+(39, 'main', '0014_remove_historia_pagina_pagina_historia', '2022-10-14 02:49:58.011773');
 
 -- --------------------------------------------------------
 
@@ -365,7 +379,10 @@ INSERT INTO `main_categoria` (`id`, `nombre`) VALUES
 (1, 'misterio'),
 (2, 'comedia'),
 (3, 'terror'),
-(6, 'cotidiano');
+(6, 'cotidiano'),
+(7, 'computación'),
+(8, 'programación'),
+(9, 'redes');
 
 -- --------------------------------------------------------
 
@@ -386,7 +403,8 @@ CREATE TABLE `main_historia` (
 
 INSERT INTO `main_historia` (`id`, `titulo`, `portada`, `descripcion`) VALUES
 (8, 'desc1', 'imagenes/portadas/landscape.jpg', 'desc'),
-(28, 'Historia prueba 1', 'imagenes/portadas/book-default.png', NULL);
+(30, 'p', 'imagenes/portadas/book-default.png', NULL),
+(31, 'h', 'imagenes/portadas/book-default.png', NULL);
 
 -- --------------------------------------------------------
 
@@ -407,9 +425,21 @@ CREATE TABLE `main_historia_id_categoria` (
 INSERT INTO `main_historia_id_categoria` (`id`, `historia_id`, `categoria_id`) VALUES
 (33, 8, 3),
 (34, 8, 6),
-(35, 28, 1),
-(36, 28, 2),
-(37, 28, 6);
+(39, 31, 1),
+(40, 31, 3),
+(41, 31, 7);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `main_pagina`
+--
+
+CREATE TABLE `main_pagina` (
+  `id` bigint(20) NOT NULL,
+  `texto` varchar(800) NOT NULL,
+  `historia_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -535,6 +565,13 @@ ALTER TABLE `main_historia_id_categoria`
   ADD KEY `main_historia_id_cat_categoria_id_38ef862e_fk_main_cate` (`categoria_id`);
 
 --
+-- Indices de la tabla `main_pagina`
+--
+ALTER TABLE `main_pagina`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `main_pagina_historia_id_e74b548d_fk_main_historia_id` (`historia_id`);
+
+--
 -- Indices de la tabla `main_user`
 --
 ALTER TABLE `main_user`
@@ -560,7 +597,7 @@ ALTER TABLE `auth_group_permissions`
 -- AUTO_INCREMENT de la tabla `auth_permission`
 --
 ALTER TABLE `auth_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT de la tabla `auth_user`
@@ -584,37 +621,43 @@ ALTER TABLE `auth_user_user_permissions`
 -- AUTO_INCREMENT de la tabla `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT de la tabla `django_content_type`
 --
 ALTER TABLE `django_content_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT de la tabla `main_categoria`
 --
 ALTER TABLE `main_categoria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `main_historia`
 --
 ALTER TABLE `main_historia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT de la tabla `main_historia_id_categoria`
 --
 ALTER TABLE `main_historia_id_categoria`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
+--
+-- AUTO_INCREMENT de la tabla `main_pagina`
+--
+ALTER TABLE `main_pagina`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `main_user`
@@ -672,6 +715,12 @@ ALTER TABLE `django_admin_log`
 ALTER TABLE `main_historia_id_categoria`
   ADD CONSTRAINT `main_historia_id_cat_categoria_id_38ef862e_fk_main_cate` FOREIGN KEY (`categoria_id`) REFERENCES `main_categoria` (`id`),
   ADD CONSTRAINT `main_historia_id_cat_historia_id_2fc7a487_fk_main_hist` FOREIGN KEY (`historia_id`) REFERENCES `main_historia` (`id`);
+
+--
+-- Filtros para la tabla `main_pagina`
+--
+ALTER TABLE `main_pagina`
+  ADD CONSTRAINT `main_pagina_historia_id_e74b548d_fk_main_historia_id` FOREIGN KEY (`historia_id`) REFERENCES `main_historia` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

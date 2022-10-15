@@ -21,13 +21,15 @@ class Categoria(models.Model):
 	    return self.nombre
 
 
+
 class Historia(models.Model):
     id = models.AutoField(primary_key=True)
     titulo = models.CharField(max_length=100, verbose_name='titulo')
     portada = models.ImageField(upload_to='imagenes/portadas/', default="imagenes/portadas/book-default.png", verbose_name='portada')
     descripcion = models.CharField(max_length=100, verbose_name='descripcion', null=True, blank=True)
+    
+    # para agregarle muchas categorías
     id_categoria = models.ManyToManyField(Categoria, blank=True)
-
 
     def delete(self, using=None, keep_parents=False):
         if self.portada.name != 'imagenes/portadas/book-default.png':
@@ -41,7 +43,15 @@ class Historia(models.Model):
         if borrar != 'imagenes/portadas/book-default.png':
             self.portada.storage.delete(borrar)
 
-
     def __str__(self) -> str:
         return f'{self.id} {self.titulo}'
         
+
+class Pagina(models.Model):
+    texto = models.CharField(max_length=800, verbose_name='pagina')
+
+    # para agregar páginas a una historia
+    historia = models.ForeignKey(Historia, on_delete=models.CASCADE, null=True)
+
+    def __str__(self) -> str:
+        return super().__str__()

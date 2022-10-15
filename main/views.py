@@ -25,7 +25,7 @@ from .forms import NewUserForm
 from django.contrib import messages
 
 from .models import Categoria, Historia
-from .forms import CategoriaForm, HistoriaForm
+from .forms import CategoriaForm, HistoriaForm, PaginaForm
 
 
 class UsersList(generics.ListCreateAPIView):
@@ -160,15 +160,16 @@ def verHistorias(request):
 def agregarHistorias(request):
     # formulario para agregar historias
     formulario = HistoriaForm(request.POST or None, request.FILES or None)
+
+    # formulario para agregar páginas
+    form_pagina = PaginaForm(request.POST or None)
     
-    # obtener todas las categorías
-    categorias = Categoria.objects.all()
 
     if formulario.is_valid():
         formulario.save()
         return redirect('ver_historias')
     return render(request, 'admin/historias/agregar_historias.html', 
-    {'formulario': formulario, 'categorias': categorias})
+    {'formulario': formulario, 'form_pagina': form_pagina})
 
 def editarHistoria(request, id):
     historia = Historia.objects.get(id=id)
