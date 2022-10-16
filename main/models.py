@@ -48,8 +48,7 @@ class Historia(models.Model):
         
 
 class Pagina(models.Model):
-    texto = models.CharField(max_length=800, verbose_name='pagina')
-
+    texto = models.CharField(max_length=800, verbose_name='texto')
     # para agregar páginas a una historia
     historia = models.ForeignKey(Historia, on_delete=models.CASCADE, null=True)
 

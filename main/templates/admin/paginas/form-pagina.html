@@ -1,6 +1,19 @@
-{% for campo in form_pagina%}
+<!--{% for campo in form_pagina%}
 <div class="mb-3">
+    <label for="" class="form-label">{{ campo.label }}</label>
     {{ campo }}
 </div>
 
 {% endfor %}
+-->
+
+
+<div class="mb-3">
+    <label for="" class="form-label">Texto</label>
+    <input type="text" name="texto" maxlength="800" required="" id="id_texto">
+</div>
+
+<div class="mb-3">
+    <label for="" class="form-label">Id</label>
+    <input type="text" name="historia">
+</div>

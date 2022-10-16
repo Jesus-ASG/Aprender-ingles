@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost
--- Tiempo de generación: 15-10-2022 a las 02:43:39
--- Versión del servidor: 10.4.25-MariaDB
--- Versión de PHP: 8.1.10
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 16-10-2022 a las 19:08:16
+-- Versión del servidor: 10.4.24-MariaDB
+-- Versión de PHP: 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `AprendeIngles`
+-- Base de datos: `aprendeingles`
 --
 
 -- --------------------------------------------------------
@@ -163,7 +163,7 @@ CREATE TABLE `auth_user` (
 --
 
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
-(1, 'pbkdf2_sha256$390000$EvDdO3VH3BWCxKll6NE0wo$7OImud9GVz3cnC6p9oY9MhMGQbWQEbKa8oR1vbK6Cek=', '2022-10-01 19:29:35.943537', 1, 'jesus', '', '', 'email@mail.com', 1, 1, '2022-08-26 13:55:37.342878'),
+(1, 'pbkdf2_sha256$390000$EvDdO3VH3BWCxKll6NE0wo$7OImud9GVz3cnC6p9oY9MhMGQbWQEbKa8oR1vbK6Cek=', '2022-10-15 00:53:49.407141', 1, 'jesus', '', '', 'email@mail.com', 1, 1, '2022-08-26 13:55:37.342878'),
 (15, 'pbkdf2_sha256$390000$FexWIh6YpNH08P3y72ZkdZ$ZlBXDFsaiQj7Z7vwDhTnVHhNmVae4NCFdog4f9sFiBw=', '2022-08-30 01:57:08.947420', 0, 'juanito', '', '', 'juanito1@email.com', 0, 1, '2022-08-30 01:57:08.436337'),
 (16, 'pbkdf2_sha256$390000$ZIPx74AcRsMqW43079G9o6$4lOQHRSdFpvpbmeOWQZ1Elg1hTwyAk0qhqmKAie7Q74=', '2022-08-30 05:03:03.746542', 0, 'jbkj', '', '', 'mlml@m.com', 0, 1, '2022-08-30 05:03:03.225807'),
 (17, 'pbkdf2_sha256$390000$oEs8gInVDhqmgNZkzZWsm0$PpGJZErm09tcTuwM2KB7DZcarTGTF5RqlG4VVJf8060=', '2022-08-31 14:07:31.008990', 0, 'sdasdas', '', '', 'sdasd@m.com', 0, 1, '2022-08-31 14:07:30.507223'),
@@ -358,7 +358,8 @@ CREATE TABLE `django_session` (
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
 ('0mmb6npv0gm5v7zazz4x6n3bjwdtb4w0', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1oYIKa:b9yCCmj1AJBECmBcDchNkk1DCzgjqg6nEPbARFw33Uc', '2022-09-28 02:40:52.932086'),
-('wvozcm7wltrx02boyqgvyuelqs9zgnfd', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1oeiB5:FiQs19VH9rIphzc9_dqtsr4dlP7keWsKyHkckyxmi9Y', '2022-10-15 19:29:35.947914');
+('wvozcm7wltrx02boyqgvyuelqs9zgnfd', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1oeiB5:FiQs19VH9rIphzc9_dqtsr4dlP7keWsKyHkckyxmi9Y', '2022-10-15 19:29:35.947914'),
+('ytpkboht9fz0ez4pb5j8wv2ssq9b1rxj', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1ojVQz:p3lYs--GWowP3y4shZMbYaBqxtKuJ72eZEBiOjwG_yw', '2022-10-29 00:53:49.410139');
 
 -- --------------------------------------------------------
 
@@ -382,7 +383,8 @@ INSERT INTO `main_categoria` (`id`, `nombre`) VALUES
 (6, 'cotidiano'),
 (7, 'computación'),
 (8, 'programación'),
-(9, 'redes');
+(9, 'redes'),
+(10, 'fútbol');
 
 -- --------------------------------------------------------
 
@@ -402,9 +404,10 @@ CREATE TABLE `main_historia` (
 --
 
 INSERT INTO `main_historia` (`id`, `titulo`, `portada`, `descripcion`) VALUES
-(8, 'desc1', 'imagenes/portadas/landscape.jpg', 'desc'),
-(30, 'p', 'imagenes/portadas/book-default.png', NULL),
-(31, 'h', 'imagenes/portadas/book-default.png', NULL);
+(63, 'sdada', 'imagenes/portadas/book-default.png', NULL),
+(65, 'assas', 'imagenes/portadas/book-default.png', NULL),
+(66, 'aaaaa', 'imagenes/portadas/book-default.png', NULL),
+(67, 'aaaa', 'imagenes/portadas/book-default.png', NULL);
 
 -- --------------------------------------------------------
 
@@ -417,17 +420,6 @@ CREATE TABLE `main_historia_id_categoria` (
   `historia_id` int(11) NOT NULL,
   `categoria_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `main_historia_id_categoria`
---
-
-INSERT INTO `main_historia_id_categoria` (`id`, `historia_id`, `categoria_id`) VALUES
-(33, 8, 3),
-(34, 8, 6),
-(39, 31, 1),
-(40, 31, 3),
-(41, 31, 7);
 
 -- --------------------------------------------------------
 
@@ -639,25 +631,25 @@ ALTER TABLE `django_migrations`
 -- AUTO_INCREMENT de la tabla `main_categoria`
 --
 ALTER TABLE `main_categoria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `main_historia`
 --
 ALTER TABLE `main_historia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT de la tabla `main_historia_id_categoria`
 --
 ALTER TABLE `main_historia_id_categoria`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT de la tabla `main_pagina`
 --
 ALTER TABLE `main_pagina`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `main_user`
