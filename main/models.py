@@ -52,5 +52,10 @@ class Pagina(models.Model):
     # para agregar páginas a una historia
     historia = models.ForeignKey(Historia, on_delete=models.CASCADE, null=True)
 
-    def __str__(self) -> str:
-        return super().__str__()
+    def __str__(self):
+        if len(self.texto)>30:
+            return self.texto[:30]
+        else:
+            return self.texto
+
+    

@@ -1,19 +1,10 @@
-<!--{% for campo in form_pagina%}
-<div class="mb-3">
-    <label for="" class="form-label">{{ campo.label }}</label>
-    {{ campo }}
-</div>
-
-{% endfor %}
--->
-
+<button class="btn btn-primary">
+    Agregar página
+</button>
 
 <div class="mb-3">
-    <label for="" class="form-label">Texto</label>
-    <input type="text" name="texto" maxlength="800" required="" id="id_texto">
+    <label class="form-label">Texto</label>
+    <textarea type="text" name="texto" maxlength="800" 
+    id="id_texto" class="txt-historias form-control" required></textarea>
 </div>
 
-<div class="mb-3">
-    <label for="" class="form-label">Id</label>
-    <input type="text" name="historia">
-</div>

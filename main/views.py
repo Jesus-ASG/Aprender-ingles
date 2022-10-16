@@ -163,29 +163,14 @@ def agregarHistorias(request):
     paginaFR = PaginaForm(request.POST or None)
     
     if historiaFR.is_valid():
-
-        # form object saved
+        # form object
         historiaFO = historiaFR.save()
-
         # Crear form object de la página
         if paginaFR.is_valid():
             paginaFO = paginaFR.save(commit=False)
-            # paginaFR.cleaned_data['historia'] = historiaFO.id
             paginaFO.historia = historiaFO
-            
-            # paginaFO.historia = historiaFO.id
-            #paginaFO.historia = 87
-            # Guardar formulario para páginas
-            # print('imprimiendo historia del formulario...')
-            # print(paginaFO.historia)
-            # print(type(paginaFO.historia))
-            # print('imprimiendo id del objeto nuevo')
-            # print(historiaFO.id)
-            # print(type(historiaFO.id))
-            
             paginaFO.save()
         
-        #print(form_pagina.texto)
         return redirect('ver_historias')
     return render(request, 'admin/historias/agregar_historias.html', 
     {'formulario': historiaFR, 'form_pagina': paginaFR})
