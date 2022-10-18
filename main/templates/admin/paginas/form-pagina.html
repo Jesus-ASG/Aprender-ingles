@@ -1,10 +1,17 @@
-<button class="btn btn-primary">
+<a class="btn btn-primary" onclick="agregarPagina()">
     Agregar página
-</button>
+</a>
 
-<div class="mb-3">
+<input type="number" value="0" id="num_paginas" name="num_paginas" hidden>
+
+<div id="seccion_paginas">
+
+</div>
+
+<!--Estructura de una nota de texto-->
+<div class="mb-3" hidden>
     <label class="form-label">Texto</label>
     <textarea type="text" name="texto" maxlength="800" 
-    id="id_texto" class="txt-historias form-control" required></textarea>
+    id="id_texto" class="txt-historias form-control" value=""></textarea>
 </div>
 

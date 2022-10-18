@@ -27,7 +27,7 @@ class PaginaForm(forms.ModelForm):
 	class Meta:
 		model = Pagina
 		fields = '__all__'
-		exclude = ['historia']
+		exclude = ['texto','historia']
 	
 	
 

@@ -167,9 +167,15 @@ def agregarHistorias(request):
         historiaFO = historiaFR.save()
         # Crear form object de la página
         if paginaFR.is_valid():
-            paginaFO = paginaFR.save(commit=False)
-            paginaFO.historia = historiaFO
-            paginaFO.save()
+            num_paginas = int(request.POST.get('num_paginas'))
+            for i in range(num_paginas):
+                
+                texto = request.POST.get('texto_'+str(i))
+                paginaFO = paginaFR.save(commit=False)
+                paginaFO.texto = texto
+                paginaFO.historia = historiaFO
+                paginaFO.save()
+                paginaFR = PaginaForm()
         
         return redirect('ver_historias')
     return render(request, 'admin/historias/agregar_historias.html', 
