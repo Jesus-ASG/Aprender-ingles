@@ -27,7 +27,8 @@ class Historia(models.Model):
     titulo = models.CharField(max_length=100, verbose_name='titulo')
     portada = models.ImageField(upload_to='imagenes/portadas/', default="imagenes/portadas/book-default.png", verbose_name='portada')
     descripcion = models.CharField(max_length=100, verbose_name='descripcion', null=True, blank=True)
-    
+    #titulo_url = titulo.name.lower().replace(' ', '-')
+    #titulo_url = 'aaa'
     # para agregarle muchas categorías
     id_categoria = models.ManyToManyField(Categoria, blank=True)
 
@@ -45,7 +46,7 @@ class Historia(models.Model):
 
     def __str__(self) -> str:
         return f'{self.id} {self.titulo}'
-        
+    
 
 class Pagina(models.Model):
     texto = models.CharField(max_length=800, verbose_name='texto')

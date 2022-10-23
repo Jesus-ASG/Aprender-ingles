@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-10-2022 a las 01:58:21
+-- Tiempo de generación: 23-10-2022 a las 16:00:47
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -38,7 +38,7 @@ CREATE TABLE `authtoken_token` (
 --
 
 INSERT INTO `authtoken_token` (`key`, `created`, `user_id`) VALUES
-('c0313fe3835beb55ac1afd75349e797888c10c90', '2022-09-14 02:40:52.920207', 1);
+('9666be76208d8c566ec9b9f88030b7bd6ef9b6b4', '2022-10-23 02:02:18.477792', 1);
 
 -- --------------------------------------------------------
 
@@ -163,12 +163,8 @@ CREATE TABLE `auth_user` (
 --
 
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
-(1, 'pbkdf2_sha256$390000$EvDdO3VH3BWCxKll6NE0wo$7OImud9GVz3cnC6p9oY9MhMGQbWQEbKa8oR1vbK6Cek=', '2022-10-15 00:53:49.407141', 1, 'jesus', '', '', 'email@mail.com', 1, 1, '2022-08-26 13:55:37.342878'),
-(15, 'pbkdf2_sha256$390000$FexWIh6YpNH08P3y72ZkdZ$ZlBXDFsaiQj7Z7vwDhTnVHhNmVae4NCFdog4f9sFiBw=', '2022-08-30 01:57:08.947420', 0, 'juanito', '', '', 'juanito1@email.com', 0, 1, '2022-08-30 01:57:08.436337'),
-(16, 'pbkdf2_sha256$390000$ZIPx74AcRsMqW43079G9o6$4lOQHRSdFpvpbmeOWQZ1Elg1hTwyAk0qhqmKAie7Q74=', '2022-08-30 05:03:03.746542', 0, 'jbkj', '', '', 'mlml@m.com', 0, 1, '2022-08-30 05:03:03.225807'),
-(17, 'pbkdf2_sha256$390000$oEs8gInVDhqmgNZkzZWsm0$PpGJZErm09tcTuwM2KB7DZcarTGTF5RqlG4VVJf8060=', '2022-08-31 14:07:31.008990', 0, 'sdasdas', '', '', 'sdasd@m.com', 0, 1, '2022-08-31 14:07:30.507223'),
-(18, 'pbkdf2_sha256$390000$ScalzOpViCNkxq0wKWkEdv$Dz05/obDcvcc7p8tfjAA0a3IevQxB0m1m42h3lPqWPI=', '2022-09-05 23:10:49.209700', 0, 'jesus2', '', '', 'correo2@mail.com', 0, 1, '2022-09-05 23:10:48.654850'),
-(19, 'pbkdf2_sha256$390000$0VM8JSJnF1ynC8mrRJlrrG$lJrgGeqtBkiM1igJqGRhKNFLzlZ3BwZhauk++pa/APU=', '2022-09-14 02:39:55.759340', 0, 'jesus3', '', '', 'jesus3@mail.com', 0, 1, '2022-09-13 23:24:58.116704');
+(1, 'pbkdf2_sha256$390000$EvDdO3VH3BWCxKll6NE0wo$7OImud9GVz3cnC6p9oY9MhMGQbWQEbKa8oR1vbK6Cek=', '2022-10-23 02:02:18.498800', 1, 'jesus', '', '', 'email@mail.com', 1, 1, '2022-08-26 13:55:37.342878'),
+(20, 'pbkdf2_sha256$390000$NaVJMsErLrDNUcg4xc2xJ5$3l/jJrHv05k0J9WfM1wtR0bQR1UTdWnor6vxi8Njpq8=', '2022-10-22 20:28:21.650227', 0, 'usuario', '', '', 'usuario@correo.com', 0, 1, '2022-10-22 19:45:06.208655');
 
 -- --------------------------------------------------------
 
@@ -359,8 +355,11 @@ CREATE TABLE `django_session` (
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
 ('0mmb6npv0gm5v7zazz4x6n3bjwdtb4w0', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1oYIKa:b9yCCmj1AJBECmBcDchNkk1DCzgjqg6nEPbARFw33Uc', '2022-09-28 02:40:52.932086'),
-('wvozcm7wltrx02boyqgvyuelqs9zgnfd', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1oeiB5:FiQs19VH9rIphzc9_dqtsr4dlP7keWsKyHkckyxmi9Y', '2022-10-15 19:29:35.947914'),
-('ytpkboht9fz0ez4pb5j8wv2ssq9b1rxj', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1ojVQz:p3lYs--GWowP3y4shZMbYaBqxtKuJ72eZEBiOjwG_yw', '2022-10-29 00:53:49.410139');
+('46zm710sld47l4c65jnfhzwhf7kf9cbd', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1omQJe:LMFlFvG1oMHAMFL8_qt9v2zj1rC0jefMRBZbIxUDq_E', '2022-11-06 02:02:18.505800'),
+('ghat0eump2a416z40ovj7ua3l8jhjuuw', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1omKMU:sMN9WKhXS6P2Luh1YZxoKk0LTXRDlUpr9222V4ca-Y4', '2022-11-05 19:40:50.792637'),
+('hafbq7zchrpnqvq2dlw400g49p8f614e', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1omKO8:PVHEVEbQBbILIG-xL3CD8yAV8MSuOsTt7Zo_iB1B3H8', '2022-11-05 19:42:32.237781'),
+('qynqh05v8uijtp6imfr511199fsnqmaa', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1omKN2:dBh_t5rcxfjRHiQ4F-BaLoT7aKf6Ozbo5EBwZWeSn_Q', '2022-11-05 19:41:24.080897'),
+('wvozcm7wltrx02boyqgvyuelqs9zgnfd', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1oeiB5:FiQs19VH9rIphzc9_dqtsr4dlP7keWsKyHkckyxmi9Y', '2022-10-15 19:29:35.947914');
 
 -- --------------------------------------------------------
 
@@ -405,7 +404,12 @@ CREATE TABLE `main_historia` (
 --
 
 INSERT INTO `main_historia` (`id`, `titulo`, `portada`, `descripcion`) VALUES
-(122, 'Libro con varias páginas', 'imagenes/portadas/book-default.png', 'Desc');
+(127, 'Libro1', 'imagenes/portadas/book-default.png', 'Descripción'),
+(128, 'Libro prueba', 'imagenes/portadas/peakpx.jpg', 'Descripción de prueba'),
+(129, 'Otro libro con título muuuuy largo y todo muy largo en general', 'imagenes/portadas/wallpaperflare.com_wallpaper_3.jpg', 'Descripción de libro muuuy larga, esta descripción podría abarcar muchisimas y páginas sin sentido12'),
+(130, 'Otro libro más', 'imagenes/portadas/wallpaperflare.com_wallpaper.jpg', NULL),
+(131, 'Libro con\\n salto de página', 'imagenes/portadas/book-default.png', NULL),
+(132, 'rf', 'imagenes/portadas/book-default.png', NULL);
 
 -- --------------------------------------------------------
 
@@ -424,8 +428,19 @@ CREATE TABLE `main_historia_id_categoria` (
 --
 
 INSERT INTO `main_historia_id_categoria` (`id`, `historia_id`, `categoria_id`) VALUES
-(72, 122, 7),
-(71, 122, 8);
+(73, 127, 1),
+(74, 127, 3),
+(75, 128, 2),
+(76, 128, 6),
+(77, 128, 7),
+(78, 129, 1),
+(79, 129, 2),
+(80, 129, 3),
+(81, 129, 6),
+(82, 129, 7),
+(83, 129, 8),
+(84, 129, 9),
+(85, 129, 10);
 
 -- --------------------------------------------------------
 
@@ -444,9 +459,13 @@ CREATE TABLE `main_pagina` (
 --
 
 INSERT INTO `main_pagina` (`id`, `texto`, `historia_id`) VALUES
-(25, 'Página 1', 122),
-(26, 'Página 2', 122),
-(27, 'Página 3', 122);
+(31, 'Página 1 de Libro1', 127),
+(32, 'Página 2 de Libro1', 127),
+(33, 'Página de prueba 1', 128),
+(34, 'Página de prueba 2', 128),
+(35, 'p1', 129),
+(36, 'p2', 129),
+(37, 'p3', 129);
 
 -- --------------------------------------------------------
 
@@ -610,7 +629,7 @@ ALTER TABLE `auth_permission`
 -- AUTO_INCREMENT de la tabla `auth_user`
 --
 ALTER TABLE `auth_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `auth_user_groups`
@@ -652,19 +671,19 @@ ALTER TABLE `main_categoria`
 -- AUTO_INCREMENT de la tabla `main_historia`
 --
 ALTER TABLE `main_historia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
 
 --
 -- AUTO_INCREMENT de la tabla `main_historia_id_categoria`
 --
 ALTER TABLE `main_historia_id_categoria`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT de la tabla `main_pagina`
 --
 ALTER TABLE `main_pagina`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT de la tabla `main_user`

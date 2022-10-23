@@ -12,14 +12,13 @@
         <h2 style="text-align: center;">Librería de cuentos</h2>
         <hr>
         {% for historia in historias %}
+
         <div class="c-card">
             <div class="c-card-img-bg">
                 <div class="c-card-img">
                     <img src="{{ historia.portada.url }}" alt="{{ historia.portada }}">
                 </div>
-                
             </div>
-            
             <div class="c-card-title">
                 {{ historia.titulo|truncatechars:70 }}
             </div>

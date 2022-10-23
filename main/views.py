@@ -91,14 +91,20 @@ class IndexAdmin(APIView):
             if request.user.auth_token is not None:
                 if request.user.is_superuser:
                     historias = Historia.objects.all()
+                    #for i in range(len(historias)):
+                    #    historias[i].titulo_url = self.clearString(historias[i].titulo)
                     return render(request, 'admin/home_admin.html', {'historias': historias})
                 return render(request, 'urls/not_found.html')
         except AttributeError:
             # if a token doesn't exists return mainpage
             return render(request, 'urls/index.html')
 
-
-
+    @staticmethod
+    def clearString(string):
+        temp = string.lower().replace(' ', '-').replace('\\', '')
+        temp = temp.replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u')
+        print(f'\n\n\n{temp}')
+        return temp
 
 def register(request):
     if request.method == 'POST':
@@ -202,3 +208,9 @@ def eliminarHistoria(request, id):
     historia = Historia.objects.get(id=id)
     historia.delete()
     return redirect('ver_historias')
+
+
+# Renderizar historia
+
+def renderizarHistoria(request, titulo):
+    return render(request, 'admin/historias/editar_historia.html')
