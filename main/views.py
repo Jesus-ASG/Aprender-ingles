@@ -27,6 +27,9 @@ from django.contrib import messages
 from .models import Categoria, Historia
 from .forms import CategoriaForm, HistoriaForm, PaginaForm
 
+# Dar formato
+import re
+
 
 class UsersList(generics.ListCreateAPIView):
     queryset = User.objects.all()
@@ -99,13 +102,6 @@ class IndexAdmin(APIView):
             # if a token doesn't exists return mainpage
             return render(request, 'urls/index.html')
 
-    @staticmethod
-    def clearString(string):
-        temp = string.lower().replace(' ', '-').replace('\\', '')
-        temp = temp.replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u')
-        print(f'\n\n\n{temp}')
-        return temp
-
 def register(request):
     if request.method == 'POST':
         form = NewUserForm(request.POST)
@@ -164,8 +160,8 @@ class Response:
         self.alert = ''
         self.message = ''
     
-    def type(self, type):
-        match type:
+    def setAlert(self, alert):
+        match alert:
             case 'danger':
                 self.alert = 'alert-danger'
     
@@ -186,21 +182,18 @@ def agregarHistorias(request):
         {'formulario': historiaFR, 'form_pagina': paginaFR})
     
     historiaFO = historiaFR.save(commit=False)
-    #historiaFO.titulo = historiaFO.titulo.upper()
-    
-    
-    temp_route = historiaFO.getCleanRoute(historiaFO.titulo)
+    historiaFO.titulo = re.sub(' +', ' ', historiaFO.titulo)
+    temp_route = historiaFO.limpiarRuta(historiaFO.titulo)
     try:
-        duplicado = Historia.objects.get(route=temp_route)
+        duplicado = Historia.objects.get(ruta=temp_route)
         if duplicado:
-            resp = Response('danger')
-            resp.setMessage = 'Ya existe una historia con ese título'
+            resp = Response()
+            resp.setAlert('danger')
+            resp.setMessage('Ya existe una historia con ese título')
             return render(request, 'admin/historias/agregar_historias.html', 
             {'formulario': historiaFR, 'form_pagina': paginaFR, 'resp': resp})
     except:
-        historiaFO.route = temp_route
-    
-    print(f'\n\nnueva ruta\n\n\n{historiaFO.route}')
+        historiaFO.ruta = temp_route
 
     historiaFO = historiaFR.save()
     # Crear form object de la página
@@ -217,25 +210,40 @@ def agregarHistorias(request):
         return redirect('ver_historias')
 def editarHistoria(request, id):
     historia = Historia.objects.get(id=id)
-    # obtiene la portada original
+    # obtiene portada y ruta del objeto
     port1 = historia.get_portada()
-    formulario = HistoriaForm(request.POST or None, request.FILES or None, instance=historia)
-    if formulario.is_valid() and request.POST:
+    ruta_original = historia.ruta
+
+    fR = HistoriaForm(request.POST or None, request.FILES or None, instance=historia)
+    if fR.is_valid() and request.POST:
+        #### Cambiar ruta si es que modificó el título, ya que la ruta se basa en el título ####
+        historia.titulo = re.sub(' +', ' ', historia.titulo)
+        nueva_ruta = historia.limpiarRuta(historia.titulo)
+        if ruta_original != nueva_ruta:
+            try:
+                duplicado = Historia.objects.get(ruta=nueva_ruta)
+                if duplicado:
+                    resp = Response()
+                    resp.setAlert('danger')
+                    resp.setMessage('Ya existe una historia con ese título')
+                    return render(request, 'admin/historias/agregar_historias.html', 
+                    {'formulario': fR, 'form_pagina': fR, 'resp': resp})
+            except:
+                historia.ruta = nueva_ruta
+        #### Portada ####
         # obtiene la portada del formulario
         port2 = historia.get_portada()
         # si las portadas son diferentes, entonces borra la anterior
         if port1 != port2:
             historia.del_portada(port1)
-        # guarda los datos
-        formulario.save()
+        fR.save()
         return redirect('ver_historias')
-    return render(request, 'admin/historias/editar_historia.html', {'formulario': formulario})
+    return render(request, 'admin/historias/editar_historia.html', {'formulario': fR})
 
 def eliminarHistoria(request, id):
     historia = Historia.objects.get(id=id)
     historia.delete()
     return redirect('ver_historias')
-
 
 # Renderizar historia
 

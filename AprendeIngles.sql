@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-10-2022 a las 16:00:47
+-- Tiempo de generación: 23-10-2022 a las 23:05:48
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -245,7 +245,8 @@ INSERT INTO `django_admin_log` (`id`, `action_time`, `object_id`, `object_repr`,
 (32, '2022-10-14 02:43:45.100029', '8', '8 desc1', 2, '[{\"changed\": {\"fields\": [\"Pagina\"]}}]', 12, 1),
 (33, '2022-10-14 02:43:58.702567', '28', '28 Historia prueba 1', 2, '[{\"changed\": {\"fields\": [\"Pagina\"]}}]', 12, 1),
 (34, '2022-10-14 02:50:44.338262', '2', 'Pagina object (2)', 2, '[{\"changed\": {\"fields\": [\"Historia\"]}}]', 13, 1),
-(35, '2022-10-14 02:51:04.667004', '1', 'Pagina object (1)', 2, '[{\"changed\": {\"fields\": [\"Historia\"]}}]', 13, 1);
+(35, '2022-10-14 02:51:04.667004', '1', 'Pagina object (1)', 2, '[{\"changed\": {\"fields\": [\"Historia\"]}}]', 13, 1),
+(36, '2022-10-23 19:02:14.441953', '138', 'q w  www', 2, '[{\"changed\": {\"fields\": [\"Id categoria\"]}}]', 12, 1);
 
 -- --------------------------------------------------------
 
@@ -335,7 +336,9 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (37, 'main', '0012_pagina', '2022-10-14 02:08:05.630944'),
 (38, 'main', '0013_historia_pagina', '2022-10-14 02:40:01.351827'),
 (39, 'main', '0014_remove_historia_pagina_pagina_historia', '2022-10-14 02:49:58.011773'),
-(40, 'main', '0015_alter_pagina_texto', '2022-10-16 17:34:00.698001');
+(40, 'main', '0015_alter_pagina_texto', '2022-10-16 17:34:00.698001'),
+(41, 'main', '0016_historia_ruta', '2022-10-23 20:10:18.874148'),
+(42, 'main', '0017_alter_historia_ruta', '2022-10-23 20:22:05.956615');
 
 -- --------------------------------------------------------
 
@@ -396,20 +399,17 @@ CREATE TABLE `main_historia` (
   `id` int(11) NOT NULL,
   `titulo` varchar(100) NOT NULL,
   `portada` varchar(100) NOT NULL,
-  `descripcion` varchar(100) DEFAULT NULL
+  `descripcion` varchar(100) DEFAULT NULL,
+  `ruta` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `main_historia`
 --
 
-INSERT INTO `main_historia` (`id`, `titulo`, `portada`, `descripcion`) VALUES
-(127, 'Libro1', 'imagenes/portadas/book-default.png', 'Descripción'),
-(128, 'Libro prueba', 'imagenes/portadas/peakpx.jpg', 'Descripción de prueba'),
-(129, 'Otro libro con título muuuuy largo y todo muy largo en general', 'imagenes/portadas/wallpaperflare.com_wallpaper_3.jpg', 'Descripción de libro muuuy larga, esta descripción podría abarcar muchisimas y páginas sin sentido12'),
-(130, 'Otro libro más', 'imagenes/portadas/wallpaperflare.com_wallpaper.jpg', NULL),
-(131, 'Libro con\\n salto de página', 'imagenes/portadas/book-default.png', NULL),
-(132, 'rf', 'imagenes/portadas/book-default.png', NULL);
+INSERT INTO `main_historia` (`id`, `titulo`, `portada`, `descripcion`, `ruta`) VALUES
+(166, '1 1 4', 'imagenes/portadas/book-default.png', NULL, '1-1-4'),
+(167, '1 1 9', 'imagenes/portadas/peakpx.jpg', NULL, '1-1-9');
 
 -- --------------------------------------------------------
 
@@ -428,19 +428,11 @@ CREATE TABLE `main_historia_id_categoria` (
 --
 
 INSERT INTO `main_historia_id_categoria` (`id`, `historia_id`, `categoria_id`) VALUES
-(73, 127, 1),
-(74, 127, 3),
-(75, 128, 2),
-(76, 128, 6),
-(77, 128, 7),
-(78, 129, 1),
-(79, 129, 2),
-(80, 129, 3),
-(81, 129, 6),
-(82, 129, 7),
-(83, 129, 8),
-(84, 129, 9),
-(85, 129, 10);
+(124, 166, 1),
+(125, 166, 2),
+(126, 167, 3),
+(127, 167, 6),
+(128, 167, 7);
 
 -- --------------------------------------------------------
 
@@ -453,19 +445,6 @@ CREATE TABLE `main_pagina` (
   `texto` varchar(800) NOT NULL,
   `historia_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `main_pagina`
---
-
-INSERT INTO `main_pagina` (`id`, `texto`, `historia_id`) VALUES
-(31, 'Página 1 de Libro1', 127),
-(32, 'Página 2 de Libro1', 127),
-(33, 'Página de prueba 1', 128),
-(34, 'Página de prueba 2', 128),
-(35, 'p1', 129),
-(36, 'p2', 129),
-(37, 'p3', 129);
 
 -- --------------------------------------------------------
 
@@ -647,7 +626,7 @@ ALTER TABLE `auth_user_user_permissions`
 -- AUTO_INCREMENT de la tabla `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT de la tabla `django_content_type`
@@ -659,7 +638,7 @@ ALTER TABLE `django_content_type`
 -- AUTO_INCREMENT de la tabla `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT de la tabla `main_categoria`
@@ -671,19 +650,19 @@ ALTER TABLE `main_categoria`
 -- AUTO_INCREMENT de la tabla `main_historia`
 --
 ALTER TABLE `main_historia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=168;
 
 --
 -- AUTO_INCREMENT de la tabla `main_historia_id_categoria`
 --
 ALTER TABLE `main_historia_id_categoria`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
 -- AUTO_INCREMENT de la tabla `main_pagina`
 --
 ALTER TABLE `main_pagina`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT de la tabla `main_user`

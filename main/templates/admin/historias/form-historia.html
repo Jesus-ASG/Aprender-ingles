@@ -1,7 +1,21 @@
 {% load static %}
 
+{% if resp != None %}
+<div class="alert {{ resp.alert }} alert-dismissible fade show mb-2 mt-2" role="alert">
+  <div style="text-align: center;">
+    <strong>{{ resp.message }}</strong>
+  </div>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
 <form method="post" enctype="multipart/form-data" autocomplete="off">
   {% csrf_token %}
+  <!--Estructura de una ruta-->
+  <div class="mb-3" hidden>
+    <label class="form-label">id</label>
+    <textarea type="text" name="ruta" maxlength="100" id="id_ruta" class="form-control"
+      value=""></textarea>
+  </div>
 
   {% for campo in formulario%}
   <div class="mb-3">

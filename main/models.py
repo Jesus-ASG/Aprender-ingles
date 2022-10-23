@@ -1,4 +1,5 @@
 from cProfile import label
+from contextlib import nullcontext
 from email.policy import default
 from tabnanny import verbose
 from django.db import models
@@ -27,6 +28,7 @@ class Historia(models.Model):
     titulo = models.CharField(max_length=100, verbose_name='titulo')
     portada = models.ImageField(upload_to='imagenes/portadas/', default="imagenes/portadas/book-default.png", verbose_name='portada')
     descripcion = models.CharField(max_length=100, verbose_name='descripcion', null=True, blank=True)
+    ruta = models.CharField(max_length=100, verbose_name='ruta', null=True)
     id_categoria = models.ManyToManyField(Categoria, blank=True)
 
     def delete(self, using=None, keep_parents=False):
@@ -41,7 +43,7 @@ class Historia(models.Model):
         if borrar != 'imagenes/portadas/book-default.png':
             self.portada.storage.delete(borrar)
     
-    def getCleanRoute(self, route):
+    def limpiarRuta(self, route):
         route = route.lower().replace(' ', '-').replace('\\', '')
         route = route.replace('á', 'a').replace('é', 'e').replace('í', 'i')
         route = route.replace('ó', 'o').replace('ú', 'u')

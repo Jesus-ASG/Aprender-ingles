@@ -36,6 +36,7 @@ class HistoriaForm(forms.ModelForm):
 	class Meta:
 		model = Historia
 		fields = '__all__'
+		exclude = ['ruta']
 
 		widgets = {
 			'titulo': forms.TextInput(attrs={'class': 'form-control'}),
