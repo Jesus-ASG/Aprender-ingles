@@ -90,8 +90,9 @@ class IndexAdmin(APIView):
             # if a token exists return data
             if request.user.auth_token is not None:
                 if request.user.is_superuser:
-                    return render(request, 'admin/home_admin.html')
-                return render(request, 'urls/home.html')
+                    historias = Historia.objects.all()
+                    return render(request, 'admin/home_admin.html', {'historias': historias})
+                return render(request, 'urls/not_found.html')
         except AttributeError:
             # if a token doesn't exists return mainpage
             return render(request, 'urls/index.html')

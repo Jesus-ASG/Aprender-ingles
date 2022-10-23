@@ -7,12 +7,28 @@
 {% block navbar %} {% include './navbar-admin.html' %} {% endblock %}
 
 {% block content %}
-<div class="section-title">
-    <h1>Librería de cuentos</h1>
-    <hr>
-
-    <h2>Unidades cargadas aquí</h2>
-    <!--Cargar todas las unidades de la base de datos-->
+<div class="container">
+    <div class="row mt-3">
+        <h2 style="text-align: center;">Librería de cuentos</h2>
+        <hr>
+        {% for historia in historias %}
+        <div class="c-card">
+            <div class="c-card-img-bg">
+                <div class="c-card-img">
+                    <img src="{{ historia.portada.url }}" alt="{{ historia.portada }}">
+                </div>
+                
+            </div>
+            
+            <div class="c-card-title">
+                {{ historia.titulo|truncatechars:70 }}
+            </div>
+            
+        </div>
+        {% endfor %}
+        
+    </div>
+    
 
 </div>
 

@@ -26,7 +26,7 @@ body{
 }
 /*End main template*/
 
-/*Content */
+/* Navbar */
 .yellow-btn{
     border-radius: 50px;
     background-color: #EBDE50;
@@ -62,6 +62,7 @@ body{
     color: #000;
     align-items: center;
     text-align: center;
+    transition: all .2s ease-in-out;
 }
 
 .yellow-icon-btn:hover{
@@ -69,13 +70,7 @@ body{
     color: #F2864B;
 }
 
-
-.section-title{
-    text-align: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-/*End content*/
+/*End Navbar*/
 
 
 /*Index*/
@@ -86,8 +81,9 @@ body{
 
 .banner-item img{
     height: 70vh;
-    
+    width: 100%;
     display: inline-block;
+    object-fit: cover;
 }
 /*End index*/
 
@@ -129,6 +125,101 @@ body{
 
 /*End login*/
 
+/* Cartas para ver historias v1
+.c-card {
+    border: 2px solid #F2864B;
+    border-radius: 5%;
+    margin: 10px;
+    width: 200px;
+    height: 300px;
+    background: rgb(230,228,50);
+    background: radial-gradient(circle, rgba(230,228,50,1) 0%, rgba(237,156,4,1) 100%);
+    
+}
+
+.c-card-image{
+    margin-top: 5%;
+    height: 55%;
+    align-items: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5%;
+    border-bottom: 2px #F2864B solid;
+}
+
+.c-card-image img {
+    position: relative;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 5px;
+    object-fit: contain;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.c-card-title{
+    font-size: .8em;
+    font-weight: bold;
+}
+
+.c-card-description{
+    font-size: .7em;
+}
+*/
+.c-card {
+    width: 200px;
+    height: 400px;
+    margin: 10px;
+    border: 1px solid #c0c0c0;
+    transition: all .2s ease-in-out;
+}
+.c-card:hover{
+    cursor: pointer;
+    transform: scale(1.1);
+    color: #F2864B;
+}
+
+.c-card-img-bg{
+    border-radius: 5%;
+    margin: 5% 0 5% 0;
+    background-color: #c0c0c0;
+    width: 100%;
+    height: 70%;
+}
+.c-card-img{
+    align-items: center;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.c-card-img img {
+    position: relative;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 5px;
+    object-fit: contain;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.c-card-title{
+    position: relative;
+    max-height: 20%;
+    margin-bottom: 5%;
+    overflow: hidden;
+    font-size: .9em;
+    font-weight: bold;
+    text-align: center;
+}
+
+
 
 .cuadrado{
     height: 100px;
@@ -136,7 +227,6 @@ body{
     background-color: aqua;
     display: none;
 }
-
 
 .center{
     text-align: center;
