@@ -159,35 +159,62 @@ def eliminarCategoria(request, id):
 
 
 # Historias
+class Response:
+    def __init__(self):
+        self.alert = ''
+        self.message = ''
+    
+    def type(self, type):
+        match type:
+            case 'danger':
+                self.alert = 'alert-danger'
+    
+    def setMessage(self, message):
+        self.message = message
+        
 
 def verHistorias(request):
     historias = Historia.objects.all()
     return render(request, 'admin/historias/ver_historias.html', {'historias': historias})
 
 def agregarHistorias(request):
-    # form request
     historiaFR = HistoriaForm(request.POST or None, request.FILES or None)
     paginaFR = PaginaForm(request.POST or None)
     
-    if historiaFR.is_valid():
-        # form object
-        historiaFO = historiaFR.save()
-        # Crear form object de la página
-        if paginaFR.is_valid():
-            num_paginas = int(request.POST.get('num_paginas'))
-            for i in range(num_paginas):
-                
-                texto = request.POST.get('texto_'+str(i))
-                paginaFO = paginaFR.save(commit=False)
-                paginaFO.texto = texto
-                paginaFO.historia = historiaFO
-                paginaFO.save()
-                paginaFR = PaginaForm()
+    if not historiaFR.is_valid():
+        return render(request, 'admin/historias/agregar_historias.html', 
+        {'formulario': historiaFR, 'form_pagina': paginaFR})
+    
+    historiaFO = historiaFR.save(commit=False)
+    #historiaFO.titulo = historiaFO.titulo.upper()
+    
+    
+    temp_route = historiaFO.getCleanRoute(historiaFO.titulo)
+    try:
+        duplicado = Historia.objects.get(route=temp_route)
+        if duplicado:
+            resp = Response('danger')
+            resp.setMessage = 'Ya existe una historia con ese título'
+            return render(request, 'admin/historias/agregar_historias.html', 
+            {'formulario': historiaFR, 'form_pagina': paginaFR, 'resp': resp})
+    except:
+        historiaFO.route = temp_route
+    
+    print(f'\n\nnueva ruta\n\n\n{historiaFO.route}')
+
+    historiaFO = historiaFR.save()
+    # Crear form object de la página
+    if paginaFR.is_valid():
+        num_paginas = int(request.POST.get('num_paginas'))
+        for i in range(num_paginas):
+            texto = request.POST.get('texto_'+str(i))
+            paginaFO = paginaFR.save(commit=False)
+            paginaFO.texto = texto
+            paginaFO.historia = historiaFO
+            paginaFO.save()
+            paginaFR = PaginaForm()
         
         return redirect('ver_historias')
-    return render(request, 'admin/historias/agregar_historias.html', 
-    {'formulario': historiaFR, 'form_pagina': paginaFR})
-
 def editarHistoria(request, id):
     historia = Historia.objects.get(id=id)
     # obtiene la portada original
