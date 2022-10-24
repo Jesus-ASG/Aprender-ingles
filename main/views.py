@@ -74,33 +74,32 @@ class Logout(APIView):
             return HttpResponseNotFound('')
 
 
-class Index(APIView):
-    def get(self, request, format=None):
-        try:
-            # if a token exists return data
-            if request.user.auth_token is not None:
-                # if request.user.is_superuser:
-                #     return render(request, 'urls/home_admin.html')
-                return render(request, 'urls/home.html')
-        except AttributeError:
-            # if a token doesn't exists return mainpage
-            return render(request, 'urls/index.html')
+def index(request):
+    try:
+        # if a token exists return data
+        user = request.user
+        if user.auth_token is not None:
+            historias = Historia.objects.all()
+            
+            return render(request, 'urls/index.html', {'historias':historias, 'user':user})
+    except AttributeError:
+        # if a token doesn't exists return to homepage
+        return render(request, 'urls/home.html')
 
 
-class IndexAdmin(APIView):
-    def get(self, request, format=None):
-        try:
-            # if a token exists return data
-            if request.user.auth_token is not None:
-                if request.user.is_superuser:
-                    historias = Historia.objects.all()
-                    #for i in range(len(historias)):
-                    #    historias[i].titulo_url = self.clearString(historias[i].titulo)
-                    return render(request, 'admin/home_admin.html', {'historias': historias})
-                return render(request, 'urls/not_found.html')
-        except AttributeError:
-            # if a token doesn't exists return mainpage
+def myAdmin(request):
+    try:
+        # if a token exists return data
+        if request.user.auth_token is not None:
+            if request.user.is_superuser:
+                #historias = Historia.objects.all()
+                #return render(request, 'urls/index.html', {'historias': historias})
+                return redirect('ver_historias')
             return render(request, 'urls/index.html')
+    except AttributeError:
+        # if a token doesn't exists return mainpage
+        return render(request, 'urls/home.html')
+    
 
 def register(request):
     if request.method == 'POST':

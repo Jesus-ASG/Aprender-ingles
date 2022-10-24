@@ -2,69 +2,35 @@
 {% load static %}
 
 
-{% block title %} Aplicación X {% endblock %}
+{% block title %} Aprende inglés!!! {% endblock %}
 
-{% block navbar %} {% include 'navbar.html' %} {% endblock %}
+{% block navbar %} {% include 'navbar-custom.html' %} {% endblock %}
 
 {% block content %} 
-<div class="section-title">
-    <h1>¡La mejor aplicación para aprender inglés!</h1>
+<div class="container">
+    <div class="row mt-3">
+        <h2 style="text-align: center;">Librería de cuentos</h2>
+        <hr>
+        {% for historia in historias %}
+
+        <div class="c-card">
+            Ruta: {{ historia.ruta }} <br>
+            <div class="c-card-img-bg">
+                <div class="c-card-img">
+                    <img src="{{ historia.portada.url }}" alt="{{ historia.portada }}">
+                </div>
+            </div>
+            <div class="c-card-title">
+                {{ historia.titulo|truncatechars:70 }}
+            </div>
+            
+        </div>
+        {% endfor %}
+        
+    </div>
+    
+
 </div>
 
-<!-- CAROUSEL -->
-<div id="MiCarrusel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-indicators"> 
-        <button type="button" data-bs-target="#MiCarrusel" data-bs-slide-to="0" class="active" arial-label="Slide 1"></button>
-        <button type="button" data-bs-target="#MiCarrusel" data-bs-slide-to="1" class="active" arial-label="Slide 2"></button>
-        <button type="button" data-bs-target="#MiCarrusel" data-bs-slide-to="2" class="active" arial-label="Slide 3"></button>
-    </div>
-    <div class="carousel-inner">
-        <div class="carousel-item active banner-item">
-            <img src="{% static 'img/banner/b3.jpg' %}">
-            <div class="container">
-                <div class="carousel-caption text-start">
-                    <div>
-                        <h1>¡Aprende inglés de manera divertida!</h1>
-                        <p>Totalmente gratis.</p>
-                    </div>
-                    <p><a href="#" class="btn btn-sm btn-primary">unsigned button</a></p>
-                </div>
-            </div>						
-        </div>
-        <div class="carousel-item banner-item">
-            <img src="{% static 'img/banner/b2.jpg' %}">
-            <div class="container">
-                <div class="carousel-caption">
-                    <div>
-                        <h1>Desarrollado completamente en México</h1>
-                        <p></p>
-                    </div>
-                    <p><a href="{% url 'login' %}" class="btn btn-lg btn-primary">Comenzar a aprender</a></p>
-                </div>
-            </div>						
-        </div>
-        <div class="carousel-item banner-item">
-            <img src="{% static 'img/banner/b4.jpg' %}">
-            <div class="container">
-                <div class="carousel-caption text-end">
-                    <div>
-                        <h1>Benemérita Universidad Autónoma de Puebla</h1>
-                        <p>Facultad de Ciencias de la Computación</p>
-                    </div>
-                    <p><a href="#" class="btn btn-sm btn-primary">unsigned button</a></p>
-                </div>
-            </div>						
-        </div>	
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#MiCarrusel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#MiCarrusel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-</div>
-<hr>
-
+<br><br>
 {% endblock %}

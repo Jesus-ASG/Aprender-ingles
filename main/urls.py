@@ -6,8 +6,8 @@ from django.conf import settings
 from django.contrib.staticfiles.urls import static
 
 urlpatterns = [
-    path('', views.Index.as_view(), name='index'),
-    path('myadmin', views.IndexAdmin.as_view(), name='index_admin'),
+    path('', views.index, name='index'),
+    path('myadmin/', views.myAdmin, name='index_admin'),
 
     # Todas las historias y sus funciones
     path('myadmin/ver-historias', views.verHistorias, name = 'ver_historias'),
@@ -23,6 +23,6 @@ urlpatterns = [
     path('myadmin/editar-categoria/<int:id>', views.editarCategoria, name = 'editar_categoria'),
     path('myadmin/eliminar-categoria/<int:id>', views.eliminarCategoria, name = 'eliminar_categoria'),
     
-    path('sign_in', views.register, name='register'),
+    path('register', views.register, name='register'),
     path('user/', views.UsersList.as_view(), name = 'users_list'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
