@@ -16,6 +16,10 @@ body{
 	padding-bottom: 200px;
 	background-color: #fff;
 }
+div{
+    margin: 0;
+    padding: 0;
+}
 
 
 .footer-position{
@@ -176,6 +180,8 @@ body{
     margin: 10px;
     border: 1px solid #c0c0c0;
     transition: all .2s ease-in-out;
+    text-decoration: none;
+    color: #000;
 }
 .c-card:hover{
     cursor: pointer;

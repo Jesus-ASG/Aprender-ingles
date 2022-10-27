@@ -1,0 +1,19 @@
+{% extends 'main_template.html' %}
+{% load static %}
+
+{% block title %} {{ historia.titulo }} {% endblock %}
+
+{% block navbar %} {% include 'navbar-custom.html' %} {% endblock %}
+
+{% block content %}
+<div class="main-history-container mt-3">
+    
+    <p>{{ pagina }}</p>
+
+    {% if continua %}
+    <a href="{% url 'contenido_historia' ruta num_pagina %}"> Siguiente</a>
+    {% else %}
+    <a href="#"> Terminar lección</a>
+    {% endif%}
+</div>
+{% endblock %}

@@ -55,14 +55,12 @@ class Historia(models.Model):
     
 
 class Pagina(models.Model):
+    id = models.AutoField(primary_key=True)
     texto = models.CharField(max_length=800, verbose_name='texto')
     # para agregar páginas a una historia
     historia = models.ForeignKey(Historia, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        if len(self.texto)>30:
-            return self.texto[:30]
-        else:
-            return self.texto
+        return self.texto
 
     

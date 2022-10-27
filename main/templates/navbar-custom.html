@@ -10,30 +10,31 @@
         <div class="collapse navbar-collapse" id="navbarCollapse2">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" id="" href="{% url 'index' %}">Aplicación x</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Aplicación x</a>
                 </li>
 
                 {% if user.is_superuser %}
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" id="" href="{% url 'ver_historias' %}">Listar historias</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'ver_historias' %}">Listar historias</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" id="" href="{% url 'agregar_historias' %}">Agregar historias</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'agregar_historias' %}">Agregar historias</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" id="" href="{% url 'ver_categorias' %}">Ver categorías</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'ver_categorias' %}">Ver categorías</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" id="" href="{% url 'agregar_categorias' %}">Agregar categorías</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'agregar_categorias' %}">Agregar categorías</a>
                 </li>
                 {% endif %}
 
             </ul>
 
             <li class="d-flex m-1">
+                <span class="nav-link">{{ user.username }}</span>
                 <a class="yellow-icon-btn" id="btn_view_profile" role="button">
                     <i class="fa fa-user fa-2x" aria-hidden="true"></i>
                 </a>

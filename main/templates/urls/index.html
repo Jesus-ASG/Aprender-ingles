@@ -13,8 +13,7 @@
         <hr>
         {% for historia in historias %}
 
-        <div class="c-card">
-            Ruta: {{ historia.ruta }} <br>
+        <a class="c-card" href="{% url 'info_historia' historia.ruta %}">
             <div class="c-card-img-bg">
                 <div class="c-card-img">
                     <img src="{{ historia.portada.url }}" alt="{{ historia.portada }}">
@@ -24,7 +23,7 @@
                 {{ historia.titulo|truncatechars:70 }}
             </div>
             
-        </div>
+        </a>
         {% endfor %}
         
     </div>

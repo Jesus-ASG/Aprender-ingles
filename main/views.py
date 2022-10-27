@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic.edit import FormView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
@@ -24,7 +24,7 @@ from rest_framework.response import Response
 from .forms import NewUserForm
 from django.contrib import messages
 
-from .models import Categoria, Historia
+from .models import Categoria, Historia, Pagina
 from .forms import CategoriaForm, HistoriaForm, PaginaForm
 
 # Dar formato
@@ -244,7 +244,32 @@ def eliminarHistoria(request, id):
     historia.delete()
     return redirect('ver_historias')
 
-# Renderizar historia
+# Renderizar información de la historia
+def infoHistoria(request, ruta):
+    try:
+        historia = Historia.objects.get(ruta=ruta)
+        paginas = Pagina.objects.filter(historia = historia.id)
+        has_pages = False
+        if len(paginas) > 0:
+            has_pages = True
+        args = {'historia': historia, 'has_pages':has_pages}
+    except:
+        return HttpResponseNotFound()
+    return render(request, 'urls/info_historia.html', args)
 
-def renderizarHistoria(request, titulo):
-    return render(request, 'admin/historias/editar_historia.html')
+def contenidoHistoria(request, ruta, num_pagina):
+    try:
+        historia = Historia.objects.get(ruta=ruta)
+        paginas = Pagina.objects.filter(historia = historia.id)
+        continua = True
+        if num_pagina>=len(paginas):
+            continua = False
+        
+        args = {'historia': historia, 'pagina': paginas[num_pagina-1], 'continua':continua,
+        'ruta': ruta, 'num_pagina':num_pagina+1}
+    except:
+        return HttpResponseNotFound()
+    
+    
+
+    return render(request, 'urls/contenido_historia.html', args)
