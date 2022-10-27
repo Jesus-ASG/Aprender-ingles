@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-10-2022 a las 01:58:21
+-- Tiempo de generación: 27-10-2022 a las 10:29:01
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -38,7 +38,7 @@ CREATE TABLE `authtoken_token` (
 --
 
 INSERT INTO `authtoken_token` (`key`, `created`, `user_id`) VALUES
-('c0313fe3835beb55ac1afd75349e797888c10c90', '2022-09-14 02:40:52.920207', 1);
+('dda73440351d6c798b80294a0bbc080b05b94230', '2022-10-27 04:30:06.304912', 1);
 
 -- --------------------------------------------------------
 
@@ -163,12 +163,8 @@ CREATE TABLE `auth_user` (
 --
 
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
-(1, 'pbkdf2_sha256$390000$EvDdO3VH3BWCxKll6NE0wo$7OImud9GVz3cnC6p9oY9MhMGQbWQEbKa8oR1vbK6Cek=', '2022-10-15 00:53:49.407141', 1, 'jesus', '', '', 'email@mail.com', 1, 1, '2022-08-26 13:55:37.342878'),
-(15, 'pbkdf2_sha256$390000$FexWIh6YpNH08P3y72ZkdZ$ZlBXDFsaiQj7Z7vwDhTnVHhNmVae4NCFdog4f9sFiBw=', '2022-08-30 01:57:08.947420', 0, 'juanito', '', '', 'juanito1@email.com', 0, 1, '2022-08-30 01:57:08.436337'),
-(16, 'pbkdf2_sha256$390000$ZIPx74AcRsMqW43079G9o6$4lOQHRSdFpvpbmeOWQZ1Elg1hTwyAk0qhqmKAie7Q74=', '2022-08-30 05:03:03.746542', 0, 'jbkj', '', '', 'mlml@m.com', 0, 1, '2022-08-30 05:03:03.225807'),
-(17, 'pbkdf2_sha256$390000$oEs8gInVDhqmgNZkzZWsm0$PpGJZErm09tcTuwM2KB7DZcarTGTF5RqlG4VVJf8060=', '2022-08-31 14:07:31.008990', 0, 'sdasdas', '', '', 'sdasd@m.com', 0, 1, '2022-08-31 14:07:30.507223'),
-(18, 'pbkdf2_sha256$390000$ScalzOpViCNkxq0wKWkEdv$Dz05/obDcvcc7p8tfjAA0a3IevQxB0m1m42h3lPqWPI=', '2022-09-05 23:10:49.209700', 0, 'jesus2', '', '', 'correo2@mail.com', 0, 1, '2022-09-05 23:10:48.654850'),
-(19, 'pbkdf2_sha256$390000$0VM8JSJnF1ynC8mrRJlrrG$lJrgGeqtBkiM1igJqGRhKNFLzlZ3BwZhauk++pa/APU=', '2022-09-14 02:39:55.759340', 0, 'jesus3', '', '', 'jesus3@mail.com', 0, 1, '2022-09-13 23:24:58.116704');
+(1, 'pbkdf2_sha256$390000$EvDdO3VH3BWCxKll6NE0wo$7OImud9GVz3cnC6p9oY9MhMGQbWQEbKa8oR1vbK6Cek=', '2022-10-27 04:30:06.316004', 1, 'jesus', '', '', 'email@mail.com', 1, 1, '2022-08-26 13:55:37.342878'),
+(20, 'pbkdf2_sha256$390000$NaVJMsErLrDNUcg4xc2xJ5$3l/jJrHv05k0J9WfM1wtR0bQR1UTdWnor6vxi8Njpq8=', '2022-10-24 06:16:06.219619', 0, 'usuario', '', '', 'usuario@correo.com', 0, 1, '2022-10-22 19:45:06.208655');
 
 -- --------------------------------------------------------
 
@@ -249,7 +245,8 @@ INSERT INTO `django_admin_log` (`id`, `action_time`, `object_id`, `object_repr`,
 (32, '2022-10-14 02:43:45.100029', '8', '8 desc1', 2, '[{\"changed\": {\"fields\": [\"Pagina\"]}}]', 12, 1),
 (33, '2022-10-14 02:43:58.702567', '28', '28 Historia prueba 1', 2, '[{\"changed\": {\"fields\": [\"Pagina\"]}}]', 12, 1),
 (34, '2022-10-14 02:50:44.338262', '2', 'Pagina object (2)', 2, '[{\"changed\": {\"fields\": [\"Historia\"]}}]', 13, 1),
-(35, '2022-10-14 02:51:04.667004', '1', 'Pagina object (1)', 2, '[{\"changed\": {\"fields\": [\"Historia\"]}}]', 13, 1);
+(35, '2022-10-14 02:51:04.667004', '1', 'Pagina object (1)', 2, '[{\"changed\": {\"fields\": [\"Historia\"]}}]', 13, 1),
+(36, '2022-10-23 19:02:14.441953', '138', 'q w  www', 2, '[{\"changed\": {\"fields\": [\"Id categoria\"]}}]', 12, 1);
 
 -- --------------------------------------------------------
 
@@ -339,7 +336,9 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (37, 'main', '0012_pagina', '2022-10-14 02:08:05.630944'),
 (38, 'main', '0013_historia_pagina', '2022-10-14 02:40:01.351827'),
 (39, 'main', '0014_remove_historia_pagina_pagina_historia', '2022-10-14 02:49:58.011773'),
-(40, 'main', '0015_alter_pagina_texto', '2022-10-16 17:34:00.698001');
+(40, 'main', '0015_alter_pagina_texto', '2022-10-16 17:34:00.698001'),
+(41, 'main', '0016_historia_ruta', '2022-10-23 20:10:18.874148'),
+(42, 'main', '0017_alter_historia_ruta', '2022-10-23 20:22:05.956615');
 
 -- --------------------------------------------------------
 
@@ -359,8 +358,11 @@ CREATE TABLE `django_session` (
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
 ('0mmb6npv0gm5v7zazz4x6n3bjwdtb4w0', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1oYIKa:b9yCCmj1AJBECmBcDchNkk1DCzgjqg6nEPbARFw33Uc', '2022-09-28 02:40:52.932086'),
-('wvozcm7wltrx02boyqgvyuelqs9zgnfd', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1oeiB5:FiQs19VH9rIphzc9_dqtsr4dlP7keWsKyHkckyxmi9Y', '2022-10-15 19:29:35.947914'),
-('ytpkboht9fz0ez4pb5j8wv2ssq9b1rxj', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1ojVQz:p3lYs--GWowP3y4shZMbYaBqxtKuJ72eZEBiOjwG_yw', '2022-10-29 00:53:49.410139');
+('ghat0eump2a416z40ovj7ua3l8jhjuuw', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1omKMU:sMN9WKhXS6P2Luh1YZxoKk0LTXRDlUpr9222V4ca-Y4', '2022-11-05 19:40:50.792637'),
+('hafbq7zchrpnqvq2dlw400g49p8f614e', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1omKO8:PVHEVEbQBbILIG-xL3CD8yAV8MSuOsTt7Zo_iB1B3H8', '2022-11-05 19:42:32.237781'),
+('n6k5dxpev32a0qxurt5q7qi7ry8cxtev', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1onuWs:PZhbb1acr3OCewsO5OuHDHnjtBc7m9-KoJbDDh5yEeA', '2022-11-10 04:30:06.320833'),
+('qynqh05v8uijtp6imfr511199fsnqmaa', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1omKN2:dBh_t5rcxfjRHiQ4F-BaLoT7aKf6Ozbo5EBwZWeSn_Q', '2022-11-05 19:41:24.080897'),
+('wvozcm7wltrx02boyqgvyuelqs9zgnfd', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1oeiB5:FiQs19VH9rIphzc9_dqtsr4dlP7keWsKyHkckyxmi9Y', '2022-10-15 19:29:35.947914');
 
 -- --------------------------------------------------------
 
@@ -385,7 +387,9 @@ INSERT INTO `main_categoria` (`id`, `nombre`) VALUES
 (7, 'computación'),
 (8, 'programación'),
 (9, 'redes'),
-(10, 'fútbol');
+(10, 'fútbol'),
+(11, 'Otros'),
+(12, 'Animales');
 
 -- --------------------------------------------------------
 
@@ -397,15 +401,19 @@ CREATE TABLE `main_historia` (
   `id` int(11) NOT NULL,
   `titulo` varchar(100) NOT NULL,
   `portada` varchar(100) NOT NULL,
-  `descripcion` varchar(100) DEFAULT NULL
+  `descripcion` varchar(100) DEFAULT NULL,
+  `ruta` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `main_historia`
 --
 
-INSERT INTO `main_historia` (`id`, `titulo`, `portada`, `descripcion`) VALUES
-(122, 'Libro con varias páginas', 'imagenes/portadas/book-default.png', 'Desc');
+INSERT INTO `main_historia` (`id`, `titulo`, `portada`, `descripcion`, `ruta`) VALUES
+(168, 'Historia de ejemplo', 'imagenes/portadas/book-default.png', 'Esta es una historia de ejemplo, cuenta con 4 categorías seleccionadas al azar y con 2 páginas.', 'historia-de-ejemplo'),
+(169, 'Aprendiendo el abecedario', 'imagenes/portadas/imagen-abc-dl29456.webp', 'Abecedario', 'aprendiendo-el-abecedario'),
+(170, 'Perrito', 'imagenes/portadas/descarga.jpg', 'No tiene páginas', 'perrito'),
+(171, 'Gatitos', 'imagenes/portadas/purina-brand-que-saber-de-los-gatitos-bebes.webp', 'Gatitos en una foto', 'gatitos');
 
 -- --------------------------------------------------------
 
@@ -424,8 +432,14 @@ CREATE TABLE `main_historia_id_categoria` (
 --
 
 INSERT INTO `main_historia_id_categoria` (`id`, `historia_id`, `categoria_id`) VALUES
-(72, 122, 7),
-(71, 122, 8);
+(129, 168, 1),
+(130, 168, 3),
+(131, 168, 6),
+(132, 168, 7),
+(133, 169, 1),
+(134, 170, 11),
+(135, 171, 11),
+(136, 171, 12);
 
 -- --------------------------------------------------------
 
@@ -444,9 +458,15 @@ CREATE TABLE `main_pagina` (
 --
 
 INSERT INTO `main_pagina` (`id`, `texto`, `historia_id`) VALUES
-(25, 'Página 1', 122),
-(26, 'Página 2', 122),
-(27, 'Página 3', 122);
+(59, 'Página 1 de la historia de ejemplo', 168),
+(60, 'Página 2 de la historia de ejemplo', 168),
+(61, 'A', 169),
+(62, 'B', 169),
+(63, 'C', 169),
+(64, 'D', 169),
+(65, 'E\r\nF\r\nG\r\nH\r\nI', 169),
+(66, 'Página 1', 171),
+(67, 'Página 2', 171);
 
 -- --------------------------------------------------------
 
@@ -610,7 +630,7 @@ ALTER TABLE `auth_permission`
 -- AUTO_INCREMENT de la tabla `auth_user`
 --
 ALTER TABLE `auth_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `auth_user_groups`
@@ -628,7 +648,7 @@ ALTER TABLE `auth_user_user_permissions`
 -- AUTO_INCREMENT de la tabla `django_admin_log`
 --
 ALTER TABLE `django_admin_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT de la tabla `django_content_type`
@@ -640,31 +660,31 @@ ALTER TABLE `django_content_type`
 -- AUTO_INCREMENT de la tabla `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT de la tabla `main_categoria`
 --
 ALTER TABLE `main_categoria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `main_historia`
 --
 ALTER TABLE `main_historia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=172;
 
 --
 -- AUTO_INCREMENT de la tabla `main_historia_id_categoria`
 --
 ALTER TABLE `main_historia_id_categoria`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
 
 --
 -- AUTO_INCREMENT de la tabla `main_pagina`
 --
 ALTER TABLE `main_pagina`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT de la tabla `main_user`
