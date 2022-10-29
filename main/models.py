@@ -19,7 +19,7 @@ class Categoria(models.Model):
     nombre = models.CharField(max_length=100, verbose_name='nombre')
 
     def __str__(self):
-	    return self.nombre.capitalize()
+	    return self.nombre
 
 
 
@@ -61,6 +61,6 @@ class Pagina(models.Model):
     historia = models.ForeignKey(Historia, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.texto
+        return f'id: {self.id} | texto: {self.texto[:5]}... | pertenece: {self.historia}'
 
     

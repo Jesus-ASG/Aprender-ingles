@@ -9,7 +9,13 @@
 {% block content %}
 
 <div class="main-history-container mt-3">
-
+    <div class="btn-regresar">
+        <a href="{% url 'index' %}">
+            <i class="fa fa-arrow-left fa-3x" aria-hidden="true"></i>
+            <label>Regresar</label>
+        </a>
+    </div>
+    
     <section class="seccion-1">
         <div class="info-container-img">
             <img src="{{ historia.portada.url }}" alt="{{ historia.portada }}">

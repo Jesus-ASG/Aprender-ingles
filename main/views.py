@@ -264,9 +264,10 @@ def contenidoHistoria(request, ruta, num_pagina):
         continua = True
         if num_pagina>=len(paginas):
             continua = False
-        
-        args = {'historia': historia, 'pagina': paginas[num_pagina-1], 'continua':continua,
-        'ruta': ruta, 'num_pagina':num_pagina+1}
+        pagina = paginas[num_pagina-1]
+        prueba = '<a href="https://www.google.com">Elemento a</a><div class="rojo">Elemento div</div>'
+        args = {'historia': historia, 'pagina': pagina, 'continua':continua,
+        'ruta': ruta, 'num_pagina':num_pagina+1, 'prueba':prueba}
     except:
         return HttpResponseNotFound()
     
