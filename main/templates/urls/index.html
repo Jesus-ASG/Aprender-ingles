@@ -13,7 +13,7 @@
         <hr>
         {% for historia in historias %}
 
-        <a class="c-card" href="{% url 'info_historia' historia.ruta %}">
+        <a class="c-card" href="{% url 'info_historia' historia.route %}">
             <div class="c-card-img-bg">
                 <div class="c-card-img">
                     <img src="{{ historia.portada.url }}" alt="{{ historia.portada }}">

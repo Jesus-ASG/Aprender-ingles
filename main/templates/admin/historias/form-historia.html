@@ -10,12 +10,6 @@
 {% endif %}
 <form method="post" enctype="multipart/form-data" autocomplete="off">
   {% csrf_token %}
-  <!--Estructura de una ruta-->
-  <div class="mb-3" hidden>
-    <label class="form-label">id</label>
-    <textarea type="text" name="ruta" maxlength="100" id="id_ruta" class="form-control"
-      value=""></textarea>
-  </div>
 
   {% for campo in formulario%}
   <div class="mb-3">

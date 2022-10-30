@@ -24,7 +24,7 @@ from rest_framework.response import Response
 from .forms import NewUserForm
 from django.contrib import messages
 
-from .models import Categoria, Historia, Pagina
+from .models import Categoria, Historia, Page
 from .forms import CategoriaForm, HistoriaForm, PaginaForm
 
 # Dar formato
@@ -182,9 +182,9 @@ def agregarHistorias(request):
     
     historiaFO = historiaFR.save(commit=False)
     historiaFO.titulo = re.sub(' +', ' ', historiaFO.titulo)
-    temp_route = historiaFO.limpiarRuta(historiaFO.titulo)
+    
     try:
-        duplicado = Historia.objects.get(ruta=temp_route)
+        duplicado = Historia.objects.get(titulo=historiaFO.titulo)
         if duplicado:
             resp = Response()
             resp.setAlert('danger')
@@ -192,7 +192,8 @@ def agregarHistorias(request):
             return render(request, 'admin/historias/agregar_historias.html', 
             {'formulario': historiaFR, 'form_pagina': paginaFR, 'resp': resp})
     except:
-        historiaFO.ruta = temp_route
+        #does nothing because save() method already save slug
+        pass
 
     historiaFO = historiaFR.save()
     # Crear form object de la página
@@ -207,20 +208,20 @@ def agregarHistorias(request):
             paginaFR = PaginaForm()
         
         return redirect('ver_historias')
+    
 def editarHistoria(request, id):
     historia = Historia.objects.get(id=id)
     # obtiene portada y ruta del objeto
     port1 = historia.get_portada()
-    ruta_original = historia.ruta
+    first_title = re.sub(' +', ' ', historia.titulo)
 
     fR = HistoriaForm(request.POST or None, request.FILES or None, instance=historia)
     if fR.is_valid() and request.POST:
         #### Cambiar ruta si es que modificó el título, ya que la ruta se basa en el título ####
         historia.titulo = re.sub(' +', ' ', historia.titulo)
-        nueva_ruta = historia.limpiarRuta(historia.titulo)
-        if ruta_original != nueva_ruta:
+        if first_title != historia.titulo:
             try:
-                duplicado = Historia.objects.get(ruta=nueva_ruta)
+                duplicado = Historia.objects.get(titulo=historia.titulo)
                 if duplicado:
                     resp = Response()
                     resp.setAlert('danger')
@@ -228,7 +229,8 @@ def editarHistoria(request, id):
                     return render(request, 'admin/historias/agregar_historias.html', 
                     {'formulario': fR, 'form_pagina': fR, 'resp': resp})
             except:
-                historia.ruta = nueva_ruta
+                #does nothing because save() method already save slug
+                pass
         #### Portada ####
         # obtiene la portada del formulario
         port2 = historia.get_portada()
@@ -248,7 +250,7 @@ def eliminarHistoria(request, id):
 def infoHistoria(request, ruta):
     try:
         historia = Historia.objects.get(ruta=ruta)
-        paginas = Pagina.objects.filter(historia = historia.id)
+        paginas = Page.objects.filter(historia = historia.id)
         has_pages = False
         if len(paginas) > 0:
             has_pages = True
@@ -260,7 +262,7 @@ def infoHistoria(request, ruta):
 def contenidoHistoria(request, ruta, num_pagina):
     try:
         historia = Historia.objects.get(ruta=ruta)
-        paginas = Pagina.objects.filter(historia = historia.id)
+        paginas = Page.objects.filter(historia = historia.id)
         continua = True
         if num_pagina>=len(paginas):
             continua = False

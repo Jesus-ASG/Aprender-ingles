@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Categoria, Historia, Pagina
+from .models import Categoria, Historia, Page
 
 
 class NewUserForm(UserCreationForm):
@@ -25,7 +25,7 @@ class CategoriaForm(forms.ModelForm):
 
 class PaginaForm(forms.ModelForm):
 	class Meta:
-		model = Pagina
+		model = Page
 		fields = '__all__'
 		exclude = ['texto','historia']
 	
@@ -36,7 +36,7 @@ class HistoriaForm(forms.ModelForm):
 	class Meta:
 		model = Historia
 		fields = '__all__'
-		exclude = ['ruta']
+		exclude = ['route']
 
 		widgets = {
 			'titulo': forms.TextInput(attrs={'class': 'form-control'}),
@@ -48,6 +48,7 @@ class HistoriaForm(forms.ModelForm):
 		queryset=Categoria.objects.all(),
 		widget=forms.CheckboxSelectMultiple(attrs={'class': ''}),
 		required=False,
-		label = 'Id categoría',
+		label = 'Categorías',
 	)
+
 
