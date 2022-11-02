@@ -29,14 +29,14 @@
                         {% for historia in historias %}
                         <tr>
                             <td>{{ historia.id }}</td>
-                            <td>{{ historia.titulo }}</td>
+                            <td>{{ historia.title }}</td>
                             <td style="width: 180px;">
-                                <img src="{{ historia.portada.url }}" width="100px" alt="{{ historia.portada }}">
+                                <img src="{{ historia.cover.url }}" width="100px" alt="{{ historia.cover }}">
                             </td>
-                            <td>{{ historia.descripcion }}</td>
+                            <td>{{ historia.description }}</td>
                             <td>
                                 <ul>
-                                {% for cat in historia.id_categoria.all %}
+                                {% for cat in historia.tag.all %}
                                 <li>{{ cat.nombre }}</li>
                                 {% endfor %}
                                 </ul>

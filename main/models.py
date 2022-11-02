@@ -18,59 +18,59 @@ class User(models.Model):
 
 
 # Categoría
-class Categoria(models.Model):
+class Tag(models.Model):
     class Meta:
-        db_table = prefix + 'categoria'
+        db_table = prefix + 'tag'
 
     # keys
     id = models.AutoField(primary_key=True)
     # fields
-    nombre = models.CharField(max_length=100, verbose_name='nombre')
+    name = models.CharField(max_length=100, verbose_name='nombre')
 
     def __str__(self) -> str:
-        return self.nombre
+        return self.name
 
 
 # -------- -------- -------- --------
 
 
 # Historia
-class Historia(models.Model):
+class Story(models.Model):
     class Meta:
-        db_table = prefix + 'historia'
+        db_table = prefix + 'story'
 
     # primary key
     id = models.AutoField(primary_key=True)
     # fields
-    titulo = models.CharField(max_length=100, verbose_name='titulo')
-    portada = models.ImageField(upload_to='imagenes/portadas/', default="imagenes/portadas/book-default.png",
-                                verbose_name='portada')
-    descripcion = models.CharField(max_length=100, verbose_name='descripcion', null=True, blank=True)
-    route = models.SlugField(max_length=255, unique=True, null=True, default='')
+    title = models.CharField(max_length=100, verbose_name='title')
+    cover = models.ImageField(upload_to='imagenes/portadas/', default="imagenes/portadas/book-default.png",
+                              verbose_name='cover')
+    description = models.CharField(max_length=100, verbose_name='description', null=True, blank=True)
+    route = models.SlugField(max_length=255, unique=True, null=False, default='')
 
     # many to many field
-    id_categoria = models.ManyToManyField(Categoria, blank=True)
+    tag = models.ManyToManyField(Tag, blank=True)
 
     def get_portada(self):
-        return self.portada.name
+        return self.cover.name
 
     def del_portada(self, borrar):
         if borrar != 'imagenes/portadas/book-default.png':
-            self.portada.storage.delete(borrar)
+            self.cover.storage.delete(borrar)
 
     # Override methods
     def save(self, *args, **kwargs):
         if not self.route:
-            self.route = slugify(self.titulo)
-        super(Historia, self).save(*args, **kwargs)
+            self.route = slugify(self.title)
+        super(Story, self).save(*args, **kwargs)
 
     def delete(self, using=None, keep_parents=False):
-        if self.portada.name != 'imagenes/portadas/book-default.png':
-            self.portada.storage.delete(self.portada.name)
+        if self.cover.name != 'imagenes/portadas/book-default.png':
+            self.cover.storage.delete(self.cover.name)
         super().delete()
 
     def __str__(self):
-        return f'id: {self.id} | titulo: {self.titulo[:5]}...'
+        return f'id: {self.id} | titulo: {self.title[:5]}...'
 
 
 # -------- -------- -------- --------
@@ -79,16 +79,16 @@ class Historia(models.Model):
 # Página
 class Page(models.Model):
     class Meta:
-        db_table = prefix + 'historia_pagina'
+        db_table = prefix + 'story_page'
 
     # keys
     id = models.AutoField(primary_key=True)
-    historia = models.ForeignKey(Historia, on_delete=models.CASCADE, null=True)
+    story = models.ForeignKey(Story, on_delete=models.CASCADE, null=True)
     # fields
     texto = models.CharField(max_length=800, verbose_name='texto')
 
     def __str__(self) -> str:
-        return f'id: {self.id} | texto: {self.texto[:5]}... | pertenece: {self.historia}'
+        return f'id: {self.id} | texto: {self.texto[:5]}... | pertenece: {self.story}'
 
 
 # -------- -------- -------- --------
@@ -97,7 +97,7 @@ class Page(models.Model):
 # Diálogo
 class Dialogue(models.Model):
     class Meta:
-        db_table = prefix + 'pag_conversation'
+        db_table = prefix + 'page_dialogue'
 
     # keys
     id = models.AutoField(primary_key=True)
@@ -117,7 +117,7 @@ class Dialogue(models.Model):
 # Repetir frase
 class RepeatPhrase(models.Model):
     class Meta:
-        db_table = prefix + 'pag_repeat_phrase'
+        db_table = prefix + 'page_repeat_phrase'
 
     # keys
     id = models.AutoField(primary_key=True)
@@ -136,7 +136,7 @@ class RepeatPhrase(models.Model):
 # Pregunta y respuestas de opción múltiple
 class Question(models.Model):
     class Meta:
-        db_table = prefix + 'pag_question'
+        db_table = prefix + 'page_question'
 
     # keys
     id = models.AutoField(primary_key=True)
@@ -150,7 +150,7 @@ class Question(models.Model):
 
 class Option(models.Model):
     class Meta:
-        db_table = prefix + 'pag_question_option'
+        db_table = prefix + 'page_question_option'
 
     # keys
     id = models.AutoField(primary_key=True)
