@@ -13,7 +13,7 @@
 
   {% for campo in formulario%}
   <div class="mb-3">
-    <label for="" class="form-label">{{ campo.label }}</label>
+    <label for="{{ campo.name }}" class="form-label">{{ campo.label }}</label>
 
     {% if campo.field.widget.input_type == 'file' and campo.value.url %} <br>
     <img src="{{ campo.value.url }}" alt="No se pudo cargar imagen" height="100">

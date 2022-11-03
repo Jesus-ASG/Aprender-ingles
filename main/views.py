@@ -189,7 +189,7 @@ def agregarHistorias(request):
     historiaFO.title = re.sub(' +', ' ', historiaFO.title)
 
     try:
-        duplicado = Story.objects.get(titulo=historiaFO.title)
+        duplicado = Story.objects.get(title=historiaFO.title)
         if duplicado:
             resp = Response()
             resp.setAlert('danger')
@@ -227,7 +227,7 @@ def editarHistoria(request, id):
         historia.title = re.sub(' +', ' ', historia.title)
         if first_title != historia.title:
             try:
-                duplicado = Story.objects.get(titulo=historia.title)
+                duplicado = Story.objects.get(title=historia.title)
                 if duplicado:
                     resp = Response()
                     resp.setAlert('danger')
@@ -255,30 +255,30 @@ def eliminarHistoria(request, id):
 
 
 # Renderizar información de la historia
-def infoHistoria(request, ruta):
+def infoHistoria(request, route):
     try:
-        historia = Story.objects.get(ruta=ruta)
-        paginas = Page.objects.filter(historia=historia.id)
+        story = Story.objects.get(route=route)
+        paginas = Page.objects.filter(story=story.id)
         has_pages = False
         if len(paginas) > 0:
             has_pages = True
-        args = {'historia': historia, 'has_pages': has_pages}
+        args = {'story': story, 'has_pages': has_pages}
     except:
         return HttpResponseNotFound()
     return render(request, 'urls/info_historia.html', args)
 
 
-def contenidoHistoria(request, ruta, num_pagina):
+def contenidoHistoria(request, route, num_pagina):
     try:
-        historia = Story.objects.get(ruta=ruta)
-        paginas = Page.objects.filter(historia=historia.id)
+        story = Story.objects.get(route=route)
+        paginas = Page.objects.filter(story=story.id)
         continua = True
         if num_pagina >= len(paginas):
             continua = False
         pagina = paginas[num_pagina - 1]
         prueba = '<a href="https://www.google.com">Elemento a</a><div class="rojo">Elemento div</div>'
-        args = {'historia': historia, 'pagina': pagina, 'continua': continua,
-                'ruta': ruta, 'num_pagina': num_pagina + 1, 'prueba': prueba}
+        args = {'story': story, 'pagina': pagina, 'continua': continua,
+                'route': route, 'num_pagina': num_pagina + 1, 'prueba': prueba}
     except:
         return HttpResponseNotFound()
 

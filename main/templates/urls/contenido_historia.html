@@ -15,9 +15,9 @@
     </div>
 
     {% if continua %}
-    <a href="{% url 'contenido_historia' ruta num_pagina %}" class="btn-empezar"> Siguiente</a>
+    <a href="{% url 'contenido_historia' route num_pagina %}" class="btn-empezar"> Siguiente</a>
     {% else %}
-    <a href="{% url 'info_historia' ruta %}" class="btn-empezar"> Terminar lección</a>
+    <a href="{% url 'info_historia' route %}" class="btn-empezar"> Terminar lección</a>
     {% endif%}
 </div>
 {% endblock %}

@@ -1,12 +1,7 @@
-from cProfile import label
-from contextlib import nullcontext
-from email.policy import default
-from tabnanny import verbose
 from django.db import models
 from django.utils.text import slugify
 
-prefix = 'app_'
-
+prefix = 'main_'
 
 class User(models.Model):
     id = models.AutoField(primary_key=True)
@@ -25,12 +20,10 @@ class Tag(models.Model):
     # keys
     id = models.AutoField(primary_key=True)
     # fields
-    name = models.CharField(max_length=100, verbose_name='nombre')
+    name = models.CharField(max_length=100, verbose_name='name')
 
     def __str__(self) -> str:
         return self.name
-
-
 # -------- -------- -------- --------
 
 
@@ -54,14 +47,13 @@ class Story(models.Model):
     def get_portada(self):
         return self.cover.name
 
-    def del_portada(self, borrar):
-        if borrar != 'imagenes/portadas/book-default.png':
-            self.cover.storage.delete(borrar)
+    def del_portada(self, to_delete):
+        if to_delete != 'imagenes/portadas/book-default.png':
+            self.cover.storage.delete(to_delete)
 
     # Override methods
     def save(self, *args, **kwargs):
-        if not self.route:
-            self.route = slugify(self.title)
+        self.route = slugify(self.title)
         super(Story, self).save(*args, **kwargs)
 
     def delete(self, using=None, keep_parents=False):
@@ -71,8 +63,6 @@ class Story(models.Model):
 
     def __str__(self):
         return f'id: {self.id} | titulo: {self.title[:5]}...'
-
-
 # -------- -------- -------- --------
 
 
@@ -85,12 +75,10 @@ class Page(models.Model):
     id = models.AutoField(primary_key=True)
     story = models.ForeignKey(Story, on_delete=models.CASCADE, null=True)
     # fields
-    texto = models.CharField(max_length=800, verbose_name='texto')
+    #texto = models.CharField(max_length=800, verbose_name='texto')
 
     def __str__(self) -> str:
-        return f'id: {self.id} | texto: {self.texto[:5]}... | pertenece: {self.story}'
-
-
+        return f'id: {self.id} | pertenece: {self.story}'
 # -------- -------- -------- --------
 
 
@@ -109,8 +97,6 @@ class Dialogue(models.Model):
 
     def __str__(self) -> str:
         return f'id: {self.id} | bt: {self.page}'
-
-
 # -------- -------- -------- --------
 
 
@@ -128,8 +114,6 @@ class RepeatPhrase(models.Model):
 
     def __str__(self) -> str:
         return f'id: {self.id} | bt: {self.page}'
-
-
 # -------- -------- -------- --------
 
 

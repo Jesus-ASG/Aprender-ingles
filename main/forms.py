@@ -29,8 +29,6 @@ class PaginaForm(forms.ModelForm):
 		fields = '__all__'
 		exclude = ['texto', 'story']
 	
-	
-
 
 class HistoriaForm(forms.ModelForm):
 	class Meta:
@@ -44,9 +42,15 @@ class HistoriaForm(forms.ModelForm):
 			'description': forms.TextInput(attrs={'class': 'form-control'}),
 		}
 
-	id_categoria = forms.ModelMultipleChoiceField(
+		labels = {
+			'title': 'Título',
+			'cover': 'Portada',
+			'description': 'Descripción',
+		}
+
+	tag = forms.ModelMultipleChoiceField(
 		queryset=Tag.objects.all(),
-		widget=forms.CheckboxSelectMultiple(attrs={'class': ''}),
+		widget=forms.CheckboxSelectMultiple(),
 		required=False,
 		label = 'Categorías',
 	)

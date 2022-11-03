@@ -18,14 +18,14 @@
     
     <section class="seccion-1">
         <div class="info-container-img">
-            <img src="{{ historia.cover.url }}" alt="{{ historia.cover }}">
+            <img src="{{ story.cover.url }}" alt="{{ story.cover }}">
         </div>
         <div class="info-container-info">
             <div class="titulo">
-                <h1>{{ historia.title }}</h1>
+                <h1>{{ story.title }}</h1>
             </div>
             <div class="descripcion">
-                <h2>{{ historia.description | default:'' }}</h2>
+                <h2>{{ story.description | default:'' }}</h2>
             </div>
         </div>
         
@@ -33,15 +33,15 @@
     <hr>
     <section class="seccion-2">
         <div class="container-categorias">
-            {% for cat in historia.tag.all %}
+            {% for cat in story.tag.all %}
             <div class="categoria">
-                {{ cat.nombre }}
+                {{ cat.name }}
             </div>
             {% endfor %}
         </div>
         <div class="container-empezar">
             {% if has_pages %}
-            <a href="{% url 'contenido_historia' historia.ruta 1 %}" class="btn-empezar">Empezar</a>
+            <a href="{% url 'contenido_historia' story.route 1 %}" class="btn-empezar">Empezar</a>
             {% else %}
             <a href="#" class="btn-empezar">Próximamente</a>
             {% endif %}

@@ -33,11 +33,11 @@
                             <td style="width: 180px;">
                                 <img src="{{ historia.cover.url }}" width="100px" alt="{{ historia.cover }}">
                             </td>
-                            <td>{{ historia.description }}</td>
+                            <td>{{ historia.description | default:'Ninguna' }}</td>
                             <td>
                                 <ul>
                                 {% for cat in historia.tag.all %}
-                                <li>{{ cat.nombre }}</li>
+                                <li>{{ cat.name }}</li>
                                 {% endfor %}
                                 </ul>
                             </td>
