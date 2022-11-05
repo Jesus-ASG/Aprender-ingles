@@ -1,4 +1,4 @@
-from http.client import HTTPResponse
+
 from django.shortcuts import render, redirect
 
 from rest_framework import generics
@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic.edit import FormView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, HttpResponseNotFound
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
@@ -132,7 +132,7 @@ def register(request):
 # Categorías
 
 def verCategorias(request):
-    categorias = Tag.objects.all()
+    categorias = Tag.objects.all().order_by('name')
     return render(request, 'admin/categorias/ver_categorias.html', {'categorias': categorias})
 
 
@@ -199,9 +199,10 @@ def agregarHistorias(request):
     except:
         # does nothing because save() method already save slug
         pass
-
     historiaFO = historiaFR.save()
-    # Crear form object de la página
+    return redirect('edit_pages', route=historiaFO.route)
+    """
+    # old code for save many pages
     if paginaFR.is_valid():
         num_paginas = int(request.POST.get('num_paginas'))
         for i in range(num_paginas):
@@ -213,7 +214,7 @@ def agregarHistorias(request):
             paginaFR = PaginaForm()
 
         return redirect('ver_historias')
-
+    """
 
 def editarHistoria(request, id):
     historia = Story.objects.get(id=id)
@@ -249,10 +250,12 @@ def editarHistoria(request, id):
 
 
 def eliminarHistoria(request, id):
-    historia = Story.objects.get(id=id)
-    historia.delete()
-    return redirect('ver_historias')
-
+    try:
+        historia = Story.objects.get(id=id)
+        historia.delete()
+        return redirect('ver_historias')
+    except:
+        return HttpResponseBadRequest('')
 
 # Renderizar información de la historia
 def infoHistoria(request, route):
@@ -283,3 +286,12 @@ def contenidoHistoria(request, route, num_pagina):
         return HttpResponseNotFound()
 
     return render(request, 'urls/contenido_historia.html', args)
+
+
+def editPages(request, route):
+    try:
+        story = Story.objects.get(route=route)
+        pages = Page.objects.filter(story=story)
+    except:
+        return HttpResponseNotFound()
+    return render(request, 'admin/page-components/choose-page-template.html', {'story':story, 'pages':pages})

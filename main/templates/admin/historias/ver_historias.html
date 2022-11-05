@@ -42,9 +42,17 @@
                                 </ul>
                             </td>
                             <td> 
-                                <a name="" id="" class="btn btn-info" href="{% url 'editar_historia' historia.id %}" role="button">Editar</a>
+                                <a class="btn btn-warning" href="{% url 'editar_historia' historia.id %}" role="button" title="Editar historia">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
                                 |
-                                <a name="" id="" class="btn btn-danger" href="{% url 'eliminar_historia' historia.id %}" role="button">Eliminar</a>
+                                <a class="btn btn-info" href="{% url 'edit_pages' historia.route %}" role="button" title="Editar páginas">
+                                    <i class="fa-regular fa-file-lines"></i>
+                                </a>
+                                |
+                                <a class="btn btn-danger" href="{% url 'eliminar_historia' historia.id %}" role="button" title="Borrar">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
                             </td>
                         </tr>
                         {% endfor %}
