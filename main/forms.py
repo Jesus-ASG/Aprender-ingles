@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Categoria, Historia, Pagina
+from .models import Tag, Story, Page
 
 
 class NewUserForm(UserCreationForm):
@@ -20,34 +20,39 @@ class NewUserForm(UserCreationForm):
 
 class CategoriaForm(forms.ModelForm):
 	class Meta:
-		model = Categoria
+		model = Tag
 		fields = '__all__'
 
 class PaginaForm(forms.ModelForm):
 	class Meta:
-		model = Pagina
+		model = Page
 		fields = '__all__'
-		exclude = ['texto','historia']
+		exclude = ['texto', 'story']
 	
-	
-
 
 class HistoriaForm(forms.ModelForm):
 	class Meta:
-		model = Historia
+		model = Story
 		fields = '__all__'
-		exclude = ['ruta']
+		exclude = ['route']
 
 		widgets = {
-			'titulo': forms.TextInput(attrs={'class': 'form-control'}),
-			'portada': forms.FileInput(attrs={'class': 'form-control'}),
-			'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
+			'title': forms.TextInput(attrs={'class': 'form-control'}),
+			'cover': forms.FileInput(attrs={'class': 'form-control'}),
+			'description': forms.TextInput(attrs={'class': 'form-control'}),
 		}
 
-	id_categoria = forms.ModelMultipleChoiceField(
-		queryset=Categoria.objects.all(),
-		widget=forms.CheckboxSelectMultiple(attrs={'class': ''}),
+		labels = {
+			'title': 'Título',
+			'cover': 'Portada',
+			'description': 'Descripción',
+		}
+
+	tag = forms.ModelMultipleChoiceField(
+		queryset=Tag.objects.all(),
+		widget=forms.CheckboxSelectMultiple(),
 		required=False,
-		label = 'Id categoría',
+		label = 'Categorías',
 	)
+
 

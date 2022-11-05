@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-10-2022 a las 10:29:01
+-- Tiempo de generación: 29-10-2022 a las 20:18:10
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -20,6 +20,162 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `aprendeingles`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `app_categoria`
+--
+
+CREATE TABLE `app_categoria` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `app_categoria`
+--
+
+INSERT INTO `app_categoria` (`id`, `nombre`) VALUES
+(1, 'Misterio'),
+(2, 'Comedia'),
+(3, 'Terror'),
+(6, 'Cotidiano'),
+(7, 'Computación'),
+(8, 'Programación'),
+(9, 'Redes'),
+(10, 'Fútbol'),
+(11, 'Otros'),
+(12, 'Animales');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `app_historia`
+--
+
+CREATE TABLE `app_historia` (
+  `id` int(11) NOT NULL,
+  `titulo` varchar(100) NOT NULL,
+  `portada` varchar(100) NOT NULL,
+  `descripcion` varchar(100) DEFAULT NULL,
+  `ruta` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `app_historia`
+--
+
+INSERT INTO `app_historia` (`id`, `titulo`, `portada`, `descripcion`, `ruta`) VALUES
+(168, 'Historia de ejemplo', 'imagenes/portadas/book-default.png', 'Esta es una historia de ejemplo, cuenta con 4 categorías seleccionadas al azar y con 2 páginas.', 'historia-de-ejemplo'),
+(169, 'Aprendiendo el abecedario', 'imagenes/portadas/imagen-abc-dl29456.webp', 'Abecedario', 'aprendiendo-el-abecedario'),
+(170, 'Perrito', 'imagenes/portadas/descarga.jpg', 'No tiene páginas', 'perrito'),
+(171, 'Gatitos', 'imagenes/portadas/purina-brand-que-saber-de-los-gatitos-bebes.webp', 'Gatitos en una foto', 'gatitos');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `app_historia_id_categoria`
+--
+
+CREATE TABLE `app_historia_id_categoria` (
+  `id` bigint(20) NOT NULL,
+  `historia_id` int(11) NOT NULL,
+  `categoria_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `app_historia_id_categoria`
+--
+
+INSERT INTO `app_historia_id_categoria` (`id`, `historia_id`, `categoria_id`) VALUES
+(129, 168, 1),
+(130, 168, 3),
+(131, 168, 6),
+(132, 168, 7),
+(133, 169, 1),
+(134, 170, 11),
+(135, 171, 11),
+(136, 171, 12);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `app_historia_pagina`
+--
+
+CREATE TABLE `app_historia_pagina` (
+  `id` int(11) NOT NULL,
+  `texto` varchar(800) NOT NULL,
+  `historia_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `app_historia_pagina`
+--
+
+INSERT INTO `app_historia_pagina` (`id`, `texto`, `historia_id`) VALUES
+(59, 'Página 1 de la historia de ejemplo', 168),
+(60, 'Página 2 de la historia de ejemplo', 168),
+(61, 'A', 169),
+(62, 'B', 169),
+(63, 'C', 169),
+(64, 'D', 169),
+(65, 'E\r\nF\r\nG\r\nH\r\nI', 169),
+(66, 'Página 1', 171),
+(67, 'Página 2', 171);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `app_pag_conversation`
+--
+
+CREATE TABLE `app_pag_conversation` (
+  `id` int(11) NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `translation` varchar(255) NOT NULL,
+  `page_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `app_pag_question`
+--
+
+CREATE TABLE `app_pag_question` (
+  `id` int(11) NOT NULL,
+  `question` varchar(255) NOT NULL,
+  `page_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `app_pag_question_option`
+--
+
+CREATE TABLE `app_pag_question_option` (
+  `id` int(11) NOT NULL,
+  `answer` varchar(255) NOT NULL,
+  `correct` tinyint(1) NOT NULL,
+  `question_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `app_pag_repeat_phrase`
+--
+
+CREATE TABLE `app_pag_repeat_phrase` (
+  `id` int(11) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `translation` varchar(255) NOT NULL,
+  `page_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -136,7 +292,23 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (53, 'Can add pagina', 13, 'add_pagina'),
 (54, 'Can change pagina', 13, 'change_pagina'),
 (55, 'Can delete pagina', 13, 'delete_pagina'),
-(56, 'Can view pagina', 13, 'view_pagina');
+(56, 'Can view pagina', 13, 'view_pagina'),
+(57, 'Can add repeat phrase', 14, 'add_repeatphrase'),
+(58, 'Can change repeat phrase', 14, 'change_repeatphrase'),
+(59, 'Can delete repeat phrase', 14, 'delete_repeatphrase'),
+(60, 'Can view repeat phrase', 14, 'view_repeatphrase'),
+(61, 'Can add question', 15, 'add_question'),
+(62, 'Can change question', 15, 'change_question'),
+(63, 'Can delete question', 15, 'delete_question'),
+(64, 'Can view question', 15, 'view_question'),
+(65, 'Can add option', 16, 'add_option'),
+(66, 'Can change option', 16, 'change_option'),
+(67, 'Can delete option', 16, 'delete_option'),
+(68, 'Can view option', 16, 'view_option'),
+(69, 'Can add dialogue', 17, 'add_dialogue'),
+(70, 'Can change dialogue', 17, 'change_dialogue'),
+(71, 'Can delete dialogue', 17, 'delete_dialogue'),
+(72, 'Can view dialogue', 17, 'view_dialogue');
 
 -- --------------------------------------------------------
 
@@ -163,7 +335,7 @@ CREATE TABLE `auth_user` (
 --
 
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
-(1, 'pbkdf2_sha256$390000$EvDdO3VH3BWCxKll6NE0wo$7OImud9GVz3cnC6p9oY9MhMGQbWQEbKa8oR1vbK6Cek=', '2022-10-27 04:30:06.316004', 1, 'jesus', '', '', 'email@mail.com', 1, 1, '2022-08-26 13:55:37.342878'),
+(1, 'pbkdf2_sha256$390000$EvDdO3VH3BWCxKll6NE0wo$7OImud9GVz3cnC6p9oY9MhMGQbWQEbKa8oR1vbK6Cek=', '2022-10-29 18:12:24.220623', 1, 'jesus', '', '', 'email@mail.com', 1, 1, '2022-08-26 13:55:37.342878'),
 (20, 'pbkdf2_sha256$390000$NaVJMsErLrDNUcg4xc2xJ5$3l/jJrHv05k0J9WfM1wtR0bQR1UTdWnor6vxi8Njpq8=', '2022-10-24 06:16:06.219619', 0, 'usuario', '', '', 'usuario@correo.com', 0, 1, '2022-10-22 19:45:06.208655');
 
 -- --------------------------------------------------------
@@ -273,9 +445,13 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (9, 'authtoken', 'tokenproxy'),
 (5, 'contenttypes', 'contenttype'),
 (11, 'main', 'categoria'),
+(17, 'main', 'dialogue'),
 (12, 'main', 'historia'),
 (10, 'main', 'myuser'),
+(16, 'main', 'option'),
 (13, 'main', 'pagina'),
+(15, 'main', 'question'),
+(14, 'main', 'repeatphrase'),
 (7, 'main', 'user'),
 (6, 'sessions', 'session');
 
@@ -338,7 +514,9 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (39, 'main', '0014_remove_historia_pagina_pagina_historia', '2022-10-14 02:49:58.011773'),
 (40, 'main', '0015_alter_pagina_texto', '2022-10-16 17:34:00.698001'),
 (41, 'main', '0016_historia_ruta', '2022-10-23 20:10:18.874148'),
-(42, 'main', '0017_alter_historia_ruta', '2022-10-23 20:22:05.956615');
+(42, 'main', '0017_alter_historia_ruta', '2022-10-23 20:22:05.956615'),
+(43, 'main', '0018_alter_pagina_id', '2022-10-29 18:13:26.789585'),
+(44, 'main', '0019_alter_categoria_table_alter_historia_table_and_more', '2022-10-29 18:13:27.173320');
 
 -- --------------------------------------------------------
 
@@ -362,111 +540,8 @@ INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALU
 ('hafbq7zchrpnqvq2dlw400g49p8f614e', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1omKO8:PVHEVEbQBbILIG-xL3CD8yAV8MSuOsTt7Zo_iB1B3H8', '2022-11-05 19:42:32.237781'),
 ('n6k5dxpev32a0qxurt5q7qi7ry8cxtev', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1onuWs:PZhbb1acr3OCewsO5OuHDHnjtBc7m9-KoJbDDh5yEeA', '2022-11-10 04:30:06.320833'),
 ('qynqh05v8uijtp6imfr511199fsnqmaa', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1omKN2:dBh_t5rcxfjRHiQ4F-BaLoT7aKf6Ozbo5EBwZWeSn_Q', '2022-11-05 19:41:24.080897'),
-('wvozcm7wltrx02boyqgvyuelqs9zgnfd', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1oeiB5:FiQs19VH9rIphzc9_dqtsr4dlP7keWsKyHkckyxmi9Y', '2022-10-15 19:29:35.947914');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `main_categoria`
---
-
-CREATE TABLE `main_categoria` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `main_categoria`
---
-
-INSERT INTO `main_categoria` (`id`, `nombre`) VALUES
-(1, 'misterio'),
-(2, 'comedia'),
-(3, 'terror'),
-(6, 'cotidiano'),
-(7, 'computación'),
-(8, 'programación'),
-(9, 'redes'),
-(10, 'fútbol'),
-(11, 'Otros'),
-(12, 'Animales');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `main_historia`
---
-
-CREATE TABLE `main_historia` (
-  `id` int(11) NOT NULL,
-  `titulo` varchar(100) NOT NULL,
-  `portada` varchar(100) NOT NULL,
-  `descripcion` varchar(100) DEFAULT NULL,
-  `ruta` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `main_historia`
---
-
-INSERT INTO `main_historia` (`id`, `titulo`, `portada`, `descripcion`, `ruta`) VALUES
-(168, 'Historia de ejemplo', 'imagenes/portadas/book-default.png', 'Esta es una historia de ejemplo, cuenta con 4 categorías seleccionadas al azar y con 2 páginas.', 'historia-de-ejemplo'),
-(169, 'Aprendiendo el abecedario', 'imagenes/portadas/imagen-abc-dl29456.webp', 'Abecedario', 'aprendiendo-el-abecedario'),
-(170, 'Perrito', 'imagenes/portadas/descarga.jpg', 'No tiene páginas', 'perrito'),
-(171, 'Gatitos', 'imagenes/portadas/purina-brand-que-saber-de-los-gatitos-bebes.webp', 'Gatitos en una foto', 'gatitos');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `main_historia_id_categoria`
---
-
-CREATE TABLE `main_historia_id_categoria` (
-  `id` bigint(20) NOT NULL,
-  `historia_id` int(11) NOT NULL,
-  `categoria_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `main_historia_id_categoria`
---
-
-INSERT INTO `main_historia_id_categoria` (`id`, `historia_id`, `categoria_id`) VALUES
-(129, 168, 1),
-(130, 168, 3),
-(131, 168, 6),
-(132, 168, 7),
-(133, 169, 1),
-(134, 170, 11),
-(135, 171, 11),
-(136, 171, 12);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `main_pagina`
---
-
-CREATE TABLE `main_pagina` (
-  `id` bigint(20) NOT NULL,
-  `texto` varchar(800) NOT NULL,
-  `historia_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `main_pagina`
---
-
-INSERT INTO `main_pagina` (`id`, `texto`, `historia_id`) VALUES
-(59, 'Página 1 de la historia de ejemplo', 168),
-(60, 'Página 2 de la historia de ejemplo', 168),
-(61, 'A', 169),
-(62, 'B', 169),
-(63, 'C', 169),
-(64, 'D', 169),
-(65, 'E\r\nF\r\nG\r\nH\r\nI', 169),
-(66, 'Página 1', 171),
-(67, 'Página 2', 171);
+('wvozcm7wltrx02boyqgvyuelqs9zgnfd', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1oeiB5:FiQs19VH9rIphzc9_dqtsr4dlP7keWsKyHkckyxmi9Y', '2022-10-15 19:29:35.947914'),
+('zpnjfo0pahdrl34kwh8nyqddr7ahyszh', '.eJxVjEEOwiAQRe_C2hCGAVpcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWIE6_20TxkeoO-E711mRsdV3mSe6KPGiX18bpeTncv4NCvXxr1MY6rwGZQUMyxutshzRCRAKtCNBNAwCBM0pF50fMGFlnRus9pyzeH6TjNtI:1ooqJk:deP2NOL_GX9a9Cy3X02L63QukPT1gIEwe5HsV3w41r8', '2022-11-12 18:12:24.224083');
 
 -- --------------------------------------------------------
 
@@ -490,6 +565,61 @@ INSERT INTO `main_user` (`id`, `username`, `password`) VALUES
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `app_categoria`
+--
+ALTER TABLE `app_categoria`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `app_historia`
+--
+ALTER TABLE `app_historia`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `app_historia_id_categoria`
+--
+ALTER TABLE `app_historia_id_categoria`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `main_historia_id_categor_historia_id_categoria_id_4ae0f7bc_uniq` (`historia_id`,`categoria_id`),
+  ADD KEY `main_historia_id_cat_categoria_id_38ef862e_fk_main_cate` (`categoria_id`);
+
+--
+-- Indices de la tabla `app_historia_pagina`
+--
+ALTER TABLE `app_historia_pagina`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `main_pagina_historia_id_e74b548d_fk_main_historia_id` (`historia_id`);
+
+--
+-- Indices de la tabla `app_pag_conversation`
+--
+ALTER TABLE `app_pag_conversation`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `app_pag_conversation_page_id_98039c29_fk_app_historia_pagina_id` (`page_id`);
+
+--
+-- Indices de la tabla `app_pag_question`
+--
+ALTER TABLE `app_pag_question`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `app_pag_question_page_id_78625dd5_fk_app_historia_pagina_id` (`page_id`);
+
+--
+-- Indices de la tabla `app_pag_question_option`
+--
+ALTER TABLE `app_pag_question_option`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `app_pag_question_opt_question_id_680ccdd2_fk_app_pag_q` (`question_id`);
+
+--
+-- Indices de la tabla `app_pag_repeat_phrase`
+--
+ALTER TABLE `app_pag_repeat_phrase`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `app_pag_repeat_phrase_page_id_cecba90a_fk_app_historia_pagina_id` (`page_id`);
 
 --
 -- Indices de la tabla `authtoken_token`
@@ -572,33 +702,6 @@ ALTER TABLE `django_session`
   ADD KEY `django_session_expire_date_a5c62663` (`expire_date`);
 
 --
--- Indices de la tabla `main_categoria`
---
-ALTER TABLE `main_categoria`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `main_historia`
---
-ALTER TABLE `main_historia`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `main_historia_id_categoria`
---
-ALTER TABLE `main_historia_id_categoria`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `main_historia_id_categor_historia_id_categoria_id_4ae0f7bc_uniq` (`historia_id`,`categoria_id`),
-  ADD KEY `main_historia_id_cat_categoria_id_38ef862e_fk_main_cate` (`categoria_id`);
-
---
--- Indices de la tabla `main_pagina`
---
-ALTER TABLE `main_pagina`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `main_pagina_historia_id_e74b548d_fk_main_historia_id` (`historia_id`);
-
---
 -- Indices de la tabla `main_user`
 --
 ALTER TABLE `main_user`
@@ -607,6 +710,54 @@ ALTER TABLE `main_user`
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
+
+--
+-- AUTO_INCREMENT de la tabla `app_categoria`
+--
+ALTER TABLE `app_categoria`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT de la tabla `app_historia`
+--
+ALTER TABLE `app_historia`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=172;
+
+--
+-- AUTO_INCREMENT de la tabla `app_historia_id_categoria`
+--
+ALTER TABLE `app_historia_id_categoria`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
+
+--
+-- AUTO_INCREMENT de la tabla `app_historia_pagina`
+--
+ALTER TABLE `app_historia_pagina`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+
+--
+-- AUTO_INCREMENT de la tabla `app_pag_conversation`
+--
+ALTER TABLE `app_pag_conversation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `app_pag_question`
+--
+ALTER TABLE `app_pag_question`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `app_pag_question_option`
+--
+ALTER TABLE `app_pag_question_option`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `app_pag_repeat_phrase`
+--
+ALTER TABLE `app_pag_repeat_phrase`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `auth_group`
@@ -624,7 +775,7 @@ ALTER TABLE `auth_group_permissions`
 -- AUTO_INCREMENT de la tabla `auth_permission`
 --
 ALTER TABLE `auth_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT de la tabla `auth_user`
@@ -654,37 +805,13 @@ ALTER TABLE `django_admin_log`
 -- AUTO_INCREMENT de la tabla `django_content_type`
 --
 ALTER TABLE `django_content_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
-
---
--- AUTO_INCREMENT de la tabla `main_categoria`
---
-ALTER TABLE `main_categoria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
--- AUTO_INCREMENT de la tabla `main_historia`
---
-ALTER TABLE `main_historia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=172;
-
---
--- AUTO_INCREMENT de la tabla `main_historia_id_categoria`
---
-ALTER TABLE `main_historia_id_categoria`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
-
---
--- AUTO_INCREMENT de la tabla `main_pagina`
---
-ALTER TABLE `main_pagina`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT de la tabla `main_user`
@@ -695,6 +822,43 @@ ALTER TABLE `main_user`
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `app_historia_id_categoria`
+--
+ALTER TABLE `app_historia_id_categoria`
+  ADD CONSTRAINT `main_historia_id_cat_categoria_id_38ef862e_fk_main_cate` FOREIGN KEY (`categoria_id`) REFERENCES `app_categoria` (`id`),
+  ADD CONSTRAINT `main_historia_id_cat_historia_id_2fc7a487_fk_main_hist` FOREIGN KEY (`historia_id`) REFERENCES `app_historia` (`id`);
+
+--
+-- Filtros para la tabla `app_historia_pagina`
+--
+ALTER TABLE `app_historia_pagina`
+  ADD CONSTRAINT `main_pagina_historia_id_e74b548d_fk_main_historia_id` FOREIGN KEY (`historia_id`) REFERENCES `app_historia` (`id`);
+
+--
+-- Filtros para la tabla `app_pag_conversation`
+--
+ALTER TABLE `app_pag_conversation`
+  ADD CONSTRAINT `app_pag_conversation_page_id_98039c29_fk_app_historia_pagina_id` FOREIGN KEY (`page_id`) REFERENCES `app_historia_pagina` (`id`);
+
+--
+-- Filtros para la tabla `app_pag_question`
+--
+ALTER TABLE `app_pag_question`
+  ADD CONSTRAINT `app_pag_question_page_id_78625dd5_fk_app_historia_pagina_id` FOREIGN KEY (`page_id`) REFERENCES `app_historia_pagina` (`id`);
+
+--
+-- Filtros para la tabla `app_pag_question_option`
+--
+ALTER TABLE `app_pag_question_option`
+  ADD CONSTRAINT `app_pag_question_opt_question_id_680ccdd2_fk_app_pag_q` FOREIGN KEY (`question_id`) REFERENCES `app_pag_question` (`id`);
+
+--
+-- Filtros para la tabla `app_pag_repeat_phrase`
+--
+ALTER TABLE `app_pag_repeat_phrase`
+  ADD CONSTRAINT `app_pag_repeat_phrase_page_id_cecba90a_fk_app_historia_pagina_id` FOREIGN KEY (`page_id`) REFERENCES `app_historia_pagina` (`id`);
 
 --
 -- Filtros para la tabla `authtoken_token`
@@ -735,19 +899,6 @@ ALTER TABLE `auth_user_user_permissions`
 ALTER TABLE `django_admin_log`
   ADD CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   ADD CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
-
---
--- Filtros para la tabla `main_historia_id_categoria`
---
-ALTER TABLE `main_historia_id_categoria`
-  ADD CONSTRAINT `main_historia_id_cat_categoria_id_38ef862e_fk_main_cate` FOREIGN KEY (`categoria_id`) REFERENCES `main_categoria` (`id`),
-  ADD CONSTRAINT `main_historia_id_cat_historia_id_2fc7a487_fk_main_hist` FOREIGN KEY (`historia_id`) REFERENCES `main_historia` (`id`);
-
---
--- Filtros para la tabla `main_pagina`
---
-ALTER TABLE `main_pagina`
-  ADD CONSTRAINT `main_pagina_historia_id_e74b548d_fk_main_historia_id` FOREIGN KEY (`historia_id`) REFERENCES `main_historia` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

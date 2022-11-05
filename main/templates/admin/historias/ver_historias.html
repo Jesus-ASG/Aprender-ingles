@@ -29,22 +29,30 @@
                         {% for historia in historias %}
                         <tr>
                             <td>{{ historia.id }}</td>
-                            <td>{{ historia.titulo }}</td>
+                            <td>{{ historia.title }}</td>
                             <td style="width: 180px;">
-                                <img src="{{ historia.portada.url }}" width="100px" alt="{{ historia.portada }}">
+                                <img src="{{ historia.cover.url }}" width="100px" alt="{{ historia.cover }}">
                             </td>
-                            <td>{{ historia.descripcion }}</td>
+                            <td>{{ historia.description | default:'Ninguna' }}</td>
                             <td>
                                 <ul>
-                                {% for cat in historia.id_categoria.all %}
-                                <li>{{ cat.nombre }}</li>
+                                {% for cat in historia.tag.all %}
+                                <li>{{ cat.name }}</li>
                                 {% endfor %}
                                 </ul>
                             </td>
                             <td> 
-                                <a name="" id="" class="btn btn-info" href="{% url 'editar_historia' historia.id %}" role="button">Editar</a>
+                                <a class="btn btn-warning" href="{% url 'editar_historia' historia.id %}" role="button" title="Editar historia">
+                                    <i class="fa-solid fa-pen"></i>
+                                </a>
                                 |
-                                <a name="" id="" class="btn btn-danger" href="{% url 'eliminar_historia' historia.id %}" role="button">Eliminar</a>
+                                <a class="btn btn-info" href="{% url 'edit_pages' historia.route %}" role="button" title="Editar páginas">
+                                    <i class="fa-regular fa-file-lines"></i>
+                                </a>
+                                |
+                                <a class="btn btn-danger" href="{% url 'eliminar_historia' historia.id %}" role="button" title="Borrar">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
                             </td>
                         </tr>
                         {% endfor %}

@@ -1,4 +1,4 @@
-from http.client import HTTPResponse
+
 from django.shortcuts import render, redirect
 
 from rest_framework import generics
@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic.edit import FormView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, HttpResponseNotFound
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
@@ -24,7 +24,7 @@ from rest_framework.response import Response
 from .forms import NewUserForm
 from django.contrib import messages
 
-from .models import Categoria, Historia, Pagina
+from .models import Tag, Story, Page
 from .forms import CategoriaForm, HistoriaForm, PaginaForm
 
 # Dar formato
@@ -79,9 +79,9 @@ def index(request):
         # if a token exists return data
         user = request.user
         if user.auth_token is not None:
-            historias = Historia.objects.all()
-            
-            return render(request, 'urls/index.html', {'historias':historias, 'user':user})
+            historias = Story.objects.all()
+
+            return render(request, 'urls/index.html', {'historias': historias, 'user': user})
     except AttributeError:
         # if a token doesn't exists return to homepage
         return render(request, 'urls/home.html')
@@ -92,14 +92,14 @@ def myAdmin(request):
         # if a token exists return data
         if request.user.auth_token is not None:
             if request.user.is_superuser:
-                #historias = Historia.objects.all()
-                #return render(request, 'urls/index.html', {'historias': historias})
+                # historias = Historia.objects.all()
+                # return render(request, 'urls/index.html', {'historias': historias})
                 return redirect('ver_historias')
             return render(request, 'urls/index.html')
     except AttributeError:
         # if a token doesn't exists return mainpage
         return render(request, 'urls/home.html')
-    
+
 
 def register(request):
     if request.method == 'POST':
@@ -113,26 +113,28 @@ def register(request):
             if token:
                 login(request, user)
 
-            #auth = authenticate(form.cleaned_data['username'], form.cleaned_data['password'])
-            #token, _ = Token.objects.get_or_create(user=auth)
-            #if token:
-            #    login(request, user)
+                # auth = authenticate(form.cleaned_data['username'], form.cleaned_data['password'])
+                # token, _ = Token.objects.get_or_create(user=auth)
+                # if token:
+                #    login(request, user)
 
-            # return redirect("index")
-            # 1 = state
-            #render(request, 'urls/register.html', {'state': '1'})
+                # return redirect("index")
+                # 1 = state
+                # render(request, 'urls/register.html', {'state': '1'})
                 return HttpResponseRedirect(reverse_lazy('index'))
 
     form = NewUserForm()
     return render(request, 'urls/register.html', {'register_form': form})
+
 
 # ADMIN #
 
 # Categorías
 
 def verCategorias(request):
-    categorias = Categoria.objects.all()
+    categorias = Tag.objects.all().order_by('name')
     return render(request, 'admin/categorias/ver_categorias.html', {'categorias': categorias})
+
 
 def agregarCategorias(request):
     formulario = CategoriaForm(request.POST or None)
@@ -140,15 +142,17 @@ def agregarCategorias(request):
         formulario.save()
     return render(request, 'admin/categorias/agregar_categorias.html', {'formulario': formulario})
 
+
 def editarCategoria(request, id):
-    categoria = Categoria.objects.get(id=id)
+    categoria = Tag.objects.get(id=id)
     formulario = CategoriaForm(request.POST or None, instance=categoria)
     if formulario.is_valid() and request.POST:
         formulario.save()
     return render(request, 'admin/categorias/editar_categoria.html', {'formulario': formulario})
 
+
 def eliminarCategoria(request, id):
-    categoria = Categoria.objects.get(id=id)
+    categoria = Tag.objects.get(id=id)
     categoria.delete()
     return redirect('ver_categorias')
 
@@ -158,77 +162,82 @@ class Response:
     def __init__(self):
         self.alert = ''
         self.message = ''
-    
+
     def setAlert(self, alert):
         match alert:
             case 'danger':
                 self.alert = 'alert-danger'
-    
+
     def setMessage(self, message):
         self.message = message
-        
+
 
 def verHistorias(request):
-    historias = Historia.objects.all()
+    historias = Story.objects.all()
     return render(request, 'admin/historias/ver_historias.html', {'historias': historias})
+
 
 def agregarHistorias(request):
     historiaFR = HistoriaForm(request.POST or None, request.FILES or None)
     paginaFR = PaginaForm(request.POST or None)
-    
+
     if not historiaFR.is_valid():
-        return render(request, 'admin/historias/agregar_historias.html', 
-        {'formulario': historiaFR, 'form_pagina': paginaFR})
-    
+        return render(request, 'admin/historias/agregar_historias.html',
+                      {'formulario': historiaFR, 'form_pagina': paginaFR})
+
     historiaFO = historiaFR.save(commit=False)
-    historiaFO.titulo = re.sub(' +', ' ', historiaFO.titulo)
-    temp_route = historiaFO.limpiarRuta(historiaFO.titulo)
+    historiaFO.title = re.sub(' +', ' ', historiaFO.title)
+
     try:
-        duplicado = Historia.objects.get(ruta=temp_route)
+        duplicado = Story.objects.get(title=historiaFO.title)
         if duplicado:
             resp = Response()
             resp.setAlert('danger')
             resp.setMessage('Ya existe una historia con ese título')
-            return render(request, 'admin/historias/agregar_historias.html', 
-            {'formulario': historiaFR, 'form_pagina': paginaFR, 'resp': resp})
+            return render(request, 'admin/historias/agregar_historias.html',
+                          {'formulario': historiaFR, 'form_pagina': paginaFR, 'resp': resp})
     except:
-        historiaFO.ruta = temp_route
-
+        # does nothing because save() method already save slug
+        pass
     historiaFO = historiaFR.save()
-    # Crear form object de la página
+    return redirect('edit_pages', route=historiaFO.route)
+    """
+    # old code for save many pages
     if paginaFR.is_valid():
         num_paginas = int(request.POST.get('num_paginas'))
         for i in range(num_paginas):
-            texto = request.POST.get('texto_'+str(i))
+            texto = request.POST.get('texto_' + str(i))
             paginaFO = paginaFR.save(commit=False)
             paginaFO.texto = texto
-            paginaFO.historia = historiaFO
+            paginaFO.story = historiaFO
             paginaFO.save()
             paginaFR = PaginaForm()
-        
+
         return redirect('ver_historias')
+    """
+
 def editarHistoria(request, id):
-    historia = Historia.objects.get(id=id)
+    historia = Story.objects.get(id=id)
     # obtiene portada y ruta del objeto
     port1 = historia.get_portada()
-    ruta_original = historia.ruta
+    first_title = re.sub(' +', ' ', historia.title)
 
     fR = HistoriaForm(request.POST or None, request.FILES or None, instance=historia)
     if fR.is_valid() and request.POST:
         #### Cambiar ruta si es que modificó el título, ya que la ruta se basa en el título ####
-        historia.titulo = re.sub(' +', ' ', historia.titulo)
-        nueva_ruta = historia.limpiarRuta(historia.titulo)
-        if ruta_original != nueva_ruta:
+        historia.title = re.sub(' +', ' ', historia.title)
+        if first_title != historia.title:
             try:
-                duplicado = Historia.objects.get(ruta=nueva_ruta)
+                duplicado = Story.objects.get(title=historia.title)
                 if duplicado:
                     resp = Response()
                     resp.setAlert('danger')
                     resp.setMessage('Ya existe una historia con ese título')
-                    return render(request, 'admin/historias/agregar_historias.html', 
-                    {'formulario': fR, 'form_pagina': fR, 'resp': resp})
+                    return render(request, 'admin/historias/agregar_historias.html',
+                                  {'formulario': fR, 'form_pagina': fR, 'resp': resp})
             except:
-                historia.ruta = nueva_ruta
+                # does nothing because save() method already save slug
+                pass
         #### Portada ####
         # obtiene la portada del formulario
         port2 = historia.get_portada()
@@ -239,37 +248,50 @@ def editarHistoria(request, id):
         return redirect('ver_historias')
     return render(request, 'admin/historias/editar_historia.html', {'formulario': fR})
 
+
 def eliminarHistoria(request, id):
-    historia = Historia.objects.get(id=id)
-    historia.delete()
-    return redirect('ver_historias')
+    try:
+        historia = Story.objects.get(id=id)
+        historia.delete()
+        return redirect('ver_historias')
+    except:
+        return HttpResponseBadRequest('')
 
 # Renderizar información de la historia
-def infoHistoria(request, ruta):
+def infoHistoria(request, route):
     try:
-        historia = Historia.objects.get(ruta=ruta)
-        paginas = Pagina.objects.filter(historia = historia.id)
+        story = Story.objects.get(route=route)
+        paginas = Page.objects.filter(story=story.id)
         has_pages = False
         if len(paginas) > 0:
             has_pages = True
-        args = {'historia': historia, 'has_pages':has_pages}
+        args = {'story': story, 'has_pages': has_pages}
     except:
         return HttpResponseNotFound()
     return render(request, 'urls/info_historia.html', args)
 
-def contenidoHistoria(request, ruta, num_pagina):
+
+def contenidoHistoria(request, route, num_pagina):
     try:
-        historia = Historia.objects.get(ruta=ruta)
-        paginas = Pagina.objects.filter(historia = historia.id)
+        story = Story.objects.get(route=route)
+        paginas = Page.objects.filter(story=story.id)
         continua = True
-        if num_pagina>=len(paginas):
+        if num_pagina >= len(paginas):
             continua = False
-        
-        args = {'historia': historia, 'pagina': paginas[num_pagina-1], 'continua':continua,
-        'ruta': ruta, 'num_pagina':num_pagina+1}
+        pagina = paginas[num_pagina - 1]
+        prueba = '<a href="https://www.google.com">Elemento a</a><div class="rojo">Elemento div</div>'
+        args = {'story': story, 'pagina': pagina, 'continua': continua,
+                'route': route, 'num_pagina': num_pagina + 1, 'prueba': prueba}
     except:
         return HttpResponseNotFound()
-    
-    
 
     return render(request, 'urls/contenido_historia.html', args)
+
+
+def editPages(request, route):
+    try:
+        story = Story.objects.get(route=route)
+        pages = Page.objects.filter(story=story)
+    except:
+        return HttpResponseNotFound()
+    return render(request, 'admin/page-components/choose-page-template.html', {'story':story, 'pages':pages})

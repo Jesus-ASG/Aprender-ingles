@@ -2,24 +2,30 @@
 {% load static %}
 
 
-{% block title %} Aprende inglés!!! {% endblock %}
+{% block title %} {{ story.title }} {% endblock %}
 
 {% block navbar %} {% include 'navbar-custom.html' %} {% endblock %}
 
 {% block content %}
 
 <div class="main-history-container mt-3">
-
+    <div class="btn-regresar">
+        <a href="{% url 'index' %}">
+            <i class="fa fa-arrow-left fa-3x" aria-hidden="true"></i>
+            <label>Regresar</label>
+        </a>
+    </div>
+    
     <section class="seccion-1">
         <div class="info-container-img">
-            <img src="{{ historia.portada.url }}" alt="{{ historia.portada }}">
+            <img src="{{ story.cover.url }}" alt="{{ story.cover }}">
         </div>
         <div class="info-container-info">
             <div class="titulo">
-                <h1>{{ historia.titulo }}</h1>
+                <h1>{{ story.title }}</h1>
             </div>
             <div class="descripcion">
-                <h2>{{ historia.descripcion | default:'' }}</h2>
+                <h2>{{ story.description | default:'' }}</h2>
             </div>
         </div>
         
@@ -27,15 +33,15 @@
     <hr>
     <section class="seccion-2">
         <div class="container-categorias">
-            {% for cat in historia.id_categoria.all %}
+            {% for cat in story.tag.all %}
             <div class="categoria">
-                {{ cat.nombre }}
+                {{ cat.name }}
             </div>
             {% endfor %}
         </div>
         <div class="container-empezar">
             {% if has_pages %}
-            <a href="{% url 'contenido_historia' historia.ruta 1 %}" class="btn-empezar">Empezar</a>
+            <a href="{% url 'contenido_historia' story.route 1 %}" class="btn-empezar">Empezar</a>
             {% else %}
             <a href="#" class="btn-empezar">Próximamente</a>
             {% endif %}

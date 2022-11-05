@@ -13,14 +13,14 @@
         <hr>
         {% for historia in historias %}
 
-        <a class="c-card" href="{% url 'info_historia' historia.ruta %}">
+        <a class="c-card" href="{% url 'info_historia' historia.route %}">
             <div class="c-card-img-bg">
                 <div class="c-card-img">
-                    <img src="{{ historia.portada.url }}" alt="{{ historia.portada }}">
+                    <img src="{{ historia.cover.url }}" alt="{{ historia.cover }}">
                 </div>
             </div>
             <div class="c-card-title">
-                {{ historia.titulo|truncatechars:70 }}
+                {{ historia.title|truncatechars:70 }}
             </div>
             
         </a>

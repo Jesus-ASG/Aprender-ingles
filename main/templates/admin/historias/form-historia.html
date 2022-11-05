@@ -10,16 +10,10 @@
 {% endif %}
 <form method="post" enctype="multipart/form-data" autocomplete="off">
   {% csrf_token %}
-  <!--Estructura de una ruta-->
-  <div class="mb-3" hidden>
-    <label class="form-label">id</label>
-    <textarea type="text" name="ruta" maxlength="100" id="id_ruta" class="form-control"
-      value=""></textarea>
-  </div>
 
   {% for campo in formulario%}
   <div class="mb-3">
-    <label for="" class="form-label">{{ campo.label }}</label>
+    <label for="{{ campo.name }}" class="form-label">{{ campo.label }}</label>
 
     {% if campo.field.widget.input_type == 'file' and campo.value.url %} <br>
     <img src="{{ campo.value.url }}" alt="No se pudo cargar imagen" height="100">
@@ -29,12 +23,7 @@
   </div>
   {% endfor %}
 
-  <!-- Agregar páginas -->
-  <!-- Tener un botón para agregar varias páginas -->
-  {% include '../paginas/form-pagina.html' %}
-
-
-  <input class="btn btn-success" type="submit" value="Enviar información">
+  <input class="btn btn-success" type="submit" value="Continuar">
   <a class="btn btn-primary" href="{% url 'ver_historias' %}" role="button">Cancelar</a>
 
 </form>

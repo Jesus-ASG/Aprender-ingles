@@ -1,3 +1,24 @@
+.btn-regresar{
+    margin: 10px 0px;
+    transform: translate(-50px);
+}
+.btn-regresar a{
+    color: #F2864B;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all .2s ease-in-out;
+}
+.btn-regresar label{
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.btn-regresar :hover{
+    cursor: pointer;
+    color: #e16421;
+}
+
 .main-history-container{
     width: 80%;
     margin: auto;
@@ -37,6 +58,7 @@
 .seccion-2{
     align-items: center;
     padding: 10px 0px;
+    display: flex;
 }
 
 .container-categorias{
@@ -127,3 +149,6 @@
 }
 
 /*   Contenido de historias   */
+.rojo{
+    background-color: red;
+}

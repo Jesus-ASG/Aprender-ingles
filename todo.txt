@@ -1,0 +1,16 @@
+create page for register a story +++
+change caption from button that says 'register/agregar' for something
+like 'continue' ++++
+quit new pages section +++
+
+'continue' button save the current story and if all goes right redirects you to
+a page for choose one template +++
+
+=====update table without refresh page
+
+put style for actually pages
+for that i need to known wich template have, and for that
+i must add one field in database model
+
+
+
