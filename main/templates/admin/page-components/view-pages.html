@@ -8,7 +8,7 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container main-content">
     <div class="row mt-3">
         <h2 style="text-align: center;">Escoge una plantilla para crear una nueva página</h2>
         <h3 style="text-align: center;">Páginas actuales:</h3>
@@ -22,7 +22,7 @@
         <hr>
         <section class="row mt-3 choose-template-section">
             <div class="col col-12">
-                <a class="template" href="#">
+                <a class="template" href="{% url 'add_page' story.route 1 %}">
                     <div class="t1-p1">
                         <div class="box-t1-1">
                             <img src="{% static 'img/image-icon.png' %}" alt="Default image">

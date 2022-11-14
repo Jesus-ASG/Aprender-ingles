@@ -200,7 +200,7 @@ def agregarHistorias(request):
         # does nothing because save() method already save slug
         pass
     historiaFO = historiaFR.save()
-    return redirect('edit_pages', route=historiaFO.route)
+    return redirect('view_pages', route=historiaFO.route)
     """
     # old code for save many pages
     if paginaFR.is_valid():
@@ -288,10 +288,24 @@ def contenidoHistoria(request, route, num_pagina):
     return render(request, 'urls/contenido_historia.html', args)
 
 
-def editPages(request, route):
+def viewPages(request, route):
     try:
         story = Story.objects.get(route=route)
         pages = Page.objects.filter(story=story)
     except:
         return HttpResponseNotFound()
-    return render(request, 'admin/page-components/choose-page-template.html', {'story':story, 'pages':pages})
+    return render(request, 'admin/page-components/view-pages.html', {'story':story, 'pages':pages})
+
+def addPage(request, route, id):
+    try:
+        story = Story.objects.get(route=route)
+        pages = Page.objects.filter(story=story)
+    except:
+        return HttpResponseNotFound()
+    match id:
+        case 1:
+            return render(request, 'admin/page-components/options/1.html', {'story':story, 'pages':pages})
+    return redirect('view_pages', route=route)
+
+
+

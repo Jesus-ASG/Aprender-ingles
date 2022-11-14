@@ -1,5 +1,9 @@
-/*Main template*/
+::selection {
+    background: rgb(28, 255, 251);
+    color: #000; 
+}
 
+/*Main template*/
 body{
     font-family: 'Muli', Sans-Serif;
 }
@@ -21,6 +25,9 @@ div{
     padding: 0;
 }
 
+.main-content {
+    max-width: 900px;
+}
 
 .footer-position{
 	position: absolute;

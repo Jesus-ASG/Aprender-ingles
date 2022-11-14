@@ -14,7 +14,8 @@ urlpatterns = [
     path('myadmin/agregar-historias', views.agregarHistorias, name = 'agregar_historias'),
     path('myadmin/editar-historia/<int:id>', views.editarHistoria, name = 'editar_historia'),
     path('myadmin/eliminar-historia/<int:id>', views.eliminarHistoria, name = 'eliminar_historia'),
-    path('myadmin/edit-pages/<slug:route>', views.editPages, name='edit_pages'),
+    path('myadmin/view-pages/<slug:route>', views.viewPages, name='view_pages'),
+    path('myadmin/view-pages/<slug:route>/add/<int:id>', views.addPage, name='add_page'),
 
     # for stories and related
     path('historia/<slug:route>/', views.infoHistoria, name = 'info_historia'),
