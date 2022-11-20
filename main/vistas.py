@@ -27,9 +27,6 @@ from django.contrib import messages
 from .models import Tag, Story, Page
 from .forms import CategoriaForm, HistoriaForm, PaginaForm
 
-# Dar formato
-import re
-
 
 class UsersList(generics.ListCreateAPIView):
     queryset = User.objects.all()
@@ -126,137 +123,6 @@ def register(request):
     form = NewUserForm()
     return render(request, 'urls/register.html', {'register_form': form})
 
-
-# ADMIN #
-
-# Categorías
-
-def verCategorias(request):
-    categorias = Tag.objects.all().order_by('name')
-    return render(request, 'admin/categorias/ver_categorias.html', {'categorias': categorias})
-
-
-def agregarCategorias(request):
-    formulario = CategoriaForm(request.POST or None)
-    if formulario.is_valid():
-        formulario.save()
-    return render(request, 'admin/categorias/agregar_categorias.html', {'formulario': formulario})
-
-
-def editarCategoria(request, id):
-    categoria = Tag.objects.get(id=id)
-    formulario = CategoriaForm(request.POST or None, instance=categoria)
-    if formulario.is_valid() and request.POST:
-        formulario.save()
-    return render(request, 'admin/categorias/editar_categoria.html', {'formulario': formulario})
-
-
-def eliminarCategoria(request, id):
-    categoria = Tag.objects.get(id=id)
-    categoria.delete()
-    return redirect('ver_categorias')
-
-
-# Historias
-class Response:
-    def __init__(self):
-        self.alert = ''
-        self.message = ''
-
-    def setAlert(self, alert):
-        match alert:
-            case 'danger':
-                self.alert = 'alert-danger'
-
-    def setMessage(self, message):
-        self.message = message
-
-
-def verHistorias(request):
-    historias = Story.objects.all()
-    return render(request, 'admin/historias/ver_historias.html', {'historias': historias})
-
-
-def agregarHistorias(request):
-    historiaFR = HistoriaForm(request.POST or None, request.FILES or None)
-    paginaFR = PaginaForm(request.POST or None)
-
-    if not historiaFR.is_valid():
-        return render(request, 'admin/historias/agregar_historias.html',
-                      {'formulario': historiaFR, 'form_pagina': paginaFR})
-
-    historiaFO = historiaFR.save(commit=False)
-    historiaFO.title = re.sub(' +', ' ', historiaFO.title)
-
-    try:
-        duplicado = Story.objects.get(title=historiaFO.title)
-        if duplicado:
-            resp = Response()
-            resp.setAlert('danger')
-            resp.setMessage('Ya existe una historia con ese título')
-            return render(request, 'admin/historias/agregar_historias.html',
-                          {'formulario': historiaFR, 'form_pagina': paginaFR, 'resp': resp})
-    except:
-        # does nothing because save() method already save slug
-        pass
-    historiaFO = historiaFR.save()
-    return redirect('view_pages', route=historiaFO.route)
-    """
-    # old code for save many pages
-    if paginaFR.is_valid():
-        num_paginas = int(request.POST.get('num_paginas'))
-        for i in range(num_paginas):
-            texto = request.POST.get('texto_' + str(i))
-            paginaFO = paginaFR.save(commit=False)
-            paginaFO.texto = texto
-            paginaFO.story = historiaFO
-            paginaFO.save()
-            paginaFR = PaginaForm()
-
-        return redirect('ver_historias')
-    """
-
-def editarHistoria(request, id):
-    historia = Story.objects.get(id=id)
-    # obtiene portada y ruta del objeto
-    port1 = historia.get_portada()
-    first_title = re.sub(' +', ' ', historia.title)
-
-    fR = HistoriaForm(request.POST or None, request.FILES or None, instance=historia)
-    if fR.is_valid() and request.POST:
-        #### Cambiar ruta si es que modificó el título, ya que la ruta se basa en el título ####
-        historia.title = re.sub(' +', ' ', historia.title)
-        if first_title != historia.title:
-            try:
-                duplicado = Story.objects.get(title=historia.title)
-                if duplicado:
-                    resp = Response()
-                    resp.setAlert('danger')
-                    resp.setMessage('Ya existe una historia con ese título')
-                    return render(request, 'admin/historias/agregar_historias.html',
-                                  {'formulario': fR, 'form_pagina': fR, 'resp': resp})
-            except:
-                # does nothing because save() method already save slug
-                pass
-        #### Portada ####
-        # obtiene la portada del formulario
-        port2 = historia.get_portada()
-        # si las portadas son diferentes, entonces borra la anterior
-        if port1 != port2:
-            historia.del_portada(port1)
-        fR.save()
-        return redirect('ver_historias')
-    return render(request, 'admin/historias/editar_historia.html', {'formulario': fR})
-
-
-def eliminarHistoria(request, id):
-    try:
-        historia = Story.objects.get(id=id)
-        historia.delete()
-        return redirect('ver_historias')
-    except:
-        return HttpResponseBadRequest('')
-
 # Renderizar información de la historia
 def infoHistoria(request, route):
     try:
@@ -286,26 +152,4 @@ def contenidoHistoria(request, route, num_pagina):
         return HttpResponseNotFound()
 
     return render(request, 'urls/contenido_historia.html', args)
-
-
-def viewPages(request, route):
-    try:
-        story = Story.objects.get(route=route)
-        pages = Page.objects.filter(story=story)
-    except:
-        return HttpResponseNotFound()
-    return render(request, 'admin/page-components/view-pages.html', {'story':story, 'pages':pages})
-
-def addPage(request, route, id):
-    try:
-        story = Story.objects.get(route=route)
-        pages = Page.objects.filter(story=story)
-    except:
-        return HttpResponseNotFound()
-    match id:
-        case 1:
-            return render(request, 'admin/page-components/options/1.html', {'story':story, 'pages':pages})
-    return redirect('view_pages', route=route)
-
-
 

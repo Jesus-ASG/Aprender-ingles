@@ -70,45 +70,51 @@ class Story(models.Model):
 class Page(models.Model):
     class Meta:
         db_table = prefix + 'story_page'
-
     # keys
     id = models.AutoField(primary_key=True)
-    story = models.ForeignKey(Story, on_delete=models.CASCADE, null=True)
+    story = models.ForeignKey(Story, on_delete=models.CASCADE, related_name='pages')
     # fields
-    page_type = models.IntegerField(verbose_name='page_type', null=False, default=0)
-
-    def __str__(self) -> str:
-        return f'id: {self.id} | page_type: {self.page_type} | pertenece: {self.story}'
+    page_type = models.IntegerField(default=0)
 # -------- -------- -------- --------
+
+
+# Video
+class VideoUrl(models.Model):
+    class Meta:
+        db_table = prefix + 'page_video_url'
+    # keys
+    id = models.AutoField(primary_key=True)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='video_urls')
+    # fields
+    url = models.CharField(max_length=2048)
+    element_number = models.IntegerField()
+
 
 # Imagen
 class Image(models.Model):
     class Meta:
         db_table = prefix + 'page_image'
-
     # keys
     id = models.AutoField(primary_key=True)
-    page = models.ForeignKey(Page, on_delete=models.CASCADE, null=True)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='images')
     # fields
-    image = models.ImageField(upload_to='imagenes/img-pages/', null=False,
-                              verbose_name='image')
+    image = models.ImageField(upload_to='imagenes/img-pages/')
+    element_number = models.IntegerField()
+
 
 # Diálogo
 class Dialogue(models.Model):
     class Meta:
         db_table = prefix + 'page_dialogue'
-
     # keys
     id = models.AutoField(primary_key=True)
-    page = models.ForeignKey(Page, on_delete=models.CASCADE, null=True)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='dialogues')
     # fields
-    name = models.CharField(max_length=30, verbose_name='name')
-    content = models.CharField(max_length=255, verbose_name='content')
-    translation = models.CharField(max_length=255, verbose_name='translation')
-    #color = models.CharField(max_length=8, verbose_name='color')
-
-    def __str__(self) -> str:
-        return f'id: {self.id} | bt: {self.page}'
+    name = models.CharField(max_length=30)
+    content = models.CharField(max_length=255)
+    translation = models.CharField(max_length=255)
+    color = models.CharField(max_length=7, default='#000000')
+    element_number = models.IntegerField()
 # -------- -------- -------- --------
 
 
@@ -116,16 +122,13 @@ class Dialogue(models.Model):
 class RepeatPhrase(models.Model):
     class Meta:
         db_table = prefix + 'page_repeat_phrase'
-
     # keys
     id = models.AutoField(primary_key=True)
-    page = models.ForeignKey(Page, on_delete=models.CASCADE, null=True)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='repeat_phrases')
     # fields
     content = models.CharField(max_length=255, verbose_name='content')
     translation = models.CharField(max_length=255, verbose_name='translation')
-
-    def __str__(self) -> str:
-        return f'id: {self.id} | bt: {self.page}'
+    element_number = models.IntegerField()
 # -------- -------- -------- --------
 
 
@@ -133,28 +136,21 @@ class RepeatPhrase(models.Model):
 class Question(models.Model):
     class Meta:
         db_table = prefix + 'page_question'
-
     # keys
     id = models.AutoField(primary_key=True)
-    page = models.ForeignKey(Page, on_delete=models.CASCADE, null=True)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='questions')
     # fields
     question = models.CharField(max_length=255, verbose_name='question')
-
-    def __str__(self) -> str:
-        return f'q: {self.question[:5]}... | bt: {self.page}'
+    element_number = models.IntegerField()
 
 
 class Option(models.Model):
     class Meta:
         db_table = prefix + 'page_question_option'
-
     # keys
     id = models.AutoField(primary_key=True)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='options')
     # fields
     answer = models.CharField(max_length=255, verbose_name='answer')
-    correct = models.BooleanField(default=False, null=False)
-
-    def __str__(self) -> str:
-        return f'ans: {self.answer[:5]}... = {self.correct} | bt: {self.question}'
+    correct = models.BooleanField(default=False)
 # -------- -------- -------- --------
