@@ -3,73 +3,74 @@
 
 {% block title %} {{ story.title }} {% endblock %}
 
-{% block page-styles %} <link rel="stylesheet" href="{% static 'css/1.css' %}"> {% endblock %}
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/1.css' %}">
+<style>
+    .btn-add-dialog {
+        min-width: 100px;
+    }
+</style>
+{% endblock %}
 
 {% block navbar %} {% include 'navbar-custom.html' %} {% endblock %}
 
 {% block content %}
 <div class="container main-content">
     <h1 class="fs-1 text-center mt-3">Plantilla de imagen, diálogo y ejercicio</h1>
-    <div class="row mt-3">
-        <div class="col-12">
-                <label for="" class="form-label fs-5">Seleccionar imagen</label>
-                <input type="file" id="image" name="image" class="form-control" accept="image/*" />
-        </div>
-    </div>
-    <div class="row mt-3">
+    <input type="file" id="image" name="image" class="form-control" accept="image/*" onchange="changeImg(this)"
+        hidden />
+    
+    <div class="mt-3" id="alert_removed_success"></div>
+    
+    <div class="row my-3">
         <div class="col-12">
             <div class="img-t-1">
-                <img src="{% static 'img/image-icon.png' %}" alt="No se pudo cargar la imagen">
-                
-            </div>
-            
-            <div class="fs-5">
-                <div class="mb-3">
-                    <div class="row mb-2">
-                        <div class="col-12 col-md-3">
-                            <input class="form-control fs-5 fw-bold ch-color" type="text" name="name" id="name" placeholder="Nombre">
-                            <div class="mt-2 d-flex">
-                                <label for="color" class="form-label me-2 fw-bold ch-color">Color:</label>
-                                <input class="form-control form-control-color text-center" type="color" name="color" id="color" value="#2DACFB">
-                            </div>
-                            
-                        </div>
-                        <div class="col-12 col-md-9">
-                            <textarea class="form-control fs-5 txta" type="text" name="content" id="content" placeholder="Inglés" maxlength="255"></textarea>
-                        </div>
+                <img src="{{ story.cover.url }}" alt="No se pudo cargar la imagen" id="img_showed">
+                <div class="row mt-1">
+                    <div class="col-12 col-md-6">
+                        <button class="btn btn-primary shadow-none fs-6 w-100 fw-bold"
+                            onclick="document.getElementById('image').click(); return false;">Cambiar imagen</button>
                     </div>
-                    <div class="row mb-2">
-                        <div class="col-12 col-md-9">
-                            <textarea class="form-control fs-5 txta" type="text" name="translation" id="translation" placeholder="Español" maxlength="255"></textarea>
-                        </div>
-                        <div class="col-12 col-md-3">
-                            <a class="btn btn-danger" href="#" role="button" title="Borrar">
-                                <i class="fa-solid fa-trash"></i>
-                            </a>
-                        </div>
+                    <div class="col-12 col-md-6">
+                        <button class="btn btn-info shadow-none fs-6 w-100 fw-bold" onclick="restoreImage()">Restaurar
+                            imagen</button>
                     </div>
                 </div>
 
+            </div>
+            <div class="fs-5">
                 <div id="dialog_area"></div>
-                
             </div>
             <div class="row mb-3">
                 <div class="col-12 text-center">
-                    <button onclick="addDialog()" class="btn btn-primary w-50 fs-5 fw-bold"> Agregar diálogo </button>
+                    <button onclick="addDialog()" class="btn btn-primary shadow-none w-50 fs-5 fw-bold btn-add-dialog"
+                        id="add_dialog"> Agregar
+                        diálogo </button>
                 </div>
-                
             </div>
-            
         </div>
-        
     </div>
-    <div class="row">
-        <button class="btn btn-primary">Enviar</button>
+    <hr>
+    <div class="row mb-3">
+        <div class="col-12">
+            <h2 class="fs-2 text-center my-3">Agregar ejercicio</h2>
+            <select class="form-select" disabled>
+                <option value="1">Próximamente</option>
+                <option value="1">Pregunta y respuesta</option>
+                <option value="2">Repetir oración</option>
+              </select>
+        </div>
     </div>
-    
-       
-    
-<!--
+    <hr>
+    <div class="row mb-3">
+        <div class="col-12 text-center">
+            <button class="btn btn-primary shadow-none w-50 fs-5 fw-bold"> Guardar página </button>
+        </div>
+    </div>
+
+
+
+    <!--
     <form method="post" enctype="multipart/form-data" autocomplete="off">
         {% csrf_token %}
 
@@ -101,5 +102,23 @@
 {% endblock %}
 
 {% block page-scripts %}
+<script>
+    function restoreImage() {
+        $("#img_showed").attr("src", "{{ story.cover.url }}");
+        $("#image").val("");
+    }
+
+    function changeImg(input) {
+        if (input.value == "")
+            restoreImage();
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                $("#img_showed").attr("src", e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
 <script src="{% static 'js/add-page.js' %}"></script>
 {% endblock %}

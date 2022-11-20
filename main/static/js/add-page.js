@@ -1,71 +1,105 @@
 // here are all javascript code for:
 // dialogue, plain text, colors, etc.
-var num_d = 1;
+var num_d = 0;
 $( document ).ready(function() {
     
-    let content = document.getElementById("content");
+    $("#add_dialog").click();
+
+});
+
+function destroy(id){
+    $("#row_dialog_"+id).remove();
+    let html = 
+    `
+    <div class="alert alert-success alert-dismissible fade show mb-2 mt-2" role="alert">
+        <div style="text-align: center;">
+            <strong>Elemento eliminado correctamente</strong>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    `;
+    document.getElementById("alert_removed_success").innerHTML = html;
+}
+
+function setFunctions(id){
+    let content = document.getElementById("content_"+id);
     content.addEventListener("keyup", e => {
         content.style.height = content.style.fontSize;
         let h = e.target.scrollHeight;
         content.style.height = `${h}px`;
     });
     
-    let translation = document.getElementById("translation");
+    let translation = document.getElementById("translation_"+id);
     translation.addEventListener("keyup", e => {
         translation.style.height = content.style.fontSize;
         let h = e.target.scrollHeight;
         translation.style.height = `${h}px`;
     });
 
-    $(".ch-color").css({'color':$("#color").val()});
-    $("#color").change(function(){
-        $(".ch-color").css({'color':$("#color").val()});
-    });
-
-});
-
-function setIncreaseHeight(){
-    
+    $(".ch-color_"+id).css({'color':$("#color_"+id).val()});
+    $("#color_"+id).on('input propertychange', (e)=>{
+        $(".ch-color_"+id).css({'color':e.target.value});
+    })
 }
 
-
 function addDialog(){
+    let html = 
+    `
+    <div class="mb-3" id="row_dialog_`+num_d+`">
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <input class="form-control fs-5 fw-bold ch-color_`+num_d+`" type="text" name="name_`+num_d+`" id="name_`+num_d+`"
+                    placeholder="Nombre" autocomplete="off">
+                <div class="mt-2 d-flex">
+                    <label for="color_`+num_d+`" class="form-label me-2 fw-bold ch-color_`+num_d+`">Color:</label>
+                    <input class="form-control form-control-color mb-2 text-center shadow-none" type="color" name="color_`+num_d+`"
+                        id="color_`+num_d+`" value="#2DACFB">
+                </div>
+            </div>
+            <div class="col-12 col-md-9">
+                <textarea class="form-control fs-5 mb-2 txta" type="text" name="content_`+num_d+`" id="content_`+num_d+`"
+                    placeholder="Contenido en inglés" maxlength="255"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-10 mb-2">
+                <textarea class="form-control fs-5 txta" type="text" name="translation_`+num_d+`" id="translation_`+num_d+`"
+                    placeholder="Contenido en español" maxlength="255"></textarea>
+            </div>
+            <div class="col-12 col-md-2 mb-2 text-center">
+                <button class="btn btn-danger shadow-none" type="button" title="Eliminar diálogo"
+                    data-bs-toggle="modal" data-bs-target="#modal_delete_`+num_d+`">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+                <div class="modal fade" id="modal_delete_`+num_d+`" tabindex="-1"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title  col-11 text-center">¿Desea eliminar este diálogo?</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="close"></button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cancelar</button>
+                                
+                                <button class="btn btn-danger" 
+                                    onclick="destroy(`+num_d+`)" data-bs-dismiss="modal">
+                                    Eliminar</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>
+    <div id="dialog_area"></div>
+    `;
+
+    document.getElementById("dialog_area").outerHTML = html;
+    setFunctions(num_d);
     num_d++;
-
-
-    
-    /*
-    let dialog_area = document.getElementById("dialog_area");
-
-    let container = document.createElement('div');
-    container.className = "mb-3";
-    seccion_paginas.appendChild(div_pagina);
-
-    // crea elementos, pone estilos, atributos
-    let label_pagina = document.createElement('label') ;
-    label_pagina.className = "form-label";
-    label_pagina.innerHTML = "Texto";
-    let textarea_pagina = document.createElement('textarea');
-    textarea_pagina.setAttribute('name', 'texto_'+num_paginas);
-    textarea_pagina.setAttribute('maxlength', '255');
-    textarea_pagina.setAttribute('id', 'texto_'+num_paginas);
-    textarea_pagina.classList.add("txt-historias");
-    textarea_pagina.classList.add("form-control");
-
-    textarea_pagina.addEventListener("keyup", e => {
-        textarea_pagina.style.height = "60px";
-        let scHeight = e.target.scrollHeight;
-        textarea_pagina.style.height = `${scHeight}px`;
-    });
-
-    // agrega elementos al div
-    div_pagina.appendChild(label_pagina);
-    div_pagina.appendChild(textarea_pagina);
-    // focus al textarea
-    textarea_pagina.focus();
-    
-    // incrementa el contador de páginas
-    num_paginas++;
-    document.getElementById("num_paginas").value = num_paginas;
-    */
 }

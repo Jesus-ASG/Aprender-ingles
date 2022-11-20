@@ -2,8 +2,7 @@
     width: 33%;
     height: auto;
     align-items: center;
-    margin: 20px;
-    border: 1px solid #000;
+    margin: 2%;
     float: left;
 }
 
@@ -29,4 +28,21 @@
 
 .txta::-webkit-scrollbar{
   width: 0px;
+}
+
+.change-img{
+    width: 20%;
+    min-width: 40px;
+    min-height: 40px;
+    background-color: #F89A16;
+    border-radius: 100%;
+    float: left;
+    position: relative;
+    margin-top: -50px;
+    margin-left: 2%;
+    transition: all .2s ease-in-out;
+}
+
+.change-img:hover{
+    transform: scale(1.1);
 }
