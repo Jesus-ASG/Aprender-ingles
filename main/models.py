@@ -75,12 +75,23 @@ class Page(models.Model):
     id = models.AutoField(primary_key=True)
     story = models.ForeignKey(Story, on_delete=models.CASCADE, null=True)
     # fields
-    #texto = models.CharField(max_length=800, verbose_name='texto')
+    page_type = models.IntegerField(verbose_name='page_type', null=False, default=0)
 
     def __str__(self) -> str:
-        return f'id: {self.id} | pertenece: {self.story}'
+        return f'id: {self.id} | page_type: {self.page_type} | pertenece: {self.story}'
 # -------- -------- -------- --------
 
+# Imagen
+class Image(models.Model):
+    class Meta:
+        db_table = prefix + 'page_image'
+
+    # keys
+    id = models.AutoField(primary_key=True)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, null=True)
+    # fields
+    image = models.ImageField(upload_to='imagenes/img-pages/', null=False,
+                              verbose_name='image')
 
 # Diálogo
 class Dialogue(models.Model):
@@ -94,6 +105,7 @@ class Dialogue(models.Model):
     name = models.CharField(max_length=30, verbose_name='name')
     content = models.CharField(max_length=255, verbose_name='content')
     translation = models.CharField(max_length=255, verbose_name='translation')
+    #color = models.CharField(max_length=8, verbose_name='color')
 
     def __str__(self) -> str:
         return f'id: {self.id} | bt: {self.page}'

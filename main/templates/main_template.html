@@ -16,18 +16,21 @@
     <script src="https://kit.fontawesome.com/f4ecb098da.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <!-- Font family 'Muli'-->
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Muli" />
-
+    <!-- Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <!--Estilos propios-->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/home.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/agregar_historias.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/info_cont_hist.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/choose_page.css' %}" type="text/css">
 
     <link rel="stylesheet" href="{% static 'css/not_found.css' %}" type="text/css">
-
+    
+    <!-- Page styles-->
+    {% block page-styles %} {% endblock %}
 
 </head>
 <body>
@@ -60,6 +63,9 @@
 <!--Propios-->
 <script src="{% static 'js/index.js' %}"></script>
 <script src="{% static 'js/forms.js' %}"></script>
+
+<!-- Page scripts-->
+{% block page-scripts %} {% endblock %}
 
 </body>
 </html>

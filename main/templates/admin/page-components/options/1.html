@@ -3,16 +3,103 @@
 
 {% block title %} {{ story.title }} {% endblock %}
 
+{% block page-styles %} <link rel="stylesheet" href="{% static 'css/1.css' %}"> {% endblock %}
+
 {% block navbar %} {% include 'navbar-custom.html' %} {% endblock %}
 
 {% block content %}
-
 <div class="container main-content">
+    <h1 class="fs-1 text-center mt-3">Plantilla de imagen, diálogo y ejercicio</h1>
     <div class="row mt-3">
-        Plantilla de imagen, diálogo y ejercicio
+        <div class="col-12">
+                <label for="" class="form-label fs-5">Seleccionar imagen</label>
+                <input type="file" id="image" name="image" class="form-control" accept="image/*" />
+        </div>
     </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="img-t-1">
+                <img src="{% static 'img/image-icon.png' %}" alt="No se pudo cargar la imagen">
+                
+            </div>
+            
+            <div class="fs-5">
+                <div class="mb-3">
+                    <div class="row mb-2">
+                        <div class="col-12 col-md-3">
+                            <input class="form-control fs-5 fw-bold ch-color" type="text" name="name" id="name" placeholder="Nombre">
+                            <div class="mt-2 d-flex">
+                                <label for="color" class="form-label me-2 fw-bold ch-color">Color:</label>
+                                <input class="form-control form-control-color text-center" type="color" name="color" id="color" value="#2DACFB">
+                            </div>
+                            
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <textarea class="form-control fs-5 txta" type="text" name="content" id="content" placeholder="Inglés" maxlength="255"></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-12 col-md-9">
+                            <textarea class="form-control fs-5 txta" type="text" name="translation" id="translation" placeholder="Español" maxlength="255"></textarea>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <a class="btn btn-danger" href="#" role="button" title="Borrar">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
+                <div id="dialog_area"></div>
+                
+            </div>
+            <div class="row mb-3">
+                <div class="col-12 text-center">
+                    <button onclick="addDialog()" class="btn btn-primary w-50 fs-5 fw-bold"> Agregar diálogo </button>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    <div class="row">
+        <button class="btn btn-primary">Enviar</button>
+    </div>
+    
+       
+    
+<!--
+    <form method="post" enctype="multipart/form-data" autocomplete="off">
+        {% csrf_token %}
 
+        <div class="mb-3">
+            <label for="cover" class="form-label">Imagen</label>
+            <input type="file" name="image" class="form-control" accept="image/*" />
+        </div>
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Nombre</label>
+            <input type="text" name="name" class="form-control" maxlength="100" />
+        </div>
+
+        <div class="mb-3">
+            <label for="content" class="form-label">Diálogo</label>
+            <input type="text" name="content" class="form-control" maxlength="100" />
+        </div>
+
+        <div class="mb-3">
+            <label for="translation" class="form-label">Traducción</label>
+            <input type="text" name="translation" class="form-control" maxlength="100" />
+        </div>
+
+        <input class="btn btn-success" type="submit" value="Continuar" />
+        <a class="btn btn-primary" href="#" role="button">Cancelar</a>
+    </form>
+-->
 </div>
+{% endblock %}
 
+{% block page-scripts %}
+<script src="{% static 'js/add-page.js' %}"></script>
 {% endblock %}
