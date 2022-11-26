@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Tag, Story, Page
+from .models import Tag, Story, Page, Dialogue, Image
 
 
 class NewUserForm(UserCreationForm):
@@ -23,11 +23,7 @@ class CategoriaForm(forms.ModelForm):
 		model = Tag
 		fields = '__all__'
 
-class PaginaForm(forms.ModelForm):
-	class Meta:
-		model = Page
-		fields = '__all__'
-		exclude = ['texto', 'story']
+
 	
 
 class HistoriaForm(forms.ModelForm):
@@ -55,4 +51,27 @@ class HistoriaForm(forms.ModelForm):
 		label = 'Categorías',
 	)
 
+
+class PageForm(forms.ModelForm):
+	class Meta:
+		model = Page
+		fields = '__all__'
+		exclude = ['story', 'subtitle', 'page_type']
+
+
+class ImageForm(forms.ModelForm):
+	class Meta:
+		model = Image
+		fields = '__all__'
+		exclude = ['page', 'image', 'element_number']
+
+
+class DialogueForm(forms.ModelForm):
+	class Meta:
+		model = Dialogue
+		fields = '__all__'
+		exclude = ['page', 'name', 'content', 'translation', 'color', 'element_number']
+		
+
+	
 

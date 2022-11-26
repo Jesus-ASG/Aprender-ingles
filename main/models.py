@@ -74,6 +74,7 @@ class Page(models.Model):
     id = models.AutoField(primary_key=True)
     story = models.ForeignKey(Story, on_delete=models.CASCADE, related_name='pages')
     # fields
+    subtitle = models.CharField(max_length=100, default="")
     page_type = models.IntegerField(default=0)
 # -------- -------- -------- --------
 

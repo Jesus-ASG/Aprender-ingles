@@ -1,9 +1,11 @@
 // here are all javascript code for:
 // dialogue, plain text, colors, etc.
 var num_d = 0;
+var max_elem = 2;
 $( document ).ready(function() {
-    
+    $("#max_elem").val(max_elem);
     $("#add_dialog").click();
+    
 
 });
 
@@ -45,7 +47,7 @@ function setFunctions(id){
 function addDialog(){
     let html = 
     `
-    <div class="mb-3" id="row_dialog_`+num_d+`">
+    <div class="mb-3" id="row_dialog_`+num_d+`" name="row_dialog_`+num_d+`">
         <div class="row">
             <div class="col-12 col-md-3">
                 <input class="form-control fs-5 fw-bold ch-color_`+num_d+`" type="text" name="name_`+num_d+`" id="name_`+num_d+`"
@@ -102,4 +104,6 @@ function addDialog(){
     document.getElementById("dialog_area").outerHTML = html;
     setFunctions(num_d);
     num_d++;
+    max_elem++;
+    $("#max_elem").val(max_elem);
 }

@@ -2,7 +2,7 @@
 import re
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
-from main.forms import HistoriaForm, PaginaForm
+from main.forms import HistoriaForm, PageForm
 from main.models import Story
 
 class RespAlert:
@@ -26,7 +26,7 @@ def index(request):
 
 def create(request):
     historiaFR = HistoriaForm(request.POST or None, request.FILES or None)
-    paginaFR = PaginaForm(request.POST or None)
+    paginaFR = PageForm(request.POST or None)
 
     if not historiaFR.is_valid():
         return render(request, 'admin/historias/agregar_historias.html',

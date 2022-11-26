@@ -15,24 +15,27 @@
 {% block navbar %} {% include 'navbar-custom.html' %} {% endblock %}
 
 {% block content %}
+<form method="POST" action="{% url 'add_page' story.route 1 %}" enctype='multipart/form-data' autocomplete="off" id="save_page">
+{% csrf_token %}
 <div class="container main-content">
-    <h1 class="fs-1 text-center mt-3">Plantilla de imagen, diálogo y ejercicio</h1>
+    <input class="fs-1 text-center mt-3 form-control" name="subtitle" placeholder="Subtítulo"></input>
     <input type="file" id="image" name="image" class="form-control" accept="image/*" onchange="changeImg(this)"
         hidden />
-    
+    <input type="number" id="max_elem" name="max_elem" hidden>
+
     <div class="mt-3" id="alert_removed_success"></div>
-    
+
     <div class="row my-3">
         <div class="col-12">
             <div class="img-t-1">
                 <img src="{{ story.cover.url }}" alt="No se pudo cargar la imagen" id="img_showed">
                 <div class="row mt-1">
                     <div class="col-12 col-md-6">
-                        <button class="btn btn-primary shadow-none fs-6 w-100 fw-bold"
+                        <button class="btn btn-primary shadow-none fs-6 w-100 fw-bold" type="button"
                             onclick="document.getElementById('image').click(); return false;">Cambiar imagen</button>
                     </div>
                     <div class="col-12 col-md-6">
-                        <button class="btn btn-info shadow-none fs-6 w-100 fw-bold" onclick="restoreImage()">Restaurar
+                        <button class="btn btn-info shadow-none fs-6 w-100 fw-bold" onclick="restoreImage()" type="button">Restaurar
                             imagen</button>
                     </div>
                 </div>
@@ -44,7 +47,7 @@
             <div class="row mb-3">
                 <div class="col-12 text-center">
                     <button onclick="addDialog()" class="btn btn-primary shadow-none w-50 fs-5 fw-bold btn-add-dialog"
-                        id="add_dialog"> Agregar
+                        id="add_dialog" type="button"> Agregar
                         diálogo </button>
                 </div>
             </div>
@@ -53,52 +56,32 @@
     <hr>
     <div class="row mb-3">
         <div class="col-12">
+            
             <h2 class="fs-2 text-center my-3">Agregar ejercicio</h2>
             <select class="form-select" disabled>
                 <option value="1">Próximamente</option>
                 <option value="1">Pregunta y respuesta</option>
                 <option value="2">Repetir oración</option>
-              </select>
+            </select>
         </div>
     </div>
     <hr>
     <div class="row mb-3">
         <div class="col-12 text-center">
-            <button class="btn btn-primary shadow-none w-50 fs-5 fw-bold"> Guardar página </button>
+            <button class="btn btn-primary shadow-none w-50 fs-5 fw-bold" type="submit" form="save_page"> Guardar página </button>
         </div>
     </div>
 
 
 
-    <!--
-    <form method="post" enctype="multipart/form-data" autocomplete="off">
-        {% csrf_token %}
 
-        <div class="mb-3">
-            <label for="cover" class="form-label">Imagen</label>
-            <input type="file" name="image" class="form-control" accept="image/*" />
-        </div>
+    
 
-        <div class="mb-3">
-            <label for="name" class="form-label">Nombre</label>
-            <input type="text" name="name" class="form-control" maxlength="100" />
-        </div>
+        
 
-        <div class="mb-3">
-            <label for="content" class="form-label">Diálogo</label>
-            <input type="text" name="content" class="form-control" maxlength="100" />
-        </div>
-
-        <div class="mb-3">
-            <label for="translation" class="form-label">Traducción</label>
-            <input type="text" name="translation" class="form-control" maxlength="100" />
-        </div>
-
-        <input class="btn btn-success" type="submit" value="Continuar" />
-        <a class="btn btn-primary" href="#" role="button">Cancelar</a>
-    </form>
--->
 </div>
+
+</form>
 {% endblock %}
 
 {% block page-scripts %}

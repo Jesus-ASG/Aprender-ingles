@@ -22,10 +22,8 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from .forms import NewUserForm
-from django.contrib import messages
 
-from .models import Tag, Story, Page
-from .forms import CategoriaForm, HistoriaForm, PaginaForm
+from .models import Story, Page
 
 
 class UsersList(generics.ListCreateAPIView):
