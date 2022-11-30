@@ -9,51 +9,86 @@
 
 <div class="container main-content">
     <div class="row mt-3">
-        <h2 style="text-align: center;">Escoge una plantilla para crear una nueva página</h2>
         <h3 style="text-align: center;">Páginas actuales:</h3>
-        <section class="row mt-3 choose-template-section">
-            <div class="col col-12">
-                {% if pages %}
-                    {% for p in pages %}
-                        {% if p.page_type == 1 %}
-                            {{ p.story }}
-                            <a class="template" href="#">
-                                <div class="t1-p1">
-                                    <div class="box-t1-1">
-                                        <img src="{% static 'img/image-icon.png' %}" alt="Default image">
-                                    </div>
-                                    <div class="box-t1-2">
-                                        <span class="t1-line-s"></span>
-                                        <span class="t1-line-s"></span>
-                                        <span class="t1-line-s"></span>
-                                    </div>
-                                </div>
-                                <div class="t1-p2">
-                                    <div class="box-t1-3">
-                                        <span class="t1-line-l"></span>
-                                        <span class="t1-line-lb"></span>
-                                        <span class="t1-line-l"></span>
-                                    </div>
-                                </div>
-                                <div class="t1-p3">
-                                    <div class="box-t1-4">
-                                        <img src="{% static 'img/test.png' %}" alt="Default image">
-                                    </div>
-                                </div>
-                                <p>
-                                    Plantilla de imagen, diálogo y ejercicio
-                                </p>
-                            </a>
-                            
-                        
-                        {% endif %}
-                    {% endfor %}
-                {% else %}
-                <p>Esta historia aún no cuenta con páginas</p>
-                {% endif %}
+        <section class="row mt-3">
+            <div class="card table-responsive">
+                <div class="card-body">
+                    <h4 class="card-title">Páginas actuales</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="fs4">#</th>
+                                <th class="fs4">Nombre</th>
+                                <th class="fs4">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if not pages %}
+                            <p>Esta historia aún no cuenta con páginas</p>
+                            {% endif %}
+
+                            {% for p in pages %}
+                                <tr>
+                                    <td class="fs4">#{{ forloop.counter }}</td>
+                                    <td class="fs4">{{ p.subtitle }}</td>
+                                    <td class="fs4 d-flex">
+                                        <!-- Link to edit -->
+                                        <div>
+                                            <button class="btn btn-info btn-entrar" href="#" type="button" title="Editar"
+                                                data-bs-toggle="modal" data-bs-target="#modal_edit_{{ p.id }}">
+                                                <i class='fa-solid fa-pen' style='color: white'></i>
+                                            </button>
+                                        </div>
+                                        <!-- fin del modal para editar -->
+    
+                                        <!-- modal para borrar -->
+                                        <div>
+                                            <button class="btn btn-danger" href="#" type="button" title="Eliminar"
+                                                data-bs-toggle="modal" data-bs-target="#modal_delete_{{ p.id }}">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                            <div class="modal fade" id="modal_delete_{{ p.id }}" tabindex="-1"
+                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title  col-11 text-center">¿Desea eliminar esta página?</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="close"></button>
+                                                        </div>
+    
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Cancelar</button>
+                                                            <form action=""
+                                                                autocomplete="off" method="POST">
+                                                                <button type="submit" class="btn btn-danger">
+                                                                    Eliminar</i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
+            
+                
+            
         </section>
         <hr>
+        <div class="row mb-3">
+            <div class="col-12">
+                <h2 class="fs-2 fw-bold text-center">Escoge una plantilla para crear una nueva página</h2>
+            </div>
+        </div>
         <section class="row mt-3 choose-template-section">
             <div class="col col-12">
                 <a class="template" href="{% url 'add_page' story.route 1 %}">

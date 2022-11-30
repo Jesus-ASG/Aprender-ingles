@@ -76,6 +76,8 @@ class Page(models.Model):
     # fields
     subtitle = models.CharField(max_length=100, default="")
     page_type = models.IntegerField(default=0)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
+    time_created = models.TimeField(auto_now_add=True, null=True)
 # -------- -------- -------- --------
 
 

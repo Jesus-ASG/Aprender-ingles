@@ -70,7 +70,8 @@ class DialogueForm(forms.ModelForm):
 	class Meta:
 		model = Dialogue
 		fields = '__all__'
-		exclude = ['page', 'name', 'content', 'translation', 'color', 'element_number']
+		exclude = ['page', 'name', 'content', 'translation', 
+		'color', 'element_number']
 		
 
 	

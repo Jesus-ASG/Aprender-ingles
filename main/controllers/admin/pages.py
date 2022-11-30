@@ -7,7 +7,7 @@ from main.forms import DialogueForm, ImageForm, PageForm
 def index(request, route):
     try:
         story = Story.objects.get(route=route)
-        pages = story.pages.all()
+        pages = story.pages.all().order_by('date_created', 'time_created').values()
     except:
         return HttpResponseNotFound()
     return render(request, 'admin/page-components/view-pages.html', {'story':story, 'pages':pages})
