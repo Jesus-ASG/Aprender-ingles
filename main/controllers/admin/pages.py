@@ -1,7 +1,7 @@
 
 from django.shortcuts import render, redirect
-from django.http import HttpResponseNotFound
-from main.models import Story, Image
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
+from main.models import Story, Page, Image
 from main.forms import DialogueForm, ImageForm, PageForm
 
 def index(request, route):
@@ -65,3 +65,14 @@ def create(request, route, id):
         
     return render(request, 'admin/page-components/options/1.html', {'story':story, 'pages':pages})
     #return redirect('view_pages', route=route)
+
+
+def delete(request):
+    if request.method == "POST":
+        try:
+            pid = request.POST.get('pid')
+            page = Page.objects.get(id=pid)
+            page.delete()
+            return HttpResponse(status=200)
+        except:
+            return HttpResponseBadRequest('')

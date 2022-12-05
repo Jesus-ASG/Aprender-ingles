@@ -8,125 +8,161 @@
 {% block content %}
 
 <div class="container main-content">
-    <div class="row mt-3">
-        <h3 style="text-align: center;">Páginas actuales:</h3>
-        <section class="row mt-3">
-            <div class="card table-responsive">
-                <div class="card-body">
-                    <h4 class="card-title">Páginas actuales</h4>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th class="fs4">#</th>
-                                <th class="fs4">Nombre</th>
-                                <th class="fs4">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if not pages %}
-                            <p>Esta historia aún no cuenta con páginas</p>
-                            {% endif %}
-
-                            {% for p in pages %}
-                                <tr>
-                                    <td class="fs4">#{{ forloop.counter }}</td>
-                                    <td class="fs4">{{ p.subtitle }}</td>
-                                    <td class="fs4 d-flex">
-                                        <!-- Link to edit -->
-                                        <div>
-                                            <button class="btn btn-info btn-entrar" href="#" type="button" title="Editar"
-                                                data-bs-toggle="modal" data-bs-target="#modal_edit_{{ p.id }}">
-                                                <i class='fa-solid fa-pen' style='color: white'></i>
-                                            </button>
-                                        </div>
-                                        <!-- fin del modal para editar -->
-    
-                                        <!-- modal para borrar -->
-                                        <div>
-                                            <button class="btn btn-danger" href="#" type="button" title="Eliminar"
-                                                data-bs-toggle="modal" data-bs-target="#modal_delete_{{ p.id }}">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                            <div class="modal fade" id="modal_delete_{{ p.id }}" tabindex="-1"
-                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title  col-11 text-center">¿Desea eliminar esta página?</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="close"></button>
-                                                        </div>
-    
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Cancelar</button>
-                                                            <form action=""
-                                                                autocomplete="off" method="POST">
-                                                                <button type="submit" class="btn btn-danger">
-                                                                    Eliminar</i>
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+  <section class="my-3">
+    <div class="row mb-3">
+      <div class="col-12">
+        <h2 class="fs-2 fw-bold text-center">Crear una nueva página</h2>
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="col col-12">
+        <a class="template" href="{% url 'add_page' story.route 1 %}">
+          <div class="t1-p1">
+            <div class="box-t1-1">
+              <img src="{% static 'img/image-icon.png' %}" alt="Default image">
             </div>
-
-            
-                
-            
-        </section>
-        <hr>
-        <div class="row mb-3">
-            <div class="col-12">
-                <h2 class="fs-2 fw-bold text-center">Escoge una plantilla para crear una nueva página</h2>
+            <div class="box-t1-2">
+              <span class="t1-line-s"></span>
+              <span class="t1-line-s"></span>
+              <span class="t1-line-s"></span>
             </div>
+          </div>
+          <div class="t1-p2">
+            <div class="box-t1-3">
+              <span class="t1-line-l"></span>
+              <span class="t1-line-lb"></span>
+              <span class="t1-line-l"></span>
+            </div>
+          </div>
+          <div class="t1-p3">
+            <div class="box-t1-4">
+              <img src="{% static 'img/test.png' %}" alt="Default image">
+            </div>
+          </div>
+          <p>
+            Imagen, diálogo y ejercicio
+          </p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <section class="my-3">
+    <div class="mt-3" id="alert_removed_success"></div>
+    <div class="row">
+      <div class="col-12">
+        <h2 class="fs-2 fw-bold text-center">Páginas actuales</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 text-center">
+        <div class="table-responsive">
+          <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="fs-5">#</th>
+                  <th class="fs-5">Nombre</th>
+                  <th class="fs-5">Acciones</th>
+                </tr>
+              </thead>
+              <tbody class="align-middle">
+                {% if pages %}
+                {% for p in pages %}
+                <tr id="rowp_{{ p.id }}">
+                  <td class="fs-6">#{{ forloop.counter }}</td>
+                  <td class="fs-6">{{ p.subtitle |default:'Página nueva' }}</td>
+                  <td class="fs-6">
+                    <!-- Link to edit -->
+                    <div class="d-block d-sm-inline-block m-1">
+                      <a class="btn btn-info" href="#" type="button" title="Editar">
+                        <i class='fa-solid fa-pen' style='color: white'></i>
+                      </a>
+                    </div>
+                    <!-- fin del modal para editar -->
+
+                    <!-- modal para borrar -->
+                    <div class="d-block d-sm-inline-block m-1">
+                      <button class="btn btn-danger" href="#" type="button" title="Eliminar" data-bs-toggle="modal"
+                        data-bs-target="#modal_delete_{{ p.id }}">
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                      <div class="modal fade" id="modal_delete_{{ p.id }}" tabindex="-1"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title  col-11 text-center">¿Desea eliminar
+                                esta página?</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="close"></button>
+                            </div>
+
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                              <button onclick="deletePage( '{{ p.id }}' )" type="button" class="btn btn-danger"
+                                data-bs-dismiss="modal">
+                                Eliminar</i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
         </div>
-        <section class="row mt-3 choose-template-section">
-            <div class="col col-12">
-                <a class="template" href="{% url 'add_page' story.route 1 %}">
-                    <div class="t1-p1">
-                        <div class="box-t1-1">
-                            <img src="{% static 'img/image-icon.png' %}" alt="Default image">
-                        </div>
-                        <div class="box-t1-2">
-                            <span class="t1-line-s"></span>
-                            <span class="t1-line-s"></span>
-                            <span class="t1-line-s"></span>
-                        </div>
-                    </div>
-                    <div class="t1-p2">
-                        <div class="box-t1-3">
-                            <span class="t1-line-l"></span>
-                            <span class="t1-line-lb"></span>
-                            <span class="t1-line-l"></span>
-                        </div>
-                    </div>
-                    <div class="t1-p3">
-                        <div class="box-t1-4">
-                            <img src="{% static 'img/test.png' %}" alt="Default image">
-                        </div>
-                    </div>
-                    <p>
-                        Plantilla de imagen, diálogo y ejercicio
-                    </p>
-                </a>
-            </div>
-        </section>
-        
-        <br><br><br><br><br><br><br><br><br><br>
-
-
+      </div>
     </div>
 
+  </section>
+
+
+  <br>
+  <hr>
 
 </div>
+
+{% endblock %}
+
+{% block page-scripts %}
+
+<script>
+  function deletePage(id) {
+    $.ajax({
+      type: 'POST',
+      url: "{% url 'del_page' %}",
+      data: {
+        "csrfmiddlewaretoken": "{{csrf_token}}",
+        'pid': id
+      },
+      success: function (response) {
+        $("#rowp_" + id).remove();
+        let html =
+          `
+        <div class="alert alert-success alert-dismissible fade show mb-2 mt-2" role="alert">
+            <div style="text-align: center;">
+                <strong>Página eliminada correctamente</strong>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        `;
+        document.getElementById("alert_removed_success").innerHTML = html;
+      },
+      error: function (response) {
+        console.log("Error");
+        console.log(response);
+      }
+    });
+
+  }
+</script>
 
 {% endblock %}

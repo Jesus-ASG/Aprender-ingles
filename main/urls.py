@@ -18,6 +18,7 @@ urlpatterns = [
 
     path('myadmin/view-pages/<slug:route>', pages.index, name='view_pages'),
     path('myadmin/view-pages/<slug:route>/add/<int:id>', pages.create, name='add_page'),
+    path('myadmin/view-pages/del/', pages.delete, name='del_page'),
 
     # for stories and related
     path('historia/<slug:route>/', v.infoHistoria, name = 'info_historia'),
