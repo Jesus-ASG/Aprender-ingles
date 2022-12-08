@@ -121,7 +121,8 @@ class Dialogue(models.Model):
 # -------- -------- -------- --------
 
 
-# Repetir frase
+# ---------- Exercises ---------- #
+# Repeat phrase
 class RepeatPhrase(models.Model):
     class Meta:
         db_table = prefix + 'page_repeat_phrase'
@@ -129,8 +130,8 @@ class RepeatPhrase(models.Model):
     id = models.AutoField(primary_key=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='repeat_phrases')
     # fields
-    content = models.CharField(max_length=255, verbose_name='content')
-    translation = models.CharField(max_length=255, verbose_name='translation')
+    content = models.CharField(max_length=255)
+    translation = models.CharField(max_length=255)
     element_number = models.IntegerField()
 # -------- -------- -------- --------
 

@@ -48,9 +48,8 @@
         </div>
         <div class="row mb-3">
           <div class="col-12 text-center">
-            <button onclick="addDialog()" class="btn btn-primary shadow-none w-50 fs-5 fw-bold btn-add-dialog"
-              id="add_dialog" type="button"> Agregar
-              diálogo </button>
+            <button onclick="addDialog()" class="btn btn-primary shadow-none w-50 fs-5 
+            fw-bold btn-add-dialog" id="add_dialog" type="button"> Agregar diálogo </button>
           </div>
         </div>
       </div>
@@ -58,19 +57,18 @@
     <hr>
     <div class="row mb-3">
       <div class="col-12">
-
-        <h2 class="fs-2 text-center my-3">Agregar ejercicio</h2>
-        <select class="form-select" disabled>
-          <option value="1">Próximamente</option>
-          <option value="1">Pregunta y respuesta</option>
-          <option value="2">Repetir oración</option>
-        </select>
+        <h2 class="fs-2 text-center my-3">Ejercicios de prueba</h2>
       </div>
+      {% include "admin/exercises/select-exercise.html" %}
     </div>
     <hr>
     <div class="row mb-3">
-      <div class="col-12 text-center">
-        <button class="btn btn-primary shadow-none w-50 fs-5 fw-bold" type="submit" form="save_page"> Guardar página
+      <div class="col-12 col-md-6 text-center">
+        <a href="{% url 'view_pages' story.route %}" class="btn btn-danger shadow-none fs-5 fw-bold w-100"
+          type="button"> Cancelar</a>
+      </div>
+      <div class="col-12 col-md-6 text-center">
+        <button class="btn btn-primary shadow-none fs-5 fw-bold w-100" type="submit" form="save_page"> Guardar página
         </button>
       </div>
     </div>

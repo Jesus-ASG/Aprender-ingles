@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Tag, Story, Page, Dialogue, Image
+from .models import Tag, Story, Page, Dialogue, Image, RepeatPhrase
 
 
 class NewUserForm(UserCreationForm):
@@ -23,8 +23,6 @@ class CategoriaForm(forms.ModelForm):
 		model = Tag
 		fields = '__all__'
 
-
-	
 
 class HistoriaForm(forms.ModelForm):
 	class Meta:
@@ -74,5 +72,10 @@ class DialogueForm(forms.ModelForm):
 		'color', 'element_number']
 		
 
-	
+# Exercises
+class RepeatPhraseForm(forms.ModelForm):
+	class Meta:
+		model = RepeatPhrase
+		fields = '__all__'
+		exclude = ['page', 'content', 'translation', 'element_number']
 

@@ -40,7 +40,7 @@
             </div>
           </div>
           <p>
-            Imagen, diálogo y ejercicio
+            #1: Imagen, diálogo y ejercicio
           </p>
         </a>
       </div>
@@ -65,6 +65,7 @@
                 <tr>
                   <th class="fs-5">#</th>
                   <th class="fs-5">Nombre</th>
+                  <th class="fs-5">Tipo</th>
                   <th class="fs-5">Acciones</th>
                 </tr>
               </thead>
@@ -74,6 +75,7 @@
                 <tr id="rowp_{{ p.id }}">
                   <td class="fs-6">#{{ forloop.counter }}</td>
                   <td class="fs-6">{{ p.subtitle |default:'Página nueva' }}</td>
+                  <td class="fs-6">{{ p.page_type }}</td>
                   <td class="fs-6">
                     <!-- Link to edit -->
                     <div class="d-block d-sm-inline-block m-1">
