@@ -68,7 +68,7 @@ class DialogueForm(forms.ModelForm):
 	class Meta:
 		model = Dialogue
 		fields = '__all__'
-		exclude = ['page', 'name', 'content', 'translation', 
+		exclude = ['page', 'name', 'content', 'content1',
 		'color', 'element_number']
 		
 
@@ -77,5 +77,5 @@ class RepeatPhraseForm(forms.ModelForm):
 	class Meta:
 		model = RepeatPhrase
 		fields = '__all__'
-		exclude = ['page', 'content', 'translation', 'element_number']
+		exclude = ['page', 'content', 'content1', 'element_number']
 

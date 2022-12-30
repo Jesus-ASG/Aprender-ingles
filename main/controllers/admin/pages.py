@@ -55,7 +55,7 @@ def create(request, route, id):
                                 diaObj.page = pgObj
                                 diaObj.name = request.POST.get('name_'+str(i))
                                 diaObj.content = request.POST.get('content_'+str(i))
-                                diaObj.translation = request.POST.get('translation_'+str(i))
+                                diaObj.content1 = request.POST.get('translation_' + str(i))
                                 diaObj.color = request.POST.get('color_'+str(i))
                                 diaObj.element_number = cont
                                 diaForm.save()

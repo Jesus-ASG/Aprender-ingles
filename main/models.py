@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils.text import slugify
 
-prefix = 'main_'
+prefix = ''
+
 
 class User(models.Model):
     id = models.AutoField(primary_key=True)
@@ -20,7 +21,8 @@ class Tag(models.Model):
     # keys
     id = models.AutoField(primary_key=True)
     # fields
-    name = models.CharField(max_length=100, verbose_name='name')
+    name = models.CharField(max_length=100)
+    name1 = models.CharField(max_length=100)
 
     def __str__(self) -> str:
         return self.name
@@ -69,7 +71,7 @@ class Story(models.Model):
 # Página
 class Page(models.Model):
     class Meta:
-        db_table = prefix + 'story_page'
+        db_table = prefix + 'page'
     # keys
     id = models.AutoField(primary_key=True)
     story = models.ForeignKey(Story, on_delete=models.CASCADE, related_name='pages')
@@ -84,7 +86,7 @@ class Page(models.Model):
 # Video
 class VideoUrl(models.Model):
     class Meta:
-        db_table = prefix + 'page_video_url'
+        db_table = prefix + 'video_url'
     # keys
     id = models.AutoField(primary_key=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='video_urls')
@@ -96,7 +98,7 @@ class VideoUrl(models.Model):
 # Imagen
 class Image(models.Model):
     class Meta:
-        db_table = prefix + 'page_image'
+        db_table = prefix + 'image'
     # keys
     id = models.AutoField(primary_key=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='images')
@@ -108,14 +110,14 @@ class Image(models.Model):
 # Diálogo
 class Dialogue(models.Model):
     class Meta:
-        db_table = prefix + 'page_dialogue'
+        db_table = prefix + 'dialogue'
     # keys
     id = models.AutoField(primary_key=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='dialogues')
     # fields
     name = models.CharField(max_length=30)
     content = models.CharField(max_length=255)
-    translation = models.CharField(max_length=255)
+    content1 = models.CharField(max_length=255)
     color = models.CharField(max_length=7, default='#000000')
     element_number = models.IntegerField()
 # -------- -------- -------- --------
@@ -125,13 +127,13 @@ class Dialogue(models.Model):
 # Repeat phrase
 class RepeatPhrase(models.Model):
     class Meta:
-        db_table = prefix + 'page_repeat_phrase'
+        db_table = prefix + 'repeat_phrase'
     # keys
     id = models.AutoField(primary_key=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='repeat_phrases')
     # fields
     content = models.CharField(max_length=255)
-    translation = models.CharField(max_length=255)
+    content1 = models.CharField(max_length=255)
     element_number = models.IntegerField()
 # -------- -------- -------- --------
 
@@ -139,22 +141,24 @@ class RepeatPhrase(models.Model):
 # Pregunta y respuestas de opción múltiple
 class Question(models.Model):
     class Meta:
-        db_table = prefix + 'page_question'
+        db_table = prefix + 'question'
     # keys
     id = models.AutoField(primary_key=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='questions')
     # fields
-    question = models.CharField(max_length=255, verbose_name='question')
+    question = models.CharField(max_length=255)
+    question1 = models.CharField(max_length=255)
     element_number = models.IntegerField()
 
 
 class Option(models.Model):
     class Meta:
-        db_table = prefix + 'page_question_option'
+        db_table = prefix + 'option'
     # keys
     id = models.AutoField(primary_key=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='options')
     # fields
-    answer = models.CharField(max_length=255, verbose_name='answer')
+    answer = models.CharField(max_length=255)
+    answer1 = models.CharField(max_length=255)
     correct = models.BooleanField(default=False)
 # -------- -------- -------- --------
