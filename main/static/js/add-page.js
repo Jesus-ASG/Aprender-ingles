@@ -86,7 +86,7 @@ function addDialog(){
                                 <button type="button" class="btn btn-secondary"
                                     data-bs-dismiss="modal">Cancelar</button>
                                 
-                                <button class="btn btn-danger" 
+                                <button class="btn btn-danger" type="button"
                                     onclick="destroy(`+num_d+`)" data-bs-dismiss="modal">
                                     Eliminar</i>
                                 </button>

@@ -57,20 +57,11 @@
     <hr>
     <div class="row mb-3">
       <div class="col-12">
-        <h2 class="fs-2 text-center my-3">Ejercicios de prueba</h2>
+        <h2 class="fs-2 text-center my-3">Ejercicios</h2>
       </div>
 
-      <div class="mb-3" id="row_dialog_`+num_d+`" name="row_dialog_`+num_d+`">
-
-        <div class="row">
-          <div class="col-12 mb-2">
-            <textarea class="form-control fs-5 txta" type="text" name="repl1" id="repl1"
-              placeholder="Contenido en español" maxlength="255"></textarea>
-          </div>
-        </div>
-        <hr>
-      </div>
       {% include "admin/exercises/select-exercise.html" %}
+      <br><br><br>
     </div>
     <hr>
     <div class="row mb-3">
@@ -91,22 +82,6 @@
 
 {% block page-scripts %}
 <script>
-
-  $(document).ready(function () {
-    console.log("hi world");
-    let x1 = document.getElementById("repl1");
-    x1.style.height = (x1.style.fontSize) / 2;
-
-    x1.style.height = `${x1.scrollHeight}px`;
-    x1.addEventListener("keyup", e => {
-      x1.style.height = (x1.style.fontSize) / 2;
-      let h = e.target.scrollHeight;
-      x1.style.height = `${h}px`;
-
-
-    });
-  });
-
   function restoreImage() {
     $("#img_showed").attr("src", "{{ story.cover.url }}");
     $("#image").val("");
