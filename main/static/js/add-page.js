@@ -1,11 +1,8 @@
 // here are all javascript code for:
 // dialogue, plain text, colors, etc.
-var num_d = 0;
 var max_elem = 2;
 $( document ).ready(function() {
-    $("#max_elem").val(max_elem);
     $("#add_dialog").click();
-    
 
 });
 
@@ -47,33 +44,33 @@ function setFunctions(id){
 function addDialog(){
     let html = 
     `
-    <div class="mb-3" id="row_dialog_`+num_d+`" name="row_dialog_`+num_d+`">
+    <div class="mb-3" id="row_dialog_`+max_elem+`" name="dialogs">
         <div class="row">
             <div class="col-12 col-md-3">
-                <input class="form-control fs-5 fw-bold ch-color_`+num_d+`" type="text" name="name_`+num_d+`" id="name_`+num_d+`"
+                <input class="form-control fs-5 fw-bold ch-color_`+max_elem+`" type="text" name="name" id="name_`+max_elem+`"
                     placeholder="Nombre" autocomplete="off">
                 <div class="mt-2 d-flex">
-                    <label for="color_`+num_d+`" class="form-label me-2 fw-bold ch-color_`+num_d+`">Color:</label>
-                    <input class="form-control form-control-color mb-2 text-center shadow-none" type="color" name="color_`+num_d+`"
-                        id="color_`+num_d+`" value="#2DACFB">
+                    <label for="color_`+max_elem+`" class="form-label me-2 fw-bold ch-color_`+max_elem+`">Color:</label>
+                    <input class="form-control form-control-color mb-2 text-center shadow-none" type="color" name="color"
+                        id="color_`+max_elem+`" value="#2DACFB">
                 </div>
             </div>
             <div class="col-12 col-md-9">
-                <textarea class="form-control fs-5 mb-2 txta" type="text" name="content_`+num_d+`" id="content_`+num_d+`"
+                <textarea class="form-control fs-5 mb-2 txta" type="text" name="language1" id="content_`+max_elem+`"
                     placeholder="Contenido en inglés" maxlength="255"></textarea>
             </div>
         </div>
         <div class="row">
             <div class="col-12 col-md-10 mb-2">
-                <textarea class="form-control fs-5 txta" type="text" name="translation_`+num_d+`" id="translation_`+num_d+`"
+                <textarea class="form-control fs-5 txta" type="text" name="language2" id="translation_`+max_elem+`"
                     placeholder="Contenido en español" maxlength="255"></textarea>
             </div>
             <div class="col-12 col-md-2 mb-2 text-center">
                 <button class="btn btn-danger shadow-none" type="button" title="Eliminar diálogo"
-                    data-bs-toggle="modal" data-bs-target="#modal_delete_`+num_d+`">
+                    data-bs-toggle="modal" data-bs-target="#modal_delete_`+max_elem+`">
                     <i class="fa-solid fa-trash"></i>
                 </button>
-                <div class="modal fade" id="modal_delete_`+num_d+`" tabindex="-1"
+                <div class="modal fade" id="modal_delete_`+max_elem+`" tabindex="-1"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                         <div class="modal-content">
@@ -87,7 +84,7 @@ function addDialog(){
                                     data-bs-dismiss="modal">Cancelar</button>
                                 
                                 <button class="btn btn-danger" type="button"
-                                    onclick="destroy(`+num_d+`)" data-bs-dismiss="modal">
+                                    onclick="destroy(`+max_elem+`)" data-bs-dismiss="modal">
                                     Eliminar</i>
                                 </button>
                             </div>
@@ -96,14 +93,13 @@ function addDialog(){
                 </div>
             </div>
         </div>
+        <input value="`+max_elem+`" name="element_number" hidden>
         <hr>
     </div>
     <div id="dialog_area"></div>
     `;
 
     document.getElementById("dialog_area").outerHTML = html;
-    setFunctions(num_d);
-    num_d++;
+    setFunctions(max_elem);
     max_elem++;
-    $("#max_elem").val(max_elem);
 }

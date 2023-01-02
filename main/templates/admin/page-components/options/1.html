@@ -15,73 +15,87 @@
 {% block navbar %} {% include 'navbar-custom.html' %} {% endblock %}
 
 {% block content %}
-<form method="POST" action="{% url 'add_page' story.route 1 %}" enctype='multipart/form-data' autocomplete="off"
+<!--<form method="POST" action="{% url 'add_page' story.route 1 %}" enctype='multipart/form-data' autocomplete="off"
   id="save_page">
-  {% csrf_token %}
-  <div class="container main-content">
-    <input class="fs-1 text-center mt-3 form-control" name="subtitle" placeholder="Subtítulo"></input>
-    <input type="file" id="image" name="image" class="form-control" accept="image/*" onchange="changeImg(this)"
-      hidden />
-    <input type="number" id="max_elem" name="max_elem" hidden>
+  {% csrf_token %}-->
+<div class="container main-content">
+  <input class="fs-1 text-center mt-3 form-control" id="sub1" placeholder="Subtítulo en inglés"></input>
+  <input class="fs-1 text-center mt-3 form-control" id="sub2" placeholder="Subtítulo en español"></input>
+  <input type="file" id="image" name="image" class="form-control" accept="image/*" onchange="changeImg(this)" hidden />
 
-    <div class="mt-3" id="alert_removed_success"></div>
+  <div class="mt-3" id="alert_removed_success"></div>
 
-    <div class="row my-3">
-      <div class="col-12">
-        <div class="img-t-1">
-          <img src="{{ story.cover.url }}" alt="No se pudo cargar la imagen" id="img_showed">
-          <div class="row mt-1">
-            <div class="col-12 col-md-6">
-              <button class="btn btn-primary shadow-none fs-6 w-100 fw-bold" type="button"
-                onclick="document.getElementById('image').click(); return false;">Cambiar imagen</button>
-            </div>
-            <div class="col-12 col-md-6">
-              <button class="btn btn-info shadow-none fs-6 w-100 fw-bold" onclick="restoreImage()"
-                type="button">Restaurar
-                imagen</button>
-            </div>
+  <div class="row my-3">
+    <div class="col-12">
+      <div class="img-t-1">
+        <img src="{{ story.cover.url }}" alt="No se pudo cargar la imagen" id="img_showed">
+        <div class="row mt-1">
+          <div class="col-12 col-md-6">
+            <button class="btn btn-primary shadow-none fs-6 w-100 fw-bold" type="button"
+              onclick="document.getElementById('image').click(); return false;">Cambiar imagen</button>
           </div>
+          <div class="col-12 col-md-6">
+            <button class="btn btn-info shadow-none fs-6 w-100 fw-bold" onclick="restoreImage()" type="button">Restaurar
+              imagen</button>
+          </div>
+        </div>
 
-        </div>
-        <div class="fs-5">
-          <div id="dialog_area"></div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-12 text-center">
-            <button onclick="addDialog()" class="btn btn-primary shadow-none w-50 fs-5 
+      </div>
+      <div class="fs-5">
+        <div id="dialog_area"></div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 text-center">
+          <button onclick="addDialog()" class="btn btn-primary shadow-none w-50 fs-5 
             fw-bold btn-add-dialog" id="add_dialog" type="button"> Agregar diálogo </button>
-          </div>
         </div>
       </div>
     </div>
-    <hr>
-    <div class="row mb-3">
-      <div class="col-12">
-        <h2 class="fs-2 text-center my-3">Ejercicios</h2>
-      </div>
-
-      {% include "admin/exercises/select-exercise.html" %}
-      <br><br><br>
-    </div>
-    <hr>
-    <div class="row mb-3">
-      <div class="col-12 col-md-6 text-center">
-        <a href="{% url 'view_pages' story.route %}" class="btn btn-danger shadow-none fs-5 fw-bold w-100"
-          type="button"> Cancelar</a>
-      </div>
-      <div class="col-12 col-md-6 text-center">
-        <button class="btn btn-primary shadow-none fs-5 fw-bold w-100" type="submit" form="save_page"> Guardar página
-        </button>
-      </div>
+  </div>
+  <hr>
+  <div class="row mb-3">
+    <div class="col-12">
+      <h2 class="fs-2 text-center my-3">Ejercicios</h2>
     </div>
 
+    {% include "admin/exercises/select-exercise.html" %}
+    <br><br><br>
+  </div>
+  <hr>
+  <div class="row mb-3">
+    <div class="col-12 col-md-6 text-center">
+      <a href="{% url 'view_pages' story.route %}" class="btn btn-danger shadow-none fs-5 fw-bold w-100" type="button">
+        Cancelar</a>
+    </div>
+    <div class="col-12 col-md-6 text-center">
+      <button class="btn btn-primary shadow-none fs-5 fw-bold w-100" onclick="savePage()"> Guardar página
+      </button>
+    </div>
   </div>
 
-</form>
+</div>
+
+
 {% endblock %}
 
 {% block page-scripts %}
 <script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
   function restoreImage() {
     $("#img_showed").attr("src", "{{ story.cover.url }}");
     $("#image").val("");
@@ -97,6 +111,53 @@
       };
       reader.readAsDataURL(input.files[0]);
     }
+  }
+
+  function savePage() {
+    let dialogs = document.getElementsByName('dialogs');
+    let jsonDialogs = [];
+    for (let i = 0; i < dialogs.length; i++) {
+      let d = {
+        "element_number": dialogs[i].querySelectorAll('[name = element_number]')[0].value,
+        "name": dialogs[i].querySelectorAll('[name = name]')[0].value,
+        "color": dialogs[i].querySelectorAll('[name = color]')[0].value,
+        "language1": dialogs[i].querySelectorAll('[name = language1]')[0].value,
+        "language2": dialogs[i].querySelectorAll('[name = language2]')[0].value
+      }
+      jsonDialogs.push(d);
+    }
+
+    let jsonData = {
+      "sub1": sub1 = document.getElementById('sub1').value,
+      "sub2": sub2 = document.getElementById('sub2').value,
+      "dialogs": jsonDialogs
+    }
+
+    let image = document.getElementById("image");
+
+    var formData = new FormData();
+    formData.append("image", image.files[0]);
+    formData.append("data", JSON.stringify(jsonData));
+
+    /*
+    formData.forEach((value, key) => {
+      console.log(key, value);
+    });
+    */
+
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+      type: "POST",
+      url: "",
+      data: formData,
+      processData: false,  // Tell jQuery not to process the data
+      contentType: false,  // Tell jQuery not to set the content type
+      headers: { "X-CSRFToken": csrftoken },
+      success: function (response) {
+        //console.log(response);
+      }
+    });
+
   }
 
 </script>
