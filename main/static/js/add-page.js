@@ -1,6 +1,6 @@
 // here are all javascript code for:
 // dialogue, plain text, colors, etc.
-var max_elem = 2;
+var max_elem = 0;
 $( document ).ready(function() {
     $("#add_dialog").click();
 
