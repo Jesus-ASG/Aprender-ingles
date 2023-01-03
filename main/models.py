@@ -21,15 +21,15 @@ class Tag(models.Model):
     # keys
     id = models.AutoField(primary_key=True)
     # fields
-    name = models.CharField(max_length=100)
     name1 = models.CharField(max_length=100)
+    name2 = models.CharField(max_length=100)
 
     def __str__(self) -> str:
-        return self.name
+        return self.name1
 # -------- -------- -------- --------
 
 
-# Historia
+# Story
 class Story(models.Model):
     class Meta:
         db_table = prefix + 'story'
@@ -37,13 +37,14 @@ class Story(models.Model):
     # primary key
     id = models.AutoField(primary_key=True)
     # fields
-    title = models.CharField(max_length=100, verbose_name='title')
+    title1 = models.CharField(max_length=100)
+    title2 = models.CharField(max_length=100)
     cover = models.ImageField(upload_to='imagenes/portadas/', default="imagenes/portadas/book-default.png",
                               verbose_name='cover')
-    description = models.CharField(max_length=100, verbose_name='description', null=True, blank=True)
+    description1 = models.CharField(max_length=100, null=True, blank=True, default='')
+    description2 = models.CharField(max_length=100, null=True, blank=True, default='')
     route = models.SlugField(max_length=255, unique=True, null=False, default='')
 
-    # many to many field
     tag = models.ManyToManyField(Tag, blank=True)
 
     def get_portada(self):
@@ -55,7 +56,7 @@ class Story(models.Model):
 
     # Override methods
     def save(self, *args, **kwargs):
-        self.route = slugify(self.title)
+        self.route = slugify(self.title1)
         super(Story, self).save(*args, **kwargs)
 
     def delete(self, using=None, keep_parents=False):
@@ -64,11 +65,11 @@ class Story(models.Model):
         super().delete()
 
     def __str__(self):
-        return f'id: {self.id} | titulo: {self.title[:5]}...'
+        return f'id: {self.id} | titulo: {self.title1[:5]}...'
 # -------- -------- -------- --------
 
 
-# Página
+# Page
 class Page(models.Model):
     class Meta:
         db_table = prefix + 'page'
@@ -76,7 +77,8 @@ class Page(models.Model):
     id = models.AutoField(primary_key=True)
     story = models.ForeignKey(Story, on_delete=models.CASCADE, related_name='pages')
     # fields
-    subtitle = models.CharField(max_length=100, default="")
+    subtitle1 = models.CharField(max_length=100, default="")
+    subtitle2 = models.CharField(max_length=100, default="")
     page_type = models.IntegerField(default=0)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     time_created = models.TimeField(auto_now_add=True, null=True)
@@ -95,7 +97,7 @@ class VideoUrl(models.Model):
     element_number = models.IntegerField()
 
 
-# Imagen
+# Image
 class Image(models.Model):
     class Meta:
         db_table = prefix + 'image'
@@ -107,7 +109,7 @@ class Image(models.Model):
     element_number = models.IntegerField()
 
 
-# Diálogo
+# Dialogue
 class Dialogue(models.Model):
     class Meta:
         db_table = prefix + 'dialogue'
@@ -116,8 +118,8 @@ class Dialogue(models.Model):
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='dialogues')
     # fields
     name = models.CharField(max_length=30)
-    content = models.CharField(max_length=255)
     content1 = models.CharField(max_length=255)
+    content2 = models.CharField(max_length=255)
     color = models.CharField(max_length=7, default='#000000')
     element_number = models.IntegerField()
 # -------- -------- -------- --------
@@ -132,8 +134,8 @@ class RepeatPhrase(models.Model):
     id = models.AutoField(primary_key=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='repeat_phrases')
     # fields
-    content = models.CharField(max_length=255)
     content1 = models.CharField(max_length=255)
+    content2 = models.CharField(max_length=255)
     element_number = models.IntegerField()
 # -------- -------- -------- --------
 
@@ -146,8 +148,8 @@ class Question(models.Model):
     id = models.AutoField(primary_key=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='questions')
     # fields
-    question = models.CharField(max_length=255)
     question1 = models.CharField(max_length=255)
+    question2 = models.CharField(max_length=255)
     element_number = models.IntegerField()
 
 
@@ -158,7 +160,7 @@ class Option(models.Model):
     id = models.AutoField(primary_key=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='options')
     # fields
-    answer = models.CharField(max_length=255)
     answer1 = models.CharField(max_length=255)
+    answer2 = models.CharField(max_length=255)
     correct = models.BooleanField(default=False)
 # -------- -------- -------- --------

@@ -4,7 +4,7 @@ from main.models import Tag
 
 
 def index(request):
-    categorias = Tag.objects.all().order_by('name')
+    categorias = Tag.objects.all().order_by('name1')
     return render(request, 'admin/categorias/ver_categorias.html', {'categorias': categorias})
 
 

@@ -2,6 +2,8 @@ __pycache__/
 env/
 envw/
 lenv/
+wenv/
+venv/
 others/
 .idea/
 imagenes/

@@ -31,15 +31,15 @@ class HistoriaForm(forms.ModelForm):
 		exclude = ['route']
 
 		widgets = {
-			'title': forms.TextInput(attrs={'class': 'form-control'}),
+			'title1': forms.TextInput(attrs={'class': 'form-control'}),
 			'cover': forms.FileInput(attrs={'class': 'form-control'}),
-			'description': forms.TextInput(attrs={'class': 'form-control'}),
+			'description1': forms.TextInput(attrs={'class': 'form-control'}),
 		}
 
 		labels = {
-			'title': 'Título',
+			'title1': 'Título',
 			'cover': 'Portada',
-			'description': 'Descripción',
+			'description1': 'Descripción',
 		}
 
 	tag = forms.ModelMultipleChoiceField(
@@ -54,7 +54,7 @@ class PageForm(forms.ModelForm):
 	class Meta:
 		model = Page
 		fields = '__all__'
-		exclude = ['story', 'subtitle', 'page_type']
+		exclude = ['story', 'subtitle1', 'page_type']
 
 
 class ImageForm(forms.ModelForm):
@@ -68,7 +68,7 @@ class DialogueForm(forms.ModelForm):
 	class Meta:
 		model = Dialogue
 		fields = '__all__'
-		exclude = ['page', 'name', 'content', 'content1',
+		exclude = ['page', 'name1', 'content1', 'content2',
 		'color', 'element_number']
 		
 
@@ -77,5 +77,5 @@ class RepeatPhraseForm(forms.ModelForm):
 	class Meta:
 		model = RepeatPhrase
 		fields = '__all__'
-		exclude = ['page', 'content', 'content1', 'element_number']
+		exclude = ['page', 'content1', 'content2', 'element_number']
 

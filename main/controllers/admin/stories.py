@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 from main.forms import HistoriaForm, PageForm
 from main.models import Story
 
+
 class RespAlert:
     def __init__(self):
         self.alert = ''
@@ -33,10 +34,10 @@ def create(request):
                       {'formulario': historiaFR, 'form_pagina': paginaFR})
 
     historiaFO = historiaFR.save(commit=False)
-    historiaFO.title = re.sub(' +', ' ', historiaFO.title)
+    historiaFO.title1 = re.sub(' +', ' ', historiaFO.title1)
 
     try:
-        duplicado = Story.objects.get(title=historiaFO.title)
+        duplicado = Story.objects.get(title=historiaFO.title1)
         if duplicado:
             resp = RespAlert()
             resp.setAlert('danger')
@@ -67,15 +68,15 @@ def update(request, id):
     historia = Story.objects.get(id=id)
     # obtiene portada y ruta del objeto
     port1 = historia.get_portada()
-    first_title = re.sub(' +', ' ', historia.title)
+    first_title = re.sub(' +', ' ', historia.title1)
 
     fR = HistoriaForm(request.POST or None, request.FILES or None, instance=historia)
     if fR.is_valid() and request.POST:
         #### Cambiar ruta si es que modificó el título, ya que la ruta se basa en el título ####
-        historia.title = re.sub(' +', ' ', historia.title)
-        if first_title != historia.title:
+        historia.title1 = re.sub(' +', ' ', historia.title1)
+        if first_title != historia.title1:
             try:
-                duplicado = Story.objects.get(title=historia.title)
+                duplicado = Story.objects.get(title=historia.title1)
                 if duplicado:
                     resp = RespAlert()
                     resp.setAlert('danger')

@@ -14,6 +14,7 @@ def index(request, route):
         return HttpResponseNotFound()
     return render(request, 'admin/page-components/view-pages.html', {'story':story, 'pages':pages})
 
+
 def create(request, route, id):
     try:
         story = Story.objects.get(route=route)
@@ -43,7 +44,7 @@ def create(request, route, id):
         # creating page
         pgObj = pgForm.save(commit=False)
         pgObj.story = story
-        pgObj.subtitle = data["sub1"]
+        pgObj.subtitle1 = data["sub1"]
         pgObj.page_type = page_type
         pgObj = pgForm.save()
         
@@ -69,8 +70,8 @@ def create(request, route, id):
                 diaObj = diaForm.save(commit=False)
                 diaObj.page = pgObj
                 diaObj.name = d["name"]
-                diaObj.content = d["language1"]
-                diaObj.content1 = d["language2"]
+                diaObj.content1 = d["language1"]
+                diaObj.content2 = d["language2"]
                 diaObj.color = d["color"]
                 diaObj.element_number = d["element_number"]
                 diaForm.save()
