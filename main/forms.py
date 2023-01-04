@@ -54,7 +54,7 @@ class PageForm(forms.ModelForm):
 	class Meta:
 		model = Page
 		fields = '__all__'
-		exclude = ['story', 'subtitle1', 'page_type']
+		exclude = ['story', 'subtitle1', 'subtitle2', 'page_type']
 
 
 class ImageForm(forms.ModelForm):
@@ -68,7 +68,7 @@ class DialogueForm(forms.ModelForm):
 	class Meta:
 		model = Dialogue
 		fields = '__all__'
-		exclude = ['page', 'name1', 'content1', 'content2',
+		exclude = ['page', 'name', 'content1', 'content2',
 		'color', 'element_number']
 		
 

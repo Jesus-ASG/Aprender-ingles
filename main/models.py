@@ -59,10 +59,15 @@ class Story(models.Model):
         self.route = slugify(self.title1)
         super(Story, self).save(*args, **kwargs)
 
-    def delete(self, using=None, keep_parents=False):
+    def delete(self, *args, **kwargs):
         if self.cover.name != 'imagenes/portadas/book-default.png':
             self.cover.storage.delete(self.cover.name)
-        super().delete()
+        
+        # delete pages related
+        for page in self.pages.all():
+            page.delete()
+        # delete story
+        super(Story, self).delete(*args, **kwargs)
 
     def __str__(self):
         return f'id: {self.id} | titulo: {self.title1[:5]}...'
@@ -82,6 +87,16 @@ class Page(models.Model):
     page_type = models.IntegerField(default=0)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     time_created = models.TimeField(auto_now_add=True, null=True)
+    
+    
+    def delete(self, *args, **kwargs):
+        # delete images related
+        for image in self.images.all():
+            image.delete()
+        # delete page
+        super(Page, self).delete(*args, **kwargs)
+        
+
 # -------- -------- -------- --------
 
 
@@ -105,8 +120,14 @@ class Image(models.Model):
     id = models.AutoField(primary_key=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='images')
     # fields
-    image = models.ImageField(upload_to='imagenes/img-pages/')
+    image = models.ImageField(upload_to='imagenes/img-pages/', null=True, blank=True)
     element_number = models.IntegerField()
+    
+    def delete(self, *args, **kwargs):
+        self.image.delete(save=False)
+        super(Image, self).delete(*args, **kwargs)
+    
+    
 
 
 # Dialogue

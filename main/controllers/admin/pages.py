@@ -23,20 +23,14 @@ def create(request, route, id):
         return HttpResponseNotFound()
 
     if request.method == "POST":
-        page_type = 0
-        match id:
-            case 1:
-                page_type = 1
-            case 2:
-                page_type = 2
         
-        if page_type == 0:
+        if id == 0:
             return HttpResponseNotFound()
 
         # validation
         pgForm = PageForm(request.POST or None)
         if not pgForm.is_valid():
-            return redirect('add_page', route=story.route, id=page_type)
+            return redirect('add_page', route=story.route, id=id)
 
         # collecting data
         data = request.POST["data"]
@@ -45,7 +39,8 @@ def create(request, route, id):
         pgObj = pgForm.save(commit=False)
         pgObj.story = story
         pgObj.subtitle1 = data["sub1"]
-        pgObj.page_type = page_type
+        pgObj.subtitle2 = data["sub2"]
+        pgObj.page_type = id
         pgObj = pgForm.save()
         
         # saving images
