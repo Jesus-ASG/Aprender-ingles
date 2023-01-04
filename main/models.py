@@ -95,8 +95,6 @@ class Page(models.Model):
             image.delete()
         # delete page
         super(Page, self).delete(*args, **kwargs)
-        
-
 # -------- -------- -------- --------
 
 
@@ -126,8 +124,6 @@ class Image(models.Model):
     def delete(self, *args, **kwargs):
         self.image.delete(save=False)
         super(Image, self).delete(*args, **kwargs)
-    
-    
 
 
 # Dialogue
@@ -161,7 +157,7 @@ class RepeatPhrase(models.Model):
 # -------- -------- -------- --------
 
 
-# Pregunta y respuestas de opción múltiple
+# Ask and answer
 class Question(models.Model):
     class Meta:
         db_table = prefix + 'question'

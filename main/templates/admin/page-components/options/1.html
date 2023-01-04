@@ -152,11 +152,11 @@
     }
 
     formData.append("data", JSON.stringify(jsonData));
-
+    /*
     formData.forEach((value, key) => {
       console.log(key, value);
     });
-
+    */
 
     const csrftoken = getCookie('csrftoken');
     $.ajax({
@@ -167,7 +167,7 @@
       contentType: false,  // Tell jQuery not to set the content type
       headers: { "X-CSRFToken": csrftoken },
       success: function (response) {
-        console.log(response);
+        //console.log(response);
       }
     });
 

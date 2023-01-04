@@ -27,6 +27,18 @@
 
     */
   });
+
+  function makeAdjustable(element) {
+    element.style.height = (element.style.fontSize) / 2;
+
+    element.style.height = `${element.scrollHeight}px`;
+    element.addEventListener("keyup", e => {
+      element.style.height = (element.style.fontSize) / 2;
+      let h = e.target.scrollHeight;
+      element.style.height = `${h}px`;
+    });
+  }
+
   function addExercise() {
     let selected = document.getElementById("exercise_selected").value;
     switch (parseInt(selected)) {
@@ -79,14 +91,14 @@
         <div class="row">
           <label class="form-label fs-5" for="repl">Escribe el contenido en inglés</label>
           <div class="col-12 mb-2">
-            <textarea class="form-control fs-5 txta" type="text" name="repl" id="repl" placeholder="Contenido en inglés"
+            <textarea class="form-control fs-5 txta" type="text" id="repP1_`+ max_elem + `" placeholder="Contenido en inglés"
               maxlength="255"></textarea>
           </div>
         </div>
         <div class="row">
           <label class="form-label fs-5" for="repl1">Escribe el contenido en español</label>
           <div class="col-12 mb-2">
-            <textarea class="form-control fs-5 txta" type="text" name="repl1" id="repl1"
+            <textarea class="form-control fs-5 txta" type="text" id="repP2_`+ max_elem + `"
               placeholder="Contenido en español" maxlength="255"></textarea>
           </div>
         </div>
@@ -96,8 +108,12 @@
       <div class="col-12"><span id="exercises_area"></span></div>
     `;
 
-
     document.getElementById("exercises_area").outerHTML = html;
+
+    let adj1 = document.getElementById("repP1_" + max_elem);
+    let adj2 = document.getElementById("repP2_" + max_elem);
+    makeAdjustable(adj1);
+    makeAdjustable(adj2);
 
     max_elem++;
     $("#max_elem").val(max_elem);

@@ -23,14 +23,18 @@ def create(request, route, id):
         return HttpResponseNotFound()
 
     if request.method == "POST":
-        
         if id == 0:
             return HttpResponseNotFound()
+        
+        
+        # create all forms
+        pgForm = PageForm(request.POST or None)
+        imgForm = ImageForm(request.POST or None, request.FILES or None)
+        diaForm = DialogueForm(request.POST or None)
 
         # validation
-        pgForm = PageForm(request.POST or None)
-        if not pgForm.is_valid():
-            return redirect('add_page', route=story.route, id=id)
+        if (not pgForm.is_valid()) or (not imgForm.is_valid()) or (not diaForm.is_valid()):
+            return JsonResponse({'message': 'error validating'})
 
         # collecting data
         data = request.POST["data"]
@@ -41,36 +45,52 @@ def create(request, route, id):
         pgObj.subtitle1 = data["sub1"]
         pgObj.subtitle2 = data["sub2"]
         pgObj.page_type = id
-        pgObj = pgForm.save()
         
         # saving images
+        images_to_submit = []
         imageFiles = request.FILES.getlist("imageFiles[]")
         imageData = data["imageData"]
         for imgF, imgD in zip (imageFiles, imageData):
+            imgObj = imgForm.save(commit=False)
+            imgObj.page = pgObj
+            imgObj.image = imgF
+            imgObj.element_number = imgD
+            images_to_submit.append(imgObj)
             imgForm = ImageForm(request.POST or None, request.FILES or None)
-            if imgForm.is_valid():
-                imgObj = imgForm.save(commit=False)
-                imgObj.page = pgObj
-                imgObj.image = imgF
-                imgObj.element_number = imgD
-                imgForm.save()
+
         
         # saving dialogs
+        dialogs_to_submit = []
         dialogs = data["dialogs"]
         for d in dialogs:
             if d["name"] == "" or d["language1"] == "" or d["language2"] == "":
-                return JsonResponse({'message': 'error'})
+                return JsonResponse({'message': 'error catched in for'})
+            
+            diaObj = diaForm.save(commit=False)
+            diaObj.page = pgObj
+            diaObj.name = d["name"]
+            diaObj.content1 = d["language1"]
+            diaObj.content2 = d["language2"]
+            diaObj.color = d["color"]
+            diaObj.element_number = d["element_number"]
+            dialogs_to_submit.append(diaObj)
             diaForm = DialogueForm(request.POST or None)
-            if diaForm.is_valid:
-                diaObj = diaForm.save(commit=False)
-                diaObj.page = pgObj
-                diaObj.name = d["name"]
-                diaObj.content1 = d["language1"]
-                diaObj.content2 = d["language2"]
-                diaObj.color = d["color"]
-                diaObj.element_number = d["element_number"]
-                diaForm.save()
-                #return redirect('view_pages', route=story.route)
+
+            
+            #return redirect('view_pages', route=story.route)
+        
+        # if comes until here means that dont have errors, so we save everything
+        pgObj = pgForm.save()
+
+        # save images if there are
+        for image in images_to_submit:
+            image.save()
+
+        # save dialogues if there are
+        for dialogue in dialogs_to_submit:
+            dialogue.save()
+
+        
         
         return JsonResponse({'message': 'success'})
         
