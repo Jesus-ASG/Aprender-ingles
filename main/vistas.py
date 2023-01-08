@@ -25,6 +25,7 @@ from .forms import NewUserForm
 
 from .models import Story, Page
 
+import json
 
 class UsersList(generics.ListCreateAPIView):
     queryset = User.objects.all()
@@ -151,3 +152,18 @@ def contenidoHistoria(request, route, num_pagina):
 
     return render(request, 'urls/contenido_historia.html', args)
 
+def test(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+
+        print('\n\n\n')
+        print(data)
+
+        print(f'elem1 {data["elem1"]}')
+
+        print(f'dialogues {len(data["dialogues"])}')
+
+        
+    
+    return render(request, 'test.html')
+    pass

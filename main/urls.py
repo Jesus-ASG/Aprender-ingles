@@ -18,6 +18,7 @@ urlpatterns = [
 
     path('myadmin/view-pages/<slug:route>', pages.index, name='view_pages'),
     path('myadmin/view-pages/<slug:route>/add/<int:id>', pages.create, name='add_page'),
+    path('myadmin/view-pages/del/', pages.delete, name='del_page'),
 
     # for stories and related
     path('historia/<slug:route>/', v.infoHistoria, name = 'info_historia'),
@@ -33,4 +34,7 @@ urlpatterns = [
     
     path('register', v.register, name='register'),
     path('user/', v.UsersList.as_view(), name = 'users_list'),
+
+    path('test/', v.test, name='test'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

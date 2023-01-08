@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Tag, Story, Page, Dialogue, Image
+from .models import Tag, Story, Page, Dialogue, Image, RepeatPhrase
 
 
 class NewUserForm(UserCreationForm):
@@ -24,8 +24,6 @@ class CategoriaForm(forms.ModelForm):
 		fields = '__all__'
 
 
-	
-
 class HistoriaForm(forms.ModelForm):
 	class Meta:
 		model = Story
@@ -33,15 +31,15 @@ class HistoriaForm(forms.ModelForm):
 		exclude = ['route']
 
 		widgets = {
-			'title': forms.TextInput(attrs={'class': 'form-control'}),
+			'title1': forms.TextInput(attrs={'class': 'form-control'}),
 			'cover': forms.FileInput(attrs={'class': 'form-control'}),
-			'description': forms.TextInput(attrs={'class': 'form-control'}),
+			'description1': forms.TextInput(attrs={'class': 'form-control'}),
 		}
 
 		labels = {
-			'title': 'Título',
+			'title1': 'Título',
 			'cover': 'Portada',
-			'description': 'Descripción',
+			'description1': 'Descripción',
 		}
 
 	tag = forms.ModelMultipleChoiceField(
@@ -56,7 +54,7 @@ class PageForm(forms.ModelForm):
 	class Meta:
 		model = Page
 		fields = '__all__'
-		exclude = ['story', 'subtitle', 'page_type']
+		exclude = ['story', 'subtitle1', 'subtitle2', 'page_type']
 
 
 class ImageForm(forms.ModelForm):
@@ -70,9 +68,14 @@ class DialogueForm(forms.ModelForm):
 	class Meta:
 		model = Dialogue
 		fields = '__all__'
-		exclude = ['page', 'name', 'content', 'translation', 
+		exclude = ['page', 'name', 'content1', 'content2',
 		'color', 'element_number']
 		
 
-	
+# Exercises
+class RepeatPhraseForm(forms.ModelForm):
+	class Meta:
+		model = RepeatPhrase
+		fields = '__all__'
+		exclude = ['page', 'content1', 'content2', 'element_number']
 

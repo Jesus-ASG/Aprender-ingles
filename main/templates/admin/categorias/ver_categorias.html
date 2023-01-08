@@ -9,7 +9,8 @@
 
 <div class="card mt-3">
     <div class="card-header">
-        <a name="" id="" class="btn btn-success" href="{% url 'agregar_categorias' %}" role="button">Agregar categorías</a>
+        <a name="" id="" class="btn btn-success" href="{% url 'agregar_categorias' %}" role="button">Agregar
+            categorías</a>
     </div>
     <div class="card-body">
         <h4 class="card-title">Categorías</h4>
@@ -25,11 +26,14 @@
                 {% for categoria in categorias %}
                 <tr>
                     <td>{{ categoria.id }}</td>
-                    <td>{{ categoria.name }}</td>
-                    <td> 
-                        <a name="" id="" class="btn btn-info" href="{% url 'editar_categoria' categoria.id %}" role="button">Editar</a>
+                    <td>{{ categoria.name1 }}</td>
+                    <td>{{ categoria.name2 }}</td>
+                    <td>
+                        <a name="" id="" class="btn btn-info" href="{% url 'editar_categoria' categoria.id %}"
+                            role="button">Editar</a>
                         |
-                        <a name="" id="" class="btn btn-danger" href="{% url 'eliminar_categoria' categoria.id %}" role="button">Eliminar</a>
+                        <a name="" id="" class="btn btn-danger" href="{% url 'eliminar_categoria' categoria.id %}"
+                            role="button">Eliminar</a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -37,6 +41,6 @@
         </table>
     </div>
     <div class="card-footer text-muted"></div>
-</div> 
+</div>
 
 {% endblock %}
