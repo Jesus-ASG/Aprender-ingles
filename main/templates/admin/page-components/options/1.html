@@ -15,18 +15,23 @@
 {% block navbar %} {% include 'navbar-custom.html' %} {% endblock %}
 
 {% block content %}
-<!--<form method="POST" action="{% url 'add_page' story.route 1 %}" enctype='multipart/form-data' autocomplete="off"
-  id="save_page">
-  {% csrf_token %}-->
+<!-- Template 1 -->
 <div class="container main-content">
-  <input class="fs-1 text-center mt-3 form-control" id="sub1" placeholder="Subtítulo en inglés"></input>
-  <input class="fs-1 text-center mt-3 form-control" id="sub2" placeholder="Subtítulo en español"></input>
+  <div class="row mt-3">
+    <label class="form-label fs-5 text-center" for="sub1">Agrega un subtítulo en inglés</label>
+    <input class="fs-1 text-center form-control" id="sub1" placeholder="Subtítulo en inglés"></input>
+  </div>
+
+  <div class="row mt-3">
+    <label class="form-label fs-5 text-center" for="sub2">Agrega un subtítulo en español</label>
+    <input class="fs-1 text-center form-control" id="sub2" placeholder="Subtítulo en español"></input>
+  </div>
+
   <div name="images">
     <input type="file" id="image" name="image" class="form-control" accept="image/*" onchange="changeImg(this)"
       hidden />
     <input value="0" name="element_number" hidden>
   </div>
-
 
   <div class="mt-3" id="alert_removed_success"></div>
 
@@ -47,7 +52,7 @@
 
       </div>
       <div class="fs-5">
-        <div id="dialog_area"></div>
+        <div id="content_area"></div>
       </div>
       <div class="row mb-3">
         <div class="col-12 text-center">
@@ -84,96 +89,13 @@
 {% endblock %}
 
 {% block page-scripts %}
+
 <script>
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        // Does this cookie string begin with the name we want?
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  }
-
-  function restoreImage() {
-    $("#img_showed").attr("src", "{{ story.cover.url }}");
-    $("#image").val("");
-  }
-
-  function changeImg(input) {
-    if (input.value == "")
-      restoreImage();
-    if (input.files && input.files[0]) {
-      let reader = new FileReader();
-      reader.onload = function (e) {
-        $("#img_showed").attr("src", e.target.result);
-      };
-      reader.readAsDataURL(input.files[0]);
-
-    }
-  }
-
-  function savePage() {
-    var formData = new FormData();
-
-    let dialogs = document.getElementsByName('dialogs');
-    let jsonDialogs = [];
-    for (let i = 0; i < dialogs.length; i++) {
-      let d = {
-        "element_number": dialogs[i].querySelectorAll('[name = element_number]')[0].value,
-        "name": dialogs[i].querySelectorAll('[name = name]')[0].value,
-        "color": dialogs[i].querySelectorAll('[name = color]')[0].value,
-        "language1": dialogs[i].querySelectorAll('[name = language1]')[0].value,
-        "language2": dialogs[i].querySelectorAll('[name = language2]')[0].value
-      }
-      jsonDialogs.push(d);
-    }
-
-    let images = document.getElementsByName("images");
-    //let imagesFiles = [];
-    let imageData = [];
-    for (let i = 0; i < images.length; i++) {
-      //imagesFiles.push(images[i].querySelectorAll('[name = image]')[0].files[0]);
-      imageData.push(images[i].querySelectorAll('[name = element_number]')[0].value);
-      formData.append("imageFiles[]", images[i].querySelectorAll('[name = image]')[0].files[0]);
-    }
-
-    let jsonData = {
-      "sub1": sub1 = document.getElementById('sub1').value,
-      "sub2": sub2 = document.getElementById('sub2').value,
-      "dialogs": jsonDialogs,
-      "imageData": imageData
-    }
-
-    formData.append("data", JSON.stringify(jsonData));
-    /*
-    formData.forEach((value, key) => {
-      console.log(key, value);
-    });
-    */
-
-    const csrftoken = getCookie('csrftoken');
-    $.ajax({
-      type: "POST",
-      url: "",
-      data: formData,
-      processData: false,  // Tell jQuery not to process the data
-      contentType: false,  // Tell jQuery not to set the content type
-      headers: { "X-CSRFToken": csrftoken },
-      success: function (response) {
-        //console.log(response);
-      }
-    });
-
-
-  }
-
+  const DEFAULT_COVER = '{{ story.cover.url }}';
 </script>
-<script src="{% static 'js/add-page.js' %}"></script>
+
+<script src="{% static 'js/add-page/content.js' %}"></script>
+<script src="{% static 'js/add-page/exercises.js' %}"></script>
+<script src="{% static 'js/add-page/add-page.js' %}"></script>
+
 {% endblock %}

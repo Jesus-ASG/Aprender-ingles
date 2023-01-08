@@ -16,7 +16,7 @@ i must add one field in database model
 -----------------
 generalize scripts for add page
 by example, use makeadjustable function for doing text-area bigger when user writes in it
-instead of use specific functions
+instead of use specific functions    ++++
 
 also organize better spripts, change of place scripts in 1.html
 

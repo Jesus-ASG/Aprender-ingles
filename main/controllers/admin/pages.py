@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 from main.models import Story, Page, Image
-from main.forms import DialogueForm, ImageForm, PageForm
+from main.forms import DialogueForm, ImageForm, PageForm, RepeatPhraseForm
 
 import json
 
@@ -21,19 +21,22 @@ def create(request, route, id):
         pages = story.pages.all()
     except:
         return HttpResponseNotFound()
+    if request.method == "GET":
+        return render(request, 'admin/page-components/options/1.html', {'story':story, 'pages':pages})
 
     if request.method == "POST":
         if id == 0:
             return HttpResponseNotFound()
         
-        
         # create all forms
         pgForm = PageForm(request.POST or None)
         imgForm = ImageForm(request.POST or None, request.FILES or None)
         diaForm = DialogueForm(request.POST or None)
+        repPForm = RepeatPhraseForm(request.POST or None)
 
         # validation
-        if (not pgForm.is_valid()) or (not imgForm.is_valid()) or (not diaForm.is_valid()):
+        if ((not pgForm.is_valid()) or (not imgForm.is_valid()) or (not diaForm.is_valid()) or 
+                (not repPForm.is_valid())):
             return JsonResponse({'message': 'error validating'})
 
         # collecting data
@@ -58,11 +61,10 @@ def create(request, route, id):
             images_to_submit.append(imgObj)
             imgForm = ImageForm(request.POST or None, request.FILES or None)
 
-        
         # saving dialogs
-        dialogs_to_submit = []
-        dialogs = data["dialogs"]
-        for d in dialogs:
+        dialogues_to_submit = []
+        dialogues = data["dialogues"]
+        for d in dialogues:
             if d["name"] == "" or d["language1"] == "" or d["language2"] == "":
                 return JsonResponse({'message': 'error catched in for'})
             
@@ -73,30 +75,43 @@ def create(request, route, id):
             diaObj.content2 = d["language2"]
             diaObj.color = d["color"]
             diaObj.element_number = d["element_number"]
-            dialogs_to_submit.append(diaObj)
+            dialogues_to_submit.append(diaObj)
             diaForm = DialogueForm(request.POST or None)
 
+        # saving repeatPhrases
+        repeatPhrases_to_submit = []
+        repeatPhrases = data["repeatPhrases"]
+        for rp in repeatPhrases:
+            if rp["language1"] == "" or rp["language2"] == "":
+                return JsonResponse({'message': 'error catched in for'})
             
-            #return redirect('view_pages', route=story.route)
+            rpPObj = repPForm.save(commit=False)
+            rpPObj.page = pgObj
+            rpPObj.content1 = rp["language1"]
+            rpPObj.content2 = rp["language2"]
+            rpPObj.element_number = rp["element_number"]
+            repeatPhrases_to_submit.append(rpPObj)
+            repPForm = RepeatPhraseForm(request.POST or None)    
         
-        # if comes until here means that dont have errors, so we save everything
+        
+        # Save all
         pgObj = pgForm.save()
 
-        # save images if there are
+        # Content
+        # Images
         for image in images_to_submit:
             image.save()
 
-        # save dialogues if there are
-        for dialogue in dialogs_to_submit:
+        # Dialogues
+        for dialogue in dialogues_to_submit:
             dialogue.save()
 
-        
-        
+        # Repeat Phrases
+        for repeatPhrase in repeatPhrases_to_submit:
+            repeatPhrase.save()
+
         return JsonResponse({'message': 'success'})
         
-    return render(request, 'admin/page-components/options/1.html', {'story':story, 'pages':pages})
-    #return redirect('view_pages', route=route)
-
 
 def delete(request):
     if request.method == "POST":
