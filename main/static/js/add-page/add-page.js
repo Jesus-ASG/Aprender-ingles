@@ -1,6 +1,5 @@
 var max_elem = 0;
-document.addEventListener("DOMContentLoaded", function () {
-});
+
 
 // Generic functions
 function getCookie(name) {

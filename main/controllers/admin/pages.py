@@ -4,7 +4,12 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFou
 from main.models import Story, Page, Image
 from main.forms import DialogueForm, ImageForm, PageForm, RepeatPhraseForm
 
+from django.core import serializers
+from django.forms.models import model_to_dict
+
 import json
+
+MAX_PAGE_TYPES = 1
 
 def index(request, route):
     try:
@@ -15,17 +20,19 @@ def index(request, route):
     return render(request, 'admin/page-components/view-pages.html', {'story':story, 'pages':pages})
 
 
-def create(request, route, id):
+def create(request, route, page_type):
+    if not 0 < page_type <= MAX_PAGE_TYPES:
+        return HttpResponseNotFound()
     try:
         story = Story.objects.get(route=route)
-        pages = story.pages.all()
     except:
         return HttpResponseNotFound()
+
     if request.method == "GET":
-        return render(request, 'admin/page-components/options/1.html', {'story':story, 'pages':pages})
+        return render(request, 'admin/page-components/options/'+str(page_type)+'.html', {'story':story})
 
     if request.method == "POST":
-        if id == 0:
+        if page_type == 0:
             return HttpResponseNotFound()
         
         # create all forms
@@ -47,7 +54,7 @@ def create(request, route, id):
         pgObj.story = story
         pgObj.subtitle1 = data["sub1"]
         pgObj.subtitle2 = data["sub2"]
-        pgObj.page_type = id
+        pgObj.page_type = page_type
         
         # saving images
         images_to_submit = []
@@ -113,11 +120,61 @@ def create(request, route, id):
         return JsonResponse({'message': 'success'})
         
 
-def delete(request):
+def update(request, route, page_type, page_id):
+    if not 0 < page_type <= MAX_PAGE_TYPES:
+        return HttpResponseNotFound()
+    try:
+        # get content
+        story = Story.objects.get(route=route)
+        page = story.pages.get(id=page_id)
+
+        images = page.images.all()
+        dialogues = page.dialogues.all()
+        repeat_phrases = page.repeat_phrases.all()
+
+        # get values from query set
+        #page = model_to_dict(page)
+        dialogues = list(dialogues.values())
+        repeat_phrases = list(repeat_phrases.values())
+        
+        
+        # cast list to json
+        #page = json.dumps(page)
+        dialogues = json.dumps(dialogues)
+        repeat_phrases = json.dumps(repeat_phrases)
+
+        # image different to get url image instead image
+        # only if page_type != 1
+        
+        images_json = []
+        for image in images:
+            x = model_to_dict(image)
+            x['image'] = x['image'].url
+            images_json.append(x)
+        images_json = json.dumps(images_json)
+
+        context = {
+            'story':story, 'page':page,
+            'images': images, 'images_json': images_json, 'dialogues': dialogues, 
+            'repeat_phrases': repeat_phrases
+        }
+
+        #print('\n\n')
+        #print(f'{page}\n\n{images}\n\n{images_json}\n\n{dialogues}\n\n{repeat_phrases}')
+        #print('\n\n')
+
+    except:
+        
+        return HttpResponseNotFound()
+    
+    if request.method == "GET":
+        return render(request, 'admin/page-components/options/'+str(page_type)+'.html', context)
+
+
+def delete(request, id):
     if request.method == "POST":
         try:
-            pid = request.POST.get('pid')
-            page = Page.objects.get(id=pid)
+            page = Page.objects.get(id=id)
             page.delete()
             return HttpResponse(status=200)
         except:

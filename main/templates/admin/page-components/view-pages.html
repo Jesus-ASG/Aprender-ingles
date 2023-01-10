@@ -74,12 +74,13 @@
                 {% for p in pages %}
                 <tr id="rowp_{{ p.id }}">
                   <td class="fs-6">#{{ forloop.counter }}</td>
-                  <td class="fs-6">{{ p.subtitle |default:'Página nueva' }}</td>
+                  <td class="fs-6">{{ p.subtitle1 |default:'Página nueva' }}</td>
                   <td class="fs-6">{{ p.page_type }}</td>
                   <td class="fs-6">
                     <!-- Link to edit -->
                     <div class="d-block d-sm-inline-block m-1">
-                      <a class="btn btn-info" href="#" type="button" title="Editar">
+                      <a class="btn btn-info" href="{% url 'edit_page' story.route p.page_type p.id %}" type="button"
+                        title="Editar">
                         <i class='fa-solid fa-pen' style='color: white'></i>
                       </a>
                     </div>
@@ -140,10 +141,9 @@
   function deletePage(id) {
     $.ajax({
       type: 'POST',
-      url: "{% url 'del_page' %}",
+      url: "/myadmin/del-page/" + id,
       data: {
-        "csrfmiddlewaretoken": "{{csrf_token}}",
-        'pid': id
+        "csrfmiddlewaretoken": "{{csrf_token}}"
       },
       success: function (response) {
         $("#rowp_" + id).remove();

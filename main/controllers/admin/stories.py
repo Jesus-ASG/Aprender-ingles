@@ -49,20 +49,6 @@ def create(request):
         pass
     historiaFO = historiaFR.save()
     return redirect('view_pages', route=historiaFO.route)
-    """
-    # old code for save many pages
-    if paginaFR.is_valid():
-        num_paginas = int(request.POST.get('num_paginas'))
-        for i in range(num_paginas):
-            texto = request.POST.get('texto_' + str(i))
-            paginaFO = paginaFR.save(commit=False)
-            paginaFO.texto = texto
-            paginaFO.story = historiaFO
-            paginaFO.save()
-            paginaFR = PaginaForm()
-
-        return redirect('ver_historias')
-    """
 
 def update(request, id):
     historia = Story.objects.get(id=id)
@@ -98,6 +84,7 @@ def update(request, id):
 
 
 def delete(request, id):
+    #if request.method == "POST":
     try:
         historia = Story.objects.get(id=id)
         historia.delete()
