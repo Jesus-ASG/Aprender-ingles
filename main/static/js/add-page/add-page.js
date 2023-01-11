@@ -1,6 +1,5 @@
 var max_elem = 0;
 
-
 // Generic functions
 function getCookie(name) {
     let cookieValue = null;
@@ -58,6 +57,7 @@ function savePage() {
     let jsonDialogues = [];
     for (let i = 0; i < dialogues.length; i++) {
         let d = {
+            "id": dialogues[i].querySelectorAll('[name = id]')[0].value,
             "element_number": dialogues[i].querySelectorAll('[name = element_number]')[0].value,
             "name": dialogues[i].querySelectorAll('[name = name]')[0].value,
             "color": dialogues[i].querySelectorAll('[name = color]')[0].value,
@@ -71,7 +71,11 @@ function savePage() {
     let images = document.getElementsByName("images");
     let imageData = [];
     for (let i = 0; i < images.length; i++) {
-        imageData.push(images[i].querySelectorAll('[name = element_number]')[0].value);
+        let img = {
+            "id": images[i].querySelectorAll('[name = id]')[0].value,
+            "element_number": images[i].querySelectorAll('[name = element_number]')[0].value
+        }
+        imageData.push(img);
         formData.append("imageFiles[]", images[i].querySelectorAll('[name = image]')[0].files[0]);
     }
 
@@ -82,6 +86,7 @@ function savePage() {
 	let jsonRepeatPhrases = [];
 	for (let i = 0; i < repatPhrases.length; i++) {
         let rp = {
+            "id": repatPhrases[i].querySelectorAll('[name = id]')[0].value,
             "element_number": repatPhrases[i].querySelectorAll('[name = element_number]')[0].value,
             "language1": repatPhrases[i].querySelectorAll('[name = language1]')[0].value,
             "language2": repatPhrases[i].querySelectorAll('[name = language2]')[0].value
@@ -90,9 +95,9 @@ function savePage() {
     }
 
 
-
 	// Build Json to send
     let jsonData = {
+        "page_id": page_id,
         "sub1": sub1 = document.getElementById('sub1').value,
         "sub2": sub2 = document.getElementById('sub2').value,
         "dialogues": jsonDialogues,
@@ -106,11 +111,11 @@ function savePage() {
       console.log(key, value);
     });
     */
-
+    
     const csrftoken = getCookie('csrftoken');
     $.ajax({
         type: "POST",
-        url: "",
+        url: "/myadmin/add-page/"+story_route+"/"+page_type,
         data: formData,
         processData: false,  // Tell jQuery not to process the data
         contentType: false,  // Tell jQuery not to set the content type

@@ -29,7 +29,8 @@ def create(request, route, page_type):
         return HttpResponseNotFound()
 
     if request.method == "GET":
-        return render(request, 'admin/page-components/options/'+str(page_type)+'.html', {'story':story})
+        return render(request, 'admin/page-components/options/'+str(page_type)+'.html', 
+        {'story': story, 'page_type': page_type})
 
     if request.method == "POST":
         if page_type == 0:
@@ -49,9 +50,15 @@ def create(request, route, page_type):
         # collecting data
         data = request.POST["data"]
         data = json.loads(data)
+        print(f'\n\n{data}\n\n')
         # creating page
         pgObj = pgForm.save(commit=False)
-        pgObj.story = story
+        if data["page_id"] != "":
+            find_page = Page.objects.get(id=int(data["page_id"]))
+            pgObj = PageForm(request.POST or None, instance=find_page)
+            print(pgObj)
+        else:
+            pgObj.story = story
         pgObj.subtitle1 = data["sub1"]
         pgObj.subtitle2 = data["sub2"]
         pgObj.page_type = page_type
@@ -103,7 +110,7 @@ def create(request, route, page_type):
         
         # Save all
         pgObj = pgForm.save()
-
+        """
         # Content
         # Images
         for image in images_to_submit:
@@ -116,7 +123,7 @@ def create(request, route, page_type):
         # Repeat Phrases
         for repeatPhrase in repeatPhrases_to_submit:
             repeatPhrase.save()
-
+        """
         return JsonResponse({'message': 'success'})
         
 
@@ -154,7 +161,7 @@ def update(request, route, page_type, page_id):
         images_json = json.dumps(images_json)
 
         context = {
-            'story':story, 'page':page,
+            'story': story, 'page': page, 'page_type': page_type,
             'images': images, 'images_json': images_json, 'dialogues': dialogues, 
             'repeat_phrases': repeat_phrases
         }

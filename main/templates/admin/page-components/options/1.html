@@ -29,11 +29,19 @@
       value="{{ page.subtitle2 | default:'' }}"></input>
   </div>
 
+  {% for i in images %}
   <div name="images">
-    <input type="file" id="image" name="image" class="form-control" accept="image/*" onchange="changeImg(this)"
-      hidden />
+    <input type="file" id="image" name="image" class="form-control" accept="image/*" onchange="changeImg(this)" hidden>
     <input value="0" name="element_number" hidden>
+    <input value="{{ i.id |default:''}}" name="id" hidden>
   </div>
+  {% empty %}
+  <div name="images">
+    <input type="file" id="image" name="image" class="form-control" accept="image/*" onchange="changeImg(this)" hidden>
+    <input value="0" name="element_number" hidden>
+    <input value="{{ i.id |default:''}}" name="id" hidden>
+  </div>
+  {% endfor %}
 
   <div class="mt-3" id="alert_removed_success"></div>
 
@@ -97,91 +105,81 @@
 {% block page-scripts %}
 
 <script>
-  var DEFAULT_COVER = '{{ story.cover.url }}';
-  let django_image_str = '{{ images_json |safe }}';
-  // if is receiving a string
-  if (!(django_image_str === null || django_image_str.trim() === ""))
-    changeDefaultImage(django_image_str);
+  let DEFAULT_COVER = '{{ story.cover.url }}';
 
-  function changeDefaultImage(str) {
-    var edit_images = JSON.parse(str);
-    if (edit_images) {
-      DEFAULT_COVER = edit_images[0].image;
-      console.log(DEFAULT_COVER);
-    }
+  let story_route = '{{ story.route }}';
+  let page_type = '{{ page_type }}';
+  let page_id = '{{ page.id }}';
+
+  let edit_images = {};
+  let edit_dialogues = {};
+  let edit_repeat_phrases = {};
+
+  loadDjangoVariables();
+
+  //console.log(edit_images);
+  //console.log(edit_dialogues);
+  //console.log(edit_repeat_phrases);
+
+  function loadDjangoVariables() {
+    try {
+      edit_images = JSON.parse('{{ images_json |safe }}');
+    } catch (e) { }
+    try {
+      edit_dialogues = JSON.parse('{{ dialogues |safe }}');
+    } catch (e) { }
+    try {
+      edit_repeat_phrases = JSON.parse('{{ repeat_phrases |safe }}');
+    } catch (e) { }
   }
-
-
-
 
 </script>
 
 <script src="{% static 'js/add-page/content.js' %}"></script>
 <script src="{% static 'js/add-page/exercises.js' %}"></script>
 <script>
-
   document.addEventListener("DOMContentLoaded", function () {
-
-    if ('{{ page }}') {
-
-      //var edit_images = JSON.parse('{{ images |safe }}');
-      var edit_dialogues = JSON.parse('{{ dialogues |safe }}');
-      var edit_repeat_phrases = JSON.parse('{{ repeat_phrases |safe }}');
-
-      //console.log(edit_images);
-      console.log(edit_dialogues);
-      console.log(edit_repeat_phrases);
+    if (page_id) {
       loadPageType1();
-
-      // for this specific page
-      //console.log(page.subtitle1);
-      //console.log('{{ images }}');
-
-
-      //console.log('{{ dialogues }}');
-      //console.log('{{ repeat_phrases }}');
-
-      //console.log(xd);
-      //document.getElementById("img_showed").src = ;
-
-
-      //
-      //document.getElementById("sub1").value = page.subtitle2;
-
     }
-
-    function loadPageType1() {
-      // get max elements
-      //max_elem = edit_dialogues.length + edit_repeat_phrases.length;
-      // Content
-      // Dialogues
-      for (let i = 0; i < edit_dialogues.length; i++)
-        addDialog();
-
-      let dialogues = document.getElementsByName('dialogues');
-      for (let i = 0; i < dialogues.length; i++) {
-        dialogues[i].querySelectorAll('[name = element_number]')[0].value = edit_dialogues[i].element_number;
-        dialogues[i].querySelectorAll('[name = name]')[0].value = edit_dialogues[i].name;
-        dialogues[i].querySelectorAll('[name = color]')[0].value = edit_dialogues[i].color;
-        dialogues[i].querySelectorAll('[name = language1]')[0].value = edit_dialogues[i].content1;
-        dialogues[i].querySelectorAll('[name = language2]')[0].value = edit_dialogues[i].content2;
-      }
-
-      // Repeat Phrases
-      for (let i = 0; i < edit_repeat_phrases.length; i++)
-        repeatPhrase();
-
-      let repeat_phrases = document.getElementsByName('repeatPhrases');
-      for (let i = 0; i < repeat_phrases.length; i++) {
-        repeat_phrases[i].querySelectorAll('[name = element_number]')[0].value = edit_repeat_phrases[i].element_number;
-        repeat_phrases[i].querySelectorAll('[name = language1]')[0].value = edit_repeat_phrases[i].content1;
-        repeat_phrases[i].querySelectorAll('[name = language2]')[0].value = edit_repeat_phrases[i].content2;
-      }
-
-
-    }
-
   });
+
+  function loadPageType1() {
+    // change default image
+    if (edit_images.length > 0) {
+      DEFAULT_COVER = edit_images[0].image;
+    }
+
+    // get max elements
+    //max_elem = edit_dialogues.length + edit_repeat_phrases.length;
+    // Content
+    // Dialogues
+    for (let i = 0; i < edit_dialogues.length; i++)
+      addDialog();
+
+    let dialogues = document.getElementsByName('dialogues');
+    for (let i = 0; i < dialogues.length; i++) {
+      dialogues[i].querySelectorAll('[name = id]')[0].value = edit_dialogues[i].id;
+      dialogues[i].querySelectorAll('[name = element_number]')[0].value = edit_dialogues[i].element_number;
+      dialogues[i].querySelectorAll('[name = name]')[0].value = edit_dialogues[i].name;
+      dialogues[i].querySelectorAll('[name = color]')[0].value = edit_dialogues[i].color;
+      dialogues[i].querySelectorAll('[name = language1]')[0].value = edit_dialogues[i].content1;
+      dialogues[i].querySelectorAll('[name = language2]')[0].value = edit_dialogues[i].content2;
+    }
+
+    // Repeat Phrases
+    for (let i = 0; i < edit_repeat_phrases.length; i++)
+      repeatPhrase();
+
+    let repeat_phrases = document.getElementsByName('repeatPhrases');
+    for (let i = 0; i < repeat_phrases.length; i++) {
+      repeat_phrases[i].querySelectorAll('[name = id]')[0].value = edit_repeat_phrases[i].id;
+      repeat_phrases[i].querySelectorAll('[name = element_number]')[0].value = edit_repeat_phrases[i].element_number;
+      repeat_phrases[i].querySelectorAll('[name = language1]')[0].value = edit_repeat_phrases[i].content1;
+      repeat_phrases[i].querySelectorAll('[name = language2]')[0].value = edit_repeat_phrases[i].content2;
+    }
+
+  }
 
 
 </script>

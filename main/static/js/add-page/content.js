@@ -59,6 +59,7 @@ function addDialog(){
 			</div>
 		</div>
 		<input value="`+max_elem+`" name="element_number" hidden>
+		<input name="id" hidden>
 		<hr>
 	</div>
 	<div id="content_area"></div>
