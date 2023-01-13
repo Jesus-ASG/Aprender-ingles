@@ -1,4 +1,5 @@
-var max_elem = 0;
+let max_elem = 0;
+let objects_deleted = [];
 
 // Generic functions
 function getCookie(name) {
@@ -18,7 +19,10 @@ function getCookie(name) {
 }
 
 function deleteElement(id) {
-    $("#element_" + id).remove();
+    let element_to_delete = document.getElementById("element_"+id);
+
+    element_to_delete.remove();
+    
     let html =
       `
     <div class="alert alert-success alert-dismissible fade show mb-2 mt-2" role="alert">
