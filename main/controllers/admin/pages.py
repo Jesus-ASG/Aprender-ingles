@@ -50,7 +50,10 @@ def create(request, route, page_type):
         # collecting data
         data = request.POST["data"]
         data = json.loads(data)
+        
         #print(f'\n\n{data}\n\n')
+        #print(f'\n\n{objects_deleted}\n\n')
+
         # creating page
         pgObj = pgForm.save(commit=False)
         if data["page_id"] != "":
@@ -112,9 +115,25 @@ def create(request, route, page_type):
             repeatPhrases_to_submit.append(rpPObj)
             repPForm = RepeatPhraseForm(request.POST or None)    
         
+
+        # Delete objects that were deleted
+        deleted = data["deleted"]
+        deleted_dialogues = deleted["dialogues"]
+        for d in deleted_dialogues:
+            try:
+                Dialogue.objects.get(id=int(d)).delete()
+            except:
+                pass
+        
+        deleted_repeatPhrases = deleted["repeatPhrases"]
+        for d in deleted_repeatPhrases:
+            try:
+                RepeatPhrase.objects.get(id=int(d)).delete()
+            except:
+                pass
+
         
         # Save all
-        #pgObj = pgForm.save()
         pgObj.save()
         
         # Content

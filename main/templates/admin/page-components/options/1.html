@@ -117,9 +117,9 @@
 
   loadDjangoVariables();
 
-  //console.log(edit_images);
-  //console.log(edit_dialogues);
-  //console.log(edit_repeat_phrases);
+  console.log('images ' + edit_images);
+  console.log('dialogues ' + edit_dialogues + ' ' + edit_dialogues.length);
+  console.log('phrases ' + edit_repeat_phrases);
 
   function loadDjangoVariables() {
     try {
@@ -154,6 +154,7 @@
     //max_elem = edit_dialogues.length + edit_repeat_phrases.length;
     // Content
     // Dialogues
+
     for (let i = 0; i < edit_dialogues.length; i++)
       addDialog();
 

@@ -1,5 +1,8 @@
 let max_elem = 0;
-let objects_deleted = [];
+let objects_deleted = {
+    "dialogues": [],
+    "repeatPhrases": []
+};
 
 // Generic functions
 function getCookie(name) {
@@ -20,7 +23,20 @@ function getCookie(name) {
 
 function deleteElement(id) {
     let element_to_delete = document.getElementById("element_"+id);
-
+    let id_database = element_to_delete.querySelectorAll('[name = id]')[0].value
+    if (id_database){
+        let name = element_to_delete.getAttribute("name");
+        switch(name){
+            case "dialogues":
+                objects_deleted.dialogues.push(id_database);
+                break;
+            case "repeatPhrases":
+                objects_deleted.repeatPhrases.push(id_database);
+                break;
+            default:
+        }
+    }
+    
     element_to_delete.remove();
     
     let html =
@@ -33,6 +49,8 @@ function deleteElement(id) {
     </div>
     `;
     document.getElementById("alert_removed_success").innerHTML = html;
+
+    console.log(objects_deleted);
 }
 
 function restoreImage() {
@@ -106,7 +124,8 @@ function savePage() {
         "sub2": sub2 = document.getElementById('sub2').value,
         "dialogues": jsonDialogues,
 		"repeatPhrases": jsonRepeatPhrases,
-        "imageData": imageData
+        "imageData": imageData,
+        "deleted": objects_deleted
     }
 
     formData.append("data", JSON.stringify(jsonData));
