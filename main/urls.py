@@ -1,6 +1,7 @@
 from django.urls import path
 from . import vistas as v
 from main.controllers.admin import pages, tags, stories
+from main.controllers.user import story_render
 
 # para cargar imagenes
 from django.conf import settings
@@ -22,10 +23,8 @@ urlpatterns = [
     path('myadmin/del-page/<int:id>', pages.delete, name='del_page'),
 
     # for stories and related
-    path('historia/<slug:route>/', v.infoHistoria, name = 'info_historia'),
-    path('historia/<slug:route>/<int:num_pagina>/', v.contenidoHistoria, name='contenido_historia'),
-    
-    #path('historia/agregar-pagina/<slug:route>', views.contenidoHistoria, name='contenido_historia'),
+    path('story/<slug:route>/', story_render.storyInfo, name = 'story_info'),
+    path('story/<slug:route>/<int:page_number>/', story_render.storyContent, name='story_content'),
 
     # Todas las categorías y sus funciones
     path('myadmin/ver-categorias', tags.index, name = 'ver_categorias'),

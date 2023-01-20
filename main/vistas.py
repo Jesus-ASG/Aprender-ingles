@@ -6,6 +6,8 @@ from .models import User
 from .serializers import UserSerializer
 
 from django.urls import reverse_lazy
+from django.urls import reverse
+
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
@@ -122,48 +124,14 @@ def register(request):
     form = NewUserForm()
     return render(request, 'urls/register.html', {'register_form': form})
 
-# Renderizar información de la historia
-def infoHistoria(request, route):
-    try:
-        story = Story.objects.get(route=route)
-        paginas = Page.objects.filter(story=story.id)
-        has_pages = False
-        if len(paginas) > 0:
-            has_pages = True
-        args = {'story': story, 'has_pages': has_pages}
-    except:
-        return HttpResponseNotFound()
-    return render(request, 'urls/info_historia.html', args)
 
-
-def contenidoHistoria(request, route, num_pagina):
-    try:
-        story = Story.objects.get(route=route)
-        paginas = Page.objects.filter(story=story.id)
-        continua = True
-        if num_pagina >= len(paginas):
-            continua = False
-        pagina = paginas[num_pagina - 1]
-        prueba = '<a href="https://www.google.com">Elemento a</a><div class="rojo">Elemento div</div>'
-        args = {'story': story, 'pagina': pagina, 'continua': continua,
-                'route': route, 'num_pagina': num_pagina + 1, 'prueba': prueba}
-    except:
-        return HttpResponseNotFound()
-
-    return render(request, 'urls/contenido_historia.html', args)
-
-def test(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-
-        print('\n\n\n')
-        print(data)
-
-        print(f'elem1 {data["elem1"]}')
-
-        print(f'dialogues {len(data["dialogues"])}')
-
-        
-    
-    return render(request, 'test.html')
+def renderPages(request, route):
     pass
+
+def test(request, route):
+    if request.method == "POST":
+        story = Story.objects.get(route=route)
+        paginas = Page.objects.filter(story=story.id)
+
+    return render(request, 'test.html')
+    

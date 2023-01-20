@@ -192,7 +192,7 @@ def update(request, route, page_type, page_id):
         }
 
         #print('\n\n')
-        #print(f'{page}\n\n{images}\n\n{images_json}\n\n{dialogues}\n\n{repeat_phrases}')
+        print(f'{page}\n\n{images}\n\n{images_json}\n\n{dialogues}\n\n{repeat_phrases}')
         #print('\n\n')
 
     except:

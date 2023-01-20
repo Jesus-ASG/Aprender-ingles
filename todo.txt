@@ -32,6 +32,7 @@ create see pages feature
 
 create points by user feature
 
+--- fix handle exceptions when: pages->update page, objects.get(id=id)
 
 
 

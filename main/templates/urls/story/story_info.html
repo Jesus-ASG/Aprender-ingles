@@ -1,12 +1,19 @@
 {% extends 'main_template.html' %}
 {% load static %}
 
-
 {% block title %} {{ story.title }} {% endblock %}
+
+{% block page-styles %}
+{% endblock %}
 
 {% block navbar %} {% include 'navbar-custom.html' %} {% endblock %}
 
 {% block content %}
+<div class="container main-content">
+    <div class="row mt-3">
+        Heres will be rendered the page's info
+    </div>
+</div>
 
 <div class="main-history-container mt-3">
     <div class="btn-regresar">
@@ -15,33 +22,34 @@
             <label>Regresar</label>
         </a>
     </div>
-    
+
     <section class="seccion-1">
         <div class="info-container-img">
             <img src="{{ story.cover.url }}" alt="{{ story.cover }}">
         </div>
         <div class="info-container-info">
             <div class="titulo">
-                <h1>{{ story.title }}</h1>
+                <h1>{{ story.title1 }}</h1>
             </div>
             <div class="descripcion">
-                <h2>{{ story.description | default:'' }}</h2>
+                <h2>{{ story.description1 | default:'' }}</h2>
             </div>
         </div>
-        
+
     </section>
     <hr>
     <section class="seccion-2">
         <div class="container-categorias">
             {% for cat in story.tag.all %}
             <div class="categoria">
-                {{ cat.name }}
+                {{ cat.name1 }}
             </div>
             {% endfor %}
         </div>
         <div class="container-empezar">
             {% if has_pages %}
-            <a href="{% url 'contenido_historia' story.route 1 %}" class="btn-empezar">Empezar</a>
+            <a href="{% url 'story_content' route=story.route page_number=page_number %}"
+                class="btn-empezar">Empezar</a>
             {% else %}
             <a href="#" class="btn-empezar">Próximamente</a>
             {% endif %}
@@ -85,11 +93,11 @@
                     <progress id="progress-pronunciacion" max="100" value="80">Pronunciacion</progress> <br>
                 </div>
             </div>
-            
-            
-            
+
+
+
         </div>
-        
+
     </section>
 </div>
 

@@ -117,19 +117,19 @@
 
   loadDjangoVariables();
 
-  console.log('images ' + edit_images);
-  console.log('dialogues ' + edit_dialogues + ' ' + edit_dialogues.length);
-  console.log('phrases ' + edit_repeat_phrases);
+  //console.log('images ' + edit_images);
+  //console.log('dialogues ' + edit_dialogues + ' ' + edit_dialogues.length);
+  //console.log('phrases ' + edit_repeat_phrases);
 
   function loadDjangoVariables() {
     try {
       edit_images = JSON.parse('{{ images_json |safe }}');
     } catch (e) { }
     try {
-      edit_dialogues = JSON.parse('{{ dialogues |safe }}');
+      edit_dialogues = JSON.parse('{{ dialogues |safe |escapejs }}');
     } catch (e) { }
     try {
-      edit_repeat_phrases = JSON.parse('{{ repeat_phrases |safe }}');
+      edit_repeat_phrases = JSON.parse('{{ repeat_phrases |safe |escapejs  }}');
     } catch (e) { }
   }
 
@@ -186,10 +186,5 @@
 </script>
 
 <script src="{% static 'js/add-page/add-page.js' %}"></script>
-
-<script>
-
-
-</script>
 
 {% endblock %}

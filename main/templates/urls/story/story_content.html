@@ -7,7 +7,7 @@
 
 {% block content %}
 <div class="main-history-container mt-3">
-    
+
     <!--<p>{{ pagina.texto |linebreaks|safe }}</p>-->
     <p>{{ pagina.texto |safe|linebreaks }}</p>
 
@@ -15,9 +15,9 @@
     </div>
 
     {% if continua %}
-    <a href="{% url 'contenido_historia' route num_pagina %}" class="btn-empezar"> Siguiente</a>
+    <a href="{% url 'story_content' route num_pagina %}" class="btn-empezar"> Siguiente</a>
     {% else %}
-    <a href="{% url 'info_historia' route %}" class="btn-empezar"> Terminar lección</a>
+    <a href="{% url 'story_info' route %}" class="btn-empezar"> Terminar lección</a>
     {% endif%}
 </div>
 {% endblock %}

@@ -6,14 +6,14 @@
 
 {% block navbar %} {% include 'navbar-custom.html' %} {% endblock %}
 
-{% block content %} 
+{% block content %}
 <div class="container">
     <div class="row mt-3">
         <h2 style="text-align: center;">Librería de cuentos</h2>
         <hr>
         {% for historia in historias %}
 
-        <a class="c-card" href="{% url 'info_historia' historia.route %}">
+        <a class="c-card" href="{% url 'story_info' historia.route %}">
             <div class="c-card-img-bg">
                 <div class="c-card-img">
                     <img src="{{ historia.cover.url }}" alt="{{ historia.cover }}">
@@ -22,12 +22,12 @@
             <div class="c-card-title">
                 {{ historia.title|truncatechars:70 }}
             </div>
-            
+
         </a>
         {% endfor %}
-        
+
     </div>
-    
+
 
 </div>
 

@@ -1,0 +1,84 @@
+{% extends 'main_template.html' %}
+{% load static %}
+
+{% block title %} {{ story.title }} {% endblock %}
+
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/1.css' %}">
+<link rel="stylesheet" href="{% static 'css/story_content.css' %}">
+
+{% endblock %}
+
+{% block navbar %} {% include 'navbar-custom.html' %} {% endblock %}
+
+{% block content %}
+
+<!-- Template 1 -->
+<div class="linebreaks" id="linebreaks">
+</div>
+
+<div class="container main-content">
+  <div class="row mt-3">
+    <h1 class="fs-1 text-center">{{ current_page.subtitle1 |linebreaks }}</h1>
+  </div>
+
+  <div class="row my-3">
+    <div class="col-12">
+      <div class="img-t-1">
+
+        {% for i in images %}
+        <img src="{{ i.image.url | default:story.cover.url }}" alt="No se pudo cargar la imagen" id="img_showed">
+        {% empty %}
+        <img src="{{ story.cover.url }}" alt="No se pudo cargar la imagen" id="img_showed">
+        {% endfor %}
+
+      </div>
+      <div class="linebreaks">
+        <div id="dialogues_area"></div>
+      </div>
+
+
+
+      <div class="row mb-3">
+        <div class="col-12 text-center">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Change page -->
+  <div class="row mt-3">
+    <div class="col-6">
+      {% if not prev_page is None %}
+      <a href="{% url 'story_content' route=story.route page_number=prev_page %}">prev</a>
+      {% endif %}
+    </div>
+    <div class="col-6">
+      {% if not next_page is None %}
+      <a href="{% url 'story_content' route=story.route page_number=next_page %}">next</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block page-scripts %}
+<script>
+
+  let db_dialogues = {};
+  let db_repeat_phrases = {};
+
+  try {
+    db_dialogues = JSON.parse('{{ dialogues |safe |escapejs }}');
+  } catch (e) { }
+  try {
+    db_repeat_phrases = JSON.parse('{{ repeat_phrases |safe |escapejs }}');
+  } catch (e) { }
+
+</script>
+<script src="{% static 'js/story_content.js' %}"></script>
+
+{% endblock %}
