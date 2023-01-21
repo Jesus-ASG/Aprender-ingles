@@ -17,10 +17,10 @@ urlpatterns = [
     path('myadmin/editar-historia/<int:id>', stories.update, name = 'editar_historia'),
     path('myadmin/eliminar-historia/<int:id>', stories.delete, name = 'eliminar_historia'),
 
-    path('myadmin/view-pages/<slug:route>', pages.index, name='view_pages'),
-    path('myadmin/add-page/<slug:route>/<int:page_type>', pages.create, name='add_page'),
-    path('myadmin/edit-page/<slug:route>/<int:page_type>/<int:page_id>', pages.update, name='edit_page'),
-    path('myadmin/del-page/<int:id>', pages.delete, name='del_page'),
+    path('myadmin/view-pages/<slug:route>/', pages.index, name='view_pages'),
+    path('myadmin/add-page/<slug:route>/<int:page_type>/', pages.create, name='add_page'),
+    path('myadmin/edit-page/<slug:route>/<int:page_type>/<int:page_id>/', pages.update, name='edit_page'),
+    path('myadmin/del-page/<int:id>/', pages.delete, name='del_page'),
 
     # for stories and related
     path('story/<slug:route>/', story_render.storyInfo, name = 'story_info'),

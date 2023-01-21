@@ -109,33 +109,30 @@
 {% block page-scripts %}
 
 <script>
-  let DEFAULT_COVER = '{{ story.cover.url }}';
+  const URL_SAVE_PAGE = `{% url 'add_page' route=story.route page_type=page_type %}`;
+  const URL_VIEW_PAGES = `{% url 'view_pages' route=story.route %}`;
 
-  let story_route = '{{ story.route }}';
-  let page_type = '{{ page_type }}';
   let page_id = '{{ page.id }}';
 
-  let edit_images = {};
-  let edit_dialogues = {};
-  let edit_repeat_phrases = {};
+  let default_cover = '{{ story.cover.url }}';
+  let db_images = {};
+  let db_dialogues = {};
+  let db_repeat_phrases = {};
 
-  loadDjangoVariables();
+  try {
+    db_images = JSON.parse('{{ images_json |safe }}');
+  } catch (e) { }
+  try {
+    db_dialogues = JSON.parse('{{ dialogues |safe |escapejs }}');
+  } catch (e) { }
+  try {
+    db_repeat_phrases = JSON.parse('{{ repeat_phrases |safe |escapejs  }}');
+  } catch (e) { }
 
-  //console.log('images ' + edit_images);
-  //console.log('dialogues ' + edit_dialogues + ' ' + edit_dialogues.length);
-  //console.log('phrases ' + edit_repeat_phrases);
-
-  function loadDjangoVariables() {
-    try {
-      edit_images = JSON.parse('{{ images_json |safe }}');
-    } catch (e) { }
-    try {
-      edit_dialogues = JSON.parse('{{ dialogues |safe |escapejs }}');
-    } catch (e) { }
-    try {
-      edit_repeat_phrases = JSON.parse('{{ repeat_phrases |safe |escapejs  }}');
-    } catch (e) { }
-  }
+  //for (let d of db_dialogues)
+    //console.log(d);
+  //for (let i of db_repeat_phrases)
+    //console.log(i);
 
 </script>
 
@@ -150,40 +147,59 @@
 
   function loadPageType1() {
     // change default image
-    if (edit_images.length > 0) {
-      DEFAULT_COVER = edit_images[0].image;
-    }
+    if (db_images.length > 0)
+      default_cover = db_images[0].image;
 
     // get max elements
     //max_elem = edit_dialogues.length + edit_repeat_phrases.length;
     // Content
     // Dialogues
 
-    for (let i = 0; i < edit_dialogues.length; i++)
+    for (let i = 0; i < db_dialogues.length; i++)
       addDialog();
 
     let dialogues = document.getElementsByName('dialogues');
     for (let i = 0; i < dialogues.length; i++) {
-      dialogues[i].querySelectorAll('[name = id]')[0].value = edit_dialogues[i].id;
-      dialogues[i].querySelectorAll('[name = element_number]')[0].value = edit_dialogues[i].element_number;
-      dialogues[i].querySelectorAll('[name = name]')[0].value = edit_dialogues[i].name;
-      dialogues[i].querySelectorAll('[name = color]')[0].value = edit_dialogues[i].color;
-      dialogues[i].querySelectorAll('[name = language1]')[0].value = edit_dialogues[i].content1;
-      dialogues[i].querySelectorAll('[name = language2]')[0].value = edit_dialogues[i].content2;
+      dialogues[i].querySelectorAll('[name = id]')[0].value = db_dialogues[i].id;
+      //dialogues[i].querySelectorAll('[name = element_number]')[0].value = db_dialogues[i].element_number;
+      dialogues[i].querySelectorAll('[name = name]')[0].value = db_dialogues[i].name;
+      dialogues[i].querySelectorAll('[name = color]')[0].value = db_dialogues[i].color;
+      dialogues[i].querySelectorAll('[name = language1]')[0].value = db_dialogues[i].content1;
+      dialogues[i].querySelectorAll('[name = language2]')[0].value = db_dialogues[i].content2;
 
-      $(".ch-color_" + i).css({ 'color': edit_dialogues[i].color });
+      $(".ch-color_" + i).css({ 'color': db_dialogues[i].color });
+    }
+
+    /* Exercises */
+    list_ordered = [];
+    for (let repeat_phrase of db_repeat_phrases) {
+      repeat_phrase.type = "repeat_phrase";
+      list_ordered.push(repeat_phrase);
+    }
+
+    // Sort all
+    list_ordered.sort((a, b) => a.element_number - b.element_number);
+    let html_exercises = ``;
+    for (let exercise of list_ordered) {
+      switch (exercise.type) {
+        case "repeat_phrase":
+          //repeatPhrase();
+          //sdasd * /
+          //html_exercises += repeatPhraseHTML(exercise);
+          break;
+      }
     }
 
     // Repeat Phrases
-    for (let i = 0; i < edit_repeat_phrases.length; i++)
+    for (let i = 0; i < db_repeat_phrases.length; i++)
       repeatPhrase();
 
     let repeat_phrases = document.getElementsByName('repeatPhrases');
-    for (let i = 0; i < repeat_phrases.length; i++) {
-      repeat_phrases[i].querySelectorAll('[name = id]')[0].value = edit_repeat_phrases[i].id;
-      repeat_phrases[i].querySelectorAll('[name = element_number]')[0].value = edit_repeat_phrases[i].element_number;
-      repeat_phrases[i].querySelectorAll('[name = language1]')[0].value = edit_repeat_phrases[i].content1;
-      repeat_phrases[i].querySelectorAll('[name = language2]')[0].value = edit_repeat_phrases[i].content2;
+    for (let i = 0; i < db_repeat_phrases.length; i++) {
+      repeat_phrases[i].querySelectorAll('[name = id]')[0].value = db_repeat_phrases[i].id;
+      //repeat_phrases[i].querySelectorAll('[name = element_number]')[0].value = db_repeat_phrases[i].element_number;
+      repeat_phrases[i].querySelectorAll('[name = language1]')[0].value = db_repeat_phrases[i].content1;
+      repeat_phrases[i].querySelectorAll('[name = language2]')[0].value = db_repeat_phrases[i].content2;
     }
 
   }

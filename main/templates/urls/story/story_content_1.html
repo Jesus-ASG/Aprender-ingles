@@ -99,8 +99,8 @@
     let text2 = dialogue.content2.replace(/\n/g, '<span></span>|');
 
     html_dialogues += `<div class="row" style="color:rgba(0,0,0,0)"><br></div>
-	<div class="fw-bold fs-5 dialogue-name" style="color:`+ dialogue.color + `;">
-	<p>`+ dialogue.name + `:</p></div>`;
+    <div class="fw-bold fs-5 dialogue-name" style="color:`+ dialogue.color + `;">
+    <p>`+ dialogue.name + `:</p></div>`;
 
     html_dialogues += createFlipHTML(text1, text2, total_translations, "fs-5");
   }

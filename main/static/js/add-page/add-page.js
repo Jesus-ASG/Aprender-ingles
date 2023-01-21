@@ -1,4 +1,4 @@
-let max_elem = 0;
+let max_elem = 1;
 let objects_deleted = {
     "dialogues": [],
     "repeatPhrases": []
@@ -13,8 +13,8 @@ function getCookie(name) {
 			const cookie = cookies[i].trim();
 			// Does this cookie string begin with the name we want?
 			if (cookie.substring(0, name.length + 1) === (name + '=')) {
-			cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-			break;
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
 			}
 		}
     }
@@ -54,7 +54,7 @@ function deleteElement(id) {
 }
 
 function restoreImage() {
-    $("#img_showed").attr("src", DEFAULT_COVER);
+    $("#img_showed").attr("src", default_cover);
     $("#image").val("");
 }
 
@@ -129,7 +129,7 @@ function savePage() {
     }
 
     formData.append("data", JSON.stringify(jsonData));
-    /*
+    /* // For debug data values
     formData.forEach((value, key) => {
       console.log(key, value);
     });
@@ -138,13 +138,21 @@ function savePage() {
     const csrftoken = getCookie('csrftoken');
     $.ajax({
         type: "POST",
-        url: "/myadmin/add-page/"+story_route+"/"+page_type,
+        url: URL_SAVE_PAGE,
         data: formData,
         processData: false,  // Tell jQuery not to process the data
         contentType: false,  // Tell jQuery not to set the content type
         headers: { "X-CSRFToken": csrftoken },
         success: function (response) {
+            switch (response.message){
+                case "success":
+                    window.location.href = URL_VIEW_PAGES;
+                    break;
+            }
+        },
+        error: function (response) {
             //console.log(response);
         }
     });
+    
 }

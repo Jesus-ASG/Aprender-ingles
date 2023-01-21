@@ -105,8 +105,8 @@
 
                             <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                              <button onclick="deletePage( '{{ p.id }}' )" type="button" class="btn btn-danger"
-                                data-bs-dismiss="modal">
+                              <button onclick="deletePage( `{% url 'del_page' p.id %}`, `{{ p.id }}` )" type="button"
+                                class="btn btn-danger" data-bs-dismiss="modal">
                                 Eliminar</i>
                               </button>
                             </div>
@@ -138,10 +138,10 @@
 {% block page-scripts %}
 
 <script>
-  function deletePage(id) {
+  function deletePage(url_delete, id) {
     $.ajax({
       type: 'POST',
-      url: "/myadmin/del-page/" + id,
+      url: url_delete,
       data: {
         "csrfmiddlewaretoken": "{{csrf_token}}"
       },
@@ -159,11 +159,9 @@
         document.getElementById("alert_removed_success").innerHTML = html;
       },
       error: function (response) {
-        console.log("Error");
-        console.log(response);
+        //console.log(response);
       }
     });
-
   }
 </script>
 
