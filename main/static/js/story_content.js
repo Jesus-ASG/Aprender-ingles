@@ -1,29 +1,19 @@
-let total_translations = 0;
+function createFlipHTML(text1, text2, counter, paper_classes){
+	let html = ``;
 
-for (let dialogue of db_dialogues) {
-	
-	//let text1 = dialogue.content1;
-	//let text2 = dialogue.content2;
-	let text1 = dialogue.content1.replace(/\n/g, '<span></span>|');
-	let text2 = dialogue.content2.replace(/\n/g, '<span></span>|');
-	// Create html
 	let arr1 = text1.split("|");
 	let arr2 = text2.split("|");
 
-	let html = `<div class="row" style="color:rgba(0,0,0,0)"><br></div>
-	<div class="fw-bold fs-5 dialogue-name" style="color:`+dialogue.color+`;">
-	<p>`+dialogue.name+`:</p></div>`;
 	for (let i = 0; i <arr1.length; i++) {
 		let words1 = arr1[i].replace(/ {2,}/g, ' ').trim(); // removes extra spaces
-		//let words2 = arr2[i].replace(/\s+/g, ' ').trim(); // removes extra spaces
-		let words2 = arr2[i].replace(/ {2,}/g, ' ').trim();
+		let words2 = arr2[i].replace(/ {2,}/g, ' ').trim(); // removes extra spaces
 		
 		words1 = words1.split(" ");
 		words2 = words2.split(" ");
 
 		let max = words1.length > words2.length ? words1.length : words2.length;
 		for (let j = 0; j < max; j++) {
-			html += `<div class="paper paper_` + total_translations + ` mx-1 fw-bold fs-5">`;
+			html += `<div class="paper paper_` + counter.value + ` mx-1 `+paper_classes+`">`;
 
 			if ((j < words1.length) && (j < words2.length)) {
 				if (j < words1.length)
@@ -57,21 +47,14 @@ for (let dialogue of db_dialogues) {
 
 			if (flag)
 				html += `<br>`;
-			
 		}
-		total_translations++;
+		counter.value++;
 	}
-	html += `<div id="dialogues_area"></div>`;
-	document.getElementById("dialogues_area").outerHTML = html;
-
-
+	return html;
 }
 
-setFunctionality();
-
-
-function setFunctionality(){
-	for (let i = 0; i < total_translations; i++) {
+function setFunctionality(max_groups){
+	for (let i = 0; i < max_groups; i++) {
 		let papers = document.getElementsByClassName("paper_" + i);
 	
 		for (let paper of papers) {

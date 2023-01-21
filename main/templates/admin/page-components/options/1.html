@@ -18,15 +18,19 @@
 <!-- Template 1 -->
 <div class="container main-content">
   <div class="row mt-3">
-    <label class="form-label fs-5 text-center" for="sub1">Agrega un subtítulo en inglés</label>
-    <input class="fs-1 text-center form-control" id="sub1" placeholder="Subtítulo en inglés" autocomplete="false"
-      value="{{ page.subtitle1 | default:'' }}"></input>
+    <div class="col-12 text-center">
+      <label class="form-label fs-5" for="sub1">Agrega un subtítulo en inglés</label>
+      <input class="fs-1 text-center form-control" id="sub1" placeholder="Subtítulo en inglés" autocomplete="false"
+        value="{{ page.subtitle1 | default:'' }}"></input>
+    </div>
   </div>
 
   <div class="row mt-3">
-    <label class="form-label fs-5 text-center" for="sub2">Agrega un subtítulo en español</label>
-    <input class="fs-1 text-center form-control" id="sub2" placeholder="Subtítulo en español" autocomplete="false"
-      value="{{ page.subtitle2 | default:'' }}"></input>
+    <div class="col-12 text-center">
+      <label class="form-label fs-5" for="sub2">Agrega un subtítulo en español</label>
+      <input class="fs-1 text-center form-control" id="sub2" placeholder="Subtítulo en español" autocomplete="false"
+        value="{{ page.subtitle2 | default:'' }}"></input>
+    </div>
   </div>
 
   {% for i in images %}
@@ -166,6 +170,8 @@
       dialogues[i].querySelectorAll('[name = color]')[0].value = edit_dialogues[i].color;
       dialogues[i].querySelectorAll('[name = language1]')[0].value = edit_dialogues[i].content1;
       dialogues[i].querySelectorAll('[name = language2]')[0].value = edit_dialogues[i].content2;
+
+      $(".ch-color_" + i).css({ 'color': edit_dialogues[i].color });
     }
 
     // Repeat Phrases

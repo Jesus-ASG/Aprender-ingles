@@ -1,7 +1,7 @@
 {% extends 'main_template.html' %}
 {% load static %}
 
-{% block title %} {{ story.title }} {% endblock %}
+{% block title %} {{ story.title1 }} {% endblock %}
 
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/1.css' %}">
@@ -14,35 +14,31 @@
 {% block content %}
 
 <!-- Template 1 -->
-<div class="linebreaks" id="linebreaks">
-</div>
-
 <div class="container main-content">
   <div class="row mt-3">
-    <h1 class="fs-1 text-center">{{ current_page.subtitle1 |linebreaks }}</h1>
+    <h1 class="fs-1 text-center">
+      <div id="subtitle"></div>
+    </h1>
   </div>
 
   <div class="row my-3">
     <div class="col-12">
       <div class="img-t-1">
-
         {% for i in images %}
         <img src="{{ i.image.url | default:story.cover.url }}" alt="No se pudo cargar la imagen" id="img_showed">
         {% empty %}
         <img src="{{ story.cover.url }}" alt="No se pudo cargar la imagen" id="img_showed">
         {% endfor %}
-
       </div>
-      <div class="linebreaks">
-        <div id="dialogues_area"></div>
-      </div>
-
-
+      <!-- Dialogues -->
+      <div id="dialogues_area"></div>
 
       <div class="row mb-3">
-        <div class="col-12 text-center">
-
+        <div class="col-12">
+          <h2 class="fs-2 text-center my-3">Resuelve</h2>
         </div>
+
+        <div class="col-12"><span id="exercises_area"></span></div>
       </div>
     </div>
   </div>
@@ -68,9 +64,16 @@
 {% block page-scripts %}
 <script>
 
+  let db_subtitle = {}
   let db_dialogues = {};
   let db_repeat_phrases = {};
 
+  try {
+    db_subtitle.subtitle1 = '{{ current_page.subtitle1 }}';
+  } catch (e) { }
+  try {
+    db_subtitle.subtitle2 = '{{ current_page.subtitle2 }}';
+  } catch (e) { }
   try {
     db_dialogues = JSON.parse('{{ dialogues |safe |escapejs }}');
   } catch (e) { }
@@ -80,5 +83,62 @@
 
 </script>
 <script src="{% static 'js/story_content.js' %}"></script>
+
+<script>
+  let total_translations = { value: 0 };
+  /* Subtitle */
+  if (db_subtitle.subtitle1 && db_subtitle.subtitle2) {
+    let html_subtitle = createFlipHTML(db_subtitle.subtitle1, db_subtitle.subtitle2, total_translations, "");
+    document.getElementById("subtitle").outerHTML = html_subtitle;
+  }
+  /* Content */
+  /* Dialogues */
+  let html_dialogues = ``;
+  for (let dialogue of db_dialogues) {
+    let text1 = dialogue.content1.replace(/\n/g, '<span></span>|');
+    let text2 = dialogue.content2.replace(/\n/g, '<span></span>|');
+
+    html_dialogues += `<div class="row" style="color:rgba(0,0,0,0)"><br></div>
+	<div class="fw-bold fs-5 dialogue-name" style="color:`+ dialogue.color + `;">
+	<p>`+ dialogue.name + `:</p></div>`;
+
+    html_dialogues += createFlipHTML(text1, text2, total_translations, "fs-5");
+  }
+  document.getElementById("dialogues_area").outerHTML = html_dialogues;
+
+  /* Exercises */
+  list_ordered = [];
+  for (let repeat_phrase of db_repeat_phrases) {
+    repeat_phrase.type = "repeat_phrase";
+    list_ordered.push(repeat_phrase);
+  }
+  // Sort all
+  list_ordered.sort((a, b) => a.element_number - b.element_number);
+  //console.log(list_ordered);
+  let html_exercises = ``;
+  for (let exercise of list_ordered) {
+    switch (exercise.type) {
+      case "repeat_phrase":
+        html_exercises += repeatPhraseHTML(exercise);
+        break;
+    }
+  }
+
+  document.getElementById("exercises_area").outerHTML = html_exercises;
+  setFunctionality(total_translations.value);
+
+
+  function repeatPhraseHTML(repeat_phrase) {
+    let text1 = repeat_phrase.content1.replace(/\n/g, '<span></span>|');
+    let text2 = repeat_phrase.content2.replace(/\n/g, '<span></span>|');
+
+    let html_repeat_phrase = `<div class="row"><div class="col-12 fs-5">`;
+    html_repeat_phrase += createFlipHTML(text1, text2, total_translations, "");
+    html_repeat_phrase += `</div></div>`;
+    return html_repeat_phrase;
+  }
+
+
+</script>
 
 {% endblock %}
