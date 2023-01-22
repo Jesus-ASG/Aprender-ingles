@@ -35,6 +35,4 @@ urlpatterns = [
     path('register', v.register, name='register'),
     path('user/', v.UsersList.as_view(), name = 'users_list'),
 
-    path('test/', v.test, name='test'),
-
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

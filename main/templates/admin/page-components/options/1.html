@@ -12,7 +12,7 @@
 </style>
 {% endblock %}
 
-{% block navbar %} {% include 'navbar-custom.html' %} {% endblock %}
+{% block navbar %} {% include 'navbar/navbar-logged.html' %} {% endblock %}
 
 {% block content %}
 <!-- Template 1 -->
@@ -139,9 +139,9 @@
 
 </script>
 
-<script src="{% static 'js/add-page/content.js' %}"></script>
-<script src="{% static 'js/add-page/exercises.js' %}"></script>
-<script src="{% static 'js/add-page/add-page.js' %}"></script>
+<script src="{% static 'js/add_page/content.js' %}"></script>
+<script src="{% static 'js/add_page/exercises.js' %}"></script>
+<script src="{% static 'js/add_page/add_page.js' %}"></script>
 <script src="{% static 'js/sort_collections.js' %}"></script>
 
 <script>

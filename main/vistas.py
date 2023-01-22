@@ -124,14 +124,4 @@ def register(request):
     form = NewUserForm()
     return render(request, 'urls/register.html', {'register_form': form})
 
-
-def renderPages(request, route):
-    pass
-
-def test(request, route):
-    if request.method == "POST":
-        story = Story.objects.get(route=route)
-        paginas = Page.objects.filter(story=story.id)
-
-    return render(request, 'test.html')
     

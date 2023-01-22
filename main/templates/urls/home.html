@@ -4,19 +4,22 @@
 
 {% block title %} Aplicación X {% endblock %}
 
-{% block navbar %} {% include 'navbar.html' %} {% endblock %}
+{% block navbar %} {% include 'navbar/navbar-guest.html' %} {% endblock %}
 
-{% block content %} 
+{% block content %}
 <div class="section-title">
     <h1>¡La mejor aplicación para aprender inglés!</h1>
 </div>
 
 <!-- CAROUSEL -->
 <div id="MiCarrusel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-indicators"> 
-        <button type="button" data-bs-target="#MiCarrusel" data-bs-slide-to="0" class="active" arial-label="Slide 1"></button>
-        <button type="button" data-bs-target="#MiCarrusel" data-bs-slide-to="1" class="active" arial-label="Slide 2"></button>
-        <button type="button" data-bs-target="#MiCarrusel" data-bs-slide-to="2" class="active" arial-label="Slide 3"></button>
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#MiCarrusel" data-bs-slide-to="0" class="active"
+            arial-label="Slide 1"></button>
+        <button type="button" data-bs-target="#MiCarrusel" data-bs-slide-to="1" class="active"
+            arial-label="Slide 2"></button>
+        <button type="button" data-bs-target="#MiCarrusel" data-bs-slide-to="2" class="active"
+            arial-label="Slide 3"></button>
     </div>
     <div class="carousel-inner">
         <div class="carousel-item active banner-item">
@@ -29,7 +32,7 @@
                     </div>
                     <p><a href="#" class="btn btn-sm btn-primary">unsigned button</a></p>
                 </div>
-            </div>						
+            </div>
         </div>
         <div class="carousel-item banner-item">
             <img src="{% static 'img/banner/b2.jpg' %}">
@@ -41,7 +44,7 @@
                     </div>
                     <p><a href="{% url 'login' %}" class="btn btn-lg btn-primary">Comenzar a aprender</a></p>
                 </div>
-            </div>						
+            </div>
         </div>
         <div class="carousel-item banner-item">
             <img src="{% static 'img/banner/b4.jpg' %}">
@@ -53,8 +56,8 @@
                     </div>
                     <p><a href="#" class="btn btn-sm btn-primary">unsigned button</a></p>
                 </div>
-            </div>						
-        </div>	
+            </div>
+        </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#MiCarrusel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon"></span>
