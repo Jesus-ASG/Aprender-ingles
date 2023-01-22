@@ -16,9 +16,29 @@
 <!-- Template 1 -->
 <div class="container main-content">
   <div class="row mt-3">
-    <h1 class="fs-1 text-center">
-      <div id="subtitle"></div>
-    </h1>
+    <div class="col-2 text-center fs-1">
+      {% if prev_page is None %}
+      <a href="{% url 'story_info' route=story.route %}"><i class='fa fa-arrow-circle-left'></i></a>
+      {% else %}
+      <a href="{% url 'story_content' route=story.route page_number=prev_page %}"><i
+          class='fa fa-arrow-circle-left'></i></a>
+      {% endif %}
+
+    </div>
+    <div class="col-8 text-center">
+      <h1 class="fs-1 text-center">
+        <div id="subtitle"></div>
+      </h1>
+    </div>
+    <div class="col-2 text-center fs-1">
+      {% if next_page is None %}
+      <a href="{% url 'story_info' route=story.route %}"><i class='fa fa-arrow-circle-right'></i></a>
+      {% else %}
+      <a href="{% url 'story_content' route=story.route page_number=next_page %}"><i
+          class='fa fa-arrow-circle-right'></i></a>
+      {% endif %}
+
+    </div>
   </div>
 
   <div class="row my-3">
@@ -33,28 +53,25 @@
       <!-- Content -->
       <div id="content_area"></div>
 
-      <div class="row mb-3">
-        <div class="col-12">
-          <h2 class="fs-2 text-center my-3">Resuelve</h2>
-        </div>
-
-        <div class="col-12"><span id="exercises_area"></span></div>
-      </div>
     </div>
   </div>
+
+  <div class="row mb-3">
+    <div class="col-12">
+      <h2 class="fs-2 text-center my-3">Resuelve</h2>
+    </div>
+    <div class="col-12"><span id="exercises_area"></span></div>
+  </div>
+
 
 
   <!-- Change page -->
   <div class="row mt-3">
     <div class="col-6">
-      {% if not prev_page is None %}
-      <a href="{% url 'story_content' route=story.route page_number=prev_page %}">prev</a>
-      {% endif %}
+
     </div>
     <div class="col-6">
-      {% if not next_page is None %}
-      <a href="{% url 'story_content' route=story.route page_number=next_page %}">next</a>
-      {% endif %}
+
     </div>
   </div>
 </div>
@@ -93,7 +110,12 @@
   let total_translations = { value: 0 };
   /* Subtitle */
   if (db_subtitle.subtitle1 && db_subtitle.subtitle2) {
-    let html_subtitle = createFlipHTML(db_subtitle.subtitle1, db_subtitle.subtitle2, total_translations, "");
+    let flipClasses = {
+      "paper": "mx-1",
+      "front": "px-1",
+      "back": "px-1"
+    };
+    let html_subtitle = createFlipHTML(db_subtitle.subtitle1, db_subtitle.subtitle2, total_translations, flipClasses);
     document.getElementById("subtitle").outerHTML = html_subtitle;
   }
 
@@ -117,12 +139,18 @@
     let text1 = dialogue.content1.replace(/\n/g, '<span></span>|');
     let text2 = dialogue.content2.replace(/\n/g, '<span></span>|');
 
-    html_dialogue += `<div class="row" style="color:rgba(0,0,0,0)"><br></div>
+    let flipClasses = {
+      "paper": "fs-5 mx-1",
+      "front": "px-1",
+      "back": "px-1"
+    };
+    html_dialogue += `
+    <div class="row" style="color:rgba(0,0,0,0)"><br></div>
     <div class="fw-bold fs-5 dialogue-name" style="color:`+ dialogue.color + `;">
-    <p>`+ dialogue.name + `:</p></div>`;
-
-    html_dialogue += createFlipHTML(text1, text2, total_translations, "fs-5");
-    html_dialogue += `<div id="content_area"></div>`;
+      <p>`+ dialogue.name + `:</p>
+    </div>
+    `+ createFlipHTML(text1, text2, total_translations, flipClasses) + `
+    <div id="content_area"></div>`;
 
     document.getElementById("content_area").outerHTML = html_dialogue;
   }
@@ -132,9 +160,34 @@
     let text1 = repeat_phrase.content1.replace(/\n/g, '<span></span>|');
     let text2 = repeat_phrase.content2.replace(/\n/g, '<span></span>|');
 
-    html_repeat_phrase = `<div class="row"><div class="col-12 fs-5">`;
-    html_repeat_phrase += createFlipHTML(text1, text2, total_translations, "");
-    html_repeat_phrase += `</div></div><span id="exercises_area">`;
+    let flipClasses = {
+      "paper": "mx-1",
+      "front": "px-1",
+      "back": "px-1"
+    };
+    html_repeat_phrase = `
+    <div class="row mb-3 fs-5">
+      <div class="col-12 col-md-8">
+        `+ createFlipHTML(text1, text2, total_translations, flipClasses) + `
+      </div>
+    <div class="col-12 col-md-4 my-1">
+      <div class="row">
+        <div class="col-6 text-center">
+          Listen
+          <div class="row">
+            <i class='fas fa-volume-up'></i>
+          </div>
+        </div>
+        <div class="col-6 text-center">
+          Repeat
+          <div class="row">
+            <i class='fas fa-microphone'></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    </div><span id="exercises_area">`;
 
     document.getElementById("exercises_area").outerHTML = html_repeat_phrase;
   }

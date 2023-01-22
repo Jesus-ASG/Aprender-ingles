@@ -1,4 +1,5 @@
 __pycache__/
+main/static/resources/
 env/
 envw/
 lenv/

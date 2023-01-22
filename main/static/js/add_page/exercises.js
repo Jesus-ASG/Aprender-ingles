@@ -22,7 +22,7 @@ function repeatPhrase() {
           </div>
           <div class="col-2 col-md-1 d-flex align-items-center">
             <button class="btn btn-danger shadow-none" type="button" title="Eliminar elemento" data-bs-toggle="modal"
-              data-bs-target="#modal_delete_`+ max_elem + `">
+            data-bs-target="#modal_delete_`+ max_elem + `">
               <i class="fa-solid fa-trash"></i>
             </button>
             <div class="modal fade" id="modal_delete_`+ max_elem + `" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -34,10 +34,8 @@ function repeatPhrase() {
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-
                     <button type="button" class="btn btn-danger" onclick="deleteElement(`+ max_elem + `)" data-bs-dismiss="modal">
-                      Eliminar</i>
-                    </button>
+                    Eliminar</button>
                   </div>
                 </div>
               </div>
@@ -64,8 +62,7 @@ function repeatPhrase() {
       <input name="id" hidden>
       <hr>
     </div>
-
-    <div class="col-12"><span id="exercises_area"></span></div>
+    <span id="exercises_area"></span>
   `;
 
   document.getElementById("exercises_area").outerHTML = html;

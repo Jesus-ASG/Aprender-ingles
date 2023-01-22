@@ -21,3 +21,8 @@ jesus@mail.com
 
 pip libraries
 django, django rest framework, pymysql, pillow, django-cleanup
+
+resources/
+  bootstrap 5
+  font awesome 6
+  jquery

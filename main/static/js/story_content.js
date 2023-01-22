@@ -1,4 +1,4 @@
-function createFlipHTML(text1, text2, counter, paper_classes){
+function createFlipHTML(text1, text2, counter, flipClasses){
 	let html = ``;
 
 	let arr1 = text1.split("|");
@@ -13,25 +13,25 @@ function createFlipHTML(text1, text2, counter, paper_classes){
 
 		let max = words1.length > words2.length ? words1.length : words2.length;
 		for (let j = 0; j < max; j++) {
-			html += `<div class="paper paper_` + counter.value + ` mx-1 `+paper_classes+`">`;
+			html += `<div class="paper paper_` + counter.value + ` `+flipClasses.paper+`">`;
 
 			if ((j < words1.length) && (j < words2.length)) {
 				if (j < words1.length)
-					html += `<div class="front styles-front">` + words1[j] + `</div>`;
+					html += `<div class="front styles-front `+flipClasses.front+`">` + words1[j] + `</div>`;
 
 				if (j < words2.length)
-					html += `<div class="back p-abs styles-back">` + words2[j] + `</div>`;
+					html += `<div class="back p-abs styles-back `+flipClasses.back+`">` + words2[j] + `</div>`;
 			}
 			else {
 				if (j < words1.length)
-					html += `<div class="front extra styles-front">` + words1[j] + `</div>`;
+					html += `<div class="front extra styles-front `+flipClasses.front+`">` + words1[j] + `</div>`;
 				else if (j >= words1.length)
 					html += `<div class="front extra" style="border:none;color:rgba(0,0,0,0);background:rgba(0,0,0,0);width=0;"></div>`;
 
 				if (j < words2.length)
-					html += `<div class="back extra hide-extras p-abs styles-back">` + words2[j] + `</div>`;
+					html += `<div class="back extra hide-extras p-abs styles-back `+flipClasses.back+`">` + words2[j] + `</div>`;
 				else if (j >= words2.length)
-					html += `<div class="back extra hide-extras p-abs" style="border:none;color:rgba(0,0,0,0);background:rgba(0,0,0,0);"></div>`;
+					html += `<div class="back extra hide-extras p-abs px-1" style="border:none;color:rgba(0,0,0,0);background:rgba(0,0,0,0);"></div>`;
 			}
 			html += `</div>`;
 			let flag = false;
