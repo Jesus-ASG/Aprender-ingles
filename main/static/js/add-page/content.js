@@ -6,7 +6,7 @@ function setFunctions(id){
 	})
 }
 
-function addDialog(){
+function addDialogue(){
   let html = 
   `
 	<div class="mb-3" id="element_`+max_elem+`" name="dialogues">

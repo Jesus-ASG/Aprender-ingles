@@ -30,8 +30,8 @@
         <img src="{{ story.cover.url }}" alt="No se pudo cargar la imagen" id="img_showed">
         {% endfor %}
       </div>
-      <!-- Dialogues -->
-      <div id="dialogues_area"></div>
+      <!-- Content -->
+      <div id="content_area"></div>
 
       <div class="row mb-3">
         <div class="col-12">
@@ -65,6 +65,7 @@
 <script>
 
   let db_subtitle = {}
+  let db_images = {};
   let db_dialogues = {};
   let db_repeat_phrases = {};
 
@@ -75,6 +76,9 @@
     db_subtitle.subtitle2 = '{{ current_page.subtitle2 }}';
   } catch (e) { }
   try {
+    db_images = JSON.parse('{{ images_json |safe }}');
+  } catch (e) { }
+  try {
     db_dialogues = JSON.parse('{{ dialogues |safe |escapejs }}');
   } catch (e) { }
   try {
@@ -83,6 +87,7 @@
 
 </script>
 <script src="{% static 'js/story_content.js' %}"></script>
+<script src="{% static 'js/sort_collections.js' %}"></script>
 
 <script>
   let total_translations = { value: 0 };
@@ -91,53 +96,48 @@
     let html_subtitle = createFlipHTML(db_subtitle.subtitle1, db_subtitle.subtitle2, total_translations, "");
     document.getElementById("subtitle").outerHTML = html_subtitle;
   }
-  /* Content */
-  /* Dialogues */
-  let html_dialogues = ``;
-  for (let dialogue of db_dialogues) {
-    let text1 = dialogue.content1.replace(/\n/g, '<span></span>|');
-    let text2 = dialogue.content2.replace(/\n/g, '<span></span>|');
 
-    html_dialogues += `<div class="row" style="color:rgba(0,0,0,0)"><br></div>
-    <div class="fw-bold fs-5 dialogue-name" style="color:`+ dialogue.color + `;">
-    <p>`+ dialogue.name + `:</p></div>`;
-
-    html_dialogues += createFlipHTML(text1, text2, total_translations, "fs-5");
-  }
-  document.getElementById("dialogues_area").outerHTML = html_dialogues;
-
-  /* Exercises */
-  list_ordered = [];
-  for (let repeat_phrase of db_repeat_phrases) {
-    repeat_phrase.type = "repeat_phrase";
-    list_ordered.push(repeat_phrase);
-  }
-  // Sort all
-  list_ordered.sort((a, b) => a.element_number - b.element_number);
-  //console.log(list_ordered);
-  let html_exercises = ``;
-  for (let exercise of list_ordered) {
-    switch (exercise.type) {
+  for (let element of collections_sorted) {
+    switch (element.type) {
+      case "image":
+        break;
+      case "dialogue":
+        renderDialogue(element, total_translations);
+        break;
       case "repeat_phrase":
-        html_exercises += repeatPhraseHTML(exercise);
+        renderRepeatPhrase(element, total_translations);
         break;
     }
   }
 
-  document.getElementById("exercises_area").outerHTML = html_exercises;
   setFunctionality(total_translations.value);
 
+  function renderDialogue(dialogue, total_translations) {
+    let html_dialogue = ``;
+    let text1 = dialogue.content1.replace(/\n/g, '<span></span>|');
+    let text2 = dialogue.content2.replace(/\n/g, '<span></span>|');
 
-  function repeatPhraseHTML(repeat_phrase) {
+    html_dialogue += `<div class="row" style="color:rgba(0,0,0,0)"><br></div>
+    <div class="fw-bold fs-5 dialogue-name" style="color:`+ dialogue.color + `;">
+    <p>`+ dialogue.name + `:</p></div>`;
+
+    html_dialogue += createFlipHTML(text1, text2, total_translations, "fs-5");
+    html_dialogue += `<div id="content_area"></div>`;
+
+    document.getElementById("content_area").outerHTML = html_dialogue;
+  }
+
+  function renderRepeatPhrase(repeat_phrase, total_translations) {
+    let html_repeat_phrase = ``;
     let text1 = repeat_phrase.content1.replace(/\n/g, '<span></span>|');
     let text2 = repeat_phrase.content2.replace(/\n/g, '<span></span>|');
 
-    let html_repeat_phrase = `<div class="row"><div class="col-12 fs-5">`;
+    html_repeat_phrase = `<div class="row"><div class="col-12 fs-5">`;
     html_repeat_phrase += createFlipHTML(text1, text2, total_translations, "");
-    html_repeat_phrase += `</div></div>`;
-    return html_repeat_phrase;
-  }
+    html_repeat_phrase += `</div></div><span id="exercises_area">`;
 
+    document.getElementById("exercises_area").outerHTML = html_repeat_phrase;
+  }
 
 </script>
 

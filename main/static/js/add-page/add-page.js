@@ -1,4 +1,3 @@
-let max_elem = 1;
 let objects_deleted = {
     "dialogues": [],
     "repeatPhrases": []

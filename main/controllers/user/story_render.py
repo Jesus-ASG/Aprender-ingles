@@ -2,6 +2,8 @@ import json
 from django.shortcuts import render, redirect
 # Renderizar información de la historia
 from django.http import HttpResponseNotFound
+from django.forms.models import model_to_dict
+
 from main.models import Story
 
 
@@ -44,6 +46,13 @@ def storyContent(request, route, page_number):
 
         dialogues = json.dumps(list(dialogues.values()))
         repeat_phrases = json.dumps(list(repeat_phrases.values()))
+
+        images_json = []
+        for image in images:
+            x = model_to_dict(image)
+            x['image'] = x['image'].url
+            images_json.append(x)
+        images_json = json.dumps(images_json)
         
         context = {
             'story': story,
@@ -52,6 +61,7 @@ def storyContent(request, route, page_number):
             'next_page': next_page,
             'current_page': current_page,
             'images': images,
+            'images_json': images_json,
             'dialogues': dialogues,
             'repeat_phrases': repeat_phrases
             }

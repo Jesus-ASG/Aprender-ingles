@@ -74,7 +74,7 @@
       </div>
       <div class="row mb-3">
         <div class="col-12 text-center">
-          <button onclick="addDialog()" class="btn btn-primary shadow-none w-50 fs-5 
+          <button onclick="addDialogue()" class="btn btn-primary shadow-none w-50 fs-5 
             fw-bold btn-add-dialog" id="add_dialog" type="button"> Agregar diálogo </button>
         </div>
       </div>
@@ -130,83 +130,71 @@
   } catch (e) { }
 
   //for (let d of db_dialogues)
-    //console.log(d);
+  //console.log(d);
   //for (let i of db_repeat_phrases)
-    //console.log(i);
+  //console.log(i);
+
+  /* For page type 1 */
+  let max_elem = 0;
 
 </script>
 
 <script src="{% static 'js/add-page/content.js' %}"></script>
 <script src="{% static 'js/add-page/exercises.js' %}"></script>
+<script src="{% static 'js/add-page/add-page.js' %}"></script>
+<script src="{% static 'js/sort_collections.js' %}"></script>
+
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    if (page_id) {
-      loadPageType1();
-    }
-  });
+  if (page_id)
+    loadPageType1();
 
   function loadPageType1() {
     // change default image
     if (db_images.length > 0)
       default_cover = db_images[0].image;
 
-    // get max elements
-    //max_elem = edit_dialogues.length + edit_repeat_phrases.length;
-    // Content
-    // Dialogues
-
-    for (let i = 0; i < db_dialogues.length; i++)
-      addDialog();
-
-    let dialogues = document.getElementsByName('dialogues');
-    for (let i = 0; i < dialogues.length; i++) {
-      dialogues[i].querySelectorAll('[name = id]')[0].value = db_dialogues[i].id;
-      //dialogues[i].querySelectorAll('[name = element_number]')[0].value = db_dialogues[i].element_number;
-      dialogues[i].querySelectorAll('[name = name]')[0].value = db_dialogues[i].name;
-      dialogues[i].querySelectorAll('[name = color]')[0].value = db_dialogues[i].color;
-      dialogues[i].querySelectorAll('[name = language1]')[0].value = db_dialogues[i].content1;
-      dialogues[i].querySelectorAll('[name = language2]')[0].value = db_dialogues[i].content2;
-
-      $(".ch-color_" + i).css({ 'color': db_dialogues[i].color });
-    }
-
-    /* Exercises */
-    list_ordered = [];
-    for (let repeat_phrase of db_repeat_phrases) {
-      repeat_phrase.type = "repeat_phrase";
-      list_ordered.push(repeat_phrase);
-    }
-
-    // Sort all
-    list_ordered.sort((a, b) => a.element_number - b.element_number);
-    let html_exercises = ``;
-    for (let exercise of list_ordered) {
-      switch (exercise.type) {
+    // Render them to the document
+    for (let element of collections_sorted) {
+      element.element_number = max_elem;
+      switch (element.type) {
+        case "image":
+          max_elem++;
+          break;
+        case "dialogue":
+          loadDialogue(element);
+          break;
         case "repeat_phrase":
-          //repeatPhrase();
-          //sdasd * /
-          //html_exercises += repeatPhraseHTML(exercise);
+          loadRepeatPhrase(element);
           break;
       }
     }
+  }
 
-    // Repeat Phrases
-    for (let i = 0; i < db_repeat_phrases.length; i++)
-      repeatPhrase();
+  function loadDialogue(dialogue) {
+    // add dialogue increases in 1 the id
+    addDialogue();
+    let html_dialogue = document.getElementById("element_" + (max_elem - 1));
 
-    let repeat_phrases = document.getElementsByName('repeatPhrases');
-    for (let i = 0; i < db_repeat_phrases.length; i++) {
-      repeat_phrases[i].querySelectorAll('[name = id]')[0].value = db_repeat_phrases[i].id;
-      //repeat_phrases[i].querySelectorAll('[name = element_number]')[0].value = db_repeat_phrases[i].element_number;
-      repeat_phrases[i].querySelectorAll('[name = language1]')[0].value = db_repeat_phrases[i].content1;
-      repeat_phrases[i].querySelectorAll('[name = language2]')[0].value = db_repeat_phrases[i].content2;
-    }
+    html_dialogue.querySelector('[name = id]').value = dialogue.id;
+    html_dialogue.querySelector('[name = name]').value = dialogue.name;
+    html_dialogue.querySelector('[name = color]').value = dialogue.color;
+    html_dialogue.querySelector('[name = language1]').value = dialogue.content1;
+    html_dialogue.querySelector('[name = language2]').value = dialogue.content2;
 
+    $(".ch-color_" + (max_elem - 1)).css({ 'color': dialogue.color });
+  }
+
+  function loadRepeatPhrase(repeat_phrase) {
+    repeatPhrase();
+    let html_repeat_phrase = document.getElementById("element_" + (max_elem - 1));
+    html_repeat_phrase.querySelector('[name = id]').value = repeat_phrase.id;
+    html_repeat_phrase.querySelector('[name = language1]').value = repeat_phrase.content1;
+    html_repeat_phrase.querySelector('[name = language2]').value = repeat_phrase.content2;
   }
 
 
 </script>
 
-<script src="{% static 'js/add-page/add-page.js' %}"></script>
+
 
 {% endblock %}

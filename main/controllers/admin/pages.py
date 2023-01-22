@@ -176,7 +176,6 @@ def update(request, route, page_type, page_id):
         repeat_phrases = json.dumps(repeat_phrases)
 
         # image different to get url image instead image
-        # only if page_type != 1
         
         images_json = []
         for image in images:
@@ -186,17 +185,20 @@ def update(request, route, page_type, page_id):
         images_json = json.dumps(images_json)
 
         context = {
-            'story': story, 'page': page, 'page_type': page_type,
-            'images': images, 'images_json': images_json, 'dialogues': dialogues, 
+            'story': story, 
+            'page': page, 
+            'page_type': page_type,
+            'images': images, 
+            'images_json': images_json, 
+            'dialogues': dialogues, 
             'repeat_phrases': repeat_phrases
         }
 
         #print('\n\n')
-        print(f'{page}\n\n{images}\n\n{images_json}\n\n{dialogues}\n\n{repeat_phrases}')
+        #print(f'{page}\n\n{images}\n\n{images_json}\n\n{dialogues}\n\n{repeat_phrases}')
         #print('\n\n')
 
     except:
-        
         return HttpResponseNotFound()
     
     if request.method == "GET":
