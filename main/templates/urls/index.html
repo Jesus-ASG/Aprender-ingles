@@ -6,83 +6,6 @@
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
 
-
-<style>
-	.story-card {
-		width: 200px;
-		height: 200px;
-		transform-origin: center;
-		margin: 20px;
-		background: rgba(0, 0, 0, 0);
-		border: none;
-	}
-
-	.story-card .story-face {
-
-		transition: 0.5s;
-	}
-
-	.story-card .story-front {
-		transform: perspective(1000px) rotateY(0deg);
-		box-shadow: 0 5px 10px #000;
-	}
-
-	.story-card .story-front img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-	}
-
-	.story-card .story-front h3 {
-		position: absolute;
-		bottom: 0;
-		width: 100%;
-		height: 45px;
-		line-height: 45px;
-		color: #fff;
-		background: rgba(0, 0, 0, 0.4);
-		text-align: center;
-	}
-
-	.story-card .story-back {
-		transform: perspective(1000px) rotateY(180deg);
-		background: rgb(0, 0, 0);
-		padding: 15px;
-		color: #f3f3f3;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		text-align: center;
-		box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-	}
-
-	.story-card .story-back .story-link {
-		border-top: 1px solid #f3f3f3;
-		height: 50px;
-		line-height: 50px;
-	}
-
-	.story-card .story-back .story-link a {
-		color: #f3f3f3;
-	}
-
-	.story-card .story-back h3 {
-		font-size: 30px;
-		margin-top: 20px;
-		letter-spacing: 2px;
-	}
-
-	.story-card .story-back p {
-		letter-spacing: 1px;
-	}
-
-	.story-card:hover .story-front {}
-
-	.story-card:hover .story-back {
-		transform: perspective(1000px) rotateY(360deg);
-	}
-</style>
 {% endblock %}
 
 {% block navbar %} {% include 'navbar/navbar-logged.html' %} {% endblock %}
@@ -97,42 +20,16 @@
 
 	<div class="row my-3 w-100">
 		{% for story in historias %}
-		<div class="col-6 col-sm-4 col-md-3 p-3 test">
-			<div class="col-12 test-1 new-card-container">
-				<a href="{% url 'story_info' story.route %}" class="new-card">
+		<div class="col-6 col-sm-4 col-md-3 p-3">
+			<div class="col-12 new-card-container text-center">
+				<a href="{% url 'story_info' story.route %}" class="">
 					<img src="{{ story.cover.url }}" alt="{{ story.cover }}">
-					<h3 class="fs-4">{{ story.title1 }}</h3>
+					<strong class="fs-6">{{ story.title1 }} </strong>
 				</a>
 			</div>
-
-
 		</div>
 		{% endfor %}
 	</div>
-
-	<div class="row my-3">
-		<!--
-		{% for historia in historias %}
-		<a class="c-card" href="{% url 'story_info' historia.route %}">
-			<div class="c-card-img-bg">
-				<div class="c-card-img">
-					<img src="{{ historia.cover.url }}" alt="{{ historia.cover }}">
-				</div>
-			</div>
-			<div class="c-card-title">
-				{{ historia.title|truncatechars:70 }}
-			</div>
-
-		</a>
-
-		{% endfor %}
-		-->
-	</div>
-
-
-
-
-
 
 </div>
 

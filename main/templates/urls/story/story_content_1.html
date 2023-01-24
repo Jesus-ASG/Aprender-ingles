@@ -45,9 +45,11 @@
     <div class="col-12">
       <div class="img-t-1">
         {% for i in images %}
-        <img src="{{ i.image.url | default:story.cover.url }}" alt="No se pudo cargar la imagen" id="img_showed">
+        <img class="box-shadow border-radius-10px" src="{{ i.image.url | default:story.cover.url }}"
+          alt="No se pudo cargar la imagen" id="img_showed">
         {% empty %}
-        <img src="{{ story.cover.url }}" alt="No se pudo cargar la imagen" id="img_showed">
+        <img class="box-shadow border-radius-10px" src="{{ story.cover.url }}" alt="No se pudo cargar la imagen"
+          id="img_showed">
         {% endfor %}
       </div>
       <!-- Content -->

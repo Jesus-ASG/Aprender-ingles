@@ -1,5 +1,10 @@
+:root {
+	--selection-color: rgb(28, 255, 251);
+	--orange: #f2864b;
+}
+
 ::selection {
-	background: rgb(28, 255, 251);
+	background: var(--selection-color);
 	color: #000;
 }
 
@@ -144,3 +149,14 @@ p {
 }
 
 /*End login*/
+
+/* Other general styles */
+
+.box-shadow {
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+		rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.border-radius-10px {
+	border-radius: 10px;
+}
