@@ -72,12 +72,7 @@ def update(request, id):
             except:
                 # does nothing because save() method already save slug
                 pass
-        #### Portada ####
-        # obtiene la portada del formulario
-        port2 = historia.get_portada()
-        # si las portadas son diferentes, entonces borra la anterior
-        if port1 != port2:
-            historia.del_portada(port1)
+
         fR.save()
         return redirect('ver_historias')
     return render(request, 'admin/historias/editar_historia.html', {'formulario': fR})

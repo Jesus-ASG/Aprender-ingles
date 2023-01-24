@@ -7,65 +7,64 @@
 
 {% block content %}
 <div class="container">
-    <div class="row mt-3">
-        <div class="card">
-            <div class="card-header">
-                <a name="" id="" class="btn btn-success" href="{% url 'agregar_historias' %}" role="button">Agregar
-                    historias</a>
-            </div>
-            <div class="card-body">
-                <h4 class="card-title">Historias</h4>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Título</th>
-                            <th>Portada</th>
-                            <th>Descripción</th>
-                            <th>Categorías</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for historia in historias %}
-                        <tr>
-                            <td>{{ historia.id }}</td>
-                            <td>{{ historia.title1 }}</td>
-                            <td style="width: 180px;">
-                                <img src="{{ historia.cover.url }}" width="100px" alt="{{ historia.cover }}">
-                            </td>
-                            <td>{{ historia.description1 | default:'Ninguna' }}</td>
-                            <td>
-                                <ul>
-                                    {% for cat in historia.tag.all %}
-                                    <li>{{ cat.name1 }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </td>
-                            <td>
-                                <a class="btn btn-warning" href="{% url 'editar_historia' historia.id %}" role="button"
-                                    title="Editar historia">
-                                    <i class="fa-solid fa-pen"></i>
-                                </a>
-                                |
-                                <a class="btn btn-info" href="{% url 'view_pages' historia.route %}" role="button"
-                                    title="Editar páginas">
-                                    <i class="fa-regular fa-file-lines"></i>
-                                </a>
-                                |
-                                <a class="btn btn-danger" href="{% url 'eliminar_historia' historia.id %}" role="button"
-                                    title="Borrar">
-                                    <i class="fa-solid fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="card-footer text-muted"></div>
-        </div>
-    </div>
+	<div class="row mt-3">
+		<div class="card">
+			<div class="card-header">
+				<a name="" id="" class="btn btn-success" href="{% url 'agregar_historias' %}" role="button">Agregar
+					historias</a>
+			</div>
+			<div class="card-body">
+				<h4 class="card-title">Historias</h4>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Título</th>
+							<th>Portada</th>
+							<th>Descripción</th>
+							<th>Categorías</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for historia in historias %}
+						<tr>
+							<td>{{ historia.id }}</td>
+							<td>{{ historia.title1 }}</td>
+							<td style="width: 180px;">
+								<img src="{{ historia.cover.url }}" width="100px" alt="{{ historia.cover }}">
+							</td>
+							<td>{{ historia.description1 | default:'Ninguna' }}</td>
+							<td>
+								<ul>
+									{% for cat in historia.tag.all %}
+									<li>{{ cat.name1 }}</li>
+									{% endfor %}
+								</ul>
+							</td>
+							<td>
+								<a class="btn btn-warning" href="{% url 'editar_historia' historia.id %}" role="button"
+									title="Editar historia">
+									<i class="fa-solid fa-pen"></i>
+								</a>
+								|
+								<a class="btn btn-info" href="{% url 'view_pages' historia.route %}" role="button"
+									title="Editar páginas">
+									<i class="fa-regular fa-file-lines"></i>
+								</a>
+								|
+								<a class="btn btn-danger" href="{% url 'eliminar_historia' historia.id %}" role="button" title="Borrar">
+									<i class="fa-solid fa-trash"></i>
+								</a>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			<div class="card-footer text-muted"></div>
+		</div>
+	</div>
 </div>
 
 

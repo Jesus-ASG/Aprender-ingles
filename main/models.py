@@ -1,6 +1,28 @@
 from django.db import models
 from django.utils.text import slugify
 
+import uuid
+from PIL import Image as pil_image
+from io import BytesIO
+from django.core.files import File
+from django.core.files.base import ContentFile
+
+def resizeImage(imageField, tupleSize):
+    im = pil_image.open(imageField)  # Catch original
+    source_image = im
+    #source_image = im.convert('RGB') # Uncomment for put solid background
+    source_image.thumbnail(tupleSize)  # Resize to size
+    output = BytesIO()
+    source_image.save(output, format='PNG') # Save resize image to bytes
+    output.seek(0)
+
+    content_file = ContentFile(output.read())  # Read output and create ContentFile in memory
+    file = File(content_file)
+
+    random_name = f'{uuid.uuid4()}.png'
+    imageField.save(random_name, file, save=False)
+
+
 prefix = ''
 
 
@@ -57,6 +79,8 @@ class Story(models.Model):
     # Override methods
     def save(self, *args, **kwargs):
         self.route = slugify(self.title1)
+        if self.cover.name != 'imagenes/portadas/book-default.png':
+            resizeImage(self.cover, (800, 800))
         super(Story, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
