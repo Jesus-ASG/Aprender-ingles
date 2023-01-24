@@ -37,7 +37,7 @@ class UsersList(generics.ListCreateAPIView):
 
 
 class Login(FormView):
-    template_name = 'urls/login.html'
+    template_name = 'no-logged/login.html'
     form_class = AuthenticationForm
     success_url = reverse_lazy('index')
 
@@ -79,10 +79,10 @@ def index(request):
         if user.auth_token is not None:
             historias = Story.objects.all()
 
-            return render(request, 'urls/index.html', {'historias': historias, 'user': user})
+            return render(request, 'no-logged/index.html', {'historias': historias, 'user': user})
     except AttributeError:
         # if a token doesn't exists return to homepage
-        return render(request, 'urls/home.html')
+        return render(request, 'no-logged/home.html')
 
 
 def myAdmin(request):
@@ -93,10 +93,10 @@ def myAdmin(request):
                 # historias = Historia.objects.all()
                 # return render(request, 'urls/index.html', {'historias': historias})
                 return redirect('ver_historias')
-            return render(request, 'urls/index.html')
+            return render(request, 'no-logged/index.html')
     except AttributeError:
         # if a token doesn't exists return mainpage
-        return render(request, 'urls/home.html')
+        return render(request, 'no-logged/home.html')
 
 
 def register(request):
@@ -122,6 +122,6 @@ def register(request):
                 return HttpResponseRedirect(reverse_lazy('index'))
 
     form = NewUserForm()
-    return render(request, 'urls/register.html', {'register_form': form})
+    return render(request, 'no-logged/register.html', {'register_form': form})
 
     

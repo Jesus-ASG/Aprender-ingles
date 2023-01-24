@@ -24,7 +24,7 @@ def storyInfo(request, route):
             }
     except:
         return HttpResponseNotFound()
-    return render(request, 'urls/story/story_info.html', context)
+    return render(request, 'user/story_info.html', context)
 
 
 def storyContent(request, route, page_number):
@@ -69,4 +69,4 @@ def storyContent(request, route, page_number):
         return HttpResponseNotFound()
 
     if request.method == "GET":
-        return render(request, 'urls/story/story_content_'+str(current_page.page_type)+'.html', context)
+        return render(request, 'user/story_render_'+str(current_page.page_type)+'.html', context)

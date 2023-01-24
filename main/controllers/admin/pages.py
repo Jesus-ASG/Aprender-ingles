@@ -17,7 +17,7 @@ def index(request, route):
         pages = story.pages.all().order_by('date_created', 'time_created').values()
     except:
         return HttpResponseNotFound()
-    return render(request, 'admin/page-components/view-pages.html', {'story':story, 'pages':pages})
+    return render(request, 'admin/view-pages.html', {'story':story, 'pages':pages})
 
 
 def create(request, route, page_type):
@@ -29,7 +29,7 @@ def create(request, route, page_type):
         return HttpResponseNotFound()
 
     if request.method == "GET":
-        return render(request, 'admin/page-components/options/'+str(page_type)+'.html', 
+        return render(request, 'admin/create_page_'+str(page_type)+'.html', 
         {'story': story, 'page_type': page_type})
 
     if request.method == "POST":
@@ -131,7 +131,6 @@ def create(request, route, page_type):
                 RepeatPhrase.objects.get(id=int(d)).delete()
             except:
                 pass
-
         
         # Save all
         pgObj.save()
@@ -202,7 +201,7 @@ def update(request, route, page_type, page_id):
         return HttpResponseNotFound()
     
     if request.method == "GET":
-        return render(request, 'admin/page-components/options/'+str(page_type)+'.html', context)
+        return render(request, 'admin/create_page_'+str(page_type)+'.html', context)
 
 
 def delete(request, id):
