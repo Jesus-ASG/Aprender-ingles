@@ -4,101 +4,131 @@
 {% block title %} {{ story.title }} {% endblock %}
 
 {% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/info_cont_hist.css' %}" type="text/css">
+
+
+<style>
+	.info-img {
+		position: relative;
+		max-width: 90%;
+		max-height: 300px;
+		object-fit: contain;
+		border-radius: 10px;
+		box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+			rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+
+	}
+
+	.btn-start-story {
+		color: #fff;
+		background-color: var(--green-ligth);
+		border-radius: 20px;
+		transition: all 0.2s ease-in-out;
+	}
+
+	.btn-start-story:hover {
+		color: #fff;
+		background-color: var(--green-ligth-active);
+	}
+</style>
+
 {% endblock %}
 
 {% block navbar %} {% include 'navbar/navbar-logged.html' %} {% endblock %}
 
 {% block content %}
+
 <div class="container main-content">
-    <div class="row mt-3">
-        Heres will be rendered the page's info
-    </div>
+
+	<div class="row">
+		<div class="col-2 text-center fs-1">
+			<a href="{% url 'index' %}"><i class='fa fa-arrow-circle-left'></i></a>
+		</div>
+	</div>
+
+	<div class="row mt-3">
+		<div class="col-12 text-center">
+			<h1 class="fs-2 fw-bold">{{ story.title1 }}</h1>
+		</div>
+	</div>
+
+	<div class="row mt-3">
+		<div class="col-12 col-md-6 text-center mt-3">
+			<img class="info-img p-1" src="{{ story.cover.url }}" alt="{{ story.cover }}">
+		</div>
+
+		<div class="col-12 col-md-6 mt-3">
+			{% if story.tag.all %}
+			<div class="row mt-3">
+				<div class="col-12 text-center">
+					<strong class="fs-5">Tags</strong> <br>
+					<div class="container-categorias">
+						{% for cat in story.tag.all %}
+						<div class="categoria">
+							{{ cat.name1 }}
+						</div>
+						{% empty %}
+						<div class="categoria">
+							Without category
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			{% endif %}
+			{% if story.description1 %}
+			<div class="row mt-3">
+				<strong class="fs-5 text-center">Description</strong> <br>
+				<div class="col-12 text-center">
+					<p class="fs-6"> {{ story.description1 | default:"No hay una descripción disponible" }}</p>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+
+	<hr>
+	<div class="row my-3">
+		<div class="col-12 text-center">
+			{% if has_pages %}
+			<a href="{% url 'story_content' route=story.route page_number=page_number %}"
+				class="btn btn-start-story fs-5 fw-bold">Empezar</a>
+			{% else %}
+			<button class="btn btn-start-story fs-5 fw-bold" disabled>Próximamente</button>
+			{% endif %}
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-12 col-md-6 text-center">
+			<div class="letra d-inline-block">
+				<div class="marco-calificacion">
+					<div class="calificacion">
+						<h3>S+</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-6">
+			<div class="estadisticas text-center text-sm-start">
+				<h3 class="fs-2">Puntuación más alta</h3>
+				<!--for rubro in historia.id_rubro.all-->
+				<div class="rubro">
+					<label for="progress-escritura">Escritura</label> <br>
+					<progress id="progress-escritura" max="100" value="85">Escritura</progress> <br>
+
+					<label for="progress-lectura">Lectura</label> <br>
+					<progress id="progress-lectura" max="100" value="65">Escritura</progress> <br>
+
+					<label for="progress-pronunciacion">Pronunciacion</label> <br>
+					<progress id="progress-pronunciacion" max="100" value="80">Pronunciacion</progress> <br>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<div class="main-history-container mt-3">
-    <div class="btn-regresar">
-        <a href="{% url 'index' %}">
-            <i class="fa fa-arrow-left fa-3x" aria-hidden="true"></i>
-            <label>Regresar</label>
-        </a>
-    </div>
+<br><br><br><br><br>
 
-    <section class="seccion-1">
-        <div class="info-container-img">
-            <img src="{{ story.cover.url }}" alt="{{ story.cover }}">
-        </div>
-        <div class="info-container-info">
-            <div class="titulo">
-                <h1>{{ story.title1 }}</h1>
-            </div>
-            <div class="descripcion">
-                <h2>{{ story.description1 | default:'' }}</h2>
-            </div>
-        </div>
-
-    </section>
-    <hr>
-    <section class="seccion-2">
-        <div class="container-categorias">
-            {% for cat in story.tag.all %}
-            <div class="categoria">
-                {{ cat.name1 }}
-            </div>
-            {% endfor %}
-        </div>
-        <div class="container-empezar">
-            {% if has_pages %}
-            <a href="{% url 'story_content' route=story.route page_number=page_number %}"
-                class="btn-empezar">Empezar</a>
-            {% else %}
-            <a href="#" class="btn-empezar">Próximamente</a>
-            {% endif %}
-        </div>
-    </section>
-    <hr>
-    <section>
-        <div class="group-calificacion">
-            <div class="letra">
-                <div class="marco-calificacion">
-                    <div class="calificacion">
-                        <h3>S+</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="estadisticas">
-                <h3>Puntuación más alta</h3>
-                <!--for rubro in historia.id_rubro.all-->
-                <div class="rubro">
-                    <!--
-                    <div class="progress mt-3">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 85%;"
-                            aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">Escritura</div>
-                    </div>
-                    <div class="progress mt-3">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 65%;"
-                            aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">Lectura</div>
-                    </div>
-                    <div class="progress mt-3">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%;"
-                            aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">Pronunciación</div>
-                    </div>
-                    -->
-                    <label for="progress-escritura">Escritura</label> <br>
-                    <progress id="progress-escritura" max="100" value="85">Escritura</progress> <br>
-
-                    <label for="progress-lectura">Lectura</label> <br>
-                    <progress id="progress-lectura" max="100" value="65">Escritura</progress> <br>
-
-                    <label for="progress-pronunciacion">Pronunciacion</label> <br>
-                    <progress id="progress-pronunciacion" max="100" value="80">Pronunciacion</progress> <br>
-                </div>
-            </div>
-
-
-
-        </div>
-
-    </section>
-</div>
 
 {% endblock %}

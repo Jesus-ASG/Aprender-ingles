@@ -3,6 +3,10 @@
 
 {% block title %} {{ story.title }} {% endblock %}
 
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/select_page.css' %}" type="text/css">
+{% endblock %}
+
 {% block navbar %} {% include 'navbar/navbar-logged.html' %} {% endblock %}
 
 {% block content %}

@@ -1,6 +1,8 @@
 :root {
 	--selection-color: rgb(28, 255, 251);
 	--orange: #f2864b;
+	--green-ligth: #49eb4b;
+	--green-ligth-active: #3dd33f;
 }
 
 ::selection {
@@ -20,6 +22,8 @@ h3,
 h4,
 h5 {
 	font-weight: bold;
+	margin: 0;
+	padding: 0;
 }
 
 body {
@@ -159,4 +163,10 @@ p {
 
 .border-radius-10px {
 	border-radius: 10px;
+}
+
+.btn-back {
+}
+
+.btn-next {
 }

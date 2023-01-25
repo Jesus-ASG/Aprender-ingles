@@ -1,8 +1,11 @@
 {% extends 'main_template.html' %}
 {% load static %}
 
-
 {% block title %} Aplicación X {% endblock %}
+
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}" type="text/css">
+{% endblock %}
 
 {% block navbar %} {% include 'navbar/navbar-guest.html' %} {% endblock %}
 
