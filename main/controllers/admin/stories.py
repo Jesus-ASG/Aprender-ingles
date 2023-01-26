@@ -1,9 +1,16 @@
 # Historias
 import re
+
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
+
 from main.forms import HistoriaForm, PageForm
 from main.models import Story
+
+
+def is_superuser(user):
+    return user.is_superuser
 
 
 class RespAlert:
@@ -20,11 +27,15 @@ class RespAlert:
         self.message = message
 
 
+@login_required(login_url='/login/')
+@user_passes_test(is_superuser, login_url='/login/')
 def index(request):
     historias = Story.objects.all()
     return render(request, 'admin/historias/ver_historias.html', {'historias': historias})
 
 
+@login_required(login_url='/login/')
+@user_passes_test(is_superuser, login_url='/login/')
 def create(request):
     historiaFR = HistoriaForm(request.POST or None, request.FILES or None)
     paginaFR = PageForm(request.POST or None)
@@ -50,6 +61,9 @@ def create(request):
     historiaFO = historiaFR.save()
     return redirect('view_pages', route=historiaFO.route)
 
+
+@login_required(login_url='/login/')
+@user_passes_test(is_superuser, login_url='/login/')
 def update(request, id):
     historia = Story.objects.get(id=id)
     # obtiene portada y ruta del objeto
@@ -78,6 +92,8 @@ def update(request, id):
     return render(request, 'admin/historias/editar_historia.html', {'formulario': fR})
 
 
+@login_required(login_url='/login/')
+@user_passes_test(is_superuser, login_url='/login/')
 def delete(request, id):
     #if request.method == "POST":
     try:

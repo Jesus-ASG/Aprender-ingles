@@ -9,7 +9,7 @@ from django.contrib.staticfiles.urls import static
 
 urlpatterns = [
     path('', v.index, name='index'),
-    path('myadmin/', v.myAdmin, name='index_admin'),
+    #path('myadmin/', v.myAdmin, name='index_admin'),
 
     # Todas las historias y sus funciones
     path('myadmin/ver-historias', stories.index, name = 'ver_historias'),

@@ -78,24 +78,10 @@ def index(request):
         user = request.user
         if user.auth_token is not None:
             historias = Story.objects.all()
-
+            print('rendering no-logged/index.html')
             return render(request, 'no-logged/index.html', {'historias': historias, 'user': user})
     except AttributeError:
         # if a token doesn't exists return to homepage
-        return render(request, 'no-logged/home.html')
-
-
-def myAdmin(request):
-    try:
-        # if a token exists return data
-        if request.user.auth_token is not None:
-            if request.user.is_superuser:
-                # historias = Historia.objects.all()
-                # return render(request, 'urls/index.html', {'historias': historias})
-                return redirect('ver_historias')
-            return render(request, 'no-logged/index.html')
-    except AttributeError:
-        # if a token doesn't exists return mainpage
         return render(request, 'no-logged/home.html')
 
 

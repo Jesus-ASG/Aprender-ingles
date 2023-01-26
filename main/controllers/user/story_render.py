@@ -1,12 +1,14 @@
 import json
-from django.shortcuts import render, redirect
-# Renderizar información de la historia
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from django.http import HttpResponseNotFound
 from django.forms.models import model_to_dict
 
 from main.models import Story
 
 
+@login_required(login_url='/login/')
 def storyInfo(request, route):
     try:
         story = Story.objects.get(route=route)
@@ -27,6 +29,7 @@ def storyInfo(request, route):
     return render(request, 'user/story_info.html', context)
 
 
+@login_required(login_url='/login/')
 def storyContent(request, route, page_number):
     try:
         story = Story.objects.get(route=route)

@@ -1,16 +1,23 @@
+import json
 
-from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
+from django.forms.models import model_to_dict
+
 from main.models import Story, Page, Image, Dialogue, RepeatPhrase
 from main.forms import DialogueForm, ImageForm, PageForm, RepeatPhraseForm
 
-from django.core import serializers
-from django.forms.models import model_to_dict
-
-import json
 
 MAX_PAGE_TYPES = 1
 
+
+def is_superuser(user):
+    return user.is_superuser
+
+
+@login_required(login_url='/login/')
+@user_passes_test(is_superuser, login_url='/login/')
 def index(request, route):
     try:
         story = Story.objects.get(route=route)
@@ -20,6 +27,8 @@ def index(request, route):
     return render(request, 'admin/view-pages.html', {'story':story, 'pages':pages})
 
 
+@login_required(login_url='/login/')
+@user_passes_test(is_superuser, login_url='/login/')
 def create(request, route, page_type):
     if not 0 < page_type <= MAX_PAGE_TYPES:
         return HttpResponseNotFound()
@@ -151,6 +160,8 @@ def create(request, route, page_type):
         return JsonResponse({'message': 'success'})
         
 
+@login_required(login_url='/login/')
+@user_passes_test(is_superuser, login_url='/login/')
 def update(request, route, page_type, page_id):
     if not 0 < page_type <= MAX_PAGE_TYPES:
         return HttpResponseNotFound()
@@ -204,6 +215,8 @@ def update(request, route, page_type, page_id):
         return render(request, 'admin/create_page_'+str(page_type)+'.html', context)
 
 
+@login_required(login_url='/login/')
+@user_passes_test(is_superuser, login_url='/login/')
 def delete(request, id):
     if request.method == "POST":
         try:
