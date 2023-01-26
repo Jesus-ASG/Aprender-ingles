@@ -43,10 +43,10 @@
     <div class="col-12">
       <div class="img-t-1">
         {% for i in images %}
-        <img class="box-shadow border-radius-10px" src="{{ i.image.url | default:story.cover.url }}"
+        <img class="box-shadow border-radius-10px p-1" src="{{ i.image.url | default:story.cover.url }}"
           alt="No se pudo cargar la imagen" id="img_showed">
         {% empty %}
-        <img class="box-shadow border-radius-10px" src="{{ story.cover.url }}" alt="No se pudo cargar la imagen"
+        <img class="box-shadow border-radius-10px p-1" src="{{ story.cover.url }}" alt="No se pudo cargar la imagen"
           id="img_showed">
         {% endfor %}
       </div>
@@ -80,6 +80,9 @@
 
 {% block page-scripts %}
 <script>
+
+  let db_page_id = '{{ current_page.id }}';
+
 
   let db_subtitle = {}
   let db_images = {};
@@ -157,41 +160,60 @@
 
   function renderRepeatPhrase(repeat_phrase, total_translations) {
     let html_repeat_phrase = ``;
+    let text_clean = repeat_phrase.content1.replace(/[|]/g, ' ');
     let text1 = repeat_phrase.content1.replace(/\n/g, '<span></span>|');
     let text2 = repeat_phrase.content2.replace(/\n/g, '<span></span>|');
-
     let flipClasses = {
       "paper": "mx-1",
       "front": "px-1",
       "back": "px-1"
     };
     html_repeat_phrase = `
-    <div class="row mb-3 fs-5">
+    <div class="row mb-3 fs-5" id="repeat_phrase_`+ repeat_phrase.id + `" text_answer = "` + text_clean + `">
       <div class="col-12 col-md-8">
         `+ createFlipHTML(text1, text2, total_translations, flipClasses) + `
-      </div>
-    <div class="col-12 col-md-4 my-1">
-      <div class="row">
-        <div class="col-6 text-center">
-          Listen
-          <div class="row">
-            <i class='fas fa-volume-up'></i>
-          </div>
-        </div>
-        <div class="col-6 text-center">
-          Repeat
-          <div class="row">
-            <i class='fas fa-microphone'></i>
+        <div class="row">
+          <div class="col-12">
+            <p class="fs-5 text-muted" name="answer">Repeat: "`+ text_clean + `"</p>
           </div>
         </div>
       </div>
-    </div>
-    <hr>
+      <div class="col-12 col-md-4 my-1">
+        <div class="row">
+          <div class="col-6 text-center">
+            Listen
+            <div class="row">
+              <div class="col-12 text-center">
+                <button class="btn shadow-none tool-icon sound_icon" 
+                onclick="readText('repeat_phrase_` + repeat_phrase.id + `')"
+                name="sound_btn" title="Play audio">
+                  <i class='fas fa-volume-up'></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 text-center">
+            Repeat
+            <div class="row">
+              <div class="col-12 text-center">
+                <button class="btn shadow-none tool-icon mic-icon" 
+                onclick="readVoice('repeat_phrase_`+ repeat_phrase.id + `')"
+                name="mic_btn" title="Start to talk!">
+                  <i class='fa-solid fa-microphone-slash'></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
     </div><span id="exercises_area">`;
 
     document.getElementById("exercises_area").outerHTML = html_repeat_phrase;
   }
 
 </script>
+
+<script src="{% static 'js/user/answer_exercises.js' %}"></script>
 
 {% endblock %}

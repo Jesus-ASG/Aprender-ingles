@@ -1,8 +1,8 @@
 :root {
 	--selection-color: rgb(28, 255, 251);
 	--orange: #f2864b;
-	--green-ligth: #49eb4b;
-	--green-ligth-active: #3dd33f;
+	--green-light: #49eb4b;
+	--green-light-active: #3dd33f;
 }
 
 ::selection {
@@ -163,6 +163,16 @@ p {
 
 .border-radius-10px {
 	border-radius: 10px;
+}
+
+.tool-icon {
+	width: 50px;
+	height: 50px;
+	border-radius: 100%;
+	padding: 10px;
+	align-items: center;
+	text-align: center;
+	border: 1px solid #000;
 }
 
 .btn-back {

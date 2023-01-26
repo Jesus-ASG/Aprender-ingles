@@ -21,14 +21,14 @@
 
 	.btn-start-story {
 		color: #fff;
-		background-color: var(--green-ligth);
+		background-color: var(--green-light);
 		border-radius: 20px;
 		transition: all 0.2s ease-in-out;
 	}
 
 	.btn-start-story:hover {
 		color: #fff;
-		background-color: var(--green-ligth-active);
+		background-color: var(--green-light-active);
 	}
 </style>
 
@@ -62,7 +62,7 @@
 			<div class="row mt-3">
 				<div class="col-12 text-center">
 					<strong class="fs-5">Tags</strong> <br>
-					<div class="container-categorias">
+					<div class="container-categorias text-center">
 						{% for cat in story.tag.all %}
 						<div class="categoria">
 							{{ cat.name1 }}
