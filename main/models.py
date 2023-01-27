@@ -1,11 +1,14 @@
+import uuid
+
 from django.db import models
 from django.utils.text import slugify
-
-import uuid
 from PIL import Image as pil_image
 from io import BytesIO
 from django.core.files import File
 from django.core.files.base import ContentFile
+
+from django.contrib.auth.models import User
+
 
 def resizeImage(imageField, tupleSize):
     im = pil_image.open(imageField)  # Catch original
@@ -24,15 +27,6 @@ def resizeImage(imageField, tupleSize):
 
 
 prefix = ''
-
-
-class User(models.Model):
-    id = models.AutoField(primary_key=True)
-    username = models.CharField('username', max_length=50)
-    password = models.CharField('password', max_length=150)
-
-    def __str__(self) -> str:
-        return f'id: {self.id}\nusername: {self.username}\npassword: {self.password}'
 
 
 # Categoría
@@ -96,6 +90,13 @@ class Story(models.Model):
     def __str__(self):
         return f'id: {self.id} | titulo: {self.title1[:5]}...'
 # -------- -------- -------- --------
+
+
+class UserProfile(models.Model):
+    class Meta:
+        db_table = prefix + 'user_profile'
+    # link one to one to the django user
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
 
 # Page
