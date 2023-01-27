@@ -88,16 +88,26 @@ class Story(models.Model):
         super(Story, self).delete(*args, **kwargs)
 
     def __str__(self):
-        return f'id: {self.id} | titulo: {self.title1[:5]}...'
+        return f'title: {self.title1}'
 # -------- -------- -------- --------
-
 
 class UserProfile(models.Model):
     class Meta:
         db_table = prefix + 'user_profile'
     # link one to one to the django user
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    completed_stories = models.ManyToManyField(Story, through='CompletedStory', related_name='completed_by')
 
+    def __str__(self) -> str:
+        return f'username: {self.user.username}'
+
+class CompletedStory(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    story = models.ForeignKey(Story, on_delete=models.CASCADE)
+    points = models.IntegerField(default=0)
+
+    def __str__(self) -> str:
+        return f'user: {self.user.user.username}, story: {self.story.title1}, points: {self.points}'
 
 # Page
 class Page(models.Model):

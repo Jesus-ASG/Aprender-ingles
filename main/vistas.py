@@ -78,8 +78,13 @@ def index(request):
         user = request.user
         if user.auth_token is not None:
             historias = Story.objects.all()
-            print('rendering no-logged/index.html')
-            return render(request, 'no-logged/index.html', {'historias': historias, 'user': user})
+            #profile = user.profile
+            
+            #completed_stories = profile.completed_stories.through.objects.all()
+            
+            #for completed in completed_stories:
+            #    print(f'\n{completed}\n')
+            return render(request, 'user/index.html', {'historias': historias, 'user': user})
     except AttributeError:
         # if a token doesn't exists return to homepage
         return render(request, 'no-logged/home.html')
