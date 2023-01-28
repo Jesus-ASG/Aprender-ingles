@@ -5,13 +5,33 @@ from django.shortcuts import render
 from django.http import HttpResponseNotFound
 from django.forms.models import model_to_dict
 
-from main.models import Story
+from main.models import Story, CompletedStory
+
+def get_or_None(object, **kwargs):
+    try:
+        return object.get(**kwargs)
+    except:
+        return None
 
 
 @login_required(login_url='/login/')
 def storyInfo(request, route):
+    
     try:
+        user_profile = request.user.profile
+        
         story = Story.objects.get(route=route)
+        print(f'Currently in {story}')
+
+        # getting all fields 
+        #all_stories_completed = CompletedStory.objects.filter(user=user_profile)
+        #print(f'\nAll stories that {user_profile} has completed \n {all_stories_completed}\n')
+
+        #users_who_completed = CompletedStory.objects.filter(story=story)
+        #print(f'\nAll users who completed {story}\n {users_who_completed}\n')
+
+        scores = CompletedStory.objects.filter(user=user_profile, story=story).order_by('-score').values('score')
+
         pages = story.pages.all().order_by('date_created', 'time_created').values()
         next_page = None
         page_number = 0
@@ -22,7 +42,8 @@ def storyInfo(request, route):
             'story': story, 
             'page_number': page_number,
             'has_pages': has_pages, 
-            'next_page': next_page
+            'next_page': next_page,
+            'scores': scores,
             }
     except:
         return HttpResponseNotFound()
@@ -73,3 +94,9 @@ def storyContent(request, route, page_number):
 
     if request.method == "GET":
         return render(request, 'user/story_render_'+str(current_page.page_type)+'.html', context)
+
+    if request.method == 'POST':
+        return render(request, 'user/story_render_'+str(current_page.page_type)+'.html', context)
+
+def answerPage(request):
+    pass

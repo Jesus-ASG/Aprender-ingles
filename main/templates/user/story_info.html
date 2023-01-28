@@ -99,7 +99,10 @@
 		</div>
 	</div>
 	<hr>
-	<div class="row">
+	<div class="row my-3">
+		<div class="col-12 mb-3 text-center">
+			<h3 class="fs-2">Puntuación más alta: {{ score }}</h3>
+		</div>
 		<div class="col-12 col-md-6 text-center">
 			<div class="letra d-inline-block">
 				<div class="marco-calificacion">
@@ -111,7 +114,7 @@
 		</div>
 		<div class="col-12 col-md-6">
 			<div class="estadisticas text-center text-sm-start">
-				<h3 class="fs-2">Puntuación más alta</h3>
+
 				<!--for rubro in historia.id_rubro.all-->
 				<div class="rubro">
 					<label for="progress-escritura">Escritura</label> <br>
@@ -124,6 +127,34 @@
 					<progress id="progress-pronunciacion" max="100" value="80">Pronunciacion</progress> <br>
 				</div>
 			</div>
+		</div>
+	</div>
+	<div class="row my-3">
+		<div class="col-12 mt-3 text-center">
+			<h3 class="fs-2">Historial</h3>
+		</div>
+		<div class="col-12 fs-3 text-center">
+			{% if not scores %}
+			<h3 class="">Aún no hay registros</h3>
+			{% else %}
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col" class="fs-4">Lugar</th>
+						<th scope="col" class="fs-4">Puntaje</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for score in scores %}
+					<tr>
+						<th scope="row" class="fs-5"># {{ forloop.counter }}</th>
+						<td class="fs-5">{{ score.score }}</td>
+					</tr>
+
+					{% endfor %}
+				</tbody>
+			</table>
+			{% endif %}
 		</div>
 	</div>
 </div>
