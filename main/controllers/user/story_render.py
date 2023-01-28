@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponseNotFound
 from django.forms.models import model_to_dict
 
-from main.models import Story, CompletedStory
+from main.models import Story, Scores
 
 def get_or_None(object, **kwargs):
     try:
@@ -28,9 +28,13 @@ def storyInfo(request, route):
         #print(f'\nAll stories that {user_profile} has completed \n {all_stories_completed}\n')
 
         #users_who_completed = CompletedStory.objects.filter(story=story)
+        #users_who_completed = story.completed_by.all()
         #print(f'\nAll users who completed {story}\n {users_who_completed}\n')
 
-        scores = CompletedStory.objects.filter(user=user_profile, story=story).order_by('-score').values('score')
+        scores = Scores.objects.filter(user_profile=user_profile, story=story).order_by('-score').values('score', 'date')
+        high_score = None
+        if scores:
+            high_score = scores[0]
 
         pages = story.pages.all().order_by('date_created', 'time_created').values()
         next_page = None
@@ -44,6 +48,7 @@ def storyInfo(request, route):
             'has_pages': has_pages, 
             'next_page': next_page,
             'scores': scores,
+            'high_score': high_score,
             }
     except:
         return HttpResponseNotFound()

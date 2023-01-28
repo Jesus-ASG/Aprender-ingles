@@ -91,6 +91,7 @@ class Story(models.Model):
         return f'title: {self.title1}'
 # -------- -------- -------- --------
 
+
 class UserProfile(models.Model):
     class Meta:
         db_table = prefix + 'user_profile'
@@ -98,18 +99,26 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     
     # extra fields
-    completed_stories = models.ManyToManyField(Story, through='CompletedStory', related_name='completed_by')
+    stories_scores = models.ManyToManyField(Story, through='Scores', related_name='users_scored')
+    
 
     def __str__(self) -> str:
         return f'username: {self.user.username}'
 
-class CompletedStory(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+
+class Scores(models.Model):
+    class Meta:
+        db_table = prefix + 'scores'
+    # keys
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
+    # fields
     score = models.IntegerField(default=0)
+    date = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self) -> str:
-        return f'username: {self.user.user.username}, story: {self.story.title1}, score: {self.score}'
+        return f'username: {self.user_profile.user.username}, story: {self.story.title1}, score: {self.score}'
+
 
 # Page
 class Page(models.Model):

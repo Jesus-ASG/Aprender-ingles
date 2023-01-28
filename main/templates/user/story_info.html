@@ -101,7 +101,7 @@
 	<hr>
 	<div class="row my-3">
 		<div class="col-12 mb-3 text-center">
-			<h3 class="fs-2">Puntuación más alta: {{ score }}</h3>
+			<h3 class="fs-2">Puntuación más alta: {{ high_score.score |default:0 }}</h3>
 		</div>
 		<div class="col-12 col-md-6 text-center">
 			<div class="letra d-inline-block">
@@ -131,7 +131,7 @@
 	</div>
 	<div class="row my-3">
 		<div class="col-12 mt-3 text-center">
-			<h3 class="fs-2">Historial</h3>
+			<h3 class="fs-2">Puntuaciones</h3>
 		</div>
 		<div class="col-12 fs-3 text-center">
 			{% if not scores %}
@@ -142,13 +142,15 @@
 					<tr>
 						<th scope="col" class="fs-4">Lugar</th>
 						<th scope="col" class="fs-4">Puntaje</th>
+						<th scope="col" class="fs-4">Fecha</th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for score in scores %}
 					<tr>
-						<th scope="row" class="fs-5"># {{ forloop.counter }}</th>
-						<td class="fs-5">{{ score.score }}</td>
+						<th scope="row" class="fs-6"># {{ forloop.counter }}</th>
+						<td class="fs-6">{{ score.score }}</td>
+						<td class="fs-6">{{ score.date|date:"j/n/Y" }} {{ score.date|time:"g:i a" }}</td>
 					</tr>
 
 					{% endfor %}
@@ -157,6 +159,7 @@
 			{% endif %}
 		</div>
 	</div>
+	<div class="row my-3"></div>
 </div>
 
 <br><br><br><br><br>
