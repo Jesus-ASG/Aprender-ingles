@@ -84,16 +84,14 @@ def storyInfo(request, route):
 
 
         pages = story.pages.all().order_by('date_created', 'time_created').values()
-        next_page = None
-        page_number = 0
-        has_pages = True if len(pages) > 0 else False
-        if (has_pages):
-            next_page = pages[0]
+        total_pages = len(pages)
+
+        page_number = 1
+        
         context = {
             'story': story, 
             'page_number': page_number,
-            'has_pages': has_pages, 
-            'next_page': next_page,
+            'total_pages': total_pages, 
             'scores': scores,
             'high_score': high_score,
             }
@@ -105,15 +103,19 @@ def storyInfo(request, route):
 @login_required(login_url='/login/')
 def storyContent(request, route, page_number):
     try:
+        page_index = page_number - 1
+
         story = Story.objects.get(route=route)
         pages = story.pages.all().order_by('date_created', 'time_created')
+        total_pages = len(pages)
+
         prev_page = None
         next_page = None
-        current_page = pages[page_number]
-
-        if page_number >= 1:
+        current_page = pages[page_index]
+        
+        if page_index >= 1:
             prev_page = page_number - 1 
-        if page_number < len(pages) - 1:
+        if page_index < len(pages) - 1:
             next_page = page_number + 1
         
         images = current_page.images.all()
@@ -133,6 +135,7 @@ def storyContent(request, route, page_number):
         context = {
             'story': story,
             'page_number': page_number,
+            'total_pages': total_pages,
             'prev_page': prev_page,
             'next_page': next_page,
             'current_page': current_page,

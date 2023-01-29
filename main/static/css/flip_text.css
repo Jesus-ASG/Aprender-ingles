@@ -1,0 +1,52 @@
+.paper {
+	display: inline-block;
+	position: inherit;
+	perspective: 1000px;
+	transform-origin: center;
+	width: auto;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.paper:hover {
+	cursor: pointer;
+}
+
+.color-hover {
+	background-color: rgb(253, 253, 164);
+}
+
+.front,
+.back {
+	width: auto;
+	backface-visibility: hidden;
+	overflow: hidden;
+	white-space: nowrap;
+	transition: transform 0.5s ease-in-out;
+}
+
+.front {
+	transform: rotateY(0deg);
+}
+
+.back {
+	top: 0;
+	transform: rotateY(180deg);
+}
+
+.flip .front {
+	transform: rotateY(180deg);
+}
+
+.flip .back {
+	transform: rotateY(360deg);
+}
+
+.p-abs {
+	position: absolute;
+}
+
+.hide-extras {
+	background: rgba(0, 0, 0, 0) !important;
+	border: none !important;
+	color: rgba(0, 0, 0, 0) !important;
+}

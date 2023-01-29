@@ -4,6 +4,12 @@
 	--light-green: #49eb4b;
 	--light-green-active: #3dd33f;
 	--light-blue: #77b9fc;
+
+	--f-orange: #ff5f13;
+	--f-orange-active: #ff5100;
+
+	--f-light-green: #49eb4b;
+	--f-light-green-active: #3dd33f;
 }
 
 ::selection {
@@ -11,7 +17,6 @@
 	color: #000;
 }
 
-/*Main template 'Muli' */
 body {
 	font-weight: normal;
 	font-style: normal;
@@ -152,20 +157,15 @@ p {
 	font-weight: bold;
 	color: red;
 }
-
 /*End login*/
 
 /* Other general styles */
-
 .box-shadow {
 	box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
 		rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
-
-.border-radius-10px {
-	border-radius: 10px;
-}
-
+/* Buttons */
+/* Use bootstrap btn class together this classes */
 .tool-icon {
 	width: 50px;
 	height: 50px;
@@ -176,8 +176,24 @@ p {
 	border: 1px solid #000;
 }
 
-.btn-back {
+.btnr-f-light-green {
+	color: #fff;
+	background-color: var(--f-light-green);
+	border-radius: 30px;
+	transition: all 0.2s ease-in-out;
+}
+.btnr-f-light-green:hover {
+	color: #fff;
+	background-color: var(--f-light-green-active);
 }
 
-.btn-next {
+.btnr-f-orange {
+	color: #fff;
+	background-color: var(--f-orange);
+	border-radius: 30px;
+	transition: all 0.2s ease-in-out;
+}
+.btnr-f-orange:hover {
+	color: #fff;
+	background-color: var(--f-orange-active);
 }

@@ -25,6 +25,7 @@
         rel="stylesheet">
     <!--Estilos propios-->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/flip_text.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/not_found.css' %}" type="text/css">
 
     <!-- Page styles-->
@@ -36,7 +37,6 @@
     {% block navbar %} {% endblock %}
 
     {% block content %} {% endblock %}
-
 
     <!-- FOOTER -->
     <footer class="bg-dark text-center text-white footer-position">
@@ -61,6 +61,7 @@
 
     <!--Propios-->
     <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'js/flip_text.js' %}"></script>
 
     <!-- Page scripts-->
     {% block page-scripts %} {% endblock %}

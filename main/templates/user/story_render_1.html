@@ -6,7 +6,6 @@
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/1.css' %}">
 <link rel="stylesheet" href="{% static 'css/story_content.css' %}">
-
 {% endblock %}
 
 {% block navbar %} {% include 'navbar/navbar-logged.html' %} {% endblock %}
@@ -14,6 +13,11 @@
 {% block content %}
 
 <!-- Template 1 -->
+<div class="container main-content">
+  <div class="row mt-3">
+    <div class="col-12 text-center text-muted fs-4">{{ page_number }}/{{ total_pages }}</div>
+  </div>
+</div>
 <div class="container main-content">
   <div class="row mt-3">
     <div class="col-2 text-center fs-1">
@@ -30,9 +34,7 @@
       </h1>
     </div>
     <div class="col-2 text-center fs-1">
-      {% if next_page is None %}
-      <a href="{% url 'story_info' route=story.route %}"><i class='fa fa-arrow-circle-right'></i></a>
-      {% else %}
+      {% if next_page is not None %}
       <a href="{% url 'story_content' route=story.route page_number=next_page %}"><i
           class='fa fa-arrow-circle-right'></i></a>
       {% endif %}
@@ -56,24 +58,27 @@
     </div>
   </div>
 
-  <div class="row mb-3">
+  <div class="row mt-3">
     <div class="col-12">
-      <h2 class="fs-2 text-center my-3">Resuelve</h2>
+      <h2 class="fs-2 text-center mt-3">Resuelve</h2>
     </div>
     <div class="col-12"><span id="exercises_area"></span></div>
   </div>
 
 
-
-  <!-- Change page -->
-  <div class="row mt-3">
-    <div class="col-6">
-
-    </div>
-    <div class="col-6">
-
+  {% if next_page is None %}
+  <div class="row">
+    <div class="col-12 mb-3 text-center">
+      <!-- 
+      <a href="{% url 'story_info' route=story.route %}"><i class='fa fa-arrow-circle-right'></i></a>
+      -->
+      <button type="button" class="btn btnr-f-orange fw-bold fs-5">
+        Send answers / Enviar respuestas
+      </button>
+      <br>
     </div>
   </div>
+  {% endif %}
 </div>
 
 {% endblock %}
@@ -81,8 +86,8 @@
 {% block page-scripts %}
 <script>
 
+  let db_story_id = '{{ story.id }}'
   let db_page_id = '{{ current_page.id }}';
-
 
   let db_subtitle = {}
   let db_images = {};
@@ -106,7 +111,6 @@
   } catch (e) { }
 
 </script>
-<script src="{% static 'js/story_content.js' %}"></script>
 <script src="{% static 'js/sort_collections.js' %}"></script>
 
 <script>
@@ -169,7 +173,7 @@
       "back": "px-1"
     };
     html_repeat_phrase = `
-    <div class="row mb-3 fs-5" id="repeat_phrase_`+ repeat_phrase.id + `" text_answer = "` + text_clean + `">
+    <div class="row mt-3 fs-5" id="repeat_phrase_`+ repeat_phrase.id + `" text_answer = "` + text_clean + `">
       <div class="col-12 col-md-8">
         `+ createFlipHTML(text1, text2, total_translations, flipClasses) + `
         <div class="row">
