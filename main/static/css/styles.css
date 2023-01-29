@@ -1,8 +1,9 @@
 :root {
 	--selection-color: rgb(28, 255, 251);
 	--orange: #f2864b;
-	--green-light: #49eb4b;
-	--green-light-active: #3dd33f;
+	--light-green: #49eb4b;
+	--light-green-active: #3dd33f;
+	--light-blue: #77b9fc;
 }
 
 ::selection {

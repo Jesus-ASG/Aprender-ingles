@@ -113,9 +113,16 @@ class Scores(models.Model):
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
     # fields
-    score = models.IntegerField(default=0)
     date = models.DateTimeField(auto_now_add=True, null=True)
 
+    # Total score puntuation
+    score = models.IntegerField(default=0)
+
+    # Percentages
+    writing_percentage = models.FloatField(default=100)
+    comprehension_percentage = models.FloatField(default=100)
+    speaking_percentage = models.FloatField(default=100)
+    
     def __str__(self) -> str:
         return f'username: {self.user_profile.user.username}, story: {self.story.title1}, score: {self.score}'
 

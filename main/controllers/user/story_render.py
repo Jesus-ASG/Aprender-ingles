@@ -14,6 +14,41 @@ def get_or_None(object, **kwargs):
         return None
 
 
+def rateSkills(max_percentage):
+    score = 'C+'
+    match max_percentage:
+        case num if 295 < num <= 300:
+            score = 'S+'
+            
+        case num if 280 < num <= 295:
+            score = 'S'
+
+        case num if 270 < num <= 280:
+            score = 'S-'
+
+        case num if 265 < num <= 270:
+            score = 'A+'
+
+        case num if 257 < num <= 265:
+            score = 'A'
+
+        case num if 250 < num <= 257:
+            score = 'A-'
+        
+        case num if 240 < num <= 250:
+            score = 'B+'
+
+        case num if 225 < num <= 240:
+            score = 'B'
+
+        case num if 210 < num <= 225:
+            score = 'B-'
+
+        case _:
+            score = 'C+'
+    return score
+
+
 @login_required(login_url='/login/')
 def storyInfo(request, route):
     
@@ -21,7 +56,7 @@ def storyInfo(request, route):
         user_profile = request.user.profile
         
         story = Story.objects.get(route=route)
-        print(f'Currently in {story}')
+        
 
         # getting all fields 
         #all_stories_completed = CompletedStory.objects.filter(user=user_profile)
@@ -31,10 +66,22 @@ def storyInfo(request, route):
         #users_who_completed = story.completed_by.all()
         #print(f'\nAll users who completed {story}\n {users_who_completed}\n')
 
-        scores = Scores.objects.filter(user_profile=user_profile, story=story).order_by('-score').values('score', 'date')
+        scores = Scores.objects.filter(user_profile=user_profile, story=story).order_by('-score').values()
         high_score = None
+        
         if scores:
             high_score = scores[0]
+            letter_grade = ''
+            
+            writing_percentage = float(high_score.get('writing_percentage')) 
+            comprehension_percentage = float(high_score.get('comprehension_percentage')) 
+            speaking_percentage = float(high_score.get('speaking_percentage'))
+
+            max_percentage = writing_percentage + comprehension_percentage + speaking_percentage
+            letter_grade = rateSkills(max_percentage)
+            
+            high_score['letter_grade'] = letter_grade
+
 
         pages = story.pages.all().order_by('date_created', 'time_created').values()
         next_page = None

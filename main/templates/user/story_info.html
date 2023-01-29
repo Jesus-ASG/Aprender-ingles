@@ -1,37 +1,10 @@
 {% extends 'main_template.html' %}
 {% load static %}
 
-{% block title %} {{ story.title }} {% endblock %}
+{% block title %} {{ story.title1 }} {% endblock %}
 
 {% block page-styles %}
-<link rel="stylesheet" href="{% static 'css/info_cont_hist.css' %}" type="text/css">
-
-
-<style>
-	.info-img {
-		position: relative;
-		max-width: 90%;
-		max-height: 300px;
-		object-fit: contain;
-		border-radius: 10px;
-		box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-			rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-
-	}
-
-	.btn-start-story {
-		color: #fff;
-		background-color: var(--green-light);
-		border-radius: 20px;
-		transition: all 0.2s ease-in-out;
-	}
-
-	.btn-start-story:hover {
-		color: #fff;
-		background-color: var(--green-light-active);
-	}
-</style>
-
+<link rel="stylesheet" href="{% static 'css/user/story_info.css' %}" type="text/css">
 {% endblock %}
 
 {% block navbar %} {% include 'navbar/navbar-logged.html' %} {% endblock %}
@@ -62,9 +35,9 @@
 			<div class="row mt-3">
 				<div class="col-12 text-center">
 					<strong class="fs-5">Tags</strong> <br>
-					<div class="container-categorias text-center">
+					<div class="text-center">
 						{% for cat in story.tag.all %}
-						<div class="categoria">
+						<div class="tag px-3 py-1 fw-bold">
 							{{ cat.name1 }}
 						</div>
 						{% empty %}
@@ -103,31 +76,63 @@
 		<div class="col-12 mb-3 text-center">
 			<h3 class="fs-2">Puntuación más alta: {{ high_score.score |default:0 }}</h3>
 		</div>
-		<div class="col-12 col-md-6 text-center">
-			<div class="letra d-inline-block">
-				<div class="marco-calificacion">
-					<div class="calificacion">
-						<h3>S+</h3>
+		<div class="col-12 col-md-6 text-center mb-3">
+			<div class="d-inline-block">
+				<div class="container-letter p-1 box-shadow">
+					<div class="letter-grade">
+						<h3>{{ high_score.letter_grade |default:'?' }}</h3>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="col-12 col-md-6">
-			<div class="estadisticas text-center text-sm-start">
 
-				<!--for rubro in historia.id_rubro.all-->
-				<div class="rubro">
-					<label for="progress-escritura">Escritura</label> <br>
-					<progress id="progress-escritura" max="100" value="85">Escritura</progress> <br>
+			<div class="row my-3">
+				<div class="col-12">
+					<h3 class="fs-6 text-center">Comprensión</h3>
+				</div>
 
-					<label for="progress-lectura">Lectura</label> <br>
-					<progress id="progress-lectura" max="100" value="65">Escritura</progress> <br>
-
-					<label for="progress-pronunciacion">Pronunciacion</label> <br>
-					<progress id="progress-pronunciacion" max="100" value="80">Pronunciacion</progress> <br>
+				<div class="col-12">
+					<div class="progress w-75 progress-styles">
+						<div class="progress-bar" role="progressbar"
+							style="width: {{ high_score.comprehension_percentage |default:0 }}%;"
+							aria-valuenow=" {{ high_score.comprehension_percentage |default:0 }} " aria-valuemin="0"
+							aria-valuemax="100"></div>
+					</div>
 				</div>
 			</div>
+
+			<div class="row my-3">
+				<div class="col-12">
+					<h3 class="fs-6 text-center">Pronunciación</h3>
+				</div>
+
+				<div class="col-12">
+					<div class="progress w-75 progress-styles">
+						<div class="progress-bar" role="progressbar"
+							style="width: {{ high_score.speaking_percentage |default:0 }}%;"
+							aria-valuenow=" {{ high_score.speaking_percentage |default:0 }} " aria-valuemin="0" aria-valuemax="100">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row my-3">
+				<div class="col-12">
+					<h3 class="fs-6 text-center">Escritura</h3>
+				</div>
+
+				<div class="col-12">
+					<div class="progress w-75 progress-styles">
+						<div class="progress-bar" role="progressbar" style="width: {{ high_score.writing_percentage |default:0 }}%;"
+							aria-valuenow=" {{ high_score.writing_percentage |default:0 }} " aria-valuemin="0" aria-valuemax="100">
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
+
 	</div>
 	<div class="row my-3">
 		<div class="col-12 mt-3 text-center">
