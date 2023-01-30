@@ -7,6 +7,7 @@
 
 	--f-orange: #ff5f13;
 	--f-orange-active: #ff5100;
+	--f-orange-shadow: rgba(255, 81, 0, 0.25);
 
 	--f-light-green: #49eb4b;
 	--f-light-green-active: #3dd33f;
@@ -196,4 +197,8 @@ p {
 .btnr-f-orange:hover {
 	color: #fff;
 	background-color: var(--f-orange-active);
+}
+
+.btnr-f-orange:focus {
+	box-shadow: 0 0 0 0.2rem var(--f-orange-shadow);
 }

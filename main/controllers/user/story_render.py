@@ -2,10 +2,10 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, JsonResponse
 from django.forms.models import model_to_dict
 
-from main.models import Story, Scores
+from main.models import Story, Scores, RepeatPhrase
 
 def get_or_None(object, **kwargs):
     try:
@@ -51,7 +51,6 @@ def rateSkills(max_percentage):
 
 @login_required(login_url='/login/')
 def storyInfo(request, route):
-    
     try:
         user_profile = request.user.profile
         
@@ -112,7 +111,7 @@ def storyContent(request, route, page_number):
         prev_page = None
         next_page = None
         current_page = pages[page_index]
-        
+
         if page_index >= 1:
             prev_page = page_number - 1 
         if page_index < len(pages) - 1:
@@ -151,7 +150,32 @@ def storyContent(request, route, page_number):
         return render(request, 'user/story_render_'+str(current_page.page_type)+'.html', context)
 
     if request.method == 'POST':
-        return render(request, 'user/story_render_'+str(current_page.page_type)+'.html', context)
+        evaluate = request.POST["feedback_page_id"]
+        feedback_page_id = int(request.POST["feedback_page_id"])
 
-def answerPage(request):
+        story_answers = request.POST["story_answers"]
+        story_answers = json.loads(story_answers)
+
+        
+        # give feedback about the last page
+        feedback_page = story_answers["pages"]
+        for s_a in feedback_page:
+            if s_a["id"] == feedback_page_id:
+                feedback_page = s_a
+        #print(last_page)
+        for exercise in feedback_page["exercises"]:
+            match exercise["type"]:
+                case "repeat_phrase":
+                    rp_answ = RepeatPhrase.objects.get(id=int(exercise["id"]))
+                    exercise["feedback"] = rp_answ.content1
+
+        #data = request.POST["data"]
+        #data = json.loads(data)
+
+        #print(data)
+
+        return JsonResponse(story_answers)
+
+def answerPage(request, route, id):
     pass
+        

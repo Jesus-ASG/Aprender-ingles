@@ -64,7 +64,7 @@
 	<div class="row my-3">
 		<div class="col-12 text-center">
 			{% if total_pages > 0 %}
-			<a href="{% url 'story_content' route=story.route page_number=page_number %}"
+			<a onclick="cleanStorage()" href="{% url 'story_content' route=story.route page_number=page_number %}"
 				class="btn btnr-f-orange fs-5 fw-bold">Empezar</a>
 			{% else %}
 			<button class="btn btnr-f-orange fs-5 fw-bold" disabled>Próximamente</button>
@@ -170,4 +170,12 @@
 <br><br><br><br><br>
 
 
+{% endblock %}
+
+{% block page-scripts %}
+<script>
+	function cleanStorage() {
+		localStorage.removeItem('story_answers');
+	}
+</script>
 {% endblock %}
