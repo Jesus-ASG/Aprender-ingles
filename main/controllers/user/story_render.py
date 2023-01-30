@@ -8,6 +8,9 @@ from django.forms.models import model_to_dict
 
 from main.models import Story, Scores, RepeatPhrase
 
+# expiration time for cache in seconds
+expiration_time = 86400
+
 def get_or_None(object, **kwargs):
     try:
         return object.get(**kwargs)
@@ -56,7 +59,7 @@ def storyInfo(request, route):
         user_profile = request.user.profile
         
         story = Story.objects.get(route=route)
-        
+        cache.delete(f'story_answers_{story.id}')
 
         # getting all fields 
         #all_stories_completed = CompletedStory.objects.filter(user=user_profile)
@@ -150,41 +153,45 @@ def storyContent(request, route, page_number):
         return render(request, 'user/story_render_'+str(current_page.page_type)+'.html', context)
 
     if request.method == 'POST':
-        
-        my_cache = cache.get('my_cache')
-        if (my_cache is not None):
-            cache.delete('my_cache')
-            print('cache deleted')
-            print(cache.get('my_cache'))
-        else:
-            cache.set('my_cache', 'this my value saved in cache', 86400)
-            print('cache created')
-            print(cache.get('my_cache'))
-        
-        evaluate = request.POST["feedback_page_id"] 
-        feedback_page_id = int(request.POST["feedback_page_id"])
+        story = Story.objects.get(route=route)
 
-        story_answers = request.POST["story_answers"]
-        story_answers = json.loads(story_answers)
+        # Get data from client
+        evaluate = request.POST["evaluate"]
+        feedback_page_id = int(request.POST["feedback_page_id"])
+        user_story_answers = request.POST["story_answers"]
+        user_story_answers = json.loads(user_story_answers)
         
-        # give feedback for the page
-        feedback_page = story_answers["pages"]
-        for s_a in feedback_page:
-            if s_a["id"] == feedback_page_id:
-                feedback_page = s_a
-        #print(last_page)
+
+        feedback_page = None
+        cache_story_answers = cache.get(f'story_answers_{story.id}')
+        if cache_story_answers is None:
+            cache.set(f'story_answers_{story.id}', user_story_answers, expiration_time)
+            cache_story_answers = cache.get(f'story_answers_{story.id}')
+
+        cache_requested_page = list(filter(lambda x: x["id"] == feedback_page_id, cache_story_answers["pages"]))
+        
+        if cache_requested_page:
+            feedback_page = cache_requested_page[0]
+        else:
+            user_feedback_page = list(filter(lambda x: x["id"] == feedback_page_id, user_story_answers["pages"]))
+            
+            cache_story_answers["pages"].append(user_feedback_page[0])
+            cache.set(f'story_answers_{story.id}', cache_story_answers, expiration_time)
+            cache_story_answers = cache.get(f'story_answers_{story.id}')
+
+            cache_requested_page = list(filter(lambda x: x["id"] == feedback_page_id, cache_story_answers["pages"]))
+
+            feedback_page = cache_requested_page[0]
+
         for exercise in feedback_page["exercises"]:
             match exercise["type"]:
                 case "repeat_phrase":
                     rp_answ = RepeatPhrase.objects.get(id=int(exercise["id"]))
                     exercise["feedback"] = rp_answ.content1
-
-        #data = request.POST["data"]
-        #data = json.loads(data)
-
-        #print(data)
-
-        return JsonResponse(story_answers)
+        
+        cache.set(f'story_answers_{story.id}', cache_story_answers, expiration_time)
+        cache_story_answers = cache.get(f'story_answers_{story.id}')
+        return JsonResponse(cache_story_answers)
 
 def answerPage(request, route, id):
     pass
