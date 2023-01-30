@@ -20,7 +20,17 @@ jesus@mail.com
 123
 
 pip libraries
-django, django rest framework, pymysql, pillow, django-cleanup
+django, django rest framework, pymysql, pillow, django-cleanup, pymemcache
+start memcached:
+-m: memory in megabytes
+-p: port
+-l: ip
+$ memcached -d -m 64 -p 11211 -l 127.0.0.1
+stop memcached:
+  search process
+    $ ps aux | grep memcached
+  kill process
+    $ kill number
 
 resources/
   bootstrap 5

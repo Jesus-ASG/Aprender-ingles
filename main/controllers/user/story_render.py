@@ -1,5 +1,6 @@
 import json
 
+from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseNotFound, JsonResponse
@@ -101,63 +102,72 @@ def storyInfo(request, route):
 
 @login_required(login_url='/login/')
 def storyContent(request, route, page_number):
-    try:
-        page_index = page_number - 1
-
-        story = Story.objects.get(route=route)
-        pages = story.pages.all().order_by('date_created', 'time_created')
-        total_pages = len(pages)
-
-        prev_page = None
-        next_page = None
-        current_page = pages[page_index]
-
-        if page_index >= 1:
-            prev_page = page_number - 1 
-        if page_index < len(pages) - 1:
-            next_page = page_number + 1
-        
-        images = current_page.images.all()
-        dialogues = current_page.dialogues.all()
-        repeat_phrases = current_page.repeat_phrases.all()
-
-        dialogues = json.dumps(list(dialogues.values()))
-        repeat_phrases = json.dumps(list(repeat_phrases.values()))
-
-        images_json = []
-        for image in images:
-            x = model_to_dict(image)
-            x['image'] = x['image'].url
-            images_json.append(x)
-        images_json = json.dumps(images_json)
-        
-        context = {
-            'story': story,
-            'page_number': page_number,
-            'total_pages': total_pages,
-            'prev_page': prev_page,
-            'next_page': next_page,
-            'current_page': current_page,
-            'images': images,
-            'images_json': images_json,
-            'dialogues': dialogues,
-            'repeat_phrases': repeat_phrases
-            }
-    except:
-        return HttpResponseNotFound()
-
     if request.method == "GET":
+        try:
+            page_index = page_number - 1
+
+            story = Story.objects.get(route=route)
+            pages = story.pages.all().order_by('date_created', 'time_created')
+            total_pages = len(pages)
+
+            prev_page = None
+            next_page = None
+            current_page = pages[page_index]
+
+            if page_index >= 1:
+                prev_page = page_number - 1 
+            if page_index < len(pages) - 1:
+                next_page = page_number + 1
+            
+            images = current_page.images.all()
+            dialogues = current_page.dialogues.all()
+            repeat_phrases = current_page.repeat_phrases.all()
+
+            dialogues = json.dumps(list(dialogues.values()))
+            repeat_phrases = json.dumps(list(repeat_phrases.values()))
+
+            images_json = []
+            for image in images:
+                x = model_to_dict(image)
+                x['image'] = x['image'].url
+                images_json.append(x)
+            images_json = json.dumps(images_json)
+            
+            context = {
+                'story': story,
+                'page_number': page_number,
+                'total_pages': total_pages,
+                'prev_page': prev_page,
+                'next_page': next_page,
+                'current_page': current_page,
+                'images': images,
+                'images_json': images_json,
+                'dialogues': dialogues,
+                'repeat_phrases': repeat_phrases
+                }
+        except:
+            return HttpResponseNotFound()
         return render(request, 'user/story_render_'+str(current_page.page_type)+'.html', context)
 
     if request.method == 'POST':
-        evaluate = request.POST["feedback_page_id"]
+        
+        my_cache = cache.get('my_cache')
+        if (my_cache is not None):
+            cache.delete('my_cache')
+            print('cache deleted')
+            print(cache.get('my_cache'))
+        else:
+            cache.set('my_cache', 'this my value saved in cache', 86400)
+            print('cache created')
+            print(cache.get('my_cache'))
+        
+        evaluate = request.POST["feedback_page_id"] 
         feedback_page_id = int(request.POST["feedback_page_id"])
 
         story_answers = request.POST["story_answers"]
         story_answers = json.loads(story_answers)
-
         
-        # give feedback about the last page
+        # give feedback for the page
         feedback_page = story_answers["pages"]
         for s_a in feedback_page:
             if s_a["id"] == feedback_page_id:
