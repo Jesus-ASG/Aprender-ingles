@@ -35,7 +35,7 @@ for (let element of collections_sorted)
 	if (element.is_exercise)
 		page_answers.exercises.push(new Exercise(element.type, element.id, ''));
 
-let ls_story_answers = JSON.parse(localStorage.getItem('story_answers'));
+let ls_story_answers = JSON.parse(localStorage.getItem('story_answers_'+ db_story_id));
 if (ls_story_answers){
 	let current_page = ls_story_answers.pages.find(e => e.id === parseInt(db_page_id));
 	if (current_page)
@@ -143,7 +143,7 @@ function capitalizeFirstLetter(string) {
 }
 
 function sendAnswers(){
-	let ls_story_answers = JSON.parse(localStorage.getItem('story_answers'));
+	let ls_story_answers = JSON.parse(localStorage.getItem('story_answers_'+ db_story_id));
 	if (ls_story_answers){
 		let search = ls_story_answers.pages.find(e => e.id === parseInt(db_page_id));
 		if(search){
@@ -153,17 +153,19 @@ function sendAnswers(){
 		else{
 			ls_story_answers.pages.push(page_answers);
 			//localStorage.removeItem('story_answers');
-			localStorage.setItem('story_answers', JSON.stringify(ls_story_answers));
+			localStorage.setItem('story_answers_'+ db_story_id, JSON.stringify(ls_story_answers));
 		}
 	}
 	else{
 		// this is the first page, so it is pushed
 		story_answers.pages.push(page_answers);
-		localStorage.setItem('story_answers', JSON.stringify(story_answers));
+		localStorage.setItem('story_answers_'+ db_story_id, JSON.stringify(story_answers));
 	}
 
+	let clear_storage_on_click = (LAST_PAGE) ? 'onclick="clearStoryAnswersLocalStorage()"' : '';
+
 	let html_button = `
-	<a href="`+URL_NEXT_PAGE+`" type="button" class="btn btnr-f-orange fw-bold fs-5">
+	<a `+ clear_storage_on_click +` href="`+URL_NEXT_PAGE+`" type="button" class="btn btnr-f-orange fw-bold fs-5">
         Continue / Continuar
     </a>
 	`;
@@ -180,7 +182,7 @@ function sendAnswers(){
 	formData.append("feedback_page_id", db_page_id);
 	
 	// update ls_story answers
-	ls_story_answers = JSON.parse(localStorage.getItem('story_answers'));
+	ls_story_answers = JSON.parse(localStorage.getItem('story_answers_'+ db_story_id));
 	formData.append("story_answers", JSON.stringify(ls_story_answers))
 	
 	
@@ -218,4 +220,8 @@ function showFeedback(response){
 			}
 		}
 	}
+}
+
+function clearStoryAnswersLocalStorage(){
+	localStorage.removeItem('story_answers_'+ db_story_id)
 }

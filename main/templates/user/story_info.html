@@ -174,8 +174,9 @@
 
 {% block page-scripts %}
 <script>
+	db_story_id = '{{ story.id }}';
 	function cleanStorage() {
-		localStorage.removeItem('story_answers');
+		localStorage.removeItem('story_answers_' + db_story_id);
 	}
 </script>
 {% endblock %}
