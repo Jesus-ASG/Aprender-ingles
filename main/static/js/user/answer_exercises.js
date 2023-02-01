@@ -176,7 +176,7 @@ function sendAnswers(){
 	let to_evaluate = false;
 	if (LAST_PAGE)
 		to_evaluate = true;
-	formData.append("evaluate", to_evaluate);
+	formData.append("evaluate", to_evaluate.toString());
 
 	// Tell what is the current page
 	formData.append("feedback_page_id", db_page_id);
