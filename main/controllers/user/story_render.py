@@ -64,6 +64,7 @@ def storyInfo(request, route):
         
         story = Story.objects.get(route=route)
         cache.delete(f'story_answers_{story.id}')
+        cache.delete(f'evaluated_story_{story.id}')
 
         # getting all fields 
         #all_stories_completed = CompletedStory.objects.filter(user=user_profile)
@@ -199,21 +200,35 @@ def storyContent(request, route, page_number):
         cache.set(f'story_answers_{story.id}', cache_story_answers, expiration_time)
         cache_story_answers = cache.get(f'story_answers_{story.id}')
 
+
+        cache_evaluated_story = cache.get(f'evaluated_story_{story.id}')
+        if cache_evaluated_story is None:
+            cache_evaluated_story = False
         
-        
-        if evaluate:
+        if evaluate and not cache_evaluated_story:
             # evaluate means give all califications
-            user = request.user
             results = evaluateAnswers(story, cache_story_answers)
-            
-            print(results)
+            cache.set(f'evaluated_story_{story.id}', True, expiration_time)
 
-            
-        else:
-            print('dont evaluate')
+            score_form = ScoreForm(request.POST or None)
+            if not score_form.is_valid():
+                pass
 
+            score_form_obj = score_form.save(commit=False)
+
+            score_form_obj.user_profile = user_profile
+            score_form_obj.story = story
+
+            score_form_obj.score = results["score"]
+            score_form_obj.writing_percentage = results["writing_percentage"]
+            score_form_obj.comprehension_percentage = results["comprehension_percentage"]
+            score_form_obj.speaking_percentage = results["speaking_percentage"]
+            
+            score_form_obj.save()
+        
 
         return JsonResponse(cache_story_answers)
+
 
 def evaluateAnswers(story, story_answers):
     # count all elements
@@ -256,7 +271,6 @@ def evaluateAnswers(story, story_answers):
     
     return results
 
-        
 
 def cleanStr(string):
     only_alpha_numerics = re.sub(r'[^A-Za-z0-9 ]+', ' ', string)
@@ -324,6 +338,3 @@ def evaluateRepeatPhrase(answer_right, answer_user):
     }
     return results
 
-
-    
-        
