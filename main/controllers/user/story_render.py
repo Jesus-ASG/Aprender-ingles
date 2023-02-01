@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.http import HttpResponseNotFound, JsonResponse
 from django.forms.models import model_to_dict
 
-from main.models import Story, Scores, RepeatPhrase
+from main.models import Story, Score, RepeatPhrase
 from main.forms import ScoreForm
 
 # expiration time for cache in seconds
@@ -74,7 +74,7 @@ def storyInfo(request, route):
         #users_who_completed = story.completed_by.all()
         #print(f'\nAll users who completed {story}\n {users_who_completed}\n')
 
-        scores = Scores.objects.filter(user_profile=user_profile, story=story).order_by('-score').values()
+        scores = Score.objects.filter(user_profile=user_profile, story=story).order_by('-score').values()
         high_score = None
         
         if scores:
@@ -220,6 +220,7 @@ def storyContent(request, route, page_number):
             score_form_obj.story = story
 
             score_form_obj.score = results["score"]
+            score_form_obj.score_limit = results["score_limit"]
             score_form_obj.writing_percentage = results["writing_percentage"]
             score_form_obj.comprehension_percentage = results["comprehension_percentage"]
             score_form_obj.speaking_percentage = results["speaking_percentage"]
@@ -232,11 +233,11 @@ def storyContent(request, route, page_number):
 
 def evaluateAnswers(story, story_answers):
     # count all elements
-    cont_rp = 0
+    exercises_number = 0
     pages = story.pages.all()
     for p in pages:
         repeat_phrases = p.repeat_phrases.all()
-        cont_rp = cont_rp + len(repeat_phrases)
+        exercises_number  += len(repeat_phrases)
 
     results = {
         "score": 0, 
@@ -244,7 +245,7 @@ def evaluateAnswers(story, story_answers):
         "comprehension_percentage": 0, 
         "speaking_percentage": 0
     }
-    exercises_number = 0
+    
     for page in story_answers["pages"]:
         for exercise in page["exercises"]:
             match exercise["type"]:
@@ -258,13 +259,15 @@ def evaluateAnswers(story, story_answers):
                     results["writing_percentage"] += rp_results["writing_percentage"]
                     results["comprehension_percentage"] += rp_results["comprehension_percentage"]
                     results["speaking_percentage"] += rp_results["speaking_percentage"]
-                    exercises_number += 1
+                    
     
     wp_t = (results["writing_percentage"] / exercises_number) * 100
     cp_t = (results["comprehension_percentage"] / exercises_number) * 100
     sp_t = (results["speaking_percentage"] / exercises_number) * 100
 
     results["score"] = int(results["score"])
+    results["score_limit"] = exercises_number * points_per_correct_answer
+
     results["writing_percentage"] = round(wp_t, 2)
     results["comprehension_percentage"] = round(cp_t, 2)
     results["speaking_percentage"] = round(sp_t, 2)

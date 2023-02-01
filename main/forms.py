@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Tag, Story, Page, Dialogue, Image, RepeatPhrase, Scores
+from .models import Tag, Story, Page, Dialogue, Image, RepeatPhrase, Score
 
 
 class NewUserForm(UserCreationForm):
@@ -52,9 +52,9 @@ class HistoriaForm(forms.ModelForm):
 
 class ScoreForm(forms.ModelForm):
 	class Meta:
-		model = Scores
+		model = Score
 		fields = '__all__'
-		exclude = ['user_profile', 'story', 'date', 'score', 'writing_percentage', 'comprehension_percentage', 'speaking_percentage']
+		exclude = ['user_profile', 'story', 'date', 'score', 'score_limit', 'writing_percentage', 'comprehension_percentage', 'speaking_percentage']
 
 
 class PageForm(forms.ModelForm):

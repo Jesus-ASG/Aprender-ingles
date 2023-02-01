@@ -99,24 +99,25 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     
     # extra fields
-    stories_scores = models.ManyToManyField(Story, through='Scores', related_name='users_scored')
+    stories_scores = models.ManyToManyField(Story, through='Score', related_name='users_scored')
     
 
     def __str__(self) -> str:
         return f'username: {self.user.username}'
 
 
-class Scores(models.Model):
+class Score(models.Model):
     class Meta:
-        db_table = prefix + 'scores'
+        db_table = prefix + 'score'
     # keys
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
     # fields
     date = models.DateTimeField(auto_now_add=True, null=True)
 
-    # Total score puntuation
+    # Score punctuation
     score = models.IntegerField(default=0)
+    score_limit = models.IntegerField(default=1)
 
     # Percentages
     writing_percentage = models.FloatField(default=100)
