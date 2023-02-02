@@ -4,6 +4,7 @@
 	--light-green: #49eb4b;
 	--light-green-active: #3dd33f;
 	--light-blue: #77b9fc;
+	--light-red: #bd2b24;
 
 	--f-orange: #ff5f13;
 	--f-orange-active: #ff5100;
@@ -14,7 +15,7 @@
 }
 
 ::selection {
-	background: var(--selection-color);
+	background: var(--light-green);
 	color: #000;
 }
 
@@ -196,9 +197,23 @@ p {
 }
 .btnr-f-orange:hover {
 	color: #fff;
+	transform: scale(1.1);
 	background-color: var(--f-orange-active);
 }
 
 .btnr-f-orange:focus {
 	box-shadow: 0 0 0 0.2rem var(--f-orange-shadow);
+}
+
+.btn-back-next {
+	transition: all 0.2s ease-in-out;
+	display: inline-block;
+}
+
+.btn-back-next:hover {
+	transform: scale(1.1);
+}
+
+.btn-back-next i {
+	color: var(--light-red);
 }

@@ -22,9 +22,10 @@
   <div class="row mt-3">
     <div class="col-2 text-center fs-1">
       {% if prev_page is None %}
-      <a href="{% url 'story_info' route=story.route %}"><i class='fa fa-arrow-circle-left'></i></a>
+      <a href="{% url 'story_info' route=story.route %}" class="btn-back-next"><i
+          class='fa fa-arrow-circle-left'></i></a>
       {% else %}
-      <a href="{% url 'story_content' route=story.route page_number=prev_page %}"><i
+      <a href="{% url 'story_content' route=story.route page_number=prev_page %}" class="btn-back-next"><i
           class='fa fa-arrow-circle-left'></i></a>
       {% endif %}
     </div>
@@ -35,7 +36,7 @@
     </div>
     <div class="col-2 text-center fs-1">
       {% if next_page is not None %}
-      <a href="{% url 'story_content' route=story.route page_number=next_page %}"><i
+      <a href="{% url 'story_content' route=story.route page_number=next_page %}" class="btn-back-next"><i
           class='fa fa-arrow-circle-right'></i></a>
       {% endif %}
     </div>
@@ -65,18 +66,19 @@
     <div class="col-12"><span id="exercises_area"></span></div>
   </div>
 
-
-
   <div class="row">
     <div class="col-12 mb-3 text-center">
-      <!-- 
-      <a href="{% url 'story_info' route=story.route %}"><i class='fa fa-arrow-circle-right'></i></a>
-      -->
       <button id="btn_send_answers" onclick="sendAnswers()" type="button" class="btn btnr-f-orange fw-bold fs-5">
+        {% if next_page is None %}
+        Evaluate pages / evaluar páginas
+        {% else %}
         Send answers / Enviar respuestas
+        {% endif %}
       </button>
     </div>
+    <hr>
   </div>
+
 
 </div>
 {% if next_page is None %}

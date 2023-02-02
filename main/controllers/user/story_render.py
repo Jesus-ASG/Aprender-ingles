@@ -183,6 +183,7 @@ def storyContent(request, route, page_number):
         if cache_evaluated_story is None:
             cache_evaluated_story = False
         
+        results = ""
         if evaluate and not cache_evaluated_story:
             # evaluate means give all califications
             results = evaluateAnswers(story, cache_story_answers)
@@ -204,6 +205,9 @@ def storyContent(request, route, page_number):
             score_form_obj.speaking_percentage = results["speaking_percentage"]
             
             score_form_obj.save()
+
+        if cache_evaluated_story:
+            cache_story_answers["score"] = results
         
 
         return JsonResponse(cache_story_answers)

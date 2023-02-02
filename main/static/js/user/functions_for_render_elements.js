@@ -50,7 +50,7 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
                 <div class="col-12 text-center">
                 <button class="btn shadow-none tool-icon sound_icon" 
                 onclick="readText('repeat_phrase_` + repeat_phrase.id + `')"
-                name="sound_btn" title="Play audio">
+                name="sound_btn" title="Listen audio">
                     <i class='fas fa-volume-up'></i>
                 </button>
                 </div>
@@ -62,7 +62,7 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
                 <div class="col-12 text-center">
                 <button class="btn shadow-none tool-icon mic-icon" 
                 onclick="readVoice('repeat_phrase_`+ repeat_phrase.id + `')"
-                name="mic_btn" title="Start to talk!">
+                name="mic_btn" title="Start to talk">
                     <i class='fa-solid fa-microphone-slash'></i>
                 </button>
                 </div>

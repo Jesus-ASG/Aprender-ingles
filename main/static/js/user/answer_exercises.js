@@ -195,6 +195,7 @@ function sendAnswers(){
         contentType: false,  // Tell jQuery not to set the content type
         headers: { "X-CSRFToken": csrftoken },
         success: function (response) {
+			console.log(response);
             showFeedback(response);
         },
         error: function (response) {
