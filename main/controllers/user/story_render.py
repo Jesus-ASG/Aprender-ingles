@@ -15,46 +15,25 @@ expiration_time = 86400
 points_per_correct_answer = 100
 tolerance_error = 3
 
-def get_or_None(object, **kwargs):
-    try:
-        return object.get(**kwargs)
-    except:
-        return None
-
 
 def rateSkills(max_percentage):
-    score = 'C+'
-    match max_percentage:
-        case num if 295 < num <= 300:
-            score = 'S+'
-            
-        case num if 280 < num <= 295:
-            score = 'S'
+    grades = ['S+', 'S', 'S-', 'A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-']
+    iterations = 0
+    delta = 4
+    aux = 100
 
-        case num if 270 < num <= 280:
-            score = 'S-'
+    ranges = []
+    for _ in range(len(grades)):
+        ranges.append(round(aux, 2))
+        aux -= delta
 
-        case num if 265 < num <= 270:
-            score = 'A+'
-
-        case num if 257 < num <= 265:
-            score = 'A'
-
-        case num if 250 < num <= 257:
-            score = 'A-'
-        
-        case num if 240 < num <= 250:
-            score = 'B+'
-
-        case num if 225 < num <= 240:
-            score = 'B'
-
-        case num if 210 < num <= 225:
-            score = 'B-'
-
-        case _:
-            score = 'C+'
-    return score
+    iterations = 0
+    for i in range(len(ranges)-1):
+        if ranges[i] >= max_percentage > ranges[i+1]:
+            break
+        else:
+            iterations += 1
+    return grades[iterations]
 
 
 @login_required(login_url='/login/')
@@ -80,12 +59,11 @@ def storyInfo(request, route):
         if scores:
             high_score = scores[0]
             letter_grade = ''
-            
-            writing_percentage = float(high_score.get('writing_percentage')) 
-            comprehension_percentage = float(high_score.get('comprehension_percentage')) 
-            speaking_percentage = float(high_score.get('speaking_percentage'))
 
-            max_percentage = writing_percentage + comprehension_percentage + speaking_percentage
+            max_percentage = float(high_score.get('score')) / float(high_score.get('score_limit'))
+            max_percentage = max_percentage * 100
+            max_percentage = round(max_percentage, 2)
+
             letter_grade = rateSkills(max_percentage)
             
             high_score['letter_grade'] = letter_grade
