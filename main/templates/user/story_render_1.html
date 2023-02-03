@@ -152,10 +152,10 @@
 
   const LAST_PAGE = (db_page_number == db_total_pages) ? true : false;
 
-  let db_story_id = '{{ story.id }}'
+  let db_story_id = '{{ story.id }}';
   let db_page_id = '{{ current_page.id }}';
 
-  let db_subtitle = {}
+  let db_subtitle = {};
   let db_images = {};
   let db_dialogues = {};
   let db_repeat_phrases = {};
@@ -216,9 +216,7 @@
       sub2 = "Página " + db_page_number;
     }
     let html_subtitle = createFlipHTML(sub1, sub2, total_translations, flipClasses);
-    //let html_subtitle = createFlipHTML("a simple | phrase", "una simple | frase", total_translations, flipClasses);
     document.getElementById("subtitle").outerHTML = html_subtitle;
-
   }
 
   function setAnswerQuestionsMessage(total_translations) {

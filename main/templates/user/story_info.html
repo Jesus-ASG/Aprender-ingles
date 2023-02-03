@@ -21,7 +21,7 @@
 
 	<div class="row mt-3">
 		<div class="col-12 text-center">
-			<h1 class="fs-2 fw-bold">{{ story.title1 }}</h1>
+			<h1 class="fs-2 fw-bold" id="story_title"></h1>
 		</div>
 	</div>
 
@@ -65,16 +65,16 @@
 		<div class="col-12 text-center">
 			{% if total_pages > 0 %}
 			<a onclick="cleanStorage()" href="{% url 'story_content' route=story.route page_number=page_number %}"
-				class="btn btnr-f-orange fs-5 fw-bold">Empezar</a>
+				class="btn btnr-f-orange fs-5 fw-bold">Start / Iniciar</a>
 			{% else %}
-			<button class="btn btnr-f-orange fs-5 fw-bold" disabled>Próximamente</button>
+			<button class="btn btnr-f-orange fs-5 fw-bold" disabled>Soon / Próximamente</button>
 			{% endif %}
 		</div>
 	</div>
 	<hr>
 	<div class="row my-3" id="results">
 		<div class="col-12 mb-3 text-center">
-			<h3 class="fs-2" name="title_score">Puntuación más alta: {{ high_score.score |default:0 }}pt</h3>
+			<h3 class="fs-2" name="title_score"></h3>
 		</div>
 		<div class="col-12 col-md-6 text-center mb-3">
 			<div class="d-inline-block">
@@ -89,7 +89,7 @@
 
 			<div class="row my-3" name="comprehension">
 				<div class="col-12">
-					<h3 class="fs-6 text-center" name="title">Comprensión</h3>
+					<h3 class="fs-6 text-center" name="title"></h3>
 				</div>
 				<div class="col-12">
 					<div class="progress w-75 progress-styles">
@@ -103,13 +103,14 @@
 
 			<div class="row my-3" name="speaking">
 				<div class="col-12">
-					<h3 class="fs-6 text-center" name="title">Pronunciación</h3>
+					<h3 class="fs-6 text-center" name="title"></h3>
 				</div>
 				<div class="col-12">
 					<div class="progress w-75 progress-styles">
 						<div class="progress-bar" role="progressbar" name="progress"
 							style="width: {{ high_score.speaking_percentage |default:0 }}%;"
-							aria-valuenow=" {{ high_score.speaking_percentage |default:0 }} " aria-valuemin="0" aria-valuemax="100">
+							aria-valuenow=" {{ high_score.speaking_percentage |default:0 }} " aria-valuemin="0"
+							aria-valuemax="100">
 						</div>
 					</div>
 				</div>
@@ -117,46 +118,51 @@
 
 			<div class="row my-3" name="writing">
 				<div class="col-12">
-					<h3 class="fs-6 text-center" name="title">Escritura</h3>
+					<h3 class="fs-6 text-center" name="title"></h3>
 				</div>
 				<div class="col-12">
 					<div class="progress w-75 progress-styles">
 						<div class="progress-bar" role="progressbar" name="progress"
 							style="width: {{ high_score.writing_percentage |default:0 }}%;"
-							aria-valuenow=" {{ high_score.writing_percentage |default:0 }} " aria-valuemin="0" aria-valuemax="100">
+							aria-valuenow=" {{ high_score.writing_percentage |default:0 }} " aria-valuemin="0"
+							aria-valuemax="100">
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<div class="row my-3">
+	<hr>
+	<div class="row my-3" id="scores_table">
 		<div class="col-12 mt-3 text-center">
-			<h3 class="fs-2">Puntuaciones</h3>
+			<h3 class="fs-2" name="title"></h3>
 		</div>
 		<div class="col-12 fs-3 text-center">
 			{% if not scores %}
-			<h3 class="">Aún no hay registros</h3>
+			<h3 name="no_scores"></h3>
 			{% else %}
-			<table class="table">
-				<thead>
-					<tr>
-						<th scope="col" class="fs-4">Lugar</th>
-						<th scope="col" class="fs-4">Puntaje</th>
-						<th scope="col" class="fs-4">Fecha</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for score in scores %}
-					<tr>
-						<th scope="row" class="fs-6"># {{ forloop.counter }}</th>
-						<td class="fs-6">{{ score.score }}</td>
-						<td class="fs-6">{{ score.date|date:"j/n/Y" }} {{ score.date|time:"g:i a" }}</td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+			<h3 name="no_scores" class="d-none"></h3>
+			<div class="table-responsive">
+				<table class="table">
+					<thead>
+						<tr name="table_header">
+							<th scope="col" class="fs-4">Lugar</th>
+							<th scope="col" class="fs-4">Puntaje</th>
+							<th scope="col" class="fs-4">Fecha</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for score in scores %}
+						<tr>
+							<th scope="row" class="fs-6"># {{ forloop.counter }}</th>
+							<td class="fs-6">{{ score.score }}</td>
+							<td class="fs-6">{{ score.date|date:"j/n/Y" }} {{ score.date|time:"g:i a" }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
 			{% endif %}
 		</div>
 	</div>
@@ -170,9 +176,26 @@
 
 {% block page-scripts %}
 <script>
-	db_story_id = '{{ story.id }}';
-	function cleanStorage() {
-		localStorage.removeItem('story_answers_' + db_story_id);
-	}
+	let db_title = {};
+	let db_story_id = '{{ story.id }}';
+	let db_high_score = '{{ high_score.score |default:0 }}';
+
+	try {
+		db_title.title1 = '{{ story.title1 }}';
+	} catch (e) { }
+	try {
+		db_title.title2 = '{{ story.title2 }}';
+	} catch (e) { }
 </script>
+<script src="{% static 'js/user/story_info.js' %}"></script>
+<script>
+	let f_counter = { "start": 0, "end": 0 };
+
+	setTitle(f_counter);
+	setStatisticsLabels(f_counter);
+	setScoresLabels(f_counter);
+
+	setFunctionality(f_counter);
+</script>
+
 {% endblock %}

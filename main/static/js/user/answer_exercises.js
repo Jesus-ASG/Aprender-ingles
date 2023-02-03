@@ -231,10 +231,8 @@ function showFeedback(response){
 		};
 		let results_dom = document.getElementById("results");
 		results_dom.classList.remove("d-none");
-		let score_lbl1 = `Results: ${results.score}pt`;
-		let score_lbl2 = `Resultados: ${results.score}pt`;
-		results_dom.querySelector("[name = title_score]").innerHTML = createFlipHTML(score_lbl1, score_lbl2, total_translations, flipClasses);
-		results_dom.querySelector("[name = letter_grade]").innerText = results.letter_grade;
+		let score_lbl1 = `Results: ${results.score}pts`;
+		let score_lbl2 = `Resultados: ${results.score}pts`;
 
 		let comprehension = results_dom.querySelector("[name = comprehension]");
 		let writing = results_dom.querySelector("[name = writing]");
@@ -245,6 +243,8 @@ function showFeedback(response){
 		let speaking_progress = speaking.querySelector("[name = progress]");
 
 		// Titles
+		results_dom.querySelector("[name = letter_grade]").innerText = results.letter_grade;
+		results_dom.querySelector("[name = title_score]").innerHTML = createFlipHTML(score_lbl1, score_lbl2, total_translations, flipClasses);
 		comprehension.querySelector("[name = title]").innerHTML = createFlipHTML("Comprehension", "Comprensión", total_translations, flipClasses);
 		writing.querySelector("[name = title]").innerHTML = createFlipHTML("Writing", "Escritura", total_translations, flipClasses);
 		speaking.querySelector("[name = title]").innerHTML = createFlipHTML("Speaking", "Pronunciación", total_translations, flipClasses);
