@@ -204,10 +204,17 @@ def storyContent(request, route, page_number):
             score_form_obj.comprehension_percentage = results["comprehension_percentage"]
             score_form_obj.speaking_percentage = results["speaking_percentage"]
             
+            max_percentage = float(results.get('score')) / float(results.get('score_limit'))
+            max_percentage = max_percentage * 100
+            max_percentage = round(max_percentage, 2)
+            letter_grade = rateSkills(max_percentage)
+
             score_form_obj.save()
 
-        if cache_evaluated_story:
             cache_story_answers["score"] = results
+            cache_story_answers["score"]["letter_grade"] = letter_grade
+
+            cache.set(f'story_answers_{story.id}', cache_story_answers, expiration_time)
         
 
         return JsonResponse(cache_story_answers)

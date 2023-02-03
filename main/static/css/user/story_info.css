@@ -17,19 +17,6 @@
 	font-size: 0.9em;
 }
 
-/* Second section */
-.btn-start-story {
-	color: #fff;
-	background-color: var(--light-green);
-	border-radius: 20px;
-	transition: all 0.2s ease-in-out;
-}
-
-.btn-start-story:hover {
-	color: #fff;
-	background-color: var(--light-green-active);
-}
-
 /* Third section */
 .container-letter {
 	width: 200px;

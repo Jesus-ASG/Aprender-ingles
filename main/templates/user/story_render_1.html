@@ -6,6 +6,7 @@
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/1.css' %}">
 <link rel="stylesheet" href="{% static 'css/story_content.css' %}">
+<link rel="stylesheet" href="{% static 'css/user/story_info.css' %}">
 {% endblock %}
 
 {% block navbar %} {% include 'navbar/navbar-logged.html' %} {% endblock %}
@@ -61,7 +62,7 @@
 
   <div class="row mt-3">
     <div class="col-12">
-      <h2 class="fs-2 text-center mt-3">Resuelve</h2>
+      <h2 class="fs-3 text-center mt-3" id="answer_questions_message"></h2>
     </div>
     <div class="col-12"><span id="exercises_area"></span></div>
   </div>
@@ -77,6 +78,58 @@
       </button>
     </div>
     <hr>
+  </div>
+
+  <div class="row my-3 d-none" id="results">
+    <div class="col-12 mb-3 text-center">
+      <h3 class="fs-2" name="title_score"></h3>
+    </div>
+    <div class="col-12 col-md-6 text-center mb-3">
+      <div class="d-inline-block">
+        <div class="container-letter p-1 box-shadow">
+          <div class="letter-grade">
+            <h3 name="letter_grade"></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+
+      <div class="row my-3" name="comprehension">
+        <div class="col-12">
+          <h3 class="fs-6 text-center" name="title"></h3>
+        </div>
+        <div class="col-12">
+          <div class="progress w-75 progress-styles">
+            <div class="progress-bar" role="progressbar" name="progress" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row my-3" name="speaking">
+        <div class="col-12">
+          <h3 class="fs-6 text-center" name="title"></h3>
+        </div>
+        <div class="col-12">
+          <div class="progress w-75 progress-styles">
+            <div class="progress-bar" role="progressbar" name="progress" aria-valuemin="0" aria-valuemax="100">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row my-3" name="writing">
+        <div class="col-12">
+          <h3 class="fs-6 text-center" name="title"></h3>
+        </div>
+        <div class="col-12">
+          <div class="progress w-75 progress-styles">
+            <div class="progress-bar" role="progressbar" name="progress" aria-valuemin="0" aria-valuemax="100">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
 
@@ -128,17 +181,11 @@
 <script src="{% static 'js/user/functions_for_render_elements.js' %}"></script>
 
 <script>
-  let total_translations = { value: 0 };
-  /* Subtitle */
-  if (db_subtitle.subtitle1 && db_subtitle.subtitle2) {
-    let flipClasses = {
-      "paper": "mx-1",
-      "front": "px-1",
-      "back": "px-1"
-    };
-    let html_subtitle = createFlipHTML(db_subtitle.subtitle1, db_subtitle.subtitle2, total_translations, flipClasses);
-    document.getElementById("subtitle").outerHTML = html_subtitle;
-  }
+  let total_translations = { "start": 0, "end": 0 };
+
+  setSubtitle(total_translations);
+
+  setAnswerQuestionsMessage(total_translations);
 
   for (let element of collections_sorted) {
     switch (element.type) {
@@ -153,7 +200,37 @@
     }
   }
 
-  setFunctionality(total_translations.value);
+  setFunctionality(total_translations);
+
+  function setSubtitle(total_translations) {
+    let flipClasses = {
+      "paper": "mx-1",
+      "front": "px-1",
+      "back": "px-1"
+    };
+
+    let sub1 = db_subtitle.subtitle1;
+    let sub2 = db_subtitle.subtitle2;
+    if (db_subtitle.subtitle1 == '' || db_subtitle.subtitle2 == '') {
+      sub1 = "Page " + db_page_number;
+      sub2 = "Página " + db_page_number;
+    }
+    let html_subtitle = createFlipHTML(sub1, sub2, total_translations, flipClasses);
+    //let html_subtitle = createFlipHTML("a simple | phrase", "una simple | frase", total_translations, flipClasses);
+    document.getElementById("subtitle").outerHTML = html_subtitle;
+
+  }
+
+  function setAnswerQuestionsMessage(total_translations) {
+    let flipClasses = {
+      "paper": "mx-1",
+      "front": "px-1",
+      "back": "px-1"
+    };
+    let text1 = "Make your best effort to answer!";
+    let text2 = "¡Has tu mejor esfuerzo para contestar!";
+    document.getElementById("answer_questions_message").innerHTML = createFlipHTML(text1, text2, total_translations, flipClasses);
+  }
 </script>
 
 <script src="{% static 'js/user/answer_exercises.js' %}"></script>

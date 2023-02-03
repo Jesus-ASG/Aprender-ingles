@@ -195,7 +195,7 @@ function sendAnswers(){
         contentType: false,  // Tell jQuery not to set the content type
         headers: { "X-CSRFToken": csrftoken },
         success: function (response) {
-			console.log(response);
+			//console.log(response);
             showFeedback(response);
         },
         error: function (response) {
@@ -220,6 +220,46 @@ function showFeedback(response){
 					break;
 			}
 		}
+	}
+
+	let results = response.score;
+	if(results){
+		let flipClasses = {
+			"paper": "mx-1",
+			"front": "px-1",
+			"back": "px-1"
+		};
+		let results_dom = document.getElementById("results");
+		results_dom.classList.remove("d-none");
+		let score_lbl1 = `Results: ${results.score}pt`;
+		let score_lbl2 = `Resultados: ${results.score}pt`;
+		results_dom.querySelector("[name = title_score]").innerHTML = createFlipHTML(score_lbl1, score_lbl2, total_translations, flipClasses);
+		results_dom.querySelector("[name = letter_grade]").innerText = results.letter_grade;
+
+		let comprehension = results_dom.querySelector("[name = comprehension]");
+		let writing = results_dom.querySelector("[name = writing]");
+		let speaking = results_dom.querySelector("[name = speaking]");
+
+		let comprehension_progress =  comprehension.querySelector("[name = progress]");
+		let writing_progress = writing.querySelector("[name = progress]");
+		let speaking_progress = speaking.querySelector("[name = progress]");
+
+		// Titles
+		comprehension.querySelector("[name = title]").innerHTML = createFlipHTML("Comprehension", "Comprensión", total_translations, flipClasses);
+		writing.querySelector("[name = title]").innerHTML = createFlipHTML("Writing", "Escritura", total_translations, flipClasses);
+		speaking.querySelector("[name = title]").innerHTML = createFlipHTML("Speaking", "Pronunciación", total_translations, flipClasses);
+		
+		// Values
+		comprehension_progress.style.width = `${results.comprehension_percentage}%`;
+		comprehension_progress["aria-valuenow"] = `${results.comprehension_percentage}%`;
+
+		writing_progress.style.width = `${results.writing_percentage}%`;
+		writing_progress["aria-valuenow"] = `${results.writing_percentage}%`;
+
+		speaking_progress.style.width = `${results.speaking_percentage}%`;
+		speaking_progress["aria-valuenow"] = `${results.speaking_percentage}%`;
+
+		setFunctionality(total_translations);
 	}
 }
 

@@ -13,7 +13,7 @@ function createFlipHTML(text1, text2, counter, flipClasses){
 
 		let max = words1.length > words2.length ? words1.length : words2.length;
 		for (let j = 0; j < max; j++) {
-			html += `<div class="paper paper_` + counter.value + ` `+flipClasses.paper+`">`;
+			html += `<div class="paper paper_` + counter.end + ` `+flipClasses.paper+`">`;
 
 			if ((j < words1.length) && (j < words2.length)) {
 				if (j < words1.length)
@@ -48,13 +48,13 @@ function createFlipHTML(text1, text2, counter, flipClasses){
 			if (flag)
 				html += `<br>`;
 		}
-		counter.value++;
+		counter.end++;
 	}
 	return html;
 }
 
-function setFunctionality(max_groups){
-	for (let i = 0; i < max_groups; i++) {
+function setFunctionality(counter){
+	for (let i = counter.start; i < counter.end; i++) {
 		let papers = document.getElementsByClassName("paper_" + i);
 	
 		for (let paper of papers) {
@@ -95,4 +95,5 @@ function setFunctionality(max_groups){
 			});
 		}
 	}
+	counter.start = counter.end;
 }
