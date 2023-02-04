@@ -216,3 +216,13 @@ p {
 .btn-back-next i {
 	color: var(--light-red);
 }
+
+.hover-scale {
+	transition: all 0.2s ease-in-out;
+	display: inline-block;
+}
+
+.hover-scale:hover {
+	cursor: pointer;
+	transform: scale(1.1);
+}

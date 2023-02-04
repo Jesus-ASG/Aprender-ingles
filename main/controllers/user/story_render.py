@@ -45,17 +45,18 @@ def storyInfo(request, route):
         cache.delete(f'story_answers_{story.id}')
         cache.delete(f'evaluated_story_{story.id}')
 
-        # show how many users have been completed the story
-
-        story_liked = json.dumps(False)
-        if user_profile in story.users_liked.all():
-            story_liked = json.dumps(True)
-        else:
-            story_liked = json.dumps(False)
-            
-        print(f'\n\n {story_liked}\n\n')
-        # story_liked = True if story_liked else False        
-
+        # check if user likes the story
+        story_liked = False
+        if story in user_profile.liked_stories.all():
+            story_liked = True
+        story_liked = json.dumps(story_liked)
+        
+        # check if user has saved the story
+        story_saved = False
+        if story in user_profile.saved_stories.all():
+            story_saved = True
+        story_saved = json.dumps(story_saved)
+        
         scores = Score.objects.filter(user_profile=user_profile, story=story).order_by('-score').values()
         high_score = None
         
@@ -80,6 +81,7 @@ def storyInfo(request, route):
         context = {
             'story': story,
             'story_liked': story_liked,
+            'story_saved': story_saved,
             'page_number': page_number,
             'total_pages': total_pages,
             'scores': scores,

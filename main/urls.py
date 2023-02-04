@@ -33,7 +33,8 @@ urlpatterns = [
     path('myadmin/eliminar-categoria/<int:id>', tags.delete, name = 'eliminar_categoria'),
 
     # Another functions
-    path('api/like_story/<int:story_id>', user_apis.likeStory, name = 'like_story'),
+    path('api/user/like_story/<int:story_id>', user_apis.likeStory, name = 'like_story'),
+    path('api/user/save_story/<int:story_id>', user_apis.saveStory, name = 'save_story'),
     
     path('register', v.register, name='register'),
 

@@ -10,12 +10,83 @@ function setTitle(f_counter) {
 
 function loadLikes(){
     let btn = document.getElementById("like_counter_btn").children[0];
+    let lbl = document.getElementById("like_counter_lbl");
+
     if (db_story_liked)
         btn.classList.add("fas");
     else
         btn.classList.add("far");
-    let lbl = document.getElementById("like_counter_lbl");
+
 	lbl.innerText = db_story_likes_number;
+}
+
+function likeFunction(e){
+    let lbl = document.getElementById("like_counter_lbl");
+    try {
+        let likes = parseInt(lbl.textContent);
+        if (db_story_liked) likes--;
+        else likes++;
+
+        const csrftoken = getCookie('csrftoken');
+        $.ajax({
+            type: "POST",
+            url: URL_LIKE_STORY,
+            headers: { "X-CSRFToken": csrftoken },
+            success: function (response) {
+                //console.log(response);
+            },
+            error: function (response) {
+                //console.log(response);
+            }
+        });
+
+        lbl.innerText = likes;
+        e.target.classList.toggle("far");
+        e.target.classList.toggle("fas");
+        db_story_liked = !db_story_liked;
+    } catch (error) {}
+}
+
+
+function loadSaved(){
+    let btn = document.getElementById("save_story_btn").children[0];
+    let lbl = document.getElementById("save_story_lbl");
+    if (db_story_saved){
+        lbl.innerText = 'Saved';
+        btn.classList.toggle("fas");
+    }
+    else{
+        lbl.innerText = 'Save';
+        btn.classList.toggle("far");
+    }
+}
+
+function saveFunction(e){
+    let lbl = document.getElementById("save_story_lbl");
+    try {
+        const csrftoken = getCookie('csrftoken');
+        $.ajax({
+            type: "POST",
+            url: URL_SAVE_STORY,
+            headers: { "X-CSRFToken": csrftoken },
+            success: function (response) {
+                //console.log(response);
+            },
+            error: function (response) {
+                //console.log(response);
+            }
+        });
+
+        db_story_saved = !db_story_saved;
+
+        if (db_story_saved)
+            lbl.innerText = 'Saved';
+        else
+            lbl.innerText = 'Save';
+
+        e.target.classList.toggle("far");
+        e.target.classList.toggle("fas");
+    } catch (error) {}
 }
 
 
@@ -69,44 +140,4 @@ function setScoresLabels(f_counter) {
 
 function cleanStorage() {
     localStorage.removeItem('story_answers_' + db_story_id);
-}
-
-function likeFunction(e){
-    let lbl = document.getElementById("like_counter_lbl");
-    try {
-        let likes = parseInt(lbl.textContent);
-        if (db_story_liked) likes--;
-        else likes++;
-
-        const csrftoken = getCookie('csrftoken');
-        $.ajax({
-            type: "POST",
-            url: URL_LIKE_STORY,
-            headers: { "X-CSRFToken": csrftoken },
-            success: function (response) {
-                //console.log(response);
-            },
-            error: function (response) {
-                //console.log(response);
-            }
-        });
-
-        lbl.innerText = likes;
-        e.target.classList.toggle("far");
-        e.target.classList.toggle("fas");
-        db_story_liked = !db_story_liked;
-    } catch (error) {}
-
-    
-}
-
-function saveFunction(e){
-    e.target.classList.toggle("far");
-    e.target.classList.toggle("fas");
-
-    let lbl = document.getElementById("save_story_lbl");
-    if (lbl.textContent.toLocaleLowerCase() == 'save')
-        lbl.innerText = 'Saved';
-    else
-        lbl.innerText = 'Save';
 }
