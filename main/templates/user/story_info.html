@@ -10,7 +10,6 @@
 {% block navbar %} {% include 'navbar/navbar-logged.html' %} {% endblock %}
 
 {% block content %}
-
 <div class="container main-content">
 
 	<div class="row mt-3">
@@ -28,6 +27,20 @@
 	<div class="row mt-3">
 		<div class="col-12 col-md-6 text-center mt-3">
 			<img class="info-img p-1" src="{{ story.cover.url }}" alt="{{ story.cover }}">
+			<div class="row my-1">
+				<div class="col-12 text-center">
+					<span class="fs-4" style="color: #ff2126" id="like_counter_btn">
+						<strong><i class="far fa-heart"></i></strong>
+					</span>
+					<p class="fs-5 d-inline-block" id="like_counter_lbl">1200</p>
+				</div>
+				<div class="col-12 text-center">
+					<span class="fs-4" style="color:#5cffab;" id="save_story_btn">
+						<strong><i class="fas fa-bookmark"></i></strong>
+					</span>
+					<p class="fs-5 d-inline-block" id="save_story_lbl">Saved</p>
+				</div>
+			</div>
 		</div>
 
 		<div class="col-12 col-md-6 mt-3">
@@ -141,7 +154,6 @@
 			{% if not scores %}
 			<h3 name="no_scores"></h3>
 			{% else %}
-			<h3 name="no_scores" class="d-none"></h3>
 			<div class="table-responsive">
 				<table class="table">
 					<thead>
@@ -196,6 +208,13 @@
 	setScoresLabels(f_counter);
 
 	setFunctionality(f_counter);
+
+	const counter_btn = document.getElementById("like_counter_btn");
+	counter_btn.addEventListener('click', e => likeFunction(e));
+
+	const save_btn = document.getElementById("save_story_btn");
+	save_btn.addEventListener('click', e => saveFunction(e));
+
 </script>
 
 {% endblock %}

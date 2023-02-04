@@ -3,7 +3,7 @@ function setFunctions(id){
 	$(".ch-color_"+id).css({'color':$("#color_"+id).val()});
 	$("#color_"+id).on('input propertychange', (e)=>{
 		$(".ch-color_"+id).css({'color':e.target.value});
-	})
+	});
 }
 
 function addDialogue(){

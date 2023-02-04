@@ -35,17 +35,55 @@ function setScoresLabels(f_counter) {
         "back": "px-1"
     };
     let table_scores = document.getElementById("scores_table");
-    table_scores.querySelector("[name = title]").innerHTML = createFlipHTML("Scores table", "Tabla de puntuaciones", f_counter, f_classes);
-    table_scores.querySelector("[name = no_scores]").innerHTML = createFlipHTML("No records yet", "Aún no hay registros", f_counter, f_classes);
+    let table_no_scores = table_scores.querySelector("[name = no_scores]");
+    let table_header = table_scores.querySelector("[name = table_header]");
+    
 
-    let html = `
-    <th scope="col" class="fs-4">`+ createFlipHTML("Position", "Posición", f_counter, f_classes) + `</th>
-    <th scope="col" class="fs-4">`+ createFlipHTML("Score", "Puntaje", f_counter, f_classes) + `</th>
-    <th scope="col" class="fs-4">`+ createFlipHTML("Date", "Fecha", f_counter, f_classes) + `</th>
-    `;
-    table_scores.querySelector("[name = table_header]").innerHTML = html;
+    table_scores.querySelector("[name = title]").innerHTML = createFlipHTML("Scores table", "Tabla de puntuaciones", f_counter, f_classes);
+
+    if (table_no_scores)
+        table_no_scores.innerHTML = createFlipHTML("No records yet", "Aún no hay registros", f_counter, f_classes);
+    
+    if (table_header){
+        let html = `
+        <th scope="col" class="fs-4">`+ createFlipHTML("Position", "Posición", f_counter, f_classes) + `</th>
+        <th scope="col" class="fs-4">`+ createFlipHTML("Score", "Puntaje", f_counter, f_classes) + `</th>
+        <th scope="col" class="fs-4">`+ createFlipHTML("Date", "Fecha", f_counter, f_classes) + `</th>
+        `;
+        table_header.innerHTML = html;
+    }
+    
 }
 
 function cleanStorage() {
     localStorage.removeItem('story_answers_' + db_story_id);
+}
+
+function likeFunction(e){
+    let lbl = document.getElementById("like_counter_lbl");
+    try {
+        let likes = parseInt(lbl.textContent);
+        if (e.target.classList.contains("far"))
+            likes++;
+        else
+            likes--;
+        
+        lbl.innerText = likes;
+
+        e.target.classList.toggle("far");
+        e.target.classList.toggle("fas");
+    } catch (error) {}
+
+    
+}
+
+function saveFunction(e){
+    e.target.classList.toggle("far");
+    e.target.classList.toggle("fas");
+
+    let lbl = document.getElementById("save_story_lbl");
+    if (lbl.textContent.toLocaleLowerCase() == 'save')
+        lbl.innerText = 'Saved';
+    else
+        lbl.innerText = 'Save';
 }
