@@ -18,6 +18,7 @@ class NewUserForm(UserCreationForm):
 			user.save()
 		return user
 
+
 class CategoriaForm(forms.ModelForm):
 	class Meta:
 		model = Tag
@@ -28,7 +29,7 @@ class HistoriaForm(forms.ModelForm):
 	class Meta:
 		model = Story
 		fields = '__all__'
-		exclude = ['route']
+		exclude = ['route', 'likes_number']
 
 		widgets = {
 			'title1': forms.TextInput(attrs={'class': 'form-control'}),

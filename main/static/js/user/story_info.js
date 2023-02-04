@@ -7,6 +7,18 @@ function setTitle(f_counter) {
     document.getElementById("story_title").innerHTML = createFlipHTML(db_title.title1, db_title.title2, f_counter, f_classes);
 }
 
+
+function loadLikes(){
+    let btn = document.getElementById("like_counter_btn").children[0];
+    if (db_story_liked)
+        btn.classList.add("fas");
+    else
+        btn.classList.add("far");
+    let lbl = document.getElementById("like_counter_lbl");
+	lbl.innerText = db_story_likes_number;
+}
+
+
 function setStatisticsLabels(f_counter) {
     let f_classes = {
         "paper": "mx-1",
@@ -63,15 +75,26 @@ function likeFunction(e){
     let lbl = document.getElementById("like_counter_lbl");
     try {
         let likes = parseInt(lbl.textContent);
-        if (e.target.classList.contains("far"))
-            likes++;
-        else
-            likes--;
-        
-        lbl.innerText = likes;
+        if (db_story_liked) likes--;
+        else likes++;
 
+        const csrftoken = getCookie('csrftoken');
+        $.ajax({
+            type: "POST",
+            url: URL_LIKE_STORY,
+            headers: { "X-CSRFToken": csrftoken },
+            success: function (response) {
+                //console.log(response);
+            },
+            error: function (response) {
+                //console.log(response);
+            }
+        });
+
+        lbl.innerText = likes;
         e.target.classList.toggle("far");
         e.target.classList.toggle("fas");
+        db_story_liked = !db_story_liked;
     } catch (error) {}
 
     

@@ -1,7 +1,7 @@
 from django.urls import path
 from . import vistas as v
 from main.controllers.admin import pages, tags, stories
-from main.controllers.user import story_render
+from main.controllers.user import story_render, user_apis
 
 # para cargar imagenes
 from django.conf import settings
@@ -31,8 +31,10 @@ urlpatterns = [
     path('myadmin/agregar-categorias', tags.create, name = 'agregar_categorias'),
     path('myadmin/editar-categoria/<int:id>', tags.update, name = 'editar_categoria'),
     path('myadmin/eliminar-categoria/<int:id>', tags.delete, name = 'eliminar_categoria'),
+
+    # Another functions
+    path('api/like_story/<int:story_id>', user_apis.likeStory, name = 'like_story'),
     
     path('register', v.register, name='register'),
-    path('user/', v.UsersList.as_view(), name = 'users_list'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

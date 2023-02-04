@@ -29,8 +29,8 @@
 			<img class="info-img p-1" src="{{ story.cover.url }}" alt="{{ story.cover }}">
 			<div class="row my-1">
 				<div class="col-12 text-center">
-					<span class="fs-4" style="color: #ff2126" id="like_counter_btn">
-						<strong><i class="far fa-heart"></i></strong>
+					<span class="fs-4 fw-bold" style="color: #ff2126" id="like_counter_btn">
+						<i class="fa-heart"></i>
 					</span>
 					<p class="fs-5 d-inline-block" id="like_counter_lbl">1200</p>
 				</div>
@@ -188,8 +188,12 @@
 
 {% block page-scripts %}
 <script>
+	const URL_LIKE_STORY = '{% url "like_story" story.id %}'
+
 	let db_title = {};
 	let db_story_id = '{{ story.id }}';
+	let db_story_liked = JSON.parse('{{ story_liked }}');
+	let db_story_likes_number = '{{ story.likes_number }}';
 	let db_high_score = '{{ high_score.score |default:0 }}';
 
 	try {
@@ -204,6 +208,8 @@
 	let f_counter = { "start": 0, "end": 0 };
 
 	setTitle(f_counter);
+	loadLikes();
+
 	setStatisticsLabels(f_counter);
 	setScoresLabels(f_counter);
 

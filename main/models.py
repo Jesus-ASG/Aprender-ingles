@@ -1,4 +1,5 @@
 import uuid
+import random
 
 from django.db import models
 from django.utils.text import slugify
@@ -55,13 +56,16 @@ class Story(models.Model):
     # fields
     title1 = models.CharField(max_length=100)
     title2 = models.CharField(max_length=100)
-    cover = models.ImageField(upload_to='imagenes/portadas/', default="imagenes/portadas/book-default.png",
+    cover = models.ImageField(upload_to='imagenes/portadas/', 
+                              default="imagenes/portadas/book-default.png",
                               verbose_name='cover')
     description1 = models.CharField(max_length=100, null=True, blank=True, default='')
     description2 = models.CharField(max_length=100, null=True, blank=True, default='')
     route = models.SlugField(max_length=255, unique=True, null=False, default='')
 
     tag = models.ManyToManyField(Tag, blank=True)
+
+    likes_number = models.IntegerField(default=0)
 
     def get_portada(self):
         return self.cover.name
@@ -72,6 +76,8 @@ class Story(models.Model):
 
     # Override methods
     def save(self, *args, **kwargs):
+        if not self.likes_number:
+            self.likes_number = random.randint(270, 300)
         self.route = slugify(self.title1)
         if self.cover.name != 'imagenes/portadas/book-default.png':
             resizeImage(self.cover, (800, 800))
@@ -100,7 +106,7 @@ class UserProfile(models.Model):
     
     # extra fields
     stories_scores = models.ManyToManyField(Story, through='Score', related_name='users_scored')
-    
+    liked_stories = models.ManyToManyField(Story, related_name='users_liked', blank=True)
 
     def __str__(self) -> str:
         return f'username: {self.user.username}'

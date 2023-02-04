@@ -45,13 +45,16 @@ def storyInfo(request, route):
         cache.delete(f'story_answers_{story.id}')
         cache.delete(f'evaluated_story_{story.id}')
 
-        # getting all fields 
-        #all_stories_completed = CompletedStory.objects.filter(user=user_profile)
-        #print(f'\nAll stories that {user_profile} has completed \n {all_stories_completed}\n')
+        # show how many users have been completed the story
 
-        #users_who_completed = CompletedStory.objects.filter(story=story)
-        #users_who_completed = story.completed_by.all()
-        #print(f'\nAll users who completed {story}\n {users_who_completed}\n')
+        story_liked = json.dumps(False)
+        if user_profile in story.users_liked.all():
+            story_liked = json.dumps(True)
+        else:
+            story_liked = json.dumps(False)
+            
+        print(f'\n\n {story_liked}\n\n')
+        # story_liked = True if story_liked else False        
 
         scores = Score.objects.filter(user_profile=user_profile, story=story).order_by('-score').values()
         high_score = None
@@ -75,9 +78,10 @@ def storyInfo(request, route):
         page_number = 1
         
         context = {
-            'story': story, 
+            'story': story,
+            'story_liked': story_liked,
             'page_number': page_number,
-            'total_pages': total_pages, 
+            'total_pages': total_pages,
             'scores': scores,
             'high_score': high_score,
             }
