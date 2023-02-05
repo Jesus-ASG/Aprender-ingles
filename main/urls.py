@@ -12,9 +12,9 @@ urlpatterns = [
 
     # Stories
     path('myadmin/', stories.index, name = 'index_admin'),
-    path('myadmin/agregar-historias', stories.create, name = 'agregar_historias'),
-    path('myadmin/editar-historia/<int:id>', stories.update, name = 'edit_story'),
-    path('myadmin/eliminar-historia/<int:id>', stories.delete, name = 'delete_story'),
+    path('myadmin/add-story/', stories.create, name = 'add_story'),
+    path('myadmin/edit-story/<int:story_id>', stories.edit, name = 'edit_story'),
+    path('myadmin/del-story/<int:story_id>', stories.delete, name = 'delete_story'),
 
     # Tags
     path('myadmin/ver-categorias', tags.index, name = 'ver_categorias'),
@@ -33,8 +33,8 @@ urlpatterns = [
     path('story/<slug:route>/<int:page_number>/', story_render.storyContent, name='story_content'),
 
     # Another functions
-    path('api/user/like_story/<int:story_id>', user_apis.likeStory, name = 'like_story'),
-    path('api/user/save_story/<int:story_id>', user_apis.saveStory, name = 'save_story'),
+    path('api/user/like-story/<int:story_id>', user_apis.likeStory, name = 'like_story'),
+    path('api/user/save-story/<int:story_id>', user_apis.saveStory, name = 'save_story'),
     
     path('register', v.register, name='register'),
 

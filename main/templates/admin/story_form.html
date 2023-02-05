@@ -1,0 +1,114 @@
+{% extends 'main_template.html' %}
+{% load static %}
+
+{% block title %} {{ action_type }} {% endblock %}
+
+{% block page-styles %}
+<style>
+	.form {
+		max-width: 600px;
+		margin: auto;
+	}
+
+	.img-form-showing-container {
+		width: 200px;
+		margin: auto;
+
+	}
+
+	.img-form-showing {
+		width: 100%;
+		min-height: 200px;
+		max-height: 300px;
+		object-fit: cover;
+		border-radius: 10px;
+		box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+			rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container main-content">
+	<div class="row mt-3">
+		<div class="col-2 text-start fs-1">
+			<a href="{% url 'index_admin' %}" class="btn-back-next"><i class='fa fa-arrow-circle-left'></i></a>
+		</div>
+		<div class="col-8">
+			<h2 class="fs-2 fw-bold text-center">{{ action_type }}</h2>
+		</div>
+	</div>
+
+	<div class="row mt-3">
+		<div class="col-12">
+			{% if error %}
+			<div class="alert alert-warning alert-dismissible fade show mb-2 mt-2" role="alert">
+				<div style="text-align: center;">
+					<strong>{{ error }}</strong>
+				</div>
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+			{% endif %}
+		</div>
+		<div class="col-12">
+			<div class="form p-3 mb-3">
+				<form method="post" enctype="multipart/form-data" autocomplete="off">
+					{% csrf_token %}
+					{% for field in story_form %}
+					<div class="mb-3 text-center">
+						<label for="{{ field.id_for_label }}" class="form-label fs-4 fw-bold" style="color: #ff5f13;">
+							{{ field.label }}:
+						</label>
+
+						{% if field.field.widget.input_type == 'file' and field.value.url %}
+						<div class="img-form-showing-container mb-2">
+							<img class="img-form-showing p-1" src="{{ field.value.url }}" alt="No se pudo cargar imagen">
+						</div>
+
+						{% else %}
+						<img src="" alt="">
+						{% endif %}
+						<div class="input-field">
+							{{ field }}
+						</div>
+					</div>
+
+					{% endfor %}
+					<hr>
+					<div class="row">
+						<div class="col-12 text-center">
+							<a class="btn hover-scale fs-5 fw-bold m-1" href="{% url 'index_admin' %}" role="button"
+								style="background-color: var(--light-red); border-radius: 10px; color: #fff;">
+								Cancelar
+							</a>
+							<input class="btn hover-scale fs-5 fw-bold m-1" type="submit"
+								style="background-color: var(--light-blue); border-radius: 10px; color: #fff;" value="Guardar">
+						</div>
+					</div>
+
+				</form>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block page-scripts %}
+
+<script>
+	// change styles for showing categories
+	document.addEventListener("DOMContentLoaded", function () {
+		var cambiar = document.querySelector("#id_tag").childNodes;
+		for (let i = 0; i < cambiar.length; i++)
+			cambiar[i].className = "form-check form-check-inline fs-6";
+
+		var checks = document.getElementsByName("tag");
+		for (let i = 0; i < checks.length; i++)
+			checks[i].className = "form-check-input";
+	});
+</script>
+
+{% endblock %}

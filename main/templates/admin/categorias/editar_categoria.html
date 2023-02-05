@@ -5,6 +5,15 @@
 
 {% block navbar %} {% include 'navbar/navbar-logged.html' %} {% endblock %}
 
+{% block page-styles %}
+<style>
+    input[type="file"] {
+        display: inline-block;
+        max-width: 200px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <div class="row mt-3">

@@ -31,16 +31,22 @@ class HistoriaForm(forms.ModelForm):
 		fields = '__all__'
 		exclude = ['route', 'likes_number']
 
+		input_classes = 'form-control fs-6'
+
 		widgets = {
-			'title1': forms.TextInput(attrs={'class': 'form-control'}),
-			'cover': forms.FileInput(attrs={'class': 'form-control'}),
-			'description1': forms.TextInput(attrs={'class': 'form-control'}),
+			'title1': forms.TextInput(attrs={'class': input_classes}),
+			'title2': forms.TextInput(attrs={'class': input_classes}),
+			'cover': forms.FileInput(attrs={'class': input_classes}),
+			'description1': forms.TextInput(attrs={'class': input_classes}),
+			'description2': forms.TextInput(attrs={'class': input_classes}),
 		}
 
 		labels = {
-			'title1': 'Título',
+			'title1': 'Título en inglés',
+			'title2': 'Título en español',
 			'cover': 'Portada',
-			'description1': 'Descripción',
+			'description1': 'Descripción en inglés',
+			'description2': 'Descripción en español',
 		}
 
 	tag = forms.ModelMultipleChoiceField(

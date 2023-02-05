@@ -204,10 +204,6 @@ def update(request, route, page_type, page_id):
             'repeat_phrases': repeat_phrases
         }
 
-        #print('\n\n')
-        #print(f'{page}\n\n{images}\n\n{images_json}\n\n{dialogues}\n\n{repeat_phrases}')
-        #print('\n\n')
-
     except:
         return HttpResponseNotFound()
     
