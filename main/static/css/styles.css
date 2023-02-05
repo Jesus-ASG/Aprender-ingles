@@ -41,7 +41,8 @@ body {
 	padding-bottom: 200px;
 	background-color: #fafafa;
 }
-div {
+div,
+span {
 	margin: 0;
 	padding: 0;
 }

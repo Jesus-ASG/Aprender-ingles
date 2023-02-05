@@ -30,8 +30,8 @@ class RespAlert:
 @login_required(login_url='/login/')
 @user_passes_test(is_superuser, login_url='/login/')
 def index(request):
-    historias = Story.objects.all()
-    return render(request, 'admin/historias/ver_historias.html', {'historias': historias})
+    stories = Story.objects.all()
+    return render(request, 'admin/index1.html', {'stories': stories})
 
 
 @login_required(login_url='/login/')
@@ -99,6 +99,6 @@ def delete(request, id):
     try:
         historia = Story.objects.get(id=id)
         historia.delete()
-        return redirect('ver_historias')
+        return redirect('index_admin')
     except:
         return HttpResponseBadRequest('')

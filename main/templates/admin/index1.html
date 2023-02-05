@@ -1,0 +1,94 @@
+{% extends 'main_template.html' %}
+{% load static %}
+
+{% block title %} Admin Story Quest {% endblock %}
+
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/admin/index1.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container main-content">
+	<div class="row mt-3">
+		<div class="col-12 text-center">
+			<h1 class="fs-2">Admin</h1>
+		</div>
+	</div>
+
+	<div class="row mt-3">
+		<div class="col-12 text-end">
+			<a class="btn fw-bold hover-scale btnr-f-light-green" style="color: #fff;" href="{% url 'agregar_historias' %}"
+				role="button">
+				Add new</a>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12 text-center">
+			<div class="card-body table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th class="fs-5 fw-bold">Cover</th>
+							<th class="fs-5 fw-bold">Info</th>
+							<th class="fs-5 fw-bold">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for story in stories %}
+						<tr>
+							<td class="text-center w-33">
+								<div class="img-admin-container w-75 d-inline-block">
+									<img src="{{ story.cover.url }}" alt="{{ historia.cover }}">
+								</div>
+							</td>
+							<td class="text-center w-33">
+								<div class="text-start d-inline-block">
+									<p><span class="fw-bold" style="color: #77b9fc;">Title:</span> {{ story.title1 }}</p>
+									<p><span class="fw-bold" style="color: #77b9fc;">Description:</span>
+										{{ story.description1 |default:'Not provided' }}</p>
+									<p><span class="fw-bold" style="color: #77b9fc;">Likes:</span> {{ story.likes_number }}</p>
+									<p>
+										<span class="fw-bold" style="color: #77b9fc;">Tags:</span>
+										<span class="d-inline-block">
+											<ul>
+												{% for t in story.tag.all %}
+												<li>{{ t.name1 }}</li>
+												{% endfor %}
+											</ul>
+										</span>
+									</p>
+								</div>
+							</td>
+							<td class="w-33">
+								<div class="d-inline-block">
+									<a class="btn fs-5 p-2 action-btn m-2 hover-scale" href="{% url 'edit_story' story.id %}"
+										style="background-color: #77b9fc;" role="button" title="Editar historia">
+										<span style="color: #fff;"><i class="fas fa-pen"></i></span>
+									</a>
+
+									<a class="btn fs-5 p-2 action-btn m-2 hover-scale" href="{% url 'view_pages' story.route %}"
+										role="button" title="Editar páginas" style="background-color: #3343f8;">
+										<span style="color: #fff"><i class="fas fa-file-pen"></i></span>
+									</a>
+
+									<a class="btn fs-5 p-2 action-btn m-2 hover-scale" href="{% url 'delete_story' story.id %}"
+										role="button" title="Borrar" style="background-color: #f53126;">
+										<span style="color: #fff"><i class="fas fa-trash"></i></span>
+									</a>
+
+
+								</div>
+
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
