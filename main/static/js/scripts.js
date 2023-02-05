@@ -1,3 +1,14 @@
+const currentURL = window.location.href;
+// Get all the nav links
+const navLinks = document.querySelectorAll('.nav-link');
+// Loop through the links
+navLinks.forEach(link => {
+// If the link URL matches the current URL, add the active class to it
+if (link.href === currentURL) 
+	link.classList.add('active');
+});
+
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

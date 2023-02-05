@@ -1,9 +1,9 @@
 {% load static %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #f0f0f0;">
     <div class="container-fluid">
         <a href="{% url 'index' %}">
-            <img src="{% static 'img/logo.png' %}" width="80px" class="logo-nav-bar">
+            <img src="{% static 'img/logo.png' %}" width="32px" class="logo-nav-bar">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse2">
             <span class="navbar-toggler-icon"></span>
@@ -11,7 +11,10 @@
         <div class="collapse navbar-collapse" id="navbarCollapse2">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" id="" href="{% url 'index' %}">Aplicación x</a>
+                    <a class="nav-link active fs-3 fw-bold" aria-current="page" id="" href="{% url 'index' %}">
+                        <span style="color: #bd2b24;">S</span><span style="color: #fff;">tory</span>
+
+                        <span style="color: #bd2b24;">Q</span><span style="color: #fff;">uest</span></a>
                 </li>
             </ul>
 

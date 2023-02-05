@@ -29,12 +29,6 @@ from .models import Story, Page
 
 import json
 
-class UsersList(generics.ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = (IsAuthenticated,)
-    # authentication_classes = (TokenAuthentication,)
-
 
 class Login(FormView):
     template_name = 'no-logged/login.html'
@@ -73,20 +67,14 @@ class Logout(APIView):
 
 
 def index(request):
-    try:
-        # if a token exists return data
-        user = request.user
-        if user.auth_token is not None:
-            historias = Story.objects.all()
-            #profile = user.profile
-            
-            #completed_stories = profile.completed_stories.through.objects.all()
-            
-            #for completed in completed_stories:
-            #    print(f'\n{completed}\n')
-            return render(request, 'user/index.html', {'historias': historias, 'user': user})
-    except AttributeError:
-        # if a token doesn't exists return to homepage
+    if request.user.is_authenticated:
+        stories = Story.objects.all()
+        context = {
+            'stories': stories,
+            'user': request.user
+        }
+        return render(request, 'user/index.html', context)
+    else:
         return render(request, 'no-logged/home.html')
 
 

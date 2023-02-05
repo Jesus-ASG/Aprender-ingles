@@ -65,46 +65,8 @@ p {
 /*End main template*/
 
 /* Navbar */
-.yellow-btn {
-	border-radius: 50px;
-	background-color: #ebde50;
-	padding: 5px;
-	margin-right: 5px;
-}
 
-.yellow-light-btn {
-	border-radius: 50px;
-	background-color: #ede68f;
-	padding: 5px;
-	margin-right: 5px;
-}
-
-.href-btn a {
-	margin: 10px;
-	text-decoration: none;
-	font-weight: bold;
-	color: #000;
-}
-
-.hover-orange:hover a {
-	color: #f2864b;
-}
-
-.yellow-icon-btn {
-	width: 50px;
-	height: 50px;
-	border-radius: 100%;
-	background-color: #ebde50;
-	padding: 10px;
-	margin-right: 5px;
-	color: #000;
-	align-items: center;
-	text-align: center;
-	transition: all 0.2s ease-in-out;
-}
-
-.yellow-icon-btn:hover {
-	transform: scale(1.1);
+.hover-orange:hover {
 	color: #f2864b;
 }
 

@@ -5,13 +5,11 @@
 
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
-
 {% endblock %}
-
-{% block navbar %} {% include 'navbar/navbar-logged.html' %} {% endblock %}
 
 {% block content %}
 <div class="container main-content">
+
 	<div class="row mt-3">
 		<div class="col-12 text-center">
 			<h2 class="fs-1">Inicio</h2>
@@ -19,7 +17,7 @@
 	</div>
 
 	<div class="row my-3 w-100">
-		{% for story in historias %}
+		{% for story in stories %}
 		<div class="col-6 col-sm-4 col-md-3 p-3">
 			<div class="col-12 new-card-container text-center">
 				<a href="{% url 'story_info' story.route %}" class="">
