@@ -1,12 +1,7 @@
 
-from django.shortcuts import render, redirect
-
-from rest_framework import generics
-from .models import User
-from .serializers import UserSerializer
+from django.shortcuts import render
 
 from django.urls import reverse_lazy
-from django.urls import reverse
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -14,20 +9,12 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic.edit import FormView
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
 
 from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.response import Response
 
 from .forms import NewUserForm
-
-from .models import Story, Page
-
-import json
 
 
 class Login(FormView):
@@ -64,18 +51,6 @@ class Logout(APIView):
         except AttributeError:
             # if there aren't a token send 404 not found
             return HttpResponseNotFound('')
-
-
-def index(request):
-    if request.user.is_authenticated:
-        stories = Story.objects.all()
-        context = {
-            'stories': stories,
-            'user': request.user
-        }
-        return render(request, 'user/index.html', context)
-    else:
-        return render(request, 'no-logged/home.html')
 
 
 def register(request):

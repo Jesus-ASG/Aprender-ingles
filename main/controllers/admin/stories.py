@@ -54,7 +54,7 @@ def create(request):
             context["error"] = "Ya existe una historia con ese título"
             return render(request, 'admin/story_form.html', context)
         storyF.save()
-        return redirect('index_admin')
+        return redirect('view_pages', route=story_obj.route)
 
 
 @login_required(login_url='/login/')

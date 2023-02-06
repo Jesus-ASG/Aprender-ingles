@@ -11,6 +11,10 @@ from django.core.files.base import ContentFile
 from django.contrib.auth.models import User
 
 
+prefix = ''
+path_default_cover_img = 'imagenes/portadas/book-default.png'
+
+
 def resizeImage(imageField, tupleSize):
     im = pil_image.open(imageField)  # Catch original
     source_image = im
@@ -27,10 +31,7 @@ def resizeImage(imageField, tupleSize):
     imageField.save(random_name, file, save=False)
 
 
-prefix = ''
-
-
-# Categoría
+# Tag
 class Tag(models.Model):
     class Meta:
         db_table = prefix + 'tag'
@@ -56,9 +57,7 @@ class Story(models.Model):
     # fields
     title1 = models.CharField(max_length=100)
     title2 = models.CharField(max_length=100)
-    cover = models.ImageField(upload_to='imagenes/portadas/', 
-                              default="imagenes/portadas/book-default.png",
-                              verbose_name='cover')
+    cover = models.ImageField(upload_to='imagenes/portadas/', default=path_default_cover_img, verbose_name='cover')
     description1 = models.CharField(max_length=100, null=True, blank=True, default='')
     description2 = models.CharField(max_length=100, null=True, blank=True, default='')
     route = models.SlugField(max_length=255, unique=True, null=False, default='')
@@ -66,12 +65,13 @@ class Story(models.Model):
     tag = models.ManyToManyField(Tag, blank=True)
 
     likes_number = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def get_portada(self):
         return self.cover.name
 
     def del_portada(self, to_delete):
-        if to_delete != 'imagenes/portadas/book-default.png':
+        if to_delete != path_default_cover_img:
             self.cover.storage.delete(to_delete)
 
     # Override methods
@@ -79,12 +79,12 @@ class Story(models.Model):
         if not self.likes_number:
             self.likes_number = random.randint(270, 300)
         self.route = slugify(self.title1)
-        if self.cover.name != 'imagenes/portadas/book-default.png':
+        if self.cover.name != path_default_cover_img:
             resizeImage(self.cover, (800, 800))
         super(Story, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        if self.cover.name != 'imagenes/portadas/book-default.png':
+        if self.cover.name != path_default_cover_img:
             self.cover.storage.delete(self.cover.name)
         
         # delete pages related

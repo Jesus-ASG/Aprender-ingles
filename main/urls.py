@@ -2,13 +2,16 @@ from django.urls import path
 from . import vistas as v
 from main.controllers.admin import pages, tags, stories
 from main.controllers.user import story_render, user_apis
+from main.controllers import views
 
 # para cargar imagenes
 from django.conf import settings
 from django.contrib.staticfiles.urls import static
 
 urlpatterns = [
-    path('', v.index, name='index'),
+    # General views
+    path('', views.index, name='index'),
+    path('saved/', views.savedStories, name='stories_saved'),
 
     # Stories
     path('myadmin/', stories.index, name = 'index_admin'),

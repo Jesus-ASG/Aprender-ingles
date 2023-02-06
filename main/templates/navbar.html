@@ -31,15 +31,14 @@
 
 				<!-- Dropdown notifications -->
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="profile_dropdown1" role="button"
-						data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="nav-link dropdown-toggle" href="#" id="profile_dropdown1" role="button" data-bs-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false">
 						<span><i class="fas fa-bell fa-lg" aria-hidden="true"></i></span>
 						<!-- 
 							<span class="badge rounded-pill badge-notification bg-danger">1</span>
 						 -->
 					</a>
-					<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end"
-						aria-labelledby="profile_dropdown1">
+					<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="profile_dropdown1">
 						<li>
 							<a class="dropdown-item" href="#/">
 								<span class="me-1"><i></i></span>
@@ -52,16 +51,21 @@
 
 				<!-- Dropdown profile options -->
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="profile_dropdown" role="button"
-						data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="nav-link dropdown-toggle" href="#" id="profile_dropdown" role="button" data-bs-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false">
 						<span><i class="fa fa-user fa-lg" aria-hidden="true"></i></span>
 					</a>
-					<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end"
-						aria-labelledby="profile_dropdown">
+					<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="profile_dropdown">
 						<li>
-							<a class="dropdown-item" href="#/">
+							<a class="dropdown-item" href="{% url 'stories_saved' %}">
 								<span class="me-1"><i class="fas fa-bookmark fa-lg"></i></span>
 								<p class="d-inline-block">Saved</p>
+							</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="#/">
+								<span class="me-1"><i class="fas fa-heart fa-lg"></i></span>
+								<p class="d-inline-block">Favorites</p>
 							</a>
 						</li>
 						<li>

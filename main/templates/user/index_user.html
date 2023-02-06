@@ -12,10 +12,20 @@
 
 	<div class="row mt-3">
 		<div class="col-12 text-center">
-			<h2 class="fs-1">Inicio</h2>
+			<h2 class="fs-1">{{ page_title }}</h2>
 		</div>
 	</div>
-
+	<hr>
+	<nav class="navbar navbar-light bg-light">
+		<div class="container-fluid">
+			<div class="d-flex">
+				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+				<button class="btn btn-outline-success" type="submit"><span><i
+							class="fa-solid fa-magnifying-glass"></i></span></button>
+			</div>
+		</div>
+	</nav>
+	<hr>
 	<div class="row my-3 w-100">
 		{% for story in stories %}
 		<div class="col-6 col-sm-4 col-md-3 p-3">
