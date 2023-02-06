@@ -30,7 +30,7 @@ def index(request):
 @login_required(login_url='/login/')
 @user_passes_test(is_superuser, login_url='/login/')
 def create(request):
-    action_type = 'Add new story'
+    action_type = 'Make a new story'
     storyF = HistoriaForm()
     context = {
         'action_type': action_type,

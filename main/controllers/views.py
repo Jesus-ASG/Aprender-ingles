@@ -29,3 +29,16 @@ def savedStories(request):
     }
     return render(request, 'user/index_user.html', context)
 
+
+@login_required(login_url='/login/')
+def likedStories(request):
+    user_profile = request.user.profile
+    page_title = 'Your favorites stories'
+    stories = Story.objects.filter(likedstory__user_profile=user_profile).order_by('-likedstory__date')
+
+    context = {
+        'page_title': page_title,
+        'stories': stories,
+    }
+    return render(request, 'user/index_user.html', context)
+

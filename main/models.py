@@ -106,11 +106,22 @@ class UserProfile(models.Model):
     
     # extra fields
     stories_scores = models.ManyToManyField(Story, related_name='users_scored', through='Score')
-    liked_stories = models.ManyToManyField(Story, related_name='users_liked', blank=True)
+    liked_stories = models.ManyToManyField(Story, related_name='users_liked', through='LikedStory')
     saved_stories = models.ManyToManyField(Story, related_name='saved_by', through='SavedStory')
 
     def __str__(self) -> str:
         return f'username: {self.user.username}'
+
+
+class LikedStory(models.Model):
+    class Meta:
+        db_table = prefix + 'liked_story'
+    # keys
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    story = models.ForeignKey(Story, on_delete=models.CASCADE)
+
+    # fields
+    date = models.DateTimeField(auto_now_add=True, null=True)
 
 
 class SavedStory(models.Model):

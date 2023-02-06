@@ -13,7 +13,7 @@ def is_superuser(user):
 @login_required(login_url='/login/')
 @user_passes_test(is_superuser, login_url='/login/')
 def create(request):
-    action_type = 'Add new tag'
+    action_type = 'Add a new tag'
     tagF = CategoriaForm()
 
     context = {
