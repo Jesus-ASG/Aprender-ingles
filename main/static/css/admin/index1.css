@@ -6,7 +6,7 @@
 	width: 33.3%;
 }
 
-.img-admin-container img {
+.img-admin-img {
 	width: 100%;
 	height: 200px;
 	border-radius: 10px;
@@ -34,4 +34,12 @@
 .action-btn span i {
 	align-items: center;
 	text-align: center;
+}
+
+.tab-titles a {
+	color: #000;
+}
+
+.tab-titles .active {
+	font-weight: bold;
 }

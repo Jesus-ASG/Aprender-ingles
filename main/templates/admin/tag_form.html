@@ -1,0 +1,70 @@
+{% extends 'main_template.html' %}
+{% load static %}
+
+{% block title %} {{ action_type }} {% endblock %}
+
+{% block page-styles %}
+<style>
+	.form {
+		max-width: 600px;
+		margin: auto;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container main-content">
+	<div class="row mt-3">
+		<div class="col-2 text-start fs-1">
+			<a href="{% url 'index_admin' %}" class="btn-back-next"><i class='fa fa-arrow-circle-left'></i></a>
+		</div>
+		<div class="col-8">
+			<h2 class="fs-2 fw-bold text-center">{{ action_type }}</h2>
+		</div>
+	</div>
+
+	<div class="row mt-3">
+		<div class="col-12">
+			<div class="form p-3 mb-3">
+				<form method="post" enctype="multipart/form-data" autocomplete="off">
+					{% csrf_token %}
+					{% for field in tag_form %}
+					<div class="mb-3 text-center">
+						<label for="{{ field.id_for_label }}" class="form-label fs-4 fw-bold" style="color: #ff5f13;">
+							{{ field.label }}:
+						</label>
+
+						<div class="input-field">
+							{{ field }}
+						</div>
+					</div>
+
+					{% endfor %}
+					<hr>
+					<div class="row">
+						<div class="col-12 text-center">
+							<a class="btn hover-scale fs-5 fw-bold m-1" href="{% url 'index_admin' %}" role="button"
+								style="background-color: var(--light-red); border-radius: 10px; color: #fff;">
+								Cancelar
+							</a>
+							<input class="btn hover-scale fs-5 fw-bold m-1" type="submit"
+								style="background-color: var(--light-blue); border-radius: 10px; color: #fff;"
+								value="Guardar">
+						</div>
+					</div>
+
+				</form>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block page-scripts %}
+
+<script>
+</script>
+
+{% endblock %}

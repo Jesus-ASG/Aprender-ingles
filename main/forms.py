@@ -24,6 +24,18 @@ class CategoriaForm(forms.ModelForm):
 		model = Tag
 		fields = '__all__'
 
+		input_classes = 'form-control fs-6'
+
+		widgets = {
+			'name1': forms.TextInput(attrs={'class': input_classes}),
+			'name2': forms.TextInput(attrs={'class': input_classes}),
+		}
+
+		labels = {
+			'name1': 'Nombre en inglés',
+			'name2': 'Nombre en español',
+		}
+
 
 class HistoriaForm(forms.ModelForm):
 	class Meta:

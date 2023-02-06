@@ -13,7 +13,6 @@
 	.img-form-showing-container {
 		width: 200px;
 		margin: auto;
-
 	}
 
 	.img-form-showing {
@@ -24,7 +23,6 @@
 		border-radius: 10px;
 		box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
 			rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-
 	}
 </style>
 {% endblock %}
@@ -61,13 +59,19 @@
 							{{ field.label }}:
 						</label>
 
-						{% if field.field.widget.input_type == 'file' and field.value.url %}
+						{% if field.field.widget.input_type == 'file' %}
+						{% if field.value.url %}
+						<input type="text" value="{{ field.value.url }}" id="default_cover" hidden>
 						<div class="img-form-showing-container mb-2">
-							<img class="img-form-showing p-1" src="{{ field.value.url }}" alt="No se pudo cargar imagen">
+							<img class="img-form-showing p-1" id="img_showed" src="{{ field.value.url }}"
+								alt="No se pudo cargar imagen">
 						</div>
-
 						{% else %}
-						<img src="" alt="">
+						<input type="text" value="{% static 'img/image-icon.png' %}" id="default_cover" hidden>
+						<div class="img-form-showing-container mb-2">
+							<img class="img-form-showing p-1" id="img_showed" src="{% static 'img/image-icon.png' %}">
+						</div>
+						{% endif %}
 						{% endif %}
 						<div class="input-field">
 							{{ field }}
@@ -83,7 +87,8 @@
 								Cancelar
 							</a>
 							<input class="btn hover-scale fs-5 fw-bold m-1" type="submit"
-								style="background-color: var(--light-blue); border-radius: 10px; color: #fff;" value="Guardar">
+								style="background-color: var(--light-blue); border-radius: 10px; color: #fff;"
+								value="Guardar">
 						</div>
 					</div>
 
@@ -101,14 +106,38 @@
 <script>
 	// change styles for showing categories
 	document.addEventListener("DOMContentLoaded", function () {
-		var cambiar = document.querySelector("#id_tag").childNodes;
+		let cambiar = document.querySelector("#id_tag").childNodes;
 		for (let i = 0; i < cambiar.length; i++)
 			cambiar[i].className = "form-check form-check-inline fs-6";
 
-		var checks = document.getElementsByName("tag");
+		let checks = document.getElementsByName("tag");
 		for (let i = 0; i < checks.length; i++)
 			checks[i].className = "form-check-input";
+
+		let input_cover = document.getElementById("id_cover");
+
+		input_cover.setAttribute('onchange', "changeImg(this)");
+		console.log(input_cover);
 	});
+
+	function restoreImage() {
+		let default_cover = $("#default_cover").val();
+		$("#img_showed").attr("src", default_cover);
+		$("#id_cover").val("");
+	}
+
+	function changeImg(input) {
+		if (input.value == "")
+			restoreImage();
+		if (input.files && input.files[0]) {
+			let reader = new FileReader();
+			reader.onload = function (e) {
+				$("#img_showed").attr("src", e.target.result);
+			};
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
+
 </script>
 
 {% endblock %}

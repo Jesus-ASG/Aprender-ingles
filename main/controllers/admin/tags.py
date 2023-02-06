@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import HttpResponseNotFound
 from django.shortcuts import redirect, render
 
 from main.forms import CategoriaForm
@@ -11,33 +12,58 @@ def is_superuser(user):
 
 @login_required(login_url='/login/')
 @user_passes_test(is_superuser, login_url='/login/')
-def index(request):
-    categorias = Tag.objects.all().order_by('name1')
-    return render(request, 'admin/categorias/ver_categorias.html', {'categorias': categorias})
-
-
-@login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
 def create(request):
-    formulario = CategoriaForm(request.POST or None)
-    if formulario.is_valid():
-        formulario.save()
-    return render(request, 'admin/categorias/agregar_categorias.html', {'formulario': formulario})
+    action_type = 'Add new tag'
+    tagF = CategoriaForm()
+
+    context = {
+        'action_type':action_type,
+        'tag_form': tagF,
+    }
+
+    if request.method == 'GET':
+        return render(request, 'admin/tag_form.html', context)
+    
+    if request.method == 'POST':
+        tagF = CategoriaForm(request.POST or None)
+        if not tagF.is_valid():
+            return render(request, 'admin/tag_form.html', context)
+        
+        tagF.save()
+        return redirect('index_admin')
 
 
 @login_required(login_url='/login/')
 @user_passes_test(is_superuser, login_url='/login/')
-def update(request, id):
-    categoria = Tag.objects.get(id=id)
-    formulario = CategoriaForm(request.POST or None, instance=categoria)
-    if formulario.is_valid() and request.POST:
-        formulario.save()
-    return render(request, 'admin/categorias/editar_categoria.html', {'formulario': formulario})
+def update(request, tag_id):
+    try:
+        tag = Tag.objects.get(id=tag_id)
+    except:
+        return HttpResponseNotFound()
+    
+    action_type = 'Edit tag'
+    tagF = CategoriaForm(instance=tag)
+    context = {
+        'action_type':action_type,
+        'tag_form': tagF,
+    }
+
+    if request.method == 'GET':
+        return render(request, 'admin/tag_form.html', context)
+    
+    if request.method == 'POST':
+        tagF = CategoriaForm(request.POST or None, instance=tag)
+        context["tag_form"] = tagF
+        if not tagF.is_valid():
+            return render(request, 'admin/tag_form.html', context)
+        
+        tagF.save()
+        return redirect('index_admin')
 
 
 @login_required(login_url='/login/')
 @user_passes_test(is_superuser, login_url='/login/')
-def delete(request, id):
-    categoria = Tag.objects.get(id=id)
+def delete(request, tag_id):
+    categoria = Tag.objects.get(id=tag_id)
     categoria.delete()
-    return redirect('ver_categorias')
+    return redirect('index_admin')

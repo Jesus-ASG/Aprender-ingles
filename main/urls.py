@@ -13,14 +13,13 @@ urlpatterns = [
     # Stories
     path('myadmin/', stories.index, name = 'index_admin'),
     path('myadmin/add-story/', stories.create, name = 'add_story'),
-    path('myadmin/edit-story/<int:story_id>', stories.edit, name = 'edit_story'),
+    path('myadmin/edit-story/<int:story_id>', stories.update, name = 'edit_story'),
     path('myadmin/del-story/<int:story_id>', stories.delete, name = 'delete_story'),
 
     # Tags
-    path('myadmin/ver-categorias', tags.index, name = 'ver_categorias'),
-    path('myadmin/agregar-categorias', tags.create, name = 'agregar_categorias'),
-    path('myadmin/editar-categoria/<int:id>', tags.update, name = 'editar_categoria'),
-    path('myadmin/eliminar-categoria/<int:id>', tags.delete, name = 'eliminar_categoria'),
+    path('myadmin/add-tag', tags.create, name = 'add_tag'),
+    path('myadmin/edit-tag/<int:tag_id>', tags.update, name = 'edit_tag'),
+    path('myadmin/del-tag/<int:tag_id>', tags.delete, name = 'delete_tag'),
 
     # Pages
     path('myadmin/view-pages/<slug:route>/', pages.index, name='view_pages'),

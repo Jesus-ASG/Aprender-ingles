@@ -8,7 +8,7 @@ from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import redirect, render
 
 from main.forms import HistoriaForm, PageForm
-from main.models import Story
+from main.models import Story, Tag
 
 
 def is_superuser(user):
@@ -19,7 +19,12 @@ def is_superuser(user):
 @user_passes_test(is_superuser, login_url='/login/')
 def index(request):
     stories = Story.objects.all()
-    return render(request, 'admin/index_admin.html', {'stories': stories})
+    tags = Tag.objects.all()
+    context = {
+        'stories': stories,
+        'tags': tags,
+    }
+    return render(request, 'admin/index_admin.html', context)
 
 
 @login_required(login_url='/login/')
@@ -54,7 +59,7 @@ def create(request):
 
 @login_required(login_url='/login/')
 @user_passes_test(is_superuser, login_url='/login/')
-def edit(request, story_id):
+def update(request, story_id):
     try:
         story = Story.objects.get(id=story_id)
     except:
