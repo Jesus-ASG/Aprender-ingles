@@ -4,71 +4,128 @@
 {% block title %} Story Quest {% endblock %}
 
 {% block page-styles %}
-<link rel="stylesheet" href="{% static 'css/home.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/no-logged/home.css' %}" type="text/css">
 {% endblock %}
 
 {% block content %}
-<div class="section-title">
-    <h1>¡La mejor aplicación para aprender inglés!</h1>
-</div>
 
 <!-- CAROUSEL -->
-<div id="MiCarrusel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#MiCarrusel" data-bs-slide-to="0" class="active"
-            arial-label="Slide 1"></button>
-        <button type="button" data-bs-target="#MiCarrusel" data-bs-slide-to="1" class="active"
-            arial-label="Slide 2"></button>
-        <button type="button" data-bs-target="#MiCarrusel" data-bs-slide-to="2" class="active"
-            arial-label="Slide 3"></button>
-    </div>
-    <div class="carousel-inner">
-        <div class="carousel-item active banner-item">
-            <img src="{% static 'img/banner/b3.jpg' %}">
-            <div class="container">
-                <div class="carousel-caption text-start">
-                    <div>
-                        <h1>¡Aprende inglés de manera divertida!</h1>
-                        <p>Totalmente gratis.</p>
-                    </div>
-                    <p><a href="#" class="btn btn-sm btn-primary">unsigned button</a></p>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item banner-item">
-            <img src="{% static 'img/banner/b2.jpg' %}">
-            <div class="container">
-                <div class="carousel-caption">
-                    <div>
-                        <h1>Desarrollado completamente en México</h1>
-                        <p></p>
-                    </div>
-                    <p><a href="{% url 'login' %}" class="btn btn-lg btn-primary">Comenzar a aprender</a></p>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item banner-item">
-            <img src="{% static 'img/banner/b4.jpg' %}">
-            <div class="container">
-                <div class="carousel-caption text-end">
-                    <div>
-                        <h1>Benemérita Universidad Autónoma de Puebla</h1>
-                        <p>Facultad de Ciencias de la Computación</p>
-                    </div>
-                    <p><a href="#" class="btn btn-sm btn-primary">unsigned button</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#MiCarrusel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#MiCarrusel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
+<div class="d-flex" style="background-color: #eeeeee;">
+	<div class="carousel-container">
+		<div id="MyCarousel" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-indicators">
+				<button type="button" data-bs-target="#MyCarousel" data-bs-slide-to="0" class="active" aria-current="true"
+					arial-label="Slide 1"></button>
+				<button type="button" data-bs-target="#MyCarousel" data-bs-slide-to="1" class="" arial-label="Slide 2"></button>
+				<button type="button" data-bs-target="#MyCarousel" data-bs-slide-to="2" class="" arial-label="Slide 3"></button>
+			</div>
+			<div class="carousel-inner">
+				<div class="carousel-item active banner-item">
+					<img src="{% static 'img/banner/b1.png' %}" class="d-none d-sm-block">
+					<img src="{% static 'img/banner/b1-sm.png' %}" class="d-block d-sm-none">
+					<div class="container">
+						<div class="carousel-caption text-center">
+							<a class="carousel-a-title hover-scale w-100" href="{% url 'register' %}">
+								<h2 class="d-inline-block m-2">¡Aprende inglés de manera divertida!</h2>
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="carousel-item banner-item">
+					<img src="{% static 'img/banner/b2.png' %}" class="d-none d-sm-block">
+					<img src="{% static 'img/banner/b2-sm.png' %}" class="d-block d-sm-none">
+					<div class="container">
+						<div class="carousel-caption text-center">
+							<a class="carousel-a-title hover-scale w-100" href="{% url 'register' %}">
+								<h2 class="d-inline-block m-2">Mejora tu pronunciación</h2>
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="carousel-item banner-item">
+					<img src="{% static 'img/banner/b3.png' %}" class="d-none d-sm-block">
+					<img src="{% static 'img/banner/b3-sm.png' %}" class="d-block d-sm-none">
+					<div class="container">
+						<div class="carousel-caption text-center">
+							<a class="carousel-a-title hover-scale w-100" href="{% url 'register' %}">
+								<h2 class="d-inline-block m-2">Guarda tus historias favoritas</h2>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<button class="carousel-control-prev" type="button" data-bs-target="#MyCarousel" data-bs-slide="prev"
+		style="height: 70vh;">
+		<span class="carousel-control-prev-icon"></span>
+		<span class="visually-hidden">Previous</span>
+	</button>
+	<button class="carousel-control-next" type="button" data-bs-target="#MyCarousel" data-bs-slide="next"
+		style="height: 70vh;">
+		<span class="carousel-control-next-icon"></span>
+		<span class="visually-hidden">Next</span>
+	</button>
 </div>
-<hr>
+
+<div class="container marketing">
+
+	<hr class="featurette-divider">
+	<div class="row featurette">
+		<div class="col-md-7">
+			<h2 class="featurette-heading">Contesta los ejercicios.
+				<span class="text-muted">Obtén retroalimentación fácilmente haciendo click sobre cualquier texto.</span>
+			</h2>
+			<p class="lead">Gana puntos de experiencia y supera tu propia marca personal.</p>
+		</div>
+		<div class="col-md-5 text-end">
+			<a href="{% static 'img/featurette/f1.png' %}" target="_blank" style="color: rgba(255, 81, 0, 0.9);">
+				<span><i class="fa fa-external-link" aria-hidden="true" title="Ver imagen completa"></i></span>
+			</a>
+			<img class="featurette-image img-fluid mx-auto" src="{% static 'img/featurette/f1.png' %}" alt=""
+				style="object-fit: contain; border-radius: 20px; max-height: 500px; background-color: rgba(0,0,0,0);">
+		</div>
+	</div>
+
+	<hr class="featurette-divider">
+	<div class="row featurette">
+		<div class="col-md-7 order-md-2">
+			<h2 class="featurette-heading">Guarda el contenido de tu agrado.
+				<span class="text-muted">Ya sea para contestar después o para marcarlo como favorito.</span>
+			</h2>
+			<p class="lead">Navega fácilmente entre tus historias favoritas.</p>
+		</div>
+		<div class="col-md-5 order-md-1 text-start">
+			<img class="featurette-image img-fluid mx-auto" src="{% static 'img/featurette/f2.png' %}" alt=""
+				style="object-fit: contain; border-radius: 20px; width: 450px; height: 450px; background-color: rgba(0,0,0,0);">
+			<a href="{% static 'img/featurette/f2.png' %}" target="_blank" style="color: rgba(255, 81, 0, 0.9);">
+				<span><i class="fa fa-external-link" aria-hidden="true" title="Ver imagen completa"></i></span>
+			</a>
+		</div>
+	</div>
+
+	<hr class="featurette-divider">
+	<div class="row featurette">
+		<div class="col-md-7">
+			<h2 class="featurette-heading">Administrador.
+				<span class="text-muted">Crea historias en el modo administrador.</span>
+			</h2>
+			<p class="lead">Fácil de usar, administra etiquetas e historias, crea nuevas páginas y ejercicios.</p>
+		</div>
+		<div class="col-md-5 text-end">
+			<a href="{% static 'img/featurette/f3.png' %}" target="_blank" style="color: rgba(255, 81, 0, 0.9);">
+				<span><i class="fa fa-external-link" aria-hidden="true" title="Ver imagen completa"></i></span>
+			</a>
+			<img class="featurette-image img-fluid mx-auto" src="{% static 'img/featurette/f3.png' %}" alt=""
+				style="object-fit: contain; border-radius: 20px; max-height: 500px; background-color: rgba(0,0,0,0);">
+		</div>
+	</div>
+
+	<hr class="featurette-divider">
+
+	<!-- /END THE FEATURETTES -->
+
+</div>
 
 {% endblock %}

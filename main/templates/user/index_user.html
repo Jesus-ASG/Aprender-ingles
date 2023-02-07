@@ -36,6 +36,11 @@
 				</a>
 			</div>
 		</div>
+		{% empty %}
+		<div class="col-12 text-center mb-3">
+			<h2 class="fs-2">{{ message_if_empty }}</h2>
+		</div>
+
 		{% endfor %}
 	</div>
 
