@@ -1,8 +1,7 @@
 from django.urls import path
-from . import vistas as v
-from main.controllers.admin import pages, tags, stories
-from main.controllers.user import story_render, user_apis
-from main.controllers import views
+from main.views.admin import pages, tags, stories
+from main.views.user import story_render, user_apis
+from main.views import views, auth_views as v
 
 # para cargar imagenes
 from django.conf import settings

@@ -14,7 +14,7 @@ from rest_framework.authtoken.models import Token
 
 from rest_framework.views import APIView
 
-from .forms import NewUserForm
+from main.forms import NewUserForm
 
 
 class Login(FormView):

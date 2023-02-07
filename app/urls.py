@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.authtoken import views
-from main.vistas import Login, Logout
+from main.views.auth_views import Login, Logout
 
 urlpatterns = [
     path('admin/', admin.site.urls),
