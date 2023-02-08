@@ -7,10 +7,11 @@ from ..models import Story
 def index(request):
     if not request.user.is_authenticated:
         return render(request, 'no-logged/home.html')
-    
+    user_profile = request.user.profile
     page_title = 'Stories Gallery'
     message_if_empty = ''
-    stories = Story.objects.all()
+    stories = Story.objects.all().exclude(xp_required__gt = user_profile.xp)
+    #stories = Story.objects.all()
     context = {
         'stories': stories,
         'page_title': page_title,

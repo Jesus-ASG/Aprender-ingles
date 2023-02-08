@@ -221,7 +221,9 @@ def storyContent(request, route, page_number):
             cache_story_answers["score"]["letter_grade"] = letter_grade
 
             cache.set(f'story_answers_{story.id}', cache_story_answers, expiration_time)
-        
+
+            user_profile.xp += results.get('score', 0)
+            user_profile.save()
 
         return JsonResponse(cache_story_answers)
 

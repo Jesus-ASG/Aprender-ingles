@@ -51,6 +51,7 @@ class HistoriaForm(forms.ModelForm):
 			'cover': forms.FileInput(attrs={'class': input_classes}),
 			'description1': forms.TextInput(attrs={'class': input_classes}),
 			'description2': forms.TextInput(attrs={'class': input_classes}),
+			'xp_required': forms.NumberInput(attrs={'class': input_classes}),
 		}
 
 		labels = {
@@ -59,6 +60,7 @@ class HistoriaForm(forms.ModelForm):
 			'cover': 'Portada',
 			'description1': 'Descripción en inglés',
 			'description2': 'Descripción en español',
+			'xp_required': 'XP necesaria para desbloquear esta historia',
 		}
 
 	tag = forms.ModelMultipleChoiceField(

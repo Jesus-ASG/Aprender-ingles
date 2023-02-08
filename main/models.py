@@ -60,12 +60,15 @@ class Story(models.Model):
     cover = models.ImageField(upload_to='imagenes/portadas/', default=path_default_cover_img, verbose_name='cover')
     description1 = models.CharField(max_length=100, null=True, blank=True, default='')
     description2 = models.CharField(max_length=100, null=True, blank=True, default='')
-    route = models.SlugField(max_length=255, unique=True, null=False, default='')
+    
+    xp_required = models.IntegerField(default=0)
 
     tag = models.ManyToManyField(Tag, blank=True)
 
     likes_number = models.IntegerField(default=0)
+    route = models.SlugField(max_length=255, unique=True, null=False, default='')
     created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
 
     def get_portada(self):
         return self.cover.name
@@ -103,6 +106,7 @@ class UserProfile(models.Model):
         db_table = prefix + 'user_profile'
     # link one to one to the django user
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    xp = models.IntegerField(default=0)
     
     # extra fields
     stories_scores = models.ManyToManyField(Story, related_name='users_scored', through='Score')
