@@ -120,20 +120,36 @@ speech.onend = (e) => {
 	highlighted_sound_btn.classList.remove("highlighted-icon");
 }
 
-function readText(element_id){
+function readText(element_id, id){
 	if (!speaking_currently){
 		speaking_currently = true;
 		let elem = document.getElementById(element_id);
-		let text = elem.getAttribute("text_answer");
-		highlighted_sound_btn = elem.querySelector("[name = sound_btn]");
-		highlighted_sound_btn.classList.add("highlighted-icon");
 
-		speech.lang = 'en-US';
-		speech.text = text;
-		speech.volume = 1;
-		speech.rate = 1;
-		speech.pitch = 1;
-		window.speechSynthesis.speak(speech);
+		const csrftoken = getCookie('csrftoken');
+		$.ajax({
+				type: "POST",
+				url: URL_REQUEST_EXERCISE_ANSWER,
+				data: {
+					'exercise_type': 'repeat_phrase',
+					'exercise_id': id
+				},
+				headers: { "X-CSRFToken": csrftoken },
+				success: function (response) {
+						if (response.success){
+							text_clean = response.response.replace(/[|]/g, ' ');
+							speech.text = text_clean;
+
+							highlighted_sound_btn = elem.querySelector("[name = sound_btn]");
+							highlighted_sound_btn.classList.add("highlighted-icon");
+							speech.lang = 'en-US';
+							speech.volume = 1;
+							speech.rate = 1;
+							speech.pitch = 1;
+							window.speechSynthesis.speak(speech);
+						}
+				},
+				error: function (response) {}
+		});
 	}
 }
 

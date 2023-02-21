@@ -105,5 +105,5 @@ class RepeatPhraseForm(forms.ModelForm):
 	class Meta:
 		model = RepeatPhrase
 		fields = '__all__'
-		exclude = ['page', 'content1', 'content2', 'element_number']
+		exclude = ['page', 'content1', 'content2', 'element_number', 'show_text']
 

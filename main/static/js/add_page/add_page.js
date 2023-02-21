@@ -54,7 +54,7 @@ function changeImg(input) {
 
 
 function savePage() {
-    var formData = new FormData();
+    let formData = new FormData();
 	// Contents
 	// Dialogues
     let dialogues = document.getElementsByName('dialogues');
@@ -86,14 +86,15 @@ function savePage() {
 
 	// Exercises
 	// Repeat phrases
-	let repatPhrases = document.getElementsByName('repeatPhrases');
+	let repeatPhrases = document.getElementsByName('repeatPhrases');
 	let jsonRepeatPhrases = [];
-	for (let i = 0; i < repatPhrases.length; i++) {
+	for (let i = 0; i < repeatPhrases.length; i++) {
         let rp = {
-            "id": repatPhrases[i].querySelectorAll('[name = id]')[0].value,
-            "element_number": repatPhrases[i].querySelectorAll('[name = element_number]')[0].value,
-            "language1": repatPhrases[i].querySelectorAll('[name = language1]')[0].value,
-            "language2": repatPhrases[i].querySelectorAll('[name = language2]')[0].value
+            "id": repeatPhrases[i].querySelectorAll('[name = id]')[0].value,
+            "element_number": repeatPhrases[i].querySelectorAll('[name = element_number]')[0].value,
+            "language1": repeatPhrases[i].querySelectorAll('[name = language1]')[0].value,
+            "language2": repeatPhrases[i].querySelectorAll('[name = language2]')[0].value,
+            "show_text": repeatPhrases[i].querySelector('[name = show_text]').checked
         }
         jsonRepeatPhrases.push(rp);
     }

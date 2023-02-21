@@ -240,6 +240,7 @@ class RepeatPhrase(models.Model):
     # fields
     content1 = models.CharField(max_length=255)
     content2 = models.CharField(max_length=255)
+    show_text = models.BooleanField(default=True)
     element_number = models.IntegerField()
 # -------- -------- -------- --------
 

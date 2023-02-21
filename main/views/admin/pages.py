@@ -121,6 +121,7 @@ def create(request, route, page_type):
             rpPObj.content1 = rp["language1"]
             rpPObj.content2 = rp["language2"]
             rpPObj.element_number = rp["element_number"]
+            rpPObj.show_text = rp["show_text"]
             repeatPhrases_to_submit.append(rpPObj)
             repPForm = RepeatPhraseForm(request.POST or None)    
         
@@ -142,6 +143,7 @@ def create(request, route, page_type):
                 pass
         
         # Save all
+        
         pgObj.save()
         
         # Content

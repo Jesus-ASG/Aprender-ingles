@@ -45,17 +45,26 @@ function repeatPhrase() {
       </div>
 
       <div class="row">
-        <label class="form-label fs-5" for="repl">Escribe el contenido en inglés</label>
         <div class="col-12 mb-2">
+        <label class="form-label fs-5" for="repP1_`+ max_elem + `">Escribe el contenido en inglés</label>
           <textarea class="form-control fs-5 txta" type="text" id="repP1_`+ max_elem + `" name="language1" placeholder="Contenido en inglés"
             maxlength="255"></textarea>
         </div>
       </div>
       <div class="row">
-        <label class="form-label fs-5" for="repl1">Escribe el contenido en español</label>
         <div class="col-12 mb-2">
+        <label class="form-label fs-5" for="repP2_`+ max_elem + `">Escribe el contenido en español</label>
           <textarea class="form-control fs-5 txta" type="text" id="repP2_`+ max_elem + `" name="language2"
             placeholder="Contenido en español" maxlength="255"></textarea>
+        </div>
+      </div>
+      <div class="row"> 
+        <div class="col-12 mb-2 text-center">
+          <div class="form-check  d-inline-block">
+            <input type="checkbox" class="form-check-input fs-5" name="show_text" id="show_text_`+ max_elem + `"
+            placeholder="Contenido en español" maxlength="255" checked>
+            <label class="form-label fs-5" for="show_text_`+ max_elem + `">Mostrar texto</label>
+          </div>
         </div>
       </div>
       <input value="`+max_elem+`" name="element_number" hidden>

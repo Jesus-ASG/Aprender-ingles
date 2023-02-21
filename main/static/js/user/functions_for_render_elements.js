@@ -31,13 +31,16 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
         "front": "px-1",
         "back": "px-1"
     };
+    let text_to_repeat = repeat_phrase.show_text ? createFlipHTML(text1, text2, total_translations, flipClasses) : '';
+    let lbl_to_repeat = repeat_phrase.show_text ? text_clean : '?';
+
     html_repeat_phrase = `
-    <div class="row mt-3 fs-5" id="repeat_phrase_`+ repeat_phrase.id + `" text_answer = "` + text_clean + `">
+    <div class="row mt-3 fs-5" id="repeat_phrase_`+ repeat_phrase.id + `">
         <div class="col-12 col-md-8">
-        `+ createFlipHTML(text1, text2, total_translations, flipClasses) + `
+        `+ text_to_repeat + `
         <div class="row">
             <div class="col-12">
-            <p class="fs-5 text-muted" name="user_answer"><strong>Listen and repeat:</strong> "`+ text_clean + `"</p>
+            <p class="fs-5 text-muted" name="user_answer" title="Press sound icon to play"><strong>Listen and repeat:</strong> "`+ lbl_to_repeat + `"</p>
             <p class="fs-5 text-success" name="feedback"></p>
             </div>
         </div>
@@ -49,7 +52,7 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
             <div class="row">
                 <div class="col-12 text-center">
                 <button class="btn shadow-none tool-icon sound_icon" 
-                onclick="readText('repeat_phrase_` + repeat_phrase.id + `')"
+                onclick="readText('repeat_phrase_` + repeat_phrase.id + `', ` + repeat_phrase.id + `)"
                 name="sound_btn" title="Listen audio">
                     <i class='fas fa-volume-up'></i>
                 </button>

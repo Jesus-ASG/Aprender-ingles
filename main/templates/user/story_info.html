@@ -48,7 +48,7 @@
 					<strong class="fs-5">Tags</strong> <br>
 					<div class="text-center">
 						{% for cat in story.tag.all %}
-						<div class="tag px-3 py-1 fw-bold">
+						<div class="rounded-pill tag">
 							{{ cat.name1 }}
 						</div>
 						{% empty %}
@@ -120,8 +120,7 @@
 					<div class="progress w-75 progress-styles">
 						<div class="progress-bar" role="progressbar" name="progress"
 							style="width: {{ high_score.speaking_percentage |default:0 }}%;"
-							aria-valuenow=" {{ high_score.speaking_percentage |default:0 }} " aria-valuemin="0"
-							aria-valuemax="100">
+							aria-valuenow=" {{ high_score.speaking_percentage |default:0 }} " aria-valuemin="0" aria-valuemax="100">
 						</div>
 					</div>
 				</div>
@@ -135,8 +134,7 @@
 					<div class="progress w-75 progress-styles">
 						<div class="progress-bar" role="progressbar" name="progress"
 							style="width: {{ high_score.writing_percentage |default:0 }}%;"
-							aria-valuenow=" {{ high_score.writing_percentage |default:0 }} " aria-valuemin="0"
-							aria-valuemax="100">
+							aria-valuenow=" {{ high_score.writing_percentage |default:0 }} " aria-valuemin="0" aria-valuemax="100">
 						</div>
 					</div>
 				</div>

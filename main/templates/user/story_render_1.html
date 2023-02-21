@@ -145,6 +145,7 @@
 <script>
   const URL_ANSWER_PAGE = '{% url "story_content" route=story.route page_number=page_number %}';
   const URL_NEXT_PAGE = document.getElementById("next_page_input").value;
+  const URL_REQUEST_EXERCISE_ANSWER = '{% url "request_exercise_answer" %}';
   let db_page_number = parseInt('{{ page_number }}');
   let db_total_pages = parseInt('{{ total_pages }}');
 
