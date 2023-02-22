@@ -231,7 +231,10 @@ function showFeedback(response){
 					let rp_ans = rp.querySelector("[name = user_answer]");
 					let feedback = rp.querySelector("[name = feedback]");
 
+					//let child = document.createElement("span");
+					//rp_ans.appendChild(child);
 					rp_ans.innerHTML = `<strong>Your answer:</strong> "${exercise.answer}"`;
+					
 					feedback.innerHTML = `<strong>Right answer:</strong> "${exercise.feedback}"`;
 					break;
 			}

@@ -56,6 +56,8 @@ body {
 .main-content {
 	max-width: 900px;
 	background-color: #fff;
+	box-shadow: rgb(50 50 93 / 25%) 0px 6px 12px -2px,
+		rgb(0 0 0 / 30%) 0px 3px 7px -3px;
 }
 
 .footer-icon {

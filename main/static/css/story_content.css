@@ -29,3 +29,25 @@
 	color: #fff !important;
 	background-color: #5bd971;
 }
+
+.custom-range::-webkit-slider-thumb {
+	background-color: #77b9fc;
+}
+
+.custom-range::-moz-range-thumb {
+	background: #77b9fc;
+}
+
+.custom-range::-ms-thumb {
+	background: #77b9fc;
+}
+
+-webkit-slider-thumb:active {
+	background-color: red;
+}
+-webkit-slider-thumb,
+.custom-range:focus::-webkit-slider-thumb,
+.custom-range:focus::-moz-range-thumb,
+.custom-range:focus::-ms-thumb {
+	box-shadow: red;
+}
