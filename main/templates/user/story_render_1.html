@@ -189,6 +189,7 @@
 
   setAnswerQuestionsMessage(total_translations);
 
+  // Render elements
   for (let element of collections_sorted) {
     switch (element.type) {
       case "image":
@@ -234,5 +235,8 @@
 </script>
 
 <script src="{% static 'js/user/answer_exercises.js' %}"></script>
+<script>
+  setVolumeFunctionality();
+</script>
 
 {% endblock %}

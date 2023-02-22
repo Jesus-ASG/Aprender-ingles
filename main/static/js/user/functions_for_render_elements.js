@@ -37,7 +37,27 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 		text_to_repeat = createFlipHTML('Press the button to listen the answer', 'Pulsa el botón para escuchar la respuesta', total_translations, flipClasses);
 	
 	html_repeat_phrase = `
-	<div class="row mt-3 fs-5" id="repeat_phrase_`+ repeat_phrase.id + `">
+	<div class="row mt-3 fs-5" id="repeat_phrase_`+ repeat_phrase.id + `" style="border: 1px solid red;">
+	
+	<!-- Controls -->
+	<div class="row my-3 text-center" id="volume_container_` + repeat_phrase.id + `">
+		<!-- Sound -->
+		<div class="col-12 col-sm-5">
+			<div class="row text-center">
+				<div class="col-2 d-inline-block align-middle">
+					<span class"" ><i class='fas fa-volume-up'></i></span>
+				</div>
+				<div class="col-10 d-inline-block align-middle">
+				<span class="align-middle">
+					<input type="range" min="0" max="1" step="0.01" value="0.5" class="form-range custom-range volume-input d-none"
+					id="volume_range_` + repeat_phrase.id + `">
+				</span>
+				</div>
+			</div>
+		</div>
+		<!-- Speed -->
+	</div>
+
 		<div class="col-12 col-md-8">
 			<div class="row">
 				<div class="col-12">
@@ -55,12 +75,11 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 				Listen
 				<div class="row">
 					<div class="col-12 text-center">
-						<button class="btn shadow-none tool-icon sound_icon" 
+						<button type="button" class="btn shadow-none tool-icon sound_icon" 
 						onclick="readText('repeat_phrase_` + repeat_phrase.id + `', ` + repeat_phrase.id + `)"
 						name="sound_btn" title="Listen audio">
-								<i class='fas fa-volume-up'></i>
+						<span class="d-inline-block"><i class='fas fa-volume-up'></i></span>
 						</button>
-						<input type="range" class="form-range custom-range">
 					</div>
 				</div>
 				</div>
@@ -83,4 +102,18 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 	</div><span id="exercises_area">`;
 
 	document.getElementById("exercises_area").outerHTML = html_repeat_phrase;
+	
+
+	let btn_rp = document.getElementById("volume_container_"+repeat_phrase.id);
+	btn_rp.addEventListener('mouseenter', (e) => {
+		document.getElementById("volume_range_"+repeat_phrase.id).classList.add("d-block");
+		document.getElementById("volume_range_"+repeat_phrase.id).classList.remove("d-none");
+	});
+
+	btn_rp.addEventListener('mouseleave', (e) => {
+		document.getElementById("volume_range_"+repeat_phrase.id).classList.add("d-none");
+		document.getElementById("volume_range_"+repeat_phrase.id).classList.remove("d-block");
+	});
+
+	
 }

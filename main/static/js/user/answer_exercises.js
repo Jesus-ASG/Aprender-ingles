@@ -52,7 +52,7 @@ let answer_paragraph = null;
 
 let db_exercise_id = 0;
 
-const speech = new SpeechSynthesisUtterance();
+let speech = new SpeechSynthesisUtterance();
 
 const SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
@@ -138,19 +138,28 @@ function readText(element_id, id){
 						if (response.success){
 							text_clean = response.response.replace(/[|]/g, ' ');
 							speech.text = text_clean;
-
-							highlighted_sound_btn = elem.querySelector("[name = sound_btn]");
-							highlighted_sound_btn.classList.add("highlighted-icon");
+							speech.volume = document.querySelector('.volume-input').value;
 							speech.lang = 'en-US';
-							speech.volume = 1;
 							speech.rate = 1;
 							speech.pitch = 1;
 							window.speechSynthesis.speak(speech);
+
+							highlighted_sound_btn = elem.querySelector("[name = sound_btn]");
+							highlighted_sound_btn.classList.add("highlighted-icon");
 						}
 				},
 				error: function (response) {}
 		});
 	}
+}
+
+
+function setVolumeFunctionality(){
+	$(".volume-input").on('input', (e)=>{
+		$(".volume-input").val(e.target.value);
+		speech.volume = e.target.value;
+	});
+		
 }
 
 
@@ -207,16 +216,13 @@ function sendAnswers(){
         type: "POST",
         url: URL_ANSWER_PAGE,
         data: formData,
-        processData: false,  // Tell jQuery not to process the data
-        contentType: false,  // Tell jQuery not to set the content type
+        processData: false,
+        contentType: false,
         headers: { "X-CSRFToken": csrftoken },
         success: function (response) {
-			//console.log(response);
             showFeedback(response);
         },
-        error: function (response) {
-            //console.log(response);
-        }
+        error: function (response) {}
     });
 }
 

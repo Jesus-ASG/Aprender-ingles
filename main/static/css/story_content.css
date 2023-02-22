@@ -30,6 +30,20 @@
 	background-color: #5bd971;
 }
 
+.volume-controls {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: var(--orange);
+}
+
+.adjust-volume-icon,
+.adjust-volume-bar {
+	display: inline-block;
+	background-color: red;
+	margin: auto;
+}
+
 .custom-range::-webkit-slider-thumb {
 	background-color: #77b9fc;
 }
