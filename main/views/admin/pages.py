@@ -24,7 +24,7 @@ def index(request, route):
         pages = story.pages.all().order_by('date_created', 'time_created').values()
     except:
         return HttpResponseNotFound()
-    return render(request, 'admin/view-pages.html', {'story':story, 'pages':pages})
+    return render(request, 'admin/view_pages.html', {'story':story, 'pages':pages})
 
 
 @login_required(login_url='/login/')
