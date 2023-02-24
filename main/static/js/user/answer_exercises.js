@@ -118,13 +118,12 @@ speech.onstart = (e) => {
 }
 speech.onend = (e) => {
 	speaking_currently = false;
-	highlighted_sound_btn.classList.remove("highlighted-icon");
+	highlighted_sound_btn.classList.remove("icon-active");
 }
 
-function readText(element_id, id, rate){
+function readText(id, speed, rate){
 	if (!speaking_currently){
 		speaking_currently = true;
-		let elem = document.getElementById(element_id);
 
 		const csrftoken = getCookie('csrftoken');
 		$.ajax({
@@ -145,8 +144,8 @@ function readText(element_id, id, rate){
 							speech.pitch = 1;
 							window.speechSynthesis.speak(speech);
 
-							highlighted_sound_btn = elem.querySelector("[name = sound_btn]");
-							highlighted_sound_btn.classList.add("highlighted-icon");
+							highlighted_sound_btn = document.getElementById(`play_rp_${speed}_${id}`);							
+							highlighted_sound_btn.classList.add("icon-active");
 						}
 				},
 				error: function (response) {}

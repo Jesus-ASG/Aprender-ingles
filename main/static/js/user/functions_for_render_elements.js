@@ -72,17 +72,14 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 				<div class="col-6 text-center">
 				Listen
 				<div class="row">
-					<div class="col-12 text-center">
-						
-						<button type="button" class="play-audio-btn" 
-						onclick="readText('repeat_phrase_${repeat_phrase.id}', ${repeat_phrase.id}, 0.7)"
-						name="sound_btn" title="Listen audio">
-						<i class="svgi-turtle"></i>
+					<div class="col-12 text-center play-audio-container">
+						<button type="button" id="play_rp_slow_${repeat_phrase.id}" 
+						onclick="readText(${repeat_phrase.id}, 'slow', 0.7)" title="Listen audio">
+							<i class="svgi-turtle"></i>
 						</button>
 
-						<button type="button" class="play-audio-btn" 
-						onclick="readText('repeat_phrase_${repeat_phrase.id}', ${repeat_phrase.id}, 1)"
-						name="sound_btn" title="Listen audio">
+						<button type="button" id="play_rp_fast_${repeat_phrase.id}" 
+						onclick="readText(${repeat_phrase.id}, 'fast', 1)" title="Listen audio">
 							<i class="svgi-rabbit"></i>
 						</button>
 					</div>

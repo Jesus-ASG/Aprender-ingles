@@ -66,7 +66,7 @@
 }
 
 /* Audio buttons */
-.play-audio-btn {
+.play-audio-container button {
 	width: 50px;
 	height: 50px;
 	border-radius: 100%;
@@ -75,19 +75,27 @@
 	background-color: #fff;
 	transition: all 0.2s ease-in-out;
 }
-.play-audio-btn i {
+.play-audio-container button i {
 	display: flex;
 }
-.play-audio-btn svg {
+.play-audio-container button svg {
 	margin: auto;
 	width: 32px;
 	height: 32px;
 }
 
-.play-audio-btn svg path {
+.play-audio-container button svg path {
 	fill: #77b9fc;
 }
 
-.play-audio-btn:hover svg path {
+.play-audio-container button:hover svg path {
 	fill: #5bd971;
+}
+
+.play-audio-container .icon-active {
+	background-color: #5bd971;
+}
+
+.play-audio-container .icon-active path {
+	fill: #fff !important;
 }
