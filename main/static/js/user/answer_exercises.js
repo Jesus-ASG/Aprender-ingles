@@ -52,7 +52,8 @@ let answer_paragraph = null;
 
 let db_exercise_id = 0;
 
-let speech = new SpeechSynthesisUtterance();
+const speech = new SpeechSynthesisUtterance();
+window.speechSynthesis.cancel();
 
 const SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
@@ -120,7 +121,7 @@ speech.onend = (e) => {
 	highlighted_sound_btn.classList.remove("highlighted-icon");
 }
 
-function readText(element_id, id){
+function readText(element_id, id, rate){
 	if (!speaking_currently){
 		speaking_currently = true;
 		let elem = document.getElementById(element_id);
@@ -140,7 +141,7 @@ function readText(element_id, id){
 							speech.text = text_clean;
 							speech.volume = document.querySelector('.volume-input').value;
 							speech.lang = 'en-US';
-							speech.rate = 1;
+							speech.rate = rate;
 							speech.pitch = 1;
 							window.speechSynthesis.speak(speech);
 

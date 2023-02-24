@@ -37,12 +37,11 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 		text_to_repeat = createFlipHTML('Press the button to listen the answer', 'Pulsa el botón para escuchar la respuesta', total_translations, flipClasses);
 	
 	html_repeat_phrase = `
-	<div class="row mt-3 fs-5" id="repeat_phrase_`+ repeat_phrase.id + `" style="border: 1px solid red;">
-	
+	<div class="row mt-3 fs-5" id="repeat_phrase_`+ repeat_phrase.id + `" >
 	<!-- Controls -->
-	<div class="row my-3 text-center" id="volume_container_` + repeat_phrase.id + `">
+	<div class="row my-3 text-center">
 		<!-- Sound -->
-		<div class="col-12 col-sm-5">
+		<div class="col-12 col-sm-5" id="volume_container_` + repeat_phrase.id + `">
 			<div class="row text-center">
 				<div class="col-2 d-inline-block align-middle">
 					<span class"" ><i class='fas fa-volume-up'></i></span>
@@ -55,7 +54,6 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 				</div>
 			</div>
 		</div>
-		<!-- Speed -->
 	</div>
 
 		<div class="col-12 col-md-8">
@@ -75,10 +73,17 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 				Listen
 				<div class="row">
 					<div class="col-12 text-center">
-						<button type="button" class="btn shadow-none tool-icon sound_icon" 
-						onclick="readText('repeat_phrase_` + repeat_phrase.id + `', ` + repeat_phrase.id + `)"
+						
+						<button type="button" class="play-audio-btn" 
+						onclick="readText('repeat_phrase_${repeat_phrase.id}', ${repeat_phrase.id}, 0.7)"
 						name="sound_btn" title="Listen audio">
-						<span class="d-inline-block"><i class='fas fa-volume-up'></i></span>
+						<i class="svgi-turtle"></i>
+						</button>
+
+						<button type="button" class="play-audio-btn" 
+						onclick="readText('repeat_phrase_${repeat_phrase.id}', ${repeat_phrase.id}, 1)"
+						name="sound_btn" title="Listen audio">
+							<i class="svgi-rabbit"></i>
 						</button>
 					</div>
 				</div>
@@ -102,7 +107,6 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 	</div><span id="exercises_area">`;
 
 	document.getElementById("exercises_area").outerHTML = html_repeat_phrase;
-	
 
 	let btn_rp = document.getElementById("volume_container_"+repeat_phrase.id);
 	btn_rp.addEventListener('mouseenter', (e) => {
