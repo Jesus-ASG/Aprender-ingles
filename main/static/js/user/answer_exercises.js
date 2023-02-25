@@ -82,9 +82,7 @@ recognition.onresult = (e) => {
 	search.answer = transcript + ".";
 	answer_paragraph.innerHTML = `<strong>Your answer:</strong> "${transcript}."`;
 }
-recognition.error = (e) => {
-	//console.log(e.error);
-}
+recognition.error = (e) => {}
 
 function readVoice(element_id){
 	if (!listening_currently){
@@ -159,7 +157,6 @@ function setVolumeFunctionality(){
 		$(".volume-input").val(e.target.value);
 		speech.volume = e.target.value;
 	});
-		
 }
 
 
@@ -237,10 +234,7 @@ function showFeedback(response){
 					let rp_ans = rp.querySelector("[name = user_answer]");
 					let feedback = rp.querySelector("[name = feedback]");
 
-					//let child = document.createElement("span");
-					//rp_ans.appendChild(child);
 					rp_ans.innerHTML = `<strong>Your answer:</strong> "${exercise.answer}"`;
-					
 					feedback.innerHTML = `<strong>Right answer:</strong> "${exercise.feedback}"`;
 					break;
 			}

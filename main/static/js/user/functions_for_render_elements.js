@@ -1,6 +1,5 @@
 // Contents
 function renderDialogue(dialogue, total_translations) {
-	let html_dialogue = ``;
 	let text1 = dialogue.content1.replace(/\n/g, '<span></span>|');
 	let text2 = dialogue.content2.replace(/\n/g, '<span></span>|');
 
@@ -9,20 +8,18 @@ function renderDialogue(dialogue, total_translations) {
 		"front": "px-1",
 		"back": "px-1"
 	};
-	html_dialogue += `
+	document.getElementById("content_area").outerHTML = 
+	`
 	<div class="row" style="color:rgba(0,0,0,0)"><br></div>
-	<div class="fw-bold fs-5 dialogue-name" style="color:`+ dialogue.color + `;">
-		<p>`+ dialogue.name + `:</p>
+	<div class="fw-bold fs-5 dialogue-name" style="color:${dialogue.color};">
+		<p>${dialogue.name}:</p>
 	</div>
 	`+ createFlipHTML(text1, text2, total_translations, flipClasses) + `
 	<div id="content_area"></div>`;
-
-	document.getElementById("content_area").outerHTML = html_dialogue;
 }
 
 // Exercises
 function renderRepeatPhrase(repeat_phrase, total_translations) {
-	let html_repeat_phrase = ``;
 	let text1 = repeat_phrase.content1.replace(/\n/g, '<span></span>|').trim();
 	let text2 = repeat_phrase.content2.replace(/\n/g, '<span></span>|').trim();
 	let flipClasses = {
@@ -36,12 +33,13 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 	else
 		text_to_repeat = createFlipHTML('Press the button to listen the answer', 'Pulsa el botón para escuchar la respuesta', total_translations, flipClasses);
 	
-	html_repeat_phrase = `
-	<div class="row mt-3 fs-5" id="repeat_phrase_`+ repeat_phrase.id + `" >
+	document.getElementById("exercises_area").outerHTML = 
+	`
+	<div class="row mt-3 fs-5" id="repeat_phrase_${repeat_phrase.id}" >
 	<!-- Controls -->
 	<div class="row my-3 text-center">
 		<!-- Sound -->
-		<div class="col-12 col-sm-5" id="volume_container_` + repeat_phrase.id + `">
+		<div class="col-12 col-sm-5" id="volume_container_${repeat_phrase.id}">
 			<div class="row text-center">
 				<div class="col-2 d-inline-block align-middle">
 					<span class"" ><i class='fas fa-volume-up'></i></span>
@@ -49,7 +47,7 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 				<div class="col-10 d-inline-block align-middle">
 				<span class="align-middle">
 					<input type="range" min="0" max="1" step="0.01" value="0.5" class="form-range custom-range volume-input d-none"
-					id="volume_range_` + repeat_phrase.id + `">
+					id="volume_range_${repeat_phrase.id}">
 				</span>
 				</div>
 			</div>
@@ -103,8 +101,6 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 		<input name="database_id" value="`+repeat_phrase.id+`" hidden>
 	</div><span id="exercises_area">`;
 
-	document.getElementById("exercises_area").outerHTML = html_repeat_phrase;
-
 	let btn_rp = document.getElementById("volume_container_"+repeat_phrase.id);
 	btn_rp.addEventListener('mouseenter', (e) => {
 		document.getElementById("volume_range_"+repeat_phrase.id).classList.add("d-block");
@@ -115,6 +111,4 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 		document.getElementById("volume_range_"+repeat_phrase.id).classList.add("d-none");
 		document.getElementById("volume_range_"+repeat_phrase.id).classList.remove("d-block");
 	});
-
-	
 }

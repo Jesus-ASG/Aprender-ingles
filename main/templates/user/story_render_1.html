@@ -226,12 +226,10 @@
   try {
     db_repeat_phrases = JSON.parse('{{ repeat_phrases |safe |escapejs }}');
   } catch (e) { }
-
 </script>
 
 <script src="{% static 'js/sort_collections.js' %}"></script>
 <script src="{% static 'js/user/functions_for_render_elements.js' %}"></script>
-
 <script>
   let total_translations = { "start": 0, "end": 0 };
 
@@ -283,7 +281,6 @@
     document.getElementById("answer_questions_message").innerHTML = createFlipHTML(text1, text2, total_translations, flipClasses);
   }
 </script>
-
 <script src="{% static 'js/user/answer_exercises.js' %}"></script>
 <script>
   setVolumeFunctionality();
