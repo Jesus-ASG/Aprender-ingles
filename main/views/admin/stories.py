@@ -10,6 +10,8 @@ from django.shortcuts import redirect, render
 from main.forms import HistoriaForm, PageForm
 from main.models import Story, Tag
 
+from main.utils.recommender import Recommender
+
 
 def is_superuser(user):
     return user.is_superuser
@@ -54,6 +56,9 @@ def create(request):
             context["error"] = "Ya existe una historia con ese título"
             return render(request, 'admin/story_form.html', context)
         storyF.save()
+
+        recommender = Recommender()
+        recommender.train()
         return redirect('view_pages', route=story_obj.route)
 
 
@@ -89,6 +94,8 @@ def update(request, story_id):
             context["error"] = "Ya existe una historia con ese título"
             return render(request, 'admin/story_form.html', context)
         storyF.save()
+        recommender = Recommender()
+        recommender.train()
         return redirect('index_admin')
         
 
@@ -98,6 +105,8 @@ def delete(request, story_id):
     try:
         historia = Story.objects.get(id=story_id)
         historia.delete()
+        recommender = Recommender()
+        recommender.train()
         return redirect('index_admin')
     except:
         return HttpResponseBadRequest('')

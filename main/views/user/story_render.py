@@ -10,6 +10,8 @@ from django.forms.models import model_to_dict
 from main.models import Story, Score, RepeatPhrase
 from main.forms import ScoreForm
 
+from main.utils.recommender import Recommender
+
 # expiration time for cache in seconds
 expiration_time = 86400
 points_per_correct_answer = 100
@@ -44,6 +46,14 @@ def storyInfo(request, route):
         story = Story.objects.get(route=route)
         cache.delete(f'story_answers_{story.id}')
         cache.delete(f'evaluated_story_{story.id}')
+
+        # Get recommendations
+        recommender = Recommender()
+        recommendations = recommender.recommend(story_id=story.id)
+        if recommendations:
+            for r in recommendations:
+                story_r = Story.objects.get(id=r[1])
+                print(f'{story_r} with {r[0]}')
 
         # check if user likes the story
         story_liked = False
