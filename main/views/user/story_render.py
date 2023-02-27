@@ -2,6 +2,8 @@ import json
 import re
 
 from django.core.cache import cache
+from django.core.serializers import serialize
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseNotFound, JsonResponse
@@ -40,65 +42,68 @@ def rateSkills(max_percentage):
 
 @login_required(login_url='/login/')
 def storyInfo(request, route):
-    try:
-        user_profile = request.user.profile
+    user_profile = request.user.profile
+    
+    story = Story.objects.get(route=route)
+    cache.delete(f'story_answers_{story.id}')
+    cache.delete(f'evaluated_story_{story.id}')
+
+    # Get recommendations
+    recommender = Recommender()
+    recommendations_dict = recommender.recommend(story_id=story.id, max_recommendations=4)
+    recommendations_list = []
+    if recommendations_dict:
+        for r in recommendations_dict:
+            story_r = Story.objects.get(id=r[1])
+            recommendations_list.append(story_r)
+    
+    #recommendations_list = json.dumps(recommendations_list)
+    #recommendations_list = serialize('json', recommendations_list)
+    #print(f'\n{recommendations_list}\n')
+
+    # check if user likes the story
+    story_liked = False
+    if story in user_profile.liked_stories.all():
+        story_liked = True
+    story_liked = json.dumps(story_liked)
+    
+    # check if user has saved the story
+    story_saved = False
+    if story in user_profile.saved_stories.all():
+        story_saved = True
+    story_saved = json.dumps(story_saved)
+    
+    scores = Score.objects.filter(user_profile=user_profile, story=story).order_by('-score').values()
+    high_score = None
+    
+    if scores:
+        high_score = scores[0]
+        letter_grade = ''
+
+        max_percentage = float(high_score.get('score')) / float(high_score.get('score_limit'))
+        max_percentage = max_percentage * 100
+        max_percentage = round(max_percentage, 2)
+
+        letter_grade = rateSkills(max_percentage)
         
-        story = Story.objects.get(route=route)
-        cache.delete(f'story_answers_{story.id}')
-        cache.delete(f'evaluated_story_{story.id}')
-
-        # Get recommendations
-        recommender = Recommender()
-        recommendations = recommender.recommend(story_id=story.id)
-        if recommendations:
-            for r in recommendations:
-                story_r = Story.objects.get(id=r[1])
-                print(f'{story_r} with {r[0]}')
-
-        # check if user likes the story
-        story_liked = False
-        if story in user_profile.liked_stories.all():
-            story_liked = True
-        story_liked = json.dumps(story_liked)
-        
-        # check if user has saved the story
-        story_saved = False
-        if story in user_profile.saved_stories.all():
-            story_saved = True
-        story_saved = json.dumps(story_saved)
-        
-        scores = Score.objects.filter(user_profile=user_profile, story=story).order_by('-score').values()
-        high_score = None
-        
-        if scores:
-            high_score = scores[0]
-            letter_grade = ''
-
-            max_percentage = float(high_score.get('score')) / float(high_score.get('score_limit'))
-            max_percentage = max_percentage * 100
-            max_percentage = round(max_percentage, 2)
-
-            letter_grade = rateSkills(max_percentage)
-            
-            high_score['letter_grade'] = letter_grade
+        high_score['letter_grade'] = letter_grade
 
 
-        pages = story.pages.all().order_by('date_created', 'time_created').values()
-        total_pages = len(pages)
+    pages = story.pages.all().order_by('date_created', 'time_created').values()
+    total_pages = len(pages)
 
-        page_number = 1
-        
-        context = {
-            'story': story,
-            'story_liked': story_liked,
-            'story_saved': story_saved,
-            'page_number': page_number,
-            'total_pages': total_pages,
-            'scores': scores,
-            'high_score': high_score,
-            }
-    except:
-        return HttpResponseNotFound()
+    page_number = 1
+    
+    context = {
+        'story': story,
+        'recommendations_list': recommendations_list,
+        'story_liked': story_liked,
+        'story_saved': story_saved,
+        'page_number': page_number,
+        'total_pages': total_pages,
+        'scores': scores,
+        'high_score': high_score,
+        }
     return render(request, 'user/story_info.html', context)
 
 

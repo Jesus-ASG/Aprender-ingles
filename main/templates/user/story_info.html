@@ -5,6 +5,7 @@
 
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/user/story_info.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/user/index_user.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -177,8 +178,27 @@
 	<div class="row my-3"></div>
 </div>
 
-<br><br><br><br><br>
-
+<div class="container main-content">
+	<div class="row mt-3">
+		<div class="col-12 text-center">
+			<h2 class="fs-1">Related</h2>
+		</div>
+	</div>
+	<hr>
+	<div class="row my-3 w-100">
+		{% for sr in recommendations_list %}
+		<div class="col-6 col-sm-4 col-md-3 p-3">
+			<div class="col-12 new-card-container text-center">
+				<a href="{% url 'story_info' sr.route %}" class="">
+					<img src="{{ sr.cover.url }}" class="p-1" alt="{{ sr.cover }}">
+					<strong class="fs-6">{{ sr.title1 }} </strong>
+				</a>
+			</div>
+		</div>
+		{% empty %}
+		{% endfor %}
+	</div>
+</div>
 
 {% endblock %}
 
@@ -193,6 +213,10 @@
 	let db_story_saved = JSON.parse('{{ story_saved }}');
 	let db_story_likes_number = '{{ story.likes_number }}';
 	let db_high_score = '{{ high_score.score |default:0 }}';
+	let db_recommendation_stories = '{{ recommendations_list }}';
+
+	for (let i of db_recommendation_stories)
+		console.log(i);
 
 	try {
 		db_title.title1 = '{{ story.title1 }}';
@@ -200,6 +224,11 @@
 	try {
 		db_title.title2 = '{{ story.title2 }}';
 	} catch (e) { }
+	try {
+		db_recommendation_stories = JSON.parse('{{ recommendations_list |safe |escapejs }}');
+	} catch (e) { console.error('error', e) }
+
+	console.log(db_recommendation_stories);
 </script>
 <script src="{% static 'js/user/story_info.js' %}"></script>
 <script>
