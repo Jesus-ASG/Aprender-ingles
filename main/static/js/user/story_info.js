@@ -135,7 +135,16 @@ function setScoresLabels(f_counter) {
         `;
         table_header.innerHTML = html;
     }
-    
+}
+
+function setRelatedTitle(f_counter){
+    let related_title = document.getElementById("related_title");
+	let f_classes = {
+		"paper": "mx-1",
+		"front": "px-1",
+		"back": "px-1"
+	};
+	related_title.innerHTML = createFlipHTML("Related", "Relacionado", f_counter, f_classes);
 }
 
 function cleanStorage() {

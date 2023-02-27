@@ -35,5 +35,11 @@ create points by user feature
 --- fix handle exceptions when: pages->update page, objects.get(id=id)
 
 
+recommender.py
+change regex 
+quit no fundamental columns
 
+models.py
+story
+increment lenght of description1 and 2, also rename tag to tags
 

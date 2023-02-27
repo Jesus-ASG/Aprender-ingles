@@ -18,7 +18,7 @@ class Recommender:
             return False
         data = []
         for story in stories:
-            related_names = [related.name1 for related in story.tag.all()]
+            related_names = [related.name1 for related in story.tags.all()]
             related_names_str = ' | '.join(related_names)
             data.append({
                 'id': story.id,
@@ -46,7 +46,7 @@ class Recommender:
             similarities[stories['id'].iloc[i]] = [(cosine_similarities[i][x], stories['id'][x], stories['title'][x], stories['tags'][x]) for x in similar_indices][1:]
         
         # Set the similarities into cache
-        cache.set('data_similarities', similarities, None)
+        cache.set('data_similarities', similarities, timeout=None)
         return True
 
     def recommend(self, story_id, max_recommendations=10):
@@ -56,7 +56,7 @@ class Recommender:
             #print('The recommender is not trained yet')
             trainning = self.train()
             if trainning:
-                self.recommend()
+                self.recommend(story_id=story_id)
             return
         #print(f'\nMatrix similarities\n{matrix_similarities}')
         return matrix_similarities[story_id][:max_recommendations]

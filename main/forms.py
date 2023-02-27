@@ -63,7 +63,7 @@ class HistoriaForm(forms.ModelForm):
 			'xp_required': 'XP necesaria para desbloquear esta historia',
 		}
 
-	tag = forms.ModelMultipleChoiceField(
+	tags = forms.ModelMultipleChoiceField(
 		queryset=Tag.objects.all(),
 		widget=forms.CheckboxSelectMultiple(),
 		required=False,

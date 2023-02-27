@@ -63,7 +63,7 @@ class Story(models.Model):
     
     xp_required = models.IntegerField(default=0)
 
-    tag = models.ManyToManyField(Tag, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     likes_number = models.IntegerField(default=0)
     route = models.SlugField(max_length=255, unique=True, null=False, default='')

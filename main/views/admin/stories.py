@@ -44,6 +44,7 @@ def create(request):
     
     if request.method == 'POST':
         storyF = HistoriaForm(request.POST or None, request.FILES or None)
+        context['story_form'] = storyF
         if not storyF.is_valid():
             return render(request, 'admin/story_form.html', context)
         

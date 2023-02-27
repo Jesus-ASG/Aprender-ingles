@@ -87,8 +87,7 @@
 								Cancelar
 							</a>
 							<input class="btn hover-scale fs-5 fw-bold m-1" type="submit"
-								style="background-color: var(--light-blue); border-radius: 10px; color: #fff;"
-								value="Guardar">
+								style="background-color: var(--light-blue); border-radius: 10px; color: #fff;" value="Guardar">
 						</div>
 					</div>
 
@@ -106,11 +105,11 @@
 <script>
 	// change styles for showing categories
 	document.addEventListener("DOMContentLoaded", function () {
-		let cambiar = document.querySelector("#id_tag").childNodes;
+		let cambiar = document.querySelector("#id_tags").childNodes;
 		for (let i = 0; i < cambiar.length; i++)
 			cambiar[i].className = "form-check form-check-inline fs-6";
 
-		let checks = document.getElementsByName("tag");
+		let checks = document.getElementsByName("tags");
 		for (let i = 0; i < checks.length; i++)
 			checks[i].className = "form-check-input";
 

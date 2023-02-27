@@ -43,24 +43,24 @@
 		</div>
 
 		<div class="col-12 col-md-6 mt-3">
-			{% if story.tag.all %}
+
 			<div class="row mt-3">
 				<div class="col-12 text-center">
 					<strong class="fs-5">Tags</strong> <br>
 					<div class="text-center">
-						{% for cat in story.tag.all %}
+						{% for t in story.tags.all %}
 						<div class="rounded-pill tag">
-							{{ cat.name1 }}
+							{{ t.name1 }}
 						</div>
 						{% empty %}
-						<div class="tag px-3 py-1 fw-bold">
-							Without category
+						<div class="rounded-pill tag">
+							Others
 						</div>
 						{% endfor %}
 					</div>
 				</div>
 			</div>
-			{% endif %}
+
 			{% if story.description1 %}
 			<div class="row mt-3">
 				<strong class="fs-5 text-center">Description</strong> <br>
@@ -178,10 +178,10 @@
 	<div class="row my-3"></div>
 </div>
 
-<div class="container main-content">
+<div class="container main-content py-3">
 	<div class="row mt-3">
 		<div class="col-12 text-center">
-			<h2 class="fs-1">Related</h2>
+			<h2 class="fs-2" id="related_title">Related</h2>
 		</div>
 	</div>
 	<hr>
@@ -213,10 +213,6 @@
 	let db_story_saved = JSON.parse('{{ story_saved }}');
 	let db_story_likes_number = '{{ story.likes_number }}';
 	let db_high_score = '{{ high_score.score |default:0 }}';
-	let db_recommendation_stories = '{{ recommendations_list }}';
-
-	for (let i of db_recommendation_stories)
-		console.log(i);
 
 	try {
 		db_title.title1 = '{{ story.title1 }}';
@@ -224,11 +220,7 @@
 	try {
 		db_title.title2 = '{{ story.title2 }}';
 	} catch (e) { }
-	try {
-		db_recommendation_stories = JSON.parse('{{ recommendations_list |safe |escapejs }}');
-	} catch (e) { console.error('error', e) }
 
-	console.log(db_recommendation_stories);
 </script>
 <script src="{% static 'js/user/story_info.js' %}"></script>
 <script>
@@ -240,6 +232,7 @@
 
 	setStatisticsLabels(f_counter);
 	setScoresLabels(f_counter);
+	setRelatedTitle(f_counter);
 
 	setFunctionality(f_counter);
 

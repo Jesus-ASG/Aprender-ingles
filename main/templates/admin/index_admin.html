@@ -77,7 +77,7 @@
 
 											<span class="d-inline-block">
 												<ul>
-													{% for t in story.tag.all %}
+													{% for t in story.tags.all %}
 													<li>{{ t.name1 }}</li>
 													{% empty %}
 													<li>No tags provided</li>
@@ -164,10 +164,4 @@
 		<!-- End tags table -->
 	</div>
 </div>
-{% endblock %}
-
-{% block page-scripts %}
-<script>
-
-</script>
 {% endblock %}
