@@ -55,11 +55,11 @@ class Story(models.Model):
     # primary key
     id = models.AutoField(primary_key=True)
     # fields
-    title1 = models.CharField(max_length=100)
-    title2 = models.CharField(max_length=100)
+    title1 = models.CharField(max_length=255)
+    title2 = models.CharField(max_length=255)
     cover = models.ImageField(upload_to='imagenes/portadas/', default=path_default_cover_img, verbose_name='cover')
-    description1 = models.CharField(max_length=100, null=True, blank=True, default='')
-    description2 = models.CharField(max_length=100, null=True, blank=True, default='')
+    description1 = models.CharField(max_length=255, null=True, blank=True, default='')
+    description2 = models.CharField(max_length=255, null=True, blank=True, default='')
     
     xp_required = models.IntegerField(default=0)
 

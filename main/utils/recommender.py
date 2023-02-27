@@ -19,7 +19,7 @@ class Recommender:
         data = []
         for story in stories:
             related_names = [related.name1 for related in story.tags.all()]
-            related_names_str = ' | '.join(related_names)
+            related_names_str = ' '.join(related_names)
             data.append({
                 'id': story.id,
                 'title': story.title1,
@@ -33,8 +33,8 @@ class Recommender:
             stories = stories.sample(n=max_data)
         
         stories['data'] = stories['title'] \
-                        + ' ' + stories['tags'].str.replace(r'|', ' ', regex=True) \
-                        + ' ' + stories['description'].str.replace(r'|', ' ', regex=True)
+                        + ' ' + stories['tags'] \
+                        + ' ' + stories['description'].str.replace(r'\n', ' ', regex=True)
         
         
         tfidf = TfidfVectorizer(analyzer='word', stop_words='english')

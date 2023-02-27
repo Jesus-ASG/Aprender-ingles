@@ -24,6 +24,18 @@
 		box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
 			rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 	}
+
+	.txta {
+		background-color: #fff;
+		outline: none;
+		padding-bottom: 10px;
+		resize: none;
+		max-height: 150px;
+	}
+
+	.txta::-webkit-scrollbar {
+		width: 0px;
+	}
 </style>
 {% endblock %}
 
@@ -51,7 +63,7 @@
 		</div>
 		<div class="col-12">
 			<div class="form p-3 mb-3">
-				<form method="post" enctype="multipart/form-data" autocomplete="off">
+				<form method="post" enctype="multipart/form-data" autocomplete="off" id="story_form">
 					{% csrf_token %}
 					{% for field in story_form %}
 					<div class="mb-3 text-center">
@@ -116,6 +128,11 @@
 		let input_cover = document.getElementById("id_cover");
 
 		input_cover.setAttribute('onchange', "changeImg(this)");
+
+		let txtas = document.getElementsByClassName('txta');
+		for (let t of txtas) {
+			makeAdjustable(t);
+		}
 	});
 
 	function restoreImage() {
@@ -137,5 +154,6 @@
 	}
 
 </script>
+
 
 {% endblock %}

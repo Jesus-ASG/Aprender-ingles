@@ -49,8 +49,8 @@ class HistoriaForm(forms.ModelForm):
 			'title1': forms.TextInput(attrs={'class': input_classes}),
 			'title2': forms.TextInput(attrs={'class': input_classes}),
 			'cover': forms.FileInput(attrs={'class': input_classes}),
-			'description1': forms.TextInput(attrs={'class': input_classes}),
-			'description2': forms.TextInput(attrs={'class': input_classes}),
+			'description1': forms.Textarea(attrs={'class': 'form-control fs-6 txta'}),
+			'description2': forms.Textarea(attrs={'class': 'form-control fs-6 txta'}),
 			'xp_required': forms.NumberInput(attrs={'class': input_classes}),
 		}
 
