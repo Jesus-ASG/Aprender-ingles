@@ -53,7 +53,7 @@ class Recommender:
         # Get the similarities from cache
         matrix_similarities = cache.get('data_similarities')
         if not matrix_similarities:
-            #print('The recommender is not trained yet')
+            print(f'\n\nThe recommender is not trained yet\n\n')
             trainning = self.train()
             if trainning:
                 self.recommend(story_id=story_id)
