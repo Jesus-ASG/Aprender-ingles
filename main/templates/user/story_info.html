@@ -61,14 +61,17 @@
 				</div>
 			</div>
 
-			{% if story.description1 %}
 			<div class="row mt-3">
 				<strong class="fs-5 text-center">Description</strong> <br>
 				<div class="col-12 text-center">
-					<p class="fs-6"> {{ story.description1 | default:"No hay una descripción disponible" }}</p>
+					{% if not story.description1 %}
+					<p class="fs-6 fst-italic"> This story don't have a description.</p>
+					{% else %}
+					<p class="fs-6 fst-italic"> {{ story.description1 | default:"" }}</p>
+					{% endif %}
 				</div>
 			</div>
-			{% endif %}
+
 		</div>
 	</div>
 

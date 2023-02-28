@@ -56,3 +56,8 @@ def saveStory(request, story_id):
         
         return JsonResponse({'success': True})
 
+
+@login_required(login_url='/login/')
+def filterStories(request):
+    
+    pass

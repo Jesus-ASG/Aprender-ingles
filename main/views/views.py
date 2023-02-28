@@ -1,3 +1,6 @@
+import json
+
+from django.core import serializers
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
@@ -11,9 +14,13 @@ def index(request):
     page_title = 'Stories Gallery'
     message_if_empty = ''
     stories = Story.objects.all().exclude(xp_required__gt = user_profile.xp)
-    #stories = Story.objects.all()
+
+    stories_json = serializers.serialize('json', stories)
+    #print(f'\n\ntype:{type(s)}\n{s}\n\n')
+
     context = {
         'stories': stories,
+        'stories_json': stories_json,
         'page_title': page_title,
         'message_if_empty': message_if_empty,
     }

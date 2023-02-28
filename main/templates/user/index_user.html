@@ -1,10 +1,20 @@
 {% extends 'main_template.html' %}
 {% load static %}
+{% load filters %}
 
 {% block title %} Story Quest {% endblock %}
 
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/user/index_user.css' %}">
+<style>
+	.show {
+		display: block;
+	}
+
+	.hide {
+		display: none;
+	}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -19,16 +29,17 @@
 	<nav class="navbar navbar-light bg-light">
 		<div class="container-fluid">
 			<div class="d-flex">
-				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+				<input class="form-control me-2" type="search" placeholder="Search story" aria-label="Search" id="search_input">
 				<button class="btn btn-outline-success" type="submit"><span><i
 							class="fa-solid fa-magnifying-glass"></i></span></button>
+
 			</div>
 		</div>
 	</nav>
 	<hr>
-	<div class="row my-3 w-100">
+	<div class="row my-3 w-100" id="query_results">
 		{% for story in stories %}
-		<div class="col-6 col-sm-4 col-md-3 p-3">
+		<div class="col-6 col-sm-4 col-md-3 p-3" name="story_slot" id="story_{{ story.id }}">
 			<div class="col-12 new-card-container text-center">
 				<a href="{% url 'story_info' story.route %}" class="">
 					<img src="{{ story.cover.url }}" class="p-1" alt="{{ story.cover }}">
@@ -47,4 +58,40 @@
 </div>
 
 <br><br>
+{% endblock %}
+
+{% block page-scripts %}
+<script>
+	const db_stories = JSON.parse('{{ stories_json|escapejs }}');
+	try {
+
+	} catch (e) { }
+
+</script>
+<script>
+
+	let search_input = document.getElementById("search_input");
+	search_input.addEventListener('keyup', (e) => { filterData(e.target.value) });
+
+	function filterData(string) {
+		string = string.toLowerCase();
+		const filtered_items = db_stories
+			.filter(item =>
+				item.fields.title1.toLowerCase().includes(string) || item.fields.title2.toLowerCase().includes(string) ||
+				item.fields.description1.toLowerCase().includes(string) || item.fields.description2.toLowerCase().includes(string)
+			);
+		let hide_items = document.getElementsByName("story_slot");
+		for (let i of hide_items) {
+			i.classList.add("hide");
+			i.classList.remove("show");
+		}
+
+		for (let i of filtered_items) {
+			let x = document.getElementById("story_" + i.pk);
+			x.classList.add("show");
+			x.classList.remove("hide");
+		}
+	}
+
+</script>
 {% endblock %}

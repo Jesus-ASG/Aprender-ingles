@@ -40,6 +40,8 @@ urlpatterns = [
     
     path('api/exercise/request_answer/', exercise_apis.request_answer, name="request_exercise_answer"),
 
+    path('api/filter_story/', user_apis.filterStories, name="filter_stories"),
+
     path('register', v.register, name='register'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
