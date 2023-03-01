@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
-from ..models import Story
+from ..models import Story, Tag
 
 stories_per_page = 8
 
@@ -16,62 +16,98 @@ def index(request):
     
     if request.method == 'GET':
         # Get query params
-        search = request.GET.get('search')
-        page = request.GET.get('page')
-        try:
-            page = int(page)
-        except:
-            page = 1
+        q_search = request.GET.get('q')
+        q_tags = request.GET.getlist('tag')
+        q_sort_date = request.GET.get('sort_date')
+        q_sort_name = request.GET.get('sort_name')
+        q_page = request.GET.get('p')
 
+        filter_form = {
+            'q': q_search,
+            'tag': q_tags,
+            'sort_date': q_sort_date,
+            'sort_name': q_sort_name
+        }
+        
         user_profile = request.user.profile
         page_title = 'Stories Gallery'
         message_if_empty = ''
         stories = Story.objects.all().exclude(xp_required__gt = user_profile.xp).order_by('title1')
+        tags = Tag.objects.all()
         
         # Custom filters
-        if search:
-            stories = stories.filter(Q(title1__icontains=search) | Q(title2__icontains=search))
+        if q_search:
+            stories = stories.filter(Q(title1__icontains=q_search) | Q(title2__icontains=q_search))
+
+        # Filter by tags
+        try:
+            if not q_tags[0] == 'all':
+                q_tag_ids = [int(x) for x in q_tags]    
+                stories = stories.filter(tags__id__in=q_tag_ids)
+        except:
+            pass
+
+        # Sort by date
+        if not q_sort_date == 'default':
+            if q_sort_date == 'updated':
+                stories = stories.order_by('-updated_at')
+            elif q_sort_date == 'created':
+                stories = stories.order_by('-created_at')
+
+        # Sort by name
+        if not q_sort_name == 'default':
+            if q_sort_name == 'a-z':
+                stories = stories.order_by('title1')
+            elif q_sort_name == 'z-a':
+                stories = stories.order_by('-title1')
 
         # Paginate        
-        paginator = Paginator(stories, 1)
+        paginator = Paginator(stories, 8)
+        try:
+            q_page = int(q_page)
+            if q_page <=0:
+                q_page = 1
+            if q_page > paginator.num_pages:
+                q_page = paginator.num_pages
+        except:
+            q_page = 1
 
-        elided_page_range = list(paginator.get_elided_page_range(page, on_each_side=2, on_ends=1))
-        
+
+        elided_page_range = list(paginator.get_elided_page_range(q_page, on_each_side=2, on_ends=1))
+
         query_params = request.GET.copy()
         page_range = []
         for p in elided_page_range:
             if type(p) == int:
-                query_params['page'] = p
+                query_params['p'] = p
                 url = '{}?{}'.format(request.path, query_params.urlencode())
             else:
                 url = '#'
             page_range.append({'label': p, 'url': url})
         
-        try:
-            stories = paginator.page(page)
-            urls = {}
-            query_params = request.GET.copy()
+        
+        stories = paginator.page(q_page)
+        urls = {}
+        query_params = request.GET.copy()
 
-            if stories.has_previous():
-                query_params['page'] = stories.previous_page_number()
-                urls['prev'] = '{}?{}'.format(request.path, query_params.urlencode())
+        if stories.has_previous():
+            query_params['p'] = stories.previous_page_number()
+            urls['prev'] = '{}?{}'.format(request.path, query_params.urlencode())
 
-            if stories.has_next():
-                query_params['page'] = stories.next_page_number()
-                urls['next'] = '{}?{}'.format(request.path, query_params.urlencode())
-
-        except PageNotAnInteger:
-            stories = paginator.page(1)
-        except EmptyPage:
-            stories = paginator.page(paginator.num_pages)
+        if stories.has_next():
+            query_params['p'] = stories.next_page_number()
+            urls['next'] = '{}?{}'.format(request.path, query_params.urlencode())
+        
         
         #print(f'\nPrev:{stories.has_previous()}\nNext:{stories.has_next()}\n')
 
         context = {
+            'page_title': page_title,
             'stories': stories,
+            'tags': tags,
+            'filter_form': filter_form,
             'page_range': page_range,
             'urls': urls,
-            'page_title': page_title,
             'message_if_empty': message_if_empty,
         }
         return render(request, 'user/index_user.html', context)

@@ -1,0 +1,77 @@
+<form class="row" action="/" method="get" autocomplete="off">
+  <div class="col-12 col-md-6">
+    <div class="d-flex">
+      <input class="form-control me-3" type="search" placeholder="Search story" aria-label="Search" id="search_input"
+        name="q" value="{{ filter_form.q|default:'' }}">
+      <button class="btn btn-outline-success" type="submit">
+        <span><i class="fa-solid fa-magnifying-glass"></i></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 text-end">
+    <div class="d-flex text-end">
+
+      <!-- Filter by tags -->
+      <div class="dropdown">
+        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="tags" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          <span><i class="fa-solid fa-tags"></i></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="tags">
+          <input type="checkbox" value="all" id="tag_all" name="tag">
+          <label for="tag_all">All</label>
+          {% for tag in tags %}
+          <div class="dropdown-item">
+            <input type="checkbox" value="{{ tag.id }}" id="tag_{{ tag.name1 }}" name="tag">
+            <label for="tag_{{ tag.name1 }}"> {{ tag.name1 }} </label>
+          </div>
+          {% endfor %}
+        </ul>
+      </div>
+      <!-- End of filter by tags -->
+
+      <!-- Filter by date -->
+      <div class="dropdown">
+        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="sort_date" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          <span><i class="fa-regular fa-clock"></i></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="sort_date">
+          <li>
+            <input type="radio" name="sort_date" id="sort_date_default" value="default" checked>
+            <label for="sort_date_default">Default</label>
+          </li>
+
+          <li>
+            <input type="radio" name="sort_date" id="sort_date_updated" value="updated">
+            <label for="sort_date_updated">Recently updated</label>
+          </li>
+
+          <li>
+            <input type="radio" name="sort_date" id="sort_date_created" value="created">
+            <label for="sort_date_created">
+              Recently added
+            </label>
+          </li>
+        </ul>
+      </div>
+      <!-- End of filter by date -->
+
+      <button class="btn btn-outline-success" type="button">
+        <span><i class="fa-solid fa-arrow-down-a-z"></i></span>
+      </button>
+
+      <button class="btn btn-outline-success">
+        <span><i class="fa-solid fa-filter"></i></span>
+      </button>
+
+      <a class="btn btn-outline-success" href="{% url 'index' %}">
+        <span><i class="fa-solid fa-filter-circle-xmark"></i></span>
+      </a>
+    </div>
+
+  </div>
+  <input type="text" name="sort_name" value="default" hidden>
+  <input type="text" name="p" value="1" hidden>
+</form>

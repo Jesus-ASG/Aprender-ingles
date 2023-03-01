@@ -19,25 +19,18 @@
 
 {% block content %}
 <div class="container main-content">
+
 	<div class="row mt-3">
 		<div class="col-12 text-center">
 			<h2 class="fs-1">{{ page_title }}</h2>
 		</div>
 	</div>
 	<hr>
-	<nav class="navbar navbar-light bg-light">
-		<div class="container-fluid">
-			<form class="d-flex" action="/" method="get" autocomplete="off">
-				<input class="form-control me-2" type="search" placeholder="Search story" aria-label="Search" id="search_input"
-					name="search">
-				<input type="text" name="page" value="1" hidden>
-				<button class="btn btn-outline-success" type="submit">
-					<span><i class="fa-solid fa-magnifying-glass"></i></span>
-				</button>
-			</form>
 
-		</div>
-	</nav>
+	<div>
+		{% include 'utils/filter_form.html' %}
+	</div>
+
 	<hr>
 	<div class="row my-3 w-100" id="query_results">
 		{% for story in stories %}
@@ -61,8 +54,8 @@
 
 				<ul class="pagination justify-content-center">
 					<li class="page-item {% if not urls.prev %} disabled {% endif %}">
-						<a class="page-link" href="{{ urls.prev |default:'#' }}" tabindex="-1"><span><i
-									class="fa-solid fa-angle-left"></i></span></a>
+						<a class="page-link" href="{{ urls.prev |default:'#' }}" tabindex="-1">
+							<span><i class="fa-solid fa-chevron-left"></i></span></a>
 					</li>
 
 					{% for page_num in page_range %}
@@ -76,8 +69,8 @@
 					{% endfor %}
 
 					<li class="page-item {% if not urls.next %} disabled {% endif %}">
-						<a class="page-link" href="{{ urls.next |default:'#' }}"><span><i
-									class="fa-solid fa-angle-right"></i></span></a>
+						<a class="page-link" href="{{ urls.next |default:'#' }}">
+							<span><i class="fa-solid fa-chevron-right"></i></span></a>
 					</li>
 				</ul>
 			</nav>
@@ -98,7 +91,7 @@
 	const navPageLinks = document.querySelectorAll('.page-link');
 	navPageLinks.forEach(link => {
 		let parent = link.parentElement;
-		if (link.href === currentURL || (parent.getAttribute('id') == 'first_page' && window.location.search === '')) {
+		if (link.href === currentURL || (link.href.includes('?page=1') && window.location.search === '')) {
 			parent.classList.add('active');
 			parent.setAttribute('aria-current', 'page');
 		}
