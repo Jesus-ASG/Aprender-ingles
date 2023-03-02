@@ -103,6 +103,9 @@
 					sgvi_dom_element.innerHTML = data;
 				});
 		}
+		$('.dropdown-menu').click(function (e) {
+			e.stopPropagation();
+		});
 	</script>
 
 </body>

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
 :root {
 	--orange: #f2864b;
 	--light-green: #49eb4b;
@@ -46,7 +48,7 @@ p {
 }
 
 body {
-	font-family: "Mulish", "Roboto", sans-serif;
+	font-family: "Poppins", "Roboto", sans-serif;
 	position: relative;
 	min-height: 100vh;
 	padding-bottom: 200px;

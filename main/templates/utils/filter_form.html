@@ -1,3 +1,8 @@
+{% load static %}
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/utils/dropdown.css' %}">
+{% endblock %}
+
 <form class="row" action="/" method="get" autocomplete="off">
   <div class="col-12 col-md-6">
     <div class="d-flex">
@@ -10,26 +15,12 @@
   </div>
 
   <div class="col-12 col-md-6 text-end">
-    <div class="d-flex text-end">
 
-      <!-- Filter by tags -->
-      <div class="dropdown">
-        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="tags" data-bs-toggle="dropdown"
-          aria-expanded="false">
-          <span><i class="fa-solid fa-tags"></i></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="tags">
-          <input type="checkbox" value="all" id="tag_all" name="tag">
-          <label for="tag_all">All</label>
-          {% for tag in tags %}
-          <div class="dropdown-item">
-            <input type="checkbox" value="{{ tag.id }}" id="tag_{{ tag.name1 }}" name="tag">
-            <label for="tag_{{ tag.name1 }}"> {{ tag.name1 }} </label>
-          </div>
-          {% endfor %}
-        </ul>
-      </div>
-      <!-- End of filter by tags -->
+    <div class="d-flex">
+
+
+
+
 
       <!-- Filter by date -->
       <div class="dropdown">
@@ -37,10 +28,11 @@
           aria-expanded="false">
           <span><i class="fa-regular fa-clock"></i></span>
         </button>
-        <ul class="dropdown-menu" aria-labelledby="sort_date">
+        <ul class="dropdown-menu prevent" aria-labelledby="sort_date">
           <li>
             <input type="radio" name="sort_date" id="sort_date_default" value="default" checked>
-            <label for="sort_date_default">Default</label>
+            <label for="sort_date_default">Default sit amet consec
+              tetur adipisicing elit.ciis adipisci</label>
           </li>
 
           <li>
@@ -72,6 +64,47 @@
     </div>
 
   </div>
+  <div class="col-12">
+    <div class="d-flex">
+
+      <!-- Filter by tags -->
+      <div class="dropdown dropdown-container">
+        <div class="dropdown-toggle dropdown-btn" type="button" id="test" data-bs-toggle="dropdown">
+          <span class="left-icon"><i class="fa-solid fa-tags"></i></span>
+          <span class="btn-text">Select Tags</span>
+          <span class="arrow-dwn">
+            <i class="fa-solid fa-chevron-down"></i>
+          </span>
+        </div>
+        <ul class="dropdown-menu dropdown-grid-items" aria-labelledby="test">
+          <li class="item" target="tag_all">
+            <span class="checkbox">
+              <input type="checkbox" name="tag" id="tag_all" value="all">
+              <i class="fa-solid fa-check check-icon"></i>
+            </span>
+            <span class="item-text">All
+            </span>
+          </li>
+
+          {% for tag in tags %}
+          <li class="item" target="tag_{{ tag.id }}">
+            <span class="checkbox">
+              <input type="checkbox" name="tag" id="tag_{{ tag.id }}" value="{{ tag.id }}">
+              <i class="fa-solid fa-check check-icon"></i>
+            </span>
+            <span class="item-text">{{ tag.name1 }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <!-- End of filter by tags -->
+    </div>
+  </div>
   <input type="text" name="sort_name" value="default" hidden>
   <input type="text" name="p" value="1" hidden>
 </form>
+
+
+{% block page-scripts %}
+<script src="{% static 'js/utils/dropdown.js' %}"></script>
+{% endblock %}
