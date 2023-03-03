@@ -19,9 +19,6 @@
     <div class="d-flex">
 
 
-
-
-
       <!-- Filter by date -->
       <div class="dropdown">
         <button class="btn btn-outline-primary dropdown-toggle" type="button" id="sort_date" data-bs-toggle="dropdown"
@@ -31,8 +28,7 @@
         <ul class="dropdown-menu prevent" aria-labelledby="sort_date">
           <li>
             <input type="radio" name="sort_date" id="sort_date_default" value="default" checked>
-            <label for="sort_date_default">Default sit amet consec
-              tetur adipisicing elit.ciis adipisci</label>
+            <label for="sort_date_default">Default</label>
           </li>
 
           <li>
@@ -69,35 +65,63 @@
 
       <!-- Filter by tags -->
       <div class="dropdown dropdown-container">
-        <div class="dropdown-toggle dropdown-btn" type="button" id="test" data-bs-toggle="dropdown">
+        <div class="dropdown-toggle dropdown-btn" type="button" id="tags_dd" data-bs-toggle="dropdown">
           <span class="left-icon"><i class="fa-solid fa-tags"></i></span>
-          <span class="btn-text">Select Tags</span>
-          <span class="arrow-dwn">
-            <i class="fa-solid fa-chevron-down"></i>
-          </span>
+          <span class="btn-text" id="label_tag">Tags</span>
+          <span class="arrow-dwn"><i class="fa-solid fa-chevron-down"></i></span>
         </div>
-        <ul class="dropdown-menu dropdown-grid-items" aria-labelledby="test">
-          <li class="item" target="tag_all">
-            <span class="checkbox">
-              <input type="checkbox" name="tag" id="tag_all" value="all">
-              <i class="fa-solid fa-check check-icon"></i>
-            </span>
-            <span class="item-text">All
-            </span>
+
+        <ul class="dropdown-menu dropdown-grid-items menu-items" aria-labelledby="tags_dd" label-id="label_tag"
+          default-label="Tags">
+
+          <li class="item" target="tag_all" select-all="true">
+            <span class="checkbox"><i class="fa-solid fa-check check-icon"></i></span>
+            <span class="item-text">All</span>
+            <input type="checkbox" name="tag" id="tag_all" value="all">
           </li>
 
           {% for tag in tags %}
           <li class="item" target="tag_{{ tag.id }}">
-            <span class="checkbox">
-              <input type="checkbox" name="tag" id="tag_{{ tag.id }}" value="{{ tag.id }}">
-              <i class="fa-solid fa-check check-icon"></i>
-            </span>
+            <span class="checkbox"><i class="fa-solid fa-check check-icon"></i></span>
             <span class="item-text">{{ tag.name1 }}</span>
+            <input type="checkbox" name="tag" id="tag_{{ tag.id }}" value="{{ tag.id }}">
           </li>
           {% endfor %}
         </ul>
       </div>
       <!-- End of filter by tags -->
+
+      <!-- Filter by date -->
+      <div class="dropdown dropdown-container">
+        <div class="dropdown-toggle dropdown-btn" type="button" id="test" data-bs-toggle="dropdown">
+          <span class="left-icon"><i class="fa-regular fa-clock"></i></span>
+          <span class="btn-text">Date</span>
+          <span class="arrow-dwn"><i class="fa-solid fa-chevron-down"></i></span>
+        </div>
+
+        <ul class="dropdown-menu dropdown-grid-items" aria-labelledby="test">
+
+          <li class="item" target="sort_date_default">
+            <span class="radio"><i class="fa-solid fa-check radio-icon"></i></span>
+            <input type="radio" name="sort_date" id="sort_date_default" value="default" checked>
+            <span class="item-text">Default</span>
+          </li>
+
+          <li class="item" target="sort_date_updated">
+            <span class="radio"><i class="fa-solid fa-check radio-icon"></i></span>
+            <span class="item-text">Recently updated</span>
+            <input type="radio" name="sort_date" id="sort_date_updated" value="updated">
+          </li>
+
+          <li class="item" target="sort_date_created">
+            <span class="radio"><i class="fa-solid fa-check radio-icon"></i></span>
+            <span class="item-text">Recently added</span>
+            <input type="radio" name="sort_date" id="sort_date_created" value="created">
+          </li>
+
+        </ul>
+      </div>
+      <!-- End of filter by date -->
     </div>
   </div>
   <input type="text" name="sort_name" value="default" hidden>

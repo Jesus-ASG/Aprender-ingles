@@ -26,6 +26,11 @@
 	display: none;
 }
 
+.dropdown-grid-items input[type="radio"] {
+	opacity: 0;
+	display: none;
+}
+
 .dropdown-btn .btn-text {
 	font-size: 17px;
 	font-weight: 400;
@@ -85,23 +90,25 @@
 	font-weight: 400;
 	color: #333;
 }
-.item .checkbox {
+.item .checkbox,
+.item .radio {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	height: 16px;
 	width: 16px;
-	border-radius: 4px;
 	margin-right: 12px;
 	border: 1.5px solid #c0c0c0;
 	transition: all 0.3s ease-in-out;
 }
-.item.checked .checkbox {
+.item.checked .checkbox,
+.item.checked .radio {
 	background-color: #ff5f13;
 	border-color: #ff5f13;
 }
 
-.checkbox .check-icon {
+.checkbox .check-icon,
+.radio .radio-icon {
 	margin: auto;
 	color: #fff;
 	font-size: 12px;
@@ -109,6 +116,14 @@
 	transition: all 0.2s ease-in-out;
 }
 
-.item.checked .check-icon {
+.item.checked .check-icon,
+.item.checked .radio-icon {
 	transform: scale(1);
+}
+
+.item .checkbox {
+	border-radius: 4px;
+}
+.item .radio {
+	border-radius: 50%;
 }
