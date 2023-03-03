@@ -56,7 +56,12 @@ for (let menu_items of menu_items_list) {
 							break;
 
 						case "radio":
-							console.log("is radio");
+							for (let i of items)
+								i.classList.remove('checked');
+
+							item.classList.add('checked');
+							input.click();
+							break;
 					}
 				}
 			});
@@ -64,12 +69,8 @@ for (let menu_items of menu_items_list) {
 	}
 }
 
-/*
-function clearSelection(item){
-		item.classList.remove('checked');
-		let check_input = 
-}
-*/
+
+
 
 function clickCheckbox(item) {
 	item.classList.toggle("checked");

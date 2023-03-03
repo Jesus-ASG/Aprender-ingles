@@ -127,3 +127,7 @@
 .item .radio {
 	border-radius: 50%;
 }
+
+.item label {
+	display: none;
+}

@@ -77,7 +77,7 @@
           <li class="item" target="tag_all" select-all="true">
             <span class="checkbox"><i class="fa-solid fa-check check-icon"></i></span>
             <span class="item-text">All</span>
-            <input type="checkbox" name="tag" id="tag_all" value="all">
+            <input type="checkbox" name="tag" id="tag_all" value="all" checked>
           </li>
 
           {% for tag in tags %}
@@ -99,24 +99,27 @@
           <span class="arrow-dwn"><i class="fa-solid fa-chevron-down"></i></span>
         </div>
 
-        <ul class="dropdown-menu dropdown-grid-items" aria-labelledby="test">
+        <ul class="dropdown-menu dropdown-grid-items menu-items" aria-labelledby="test">
 
           <li class="item" target="sort_date_default">
             <span class="radio"><i class="fa-solid fa-check radio-icon"></i></span>
-            <input type="radio" name="sort_date" id="sort_date_default" value="default" checked>
             <span class="item-text">Default</span>
+            <input type="radio" name="sort_date" id="sort_date_default" value="default" checked>
+            <label for="sort_date_default"></label>
           </li>
 
           <li class="item" target="sort_date_updated">
             <span class="radio"><i class="fa-solid fa-check radio-icon"></i></span>
             <span class="item-text">Recently updated</span>
             <input type="radio" name="sort_date" id="sort_date_updated" value="updated">
+            <label for="sort_date_updated"></label>
           </li>
 
           <li class="item" target="sort_date_created">
             <span class="radio"><i class="fa-solid fa-check radio-icon"></i></span>
             <span class="item-text">Recently added</span>
             <input type="radio" name="sort_date" id="sort_date_created" value="created">
+            <label for="sort_date_created"></label>
           </li>
 
         </ul>
