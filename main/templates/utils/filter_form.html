@@ -7,7 +7,7 @@
   <div class="col-12">
     <div class="d-flex">
       <input class="me-2 search-bar" type="search" placeholder="Search story" aria-label="Search" id="search_input"
-        name="q" value="{{ filter_form.q|default:'' }}">
+        name="s" value="{{ filter_form.s |default:'' }}">
       <button class="filter-button" type="submit">
         <span><i class="fa-solid fa-magnifying-glass"></i></span>
       </button>
@@ -29,15 +29,15 @@
           <ul class="dropdown-menu dropdown-grid-items menu-items" aria-labelledby="tags_dd" label-id="label_tag"
             default-label="Tags">
 
-            <li class="item" target="tag_all" select-all="true">
+            <li class="item" select-all="true">
               <span class="checkbox"><i class="fa-solid fa-check check-icon"></i></span>
               <span class="item-text">All</span>
-              <input type="checkbox" name="tag" id="tag_all" value="all" checked>
+              <input type="checkbox" name="tag" id="tag_all" value="all">
               <label for="tag_all"></label>
             </li>
 
             {% for tag in tags %}
-            <li class="item" target="tag_{{ tag.id }}">
+            <li class="item">
               <span class="checkbox"><i class="fa-solid fa-check check-icon"></i></span>
               <span class="item-text">{{ tag.name1 }}</span>
               <input type="checkbox" name="tag" id="tag_{{ tag.id }}" value="{{ tag.id }}">
@@ -67,21 +67,21 @@
 
           <ul class="dropdown-menu dropdown-grid-items menu-items" aria-labelledby="sort_date">
 
-            <li class="item" target="sort_date_default">
+            <li class="item">
               <span class="radio"><i class="fa-solid fa-check radio-icon"></i></span>
               <span class="item-text">Default</span>
               <input type="radio" name="sort_date" id="sort_date_default" value="default" checked>
               <label for="sort_date_default"></label>
             </li>
 
-            <li class="item" target="sort_date_updated">
+            <li class="item">
               <span class="radio"><i class="fa-solid fa-check radio-icon"></i></span>
               <span class="item-text">Recently updated</span>
               <input type="radio" name="sort_date" id="sort_date_updated" value="updated">
               <label for="sort_date_updated"></label>
             </li>
 
-            <li class="item" target="sort_date_created">
+            <li class="item">
               <span class="radio"><i class="fa-solid fa-check radio-icon"></i></span>
               <span class="item-text">Recently added</span>
               <input type="radio" name="sort_date" id="sort_date_created" value="created">

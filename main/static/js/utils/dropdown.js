@@ -11,47 +11,61 @@ for (let menu_items of menu_items_list) {
 
 			let select_all = item.getAttribute("select-all");
 			if (select_all == "true") {
+
 				item.addEventListener("click", () => {
+					let input = item.querySelector('input');
+
 					if (item.classList.contains("checked")) {
 						for (let i of items)
 							if (i.classList.contains("checked")) {
-								clickCheckbox(i);
+								i.classList.toggle("checked");
+								input.checked = !input.checked;
 							};
-					} else {
+					}
+					else {
 						for (let i of items)
 							if (!i.classList.contains("checked")) {
-								clickCheckbox(i);
+								i.classList.toggle("checked");
+								input.checked = !input.checked;
 							};
 					}
 					showLabelMessage(menu_items);
 				});
 			}
-		} else {
+		}
+		else {
 			item.addEventListener("click", () => {
 				let input = item.querySelector("input");
 				if (input) {
 					let input_type = input.getAttribute("type");
-
 					switch (input_type) {
 						case "checkbox":
-							clickCheckbox(item);
+							item.classList.toggle("checked");
+							input.checked = !input.checked;
+
 							if (dom_select_all) {
 								let checked = menu_items.querySelectorAll(".checked");
-								if (checked.length < items.length) {
-									if (checked.length == items.length - 1 && !dom_select_all.classList.contains("checked")) {
-										dom_select_all.classList.add("checked");
-										let check_input = document.getElementById(item.getAttribute("target"));
-										if (check_input)
-											check_input.checked = true;
-									}
-									else {
+
+								// All is checked
+								if (dom_select_all.classList.contains("checked")) {
+									// But it should'nt -> quit checked state
+									if (checked.length < items.length) {
 										dom_select_all.classList.remove("checked");
-										let check_input = document.getElementById(item.getAttribute("target"));
-										if (check_input)
-											check_input.checked = false;
+										let input_all = dom_select_all.querySelector('input');
+										input_all.checked = false;
+									}
+								}
+								// All is no checked
+								else {
+									// But it should do
+									if (checked.length == items.length - 1) {
+										dom_select_all.classList.add("checked");
+										let input_all = dom_select_all.querySelector('input');
+										input_all.checked = true;
 									}
 								}
 							}
+
 							showLabelMessage(menu_items);
 							break;
 
@@ -60,20 +74,13 @@ for (let menu_items of menu_items_list) {
 								i.classList.remove('checked');
 
 							item.classList.add('checked');
-							input.click();
+							input.checked = true;
 							break;
 					}
 				}
 			});
 		}
 	}
-}
-
-function clickCheckbox(item) {
-	item.classList.toggle("checked");
-	let check_input = document.getElementById(item.getAttribute("target"));
-	if (check_input)
-		check_input.checked = !check_input.checked;
 }
 
 function showLabelMessage(menu_items) {

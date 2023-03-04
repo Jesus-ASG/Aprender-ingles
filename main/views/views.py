@@ -16,24 +16,26 @@ def index(request):
     
     if request.method == 'GET':
         # Get query params
-        q_search = request.GET.get('q')
+        q_search = request.GET.get('s')
         q_tags = request.GET.getlist('tag')
         q_sort_date = request.GET.get('sort_date')
         q_sort_name = request.GET.get('sort_name')
         q_page = request.GET.get('p')
 
         filter_form = {
-            'q': q_search,
+            's': q_search,
             'tag': q_tags,
             'sort_date': q_sort_date,
             'sort_name': q_sort_name
         }
+
+        #filter_form = json.dumps(filter_form)
         
         user_profile = request.user.profile
         page_title = 'Stories Gallery'
         message_if_empty = ''
         stories = Story.objects.all().exclude(xp_required__gt = user_profile.xp).order_by('title1')
-        tags = Tag.objects.all()
+        tags = Tag.objects.all().order_by('name1')
         
         # Custom filters
         if q_search:
