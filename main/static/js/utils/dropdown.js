@@ -16,20 +16,23 @@ for (let menu_items of menu_items_list) {
 					let input = item.querySelector('input');
 
 					if (item.classList.contains("checked")) {
-						for (let i of items)
-							if (i.classList.contains("checked")) {
-								i.classList.toggle("checked");
-								input.checked = !input.checked;
-							};
+						for (let i of items) {
+							input.checked = false;
+							i.classList.remove("checked");
+							let input_i = i.querySelector('input');
+							input_i.checked = false;
+						}
 					}
 					else {
-						for (let i of items)
-							if (!i.classList.contains("checked")) {
-								i.classList.toggle("checked");
-								input.checked = !input.checked;
-							};
+						for (let i of items) {
+							input.checked = true;
+							i.classList.add("checked");
+							let input_i = i.querySelector('input');
+							input_i.checked = true;
+						}
+
 					}
-					showLabelMessage(menu_items);
+					showCheckboxLabel(menu_items);
 				});
 			}
 		}
@@ -66,7 +69,7 @@ for (let menu_items of menu_items_list) {
 								}
 							}
 
-							showLabelMessage(menu_items);
+							showCheckboxLabel(menu_items);
 							break;
 
 						case "radio":
@@ -75,6 +78,8 @@ for (let menu_items of menu_items_list) {
 
 							item.classList.add('checked');
 							input.checked = true;
+
+							showRadioLabel(menu_items);
 							break;
 					}
 				}
@@ -83,7 +88,7 @@ for (let menu_items of menu_items_list) {
 	}
 }
 
-function showLabelMessage(menu_items) {
+function showCheckboxLabel(menu_items) {
 	let checked = menu_items.querySelectorAll(".checked");
 	const label_id = menu_items.getAttribute("label-id");
 	const default_label = menu_items.getAttribute("default-label");
@@ -100,6 +105,23 @@ function showLabelMessage(menu_items) {
 	}
 }
 
+function showRadioLabel(menu_items) {
+	const label_id = menu_items.getAttribute("label-id");
+	const default_label = menu_items.getAttribute("default-label");
+	if (label_id && default_label) {
+		const label = document.getElementById(label_id);
+
+		let text = menu_items.querySelector('.checked > .item-text').textContent || '';
+
+		if (label && label_id) {
+			if (text.toLowerCase() == 'default')
+				label.innerText = default_label + "";
+			else
+				label.innerText = text;
+		}
+	}
+}
+
 
 // Init checkbox and radio
 for (let menu_items of menu_items_list) {
@@ -110,6 +132,15 @@ for (let menu_items of menu_items_list) {
 			if (input.checked)
 				item.classList.add('checked');
 		});
+	}
+	let type = menu_items.querySelector('input').type;
+	switch (type) {
+		case 'checkbox':
+			showCheckboxLabel(menu_items);
+			break;
+		case 'radio':
+			showRadioLabel(menu_items);
+			break;
 	}
 }
 
@@ -129,4 +160,3 @@ sort_by_name.addEventListener('click', (e) => {
 	sort_by_name_icon.classList.toggle('fa-arrow-down-z-a');
 
 });
-

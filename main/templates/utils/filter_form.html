@@ -1,4 +1,6 @@
 {% load static %}
+{% load filters %}
+
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/utils/dropdown.css' %}">
 {% endblock %}
@@ -32,15 +34,25 @@
             <li class="item" select-all="true">
               <span class="checkbox"><i class="fa-solid fa-check check-icon"></i></span>
               <span class="item-text">All</span>
+              {% if 'all' in filter_form.tags %}
+              <input type="checkbox" name="tag" id="tag_all" value="all" checked>
+              {% else %}
               <input type="checkbox" name="tag" id="tag_all" value="all">
+              {% endif %}
               <label for="tag_all"></label>
             </li>
+
 
             {% for tag in tags %}
             <li class="item">
               <span class="checkbox"><i class="fa-solid fa-check check-icon"></i></span>
               <span class="item-text">{{ tag.name1 }}</span>
+              {% if tag.id|to_str in filter_form.tags %}
+              <input type="checkbox" name="tag" id="tag_{{ tag.id }}" value="{{ tag.id }}" checked>
+              {% else %}
               <input type="checkbox" name="tag" id="tag_{{ tag.id }}" value="{{ tag.id }}">
+              {% endif %}
+
               <label for="tag_{{ tag.id }}"></label>
             </li>
             {% endfor %}
@@ -61,30 +73,45 @@
         <div class="dropdown dropdown-container">
           <div class="dropdown-toggle dropdown-btn" type="button" id="sort_date" data-bs-toggle="dropdown">
             <span class="left-icon"><i class="fa-regular fa-clock"></i></span>
-            <span class="btn-text">Date</span>
+            <span class="btn-text" id="label_date">Date</span>
             <span class="arrow-dwn"><i class="fa-solid fa-chevron-down"></i></span>
           </div>
 
-          <ul class="dropdown-menu dropdown-grid-items menu-items" aria-labelledby="sort_date">
+          <ul class="dropdown-menu dropdown-grid-items menu-items" aria-labelledby="sort_date" label-id="label_date"
+            default-label="Date">
 
             <li class="item">
+
               <span class="radio"><i class="fa-solid fa-check radio-icon"></i></span>
               <span class="item-text">Default</span>
+              {% if filter_form.sort_date == 'default' or not filter_form.sort_date %}
               <input type="radio" name="sort_date" id="sort_date_default" value="default" checked>
+              {% else %}
+              <input type="radio" name="sort_date" id="sort_date_default" value="default">
+              {% endif %}
+
               <label for="sort_date_default"></label>
             </li>
 
             <li class="item">
               <span class="radio"><i class="fa-solid fa-check radio-icon"></i></span>
               <span class="item-text">Recently updated</span>
+              {% if filter_form.sort_date == 'updated' %}
+              <input type="radio" name="sort_date" id="sort_date_updated" value="updated" checked>
+              {% else %}
               <input type="radio" name="sort_date" id="sort_date_updated" value="updated">
+              {% endif %}
               <label for="sort_date_updated"></label>
             </li>
 
             <li class="item">
               <span class="radio"><i class="fa-solid fa-check radio-icon"></i></span>
               <span class="item-text">Recently added</span>
+              {% if filter_form.sort_date == 'created' %}
+              <input type="radio" name="sort_date" id="sort_date_created" value="created" checked>
+              {% else %}
               <input type="radio" name="sort_date" id="sort_date_created" value="created">
+              {% endif %}
               <label for="sort_date_created"></label>
             </li>
 
@@ -102,8 +129,13 @@
 
         <!-- Sort by title -->
         <div class="filter-button" id="sort_by_name">
+          {% if filter_form.sort_name == 'default' or not filter_form.sort_date %}
           <span><i class="fa-solid fa-arrow-down-a-z"></i></span>
           <input type="text" name="sort_name" value="default" hidden>
+          {% else %}
+          <span><i class="fa-solid fa-arrow-down-z-a"></i></span>
+          <input type="text" name="sort_name" value="z-a" hidden>
+          {% endif %}
         </div>
         <!-- End of sort by title -->
       </div>

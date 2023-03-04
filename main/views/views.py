@@ -24,12 +24,10 @@ def index(request):
 
         filter_form = {
             's': q_search,
-            'tag': q_tags,
+            'tags': q_tags,
             'sort_date': q_sort_date,
             'sort_name': q_sort_name
         }
-
-        #filter_form = json.dumps(filter_form)
         
         user_profile = request.user.profile
         page_title = 'Stories Gallery'
@@ -38,6 +36,14 @@ def index(request):
         tags = Tag.objects.all().order_by('name1')
         
         # Custom filters
+        # Sort by name
+        if not q_sort_name == 'default':
+            if q_sort_name == 'a-z':
+                stories = stories.order_by('title1')
+            elif q_sort_name == 'z-a':
+                stories = stories.order_by('-title1')
+        
+        # Search
         if q_search:
             stories = stories.filter(Q(title1__icontains=q_search) | Q(title2__icontains=q_search))
 
@@ -45,7 +51,7 @@ def index(request):
         try:
             if not q_tags[0] == 'all':
                 q_tag_ids = [int(x) for x in q_tags]    
-                stories = stories.filter(tags__id__in=q_tag_ids)
+                stories = stories.filter(tags__id__in=q_tag_ids).distinct()
         except:
             pass
 
@@ -56,12 +62,6 @@ def index(request):
             elif q_sort_date == 'created':
                 stories = stories.order_by('-created_at')
 
-        # Sort by name
-        if not q_sort_name == 'default':
-            if q_sort_name == 'a-z':
-                stories = stories.order_by('title1')
-            elif q_sort_name == 'z-a':
-                stories = stories.order_by('-title1')
 
         # Paginate        
         paginator = Paginator(stories, 8)
