@@ -87,7 +87,6 @@
 	//const db_stories = JSON.parse('{{ stories_json|escapejs }}');
 
 	//const currentURL = window.location.href; //This variable is already defined in scripts.js
-
 	const navPageLinks = document.querySelectorAll('.page-link');
 	navPageLinks.forEach(link => {
 		let parent = link.parentElement;
@@ -98,6 +97,7 @@
 	});
 
 </script>
+<script src="{% static 'js/utils/dropdown.js' %}"></script>
 <script>
 
 	//let search_input = document.getElementById("search_input");

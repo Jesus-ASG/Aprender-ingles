@@ -3,6 +3,39 @@
 	display: none !important;
 }
 
+.filter-button,
+.search-bar {
+	display: flex;
+	height: 2.5em;
+	margin: 1rem;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 16px;
+	border-radius: 8px;
+	background-color: #fff;
+	color: #ff5f13;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+	border: none;
+}
+
+.filter-button {
+	cursor: pointer;
+}
+
+.filter-button:hover {
+	background-color: #fff;
+	color: #ff5f13;
+}
+
+.search-bar {
+	cursor: text;
+	outline: none;
+	width: 100%;
+}
+.search-bar:focus {
+	box-shadow: 0 0 0 0.2rem rgba(255, 95, 19, 0.5);
+}
+
 .dropdown-container {
 	position: relative;
 	width: 100%;

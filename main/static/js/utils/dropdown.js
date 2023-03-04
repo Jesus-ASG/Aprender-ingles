@@ -35,7 +35,6 @@ for (let menu_items of menu_items_list) {
 					switch (input_type) {
 						case "checkbox":
 							clickCheckbox(item);
-							showLabelMessage(menu_items);
 							if (dom_select_all) {
 								let checked = menu_items.querySelectorAll(".checked");
 								if (checked.length < items.length) {
@@ -53,6 +52,7 @@ for (let menu_items of menu_items_list) {
 									}
 								}
 							}
+							showLabelMessage(menu_items);
 							break;
 
 						case "radio":
@@ -68,9 +68,6 @@ for (let menu_items of menu_items_list) {
 		}
 	}
 }
-
-
-
 
 function clickCheckbox(item) {
 	item.classList.toggle("checked");
@@ -95,3 +92,34 @@ function showLabelMessage(menu_items) {
 		}
 	}
 }
+
+
+// Init checkbox and radio
+for (let menu_items of menu_items_list) {
+	let items = menu_items.getElementsByClassName("item");
+	for (let item of items) {
+		let input = item.querySelectorAll('input');
+		input.forEach(input => {
+			if (input.checked)
+				item.classList.add('checked');
+		});
+	}
+}
+
+// Sort by name
+let sort_by_name = document.getElementById('sort_by_name');
+let sort_by_name_icon = sort_by_name.querySelector('i');
+let sort_by_name_input = sort_by_name.querySelector('input');
+
+sort_by_name.addEventListener('click', (e) => {
+	let value = sort_by_name_input.value;
+	if (value == 'default')
+		sort_by_name_input.value = 'z-a';
+	else
+		sort_by_name_input.value = 'default';
+
+	sort_by_name_icon.classList.toggle('fa-arrow-down-a-z');
+	sort_by_name_icon.classList.toggle('fa-arrow-down-z-a');
+
+});
+

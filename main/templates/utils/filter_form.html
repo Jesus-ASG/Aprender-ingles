@@ -4,61 +4,14 @@
 {% endblock %}
 
 <form class="row" action="/" method="get" autocomplete="off">
-  <div class="col-12 col-md-6">
+  <div class="col-12">
     <div class="d-flex">
-      <input class="form-control me-3" type="search" placeholder="Search story" aria-label="Search" id="search_input"
+      <input class="me-2 search-bar" type="search" placeholder="Search story" aria-label="Search" id="search_input"
         name="q" value="{{ filter_form.q|default:'' }}">
-      <button class="btn btn-outline-success" type="submit">
+      <button class="filter-button" type="submit">
         <span><i class="fa-solid fa-magnifying-glass"></i></span>
       </button>
     </div>
-  </div>
-
-  <div class="col-12 col-md-6 text-end">
-
-    <div class="d-flex">
-
-
-      <!-- Filter by date -->
-      <div class="dropdown">
-        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="sort_date" data-bs-toggle="dropdown"
-          aria-expanded="false">
-          <span><i class="fa-regular fa-clock"></i></span>
-        </button>
-        <ul class="dropdown-menu prevent" aria-labelledby="sort_date">
-          <li>
-            <input type="radio" name="sort_date" id="sort_date_default" value="default" checked>
-            <label for="sort_date_default">Default</label>
-          </li>
-
-          <li>
-            <input type="radio" name="sort_date" id="sort_date_updated" value="updated">
-            <label for="sort_date_updated">Recently updated</label>
-          </li>
-
-          <li>
-            <input type="radio" name="sort_date" id="sort_date_created" value="created">
-            <label for="sort_date_created">
-              Recently added
-            </label>
-          </li>
-        </ul>
-      </div>
-      <!-- End of filter by date -->
-
-      <button class="btn btn-outline-success" type="button">
-        <span><i class="fa-solid fa-arrow-down-a-z"></i></span>
-      </button>
-
-      <button class="btn btn-outline-success">
-        <span><i class="fa-solid fa-filter"></i></span>
-      </button>
-
-      <a class="btn btn-outline-success" href="{% url 'index' %}">
-        <span><i class="fa-solid fa-filter-circle-xmark"></i></span>
-      </a>
-    </div>
-
   </div>
   <div class="col-12">
     <div class="d-flex">
@@ -78,6 +31,7 @@
             <span class="checkbox"><i class="fa-solid fa-check check-icon"></i></span>
             <span class="item-text">All</span>
             <input type="checkbox" name="tag" id="tag_all" value="all" checked>
+            <label for="tag_all"></label>
           </li>
 
           {% for tag in tags %}
@@ -85,6 +39,7 @@
             <span class="checkbox"><i class="fa-solid fa-check check-icon"></i></span>
             <span class="item-text">{{ tag.name1 }}</span>
             <input type="checkbox" name="tag" id="tag_{{ tag.id }}" value="{{ tag.id }}">
+            <label for="tag_{{ tag.id }}"></label>
           </li>
           {% endfor %}
         </ul>
@@ -93,13 +48,13 @@
 
       <!-- Filter by date -->
       <div class="dropdown dropdown-container">
-        <div class="dropdown-toggle dropdown-btn" type="button" id="test" data-bs-toggle="dropdown">
+        <div class="dropdown-toggle dropdown-btn" type="button" id="sort_date" data-bs-toggle="dropdown">
           <span class="left-icon"><i class="fa-regular fa-clock"></i></span>
           <span class="btn-text">Date</span>
           <span class="arrow-dwn"><i class="fa-solid fa-chevron-down"></i></span>
         </div>
 
-        <ul class="dropdown-menu dropdown-grid-items menu-items" aria-labelledby="test">
+        <ul class="dropdown-menu dropdown-grid-items menu-items" aria-labelledby="sort_date">
 
           <li class="item" target="sort_date_default">
             <span class="radio"><i class="fa-solid fa-check radio-icon"></i></span>
@@ -125,13 +80,26 @@
         </ul>
       </div>
       <!-- End of filter by date -->
+
+      <!-- Sort by title -->
+      <div class="filter-button" id="sort_by_name">
+        <span><i class="fa-solid fa-arrow-down-a-z"></i></span>
+        <input type="text" name="sort_name" value="default" hidden>
+      </div>
+      <!-- End of sort by title -->
+
+      <!-- Filter button -->
+      <button class="filter-button" type="submit">
+        <span><i class="fa-solid fa-filter"></i></span>
+      </button>
+
+      <!-- Clear filters  -->
+      <a class="filter-button" href="{% url 'index' %}">
+        <span><i class="fa-solid fa-filter-circle-xmark"></i></span>
+      </a>
+
     </div>
   </div>
-  <input type="text" name="sort_name" value="default" hidden>
+
   <input type="text" name="p" value="1" hidden>
 </form>
-
-
-{% block page-scripts %}
-<script src="{% static 'js/utils/dropdown.js' %}"></script>
-{% endblock %}
