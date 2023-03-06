@@ -180,7 +180,7 @@
 	</div>
 	<div class="row my-3"></div>
 </div>
-
+{% if not recommendations_list|length == 0 %}
 <div class="container main-content py-3">
 	<div class="row mt-3">
 		<div class="col-12 text-center">
@@ -202,6 +202,7 @@
 		{% endfor %}
 	</div>
 </div>
+{% endif %}
 
 {% endblock %}
 

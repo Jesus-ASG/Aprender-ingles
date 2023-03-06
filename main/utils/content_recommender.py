@@ -8,7 +8,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 from main.models import Story
 
-class Recommender:
+class ContentRecommender:
     def __init__(self) -> None:
         pass
     
@@ -18,12 +18,12 @@ class Recommender:
             return False
         data = []
         for story in stories:
-            related_names = [related.name1 for related in story.tags.all()]
-            related_names_str = ' '.join(related_names)
+            tag_names = [tag.name1 for tag in story.tags.all()]
+            tag_names_str = ' '.join(tag_names)
             data.append({
                 'id': story.id,
                 'title': story.title1,
-                'tags': related_names_str,
+                'tags': tag_names_str,
                 'description': story.description1
             })
         
@@ -43,21 +43,33 @@ class Recommender:
         similarities = {}
         for i in range(len(cosine_similarities)):
             similar_indices = cosine_similarities[i].argsort()[:-50:-1] 
-            similarities[stories['id'].iloc[i]] = [(cosine_similarities[i][x], stories['id'][x], stories['title'][x], stories['tags'][x]) for x in similar_indices][1:]
+            similarities[stories['id'].iloc[i]] = [(stories['id'][x], cosine_similarities[i][x]) for x in similar_indices][1:]
         
         # Set the similarities into cache
-        cache.set('data_similarities', similarities, timeout=None)
+        cache.set('cb_recommender_similarities', similarities, timeout=None)
         return True
 
     def recommend(self, story_id, max_recommendations=10):
         # Get the similarities from cache
-        matrix_similarities = cache.get('data_similarities')
+        matrix_similarities = cache.get('cb_recommender_similarities')
         if not matrix_similarities:
-            print(f'\n\nThe recommender is not trained yet\n\n')
+            print(f'\n\nThe recommender is not trained yet, training...\n\n')
             trainning = self.train()
             if trainning:
-                self.recommend(story_id=story_id)
-            return
+                return self.recommend(story_id=story_id, max_recommendations=max_recommendations)
+            return []
         #print(f'\nMatrix similarities\n{matrix_similarities}')
-        return matrix_similarities[story_id][:max_recommendations]
+
+        # Recommendations is an array with the story id and similarity predicted
+        recommendations = matrix_similarities.get(story_id)[:max_recommendations]
+
+        recommendations_story = []
+        if (recommendations):
+            for r in recommendations:
+                try:
+                    recommendations_story.append(Story.objects.get(id=r[0]))
+                except:
+                    pass
+        return recommendations_story
+                    
         

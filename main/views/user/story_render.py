@@ -2,7 +2,6 @@ import json
 import re
 
 from django.core.cache import cache
-from django.core.serializers import serialize
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -12,7 +11,7 @@ from django.forms.models import model_to_dict
 from main.models import Story, Score, RepeatPhrase
 from main.forms import ScoreForm
 
-from main.utils.recommender import Recommender
+from main.utils.content_recommender import ContentRecommender
 
 # expiration time for cache in seconds
 expiration_time = 86400
@@ -49,17 +48,8 @@ def storyInfo(request, route):
     cache.delete(f'evaluated_story_{story.id}')
 
     # Get recommendations
-    recommender = Recommender()
-    recommendations_dict = recommender.recommend(story_id=story.id, max_recommendations=4)
-    recommendations_list = []
-    if recommendations_dict:
-        for r in recommendations_dict:
-            story_r = Story.objects.get(id=r[1])
-            recommendations_list.append(story_r)
-    
-    #recommendations_list = json.dumps(recommendations_list)
-    #recommendations_list = serialize('json', recommendations_list)
-    #print(f'\n{recommendations_list}\n')
+    recommender = ContentRecommender()
+    recommendations_list = recommender.recommend(story_id=story.id, max_recommendations=4)
 
     # check if user likes the story
     story_liked = False

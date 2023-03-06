@@ -1,16 +1,15 @@
 # Historias
 import re
-from django import forms
 from django.utils.text import slugify
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import redirect, render
 
-from main.forms import HistoriaForm, PageForm
+from main.forms import HistoriaForm
 from main.models import Story, Tag
 
-from main.utils.recommender import Recommender
+from main.utils.content_recommender import ContentRecommender
 
 
 def is_superuser(user):
@@ -58,7 +57,7 @@ def create(request):
             return render(request, 'admin/story_form.html', context)
         storyF.save()
 
-        recommender = Recommender()
+        recommender = ContentRecommender()
         recommender.train()
         return redirect('view_pages', route=story_obj.route)
 
@@ -95,7 +94,7 @@ def update(request, story_id):
             context["error"] = "Ya existe una historia con ese título"
             return render(request, 'admin/story_form.html', context)
         storyF.save()
-        recommender = Recommender()
+        recommender = ContentRecommender()
         recommender.train()
         return redirect('index_admin')
         
@@ -106,7 +105,7 @@ def delete(request, story_id):
     try:
         historia = Story.objects.get(id=story_id)
         historia.delete()
-        recommender = Recommender()
+        recommender = ContentRecommender()
         recommender.train()
         return redirect('index_admin')
     except:
