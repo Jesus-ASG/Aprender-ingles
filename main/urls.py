@@ -1,7 +1,7 @@
 from django.urls import path
 from main.views.admin import pages, tags, stories, admin_apis
 from main.views.user import story_render, user_apis, exercise_apis
-from main.views import views, auth_views as v
+from main.views import views, auth_views
 
 # para cargar imagenes
 from django.conf import settings
@@ -13,7 +13,7 @@ urlpatterns = [
     path('saved/', views.savedStories, name='saved_stories'),
     path('liked/', views.likedStories, name='liked_stories'),
 
-    # Stories
+    # Stories for admin
     path('myadmin/', stories.index, name = 'index_admin'),
     path('myadmin/add-story/', stories.create, name = 'add_story'),
     path('myadmin/edit-story/<int:story_id>', stories.update, name = 'edit_story'),
@@ -30,6 +30,8 @@ urlpatterns = [
     path('myadmin/edit-page/<slug:route>/<int:page_type>/<int:page_id>/', pages.update, name='edit_page'),
     path('myadmin/del-page/<int:id>/', pages.delete, name='del_page'),
 
+    # Show stories
+    path('stories/', views.storiesGallery, name="stories"),
     # Show stories content
     path('story/<slug:route>/', story_render.storyInfo, name = 'story_info'),
     path('story/<slug:route>/<int:page_number>/', story_render.storyContent, name='story_content'),
@@ -40,9 +42,9 @@ urlpatterns = [
     
     path('api/exercise/request_answer/', exercise_apis.request_answer, name="request_exercise_answer"),
 
-    path('api/filter_story/', user_apis.filterStories, name="filter_stories"),
+    
     path('api/update/user-based-recommender/', admin_apis.updateUBRecommender, name="ub_recommender"),
 
-    path('register', v.register, name='register'),
+    path('register', auth_views.register, name='register'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

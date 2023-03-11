@@ -6,15 +6,6 @@
 
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/user/index_user.css' %}">
-<style>
-	.show {
-		display: block;
-	}
-
-	.hide {
-		display: none;
-	}
-</style>
 {% endblock %}
 
 {% block content %}
@@ -25,16 +16,11 @@
 			<h2 class="fs-1">{{ page_title }}</h2>
 		</div>
 	</div>
-	<hr>
-
-	<div>
-		{% include 'utils/filter_form.html' %}
-	</div>
 
 	<hr>
 	<div class="row my-3 w-100" id="query_results">
 		{% for story in stories %}
-		<div class="col-6 col-sm-4 col-md-3 p-3" name="story_slot" id="story_{{ story.id }}">
+		<div class="col-12 col-md-6 p-3" name="story_slot" id="story_{{ story.id }}">
 			<div class="col-12 new-card-container text-center">
 				<a href="{% url 'story_info' story.route %}" class="">
 					<img src="{{ story.cover.url }}" class="p-1" alt="{{ story.cover }}">
@@ -48,85 +34,9 @@
 		</div>
 		{% endfor %}
 	</div>
-	<div class="row my-3">
-		<div class="col-12">
-			<nav>
-
-				<ul class="pagination justify-content-center">
-					<li class="page-item {% if not urls.prev %} disabled {% endif %}">
-						<a class="page-link" href="{{ urls.prev |default:'#' }}" tabindex="-1">
-							<span><i class="fa-solid fa-chevron-left"></i></span></a>
-					</li>
-
-					{% for page_num in page_range %}
-					<li class="page-item">
-						{% if not page_num.url == '#' %}
-						<a class="page-link" href="{{ page_num.url }}">{{ page_num.label }}</a>
-						{% else %}
-						<span class="page-link">...</span>
-						{% endif %}
-					</li>
-					{% endfor %}
-
-					<li class="page-item {% if not urls.next %} disabled {% endif %}">
-						<a class="page-link" href="{{ urls.next |default:'#' }}">
-							<span><i class="fa-solid fa-chevron-right"></i></span></a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-	</div>
 
 </div>
-
-<br><br>
 {% endblock %}
 
 {% block page-scripts %}
-<script>
-	//let db_filter_form = JSON.parse('{{ filter_form |safe }}');
-
-	//console.log(db_filter_form.s);
-</script>
-<script>
-	//const db_stories = JSON.parse('{{ stories_json|escapejs }}');
-
-	//const currentURL = window.location.href; //This variable is already defined in scripts.js
-	const navPageLinks = document.querySelectorAll('.page-link');
-	navPageLinks.forEach(link => {
-		let parent = link.parentElement;
-		if (link.href === currentURL || (link.href.includes('?page=1') && window.location.search === '')) {
-			parent.classList.add('active');
-			parent.setAttribute('aria-current', 'page');
-		}
-	});
-
-</script>
-<script src="{% static 'js/utils/dropdown.js' %}"></script>
-<script>
-
-	//let search_input = document.getElementById("search_input");
-	//search_input.addEventListener('keyup', (e) => { filterData(e.target.value) });
-
-	function filterData(string) {
-		string = string.toLowerCase();
-		const filtered_items = db_stories
-			.filter(item =>
-				item.fields.title1.toLowerCase().includes(string) || item.fields.title2.toLowerCase().includes(string) ||
-				item.fields.description1.toLowerCase().includes(string) || item.fields.description2.toLowerCase().includes(string)
-			);
-		let hide_items = document.getElementsByName("story_slot");
-		for (let i of hide_items) {
-			i.classList.add("hide");
-			i.classList.remove("show");
-		}
-
-		for (let i of filtered_items) {
-			let x = document.getElementById("story_" + i.pk);
-			x.classList.add("show");
-			x.classList.remove("hide");
-		}
-	}
-
-</script>
 {% endblock %}

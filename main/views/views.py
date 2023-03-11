@@ -13,7 +13,22 @@ stories_per_page = 8
 def index(request):
     if not request.user.is_authenticated:
         return render(request, 'no-logged/home.html')
-    
+    if request.method == 'GET':
+        page_title = 'Recommended'
+        message_if_empty = ''
+        stories = Story.objects.all()
+
+        context = {
+            'page_title': page_title,
+            'message_if_empty': message_if_empty,
+            'stories': stories,
+        }
+        
+        return render(request, 'user/index_user.html', context=context)
+
+
+@login_required(login_url='/login/')
+def storiesGallery(request):    
     if request.method == 'GET':
         # Get query params
         q_search = request.GET.get('s')
@@ -112,7 +127,7 @@ def index(request):
             'urls': urls,
             'message_if_empty': message_if_empty,
         }
-        return render(request, 'user/index_user.html', context)
+        return render(request, 'user/stories_gallery.html', context)
     
 
 @login_required(login_url='/login/')
