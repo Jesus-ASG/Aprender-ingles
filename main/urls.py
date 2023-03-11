@@ -1,5 +1,5 @@
 from django.urls import path
-from main.views.admin import pages, tags, stories
+from main.views.admin import pages, tags, stories, admin_apis
 from main.views.user import story_render, user_apis, exercise_apis
 from main.views import views, auth_views as v
 
@@ -41,6 +41,7 @@ urlpatterns = [
     path('api/exercise/request_answer/', exercise_apis.request_answer, name="request_exercise_answer"),
 
     path('api/filter_story/', user_apis.filterStories, name="filter_stories"),
+    path('api/update/user-based-recommender/', admin_apis.updateUBRecommender, name="ub_recommender"),
 
     path('register', v.register, name='register'),
 

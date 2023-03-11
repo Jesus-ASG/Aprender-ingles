@@ -36,6 +36,10 @@
 			<li class="nav-item" role="presentation">
 				<a class="nav-link" href="#tags" aria-controls="tags" role="tab" data-bs-toggle="tab" onclick="">Tags</a>
 			</li>
+			<li class="nav-item" role="presentation">
+				<a class="nav-link" href="#recommenders" aria-controls="tags" role="tab" data-bs-toggle="tab"
+					onclick="">Recommenders</a>
+			</li>
 		</ul>
 	</div>
 
@@ -160,8 +164,39 @@
 				</div>
 			</div>
 		</div>
-
 		<!-- End tags table -->
+
+		<!-- Tags table -->
+		<div class="row tab-pane" role="tabpanel" id="recommenders" style="min-height: 50vh;">
+			<div class="col-12 text-center">
+				<h2>Content based recommender</h2>
+				<p>Update content based recommender <button onclick="updateCBRecommender()"><i
+							class="fa-solid fa-arrows-rotate"></i></button></p>
+			</div>
+		</div>
 	</div>
 </div>
+{% endblock %}
+
+{% block page-scripts %}
+<script>
+	const URL_UPDATE_CB_RECOMMENDER = '{% url "ub_recommender" %}';
+</script>
+<script>
+	function updateCBRecommender() {
+		const csrftoken = getCookie('csrftoken');
+		$.ajax({
+			type: "POST",
+			url: URL_UPDATE_CB_RECOMMENDER,
+			headers: { "X-CSRFToken": csrftoken },
+			success: function (response) {
+				console.log(response);
+			},
+			error: function (response) {
+				//console.log(response);
+			}
+		});
+
+	}
+</script>
 {% endblock %}
