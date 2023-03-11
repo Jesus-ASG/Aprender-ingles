@@ -8,10 +8,12 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 from main.models import Story
 
+
 class ContentRecommender:
     def __init__(self) -> None:
-        pass
+        self.cache_key = 'cb_recommender_similarities'
     
+
     def train(self, max_data=5000):
         stories = Story.objects.all()
         if not stories:
@@ -46,12 +48,12 @@ class ContentRecommender:
             similarities[stories['id'].iloc[i]] = [(stories['id'][x], cosine_similarities[i][x]) for x in similar_indices][1:]
         
         # Set the similarities into cache
-        cache.set('cb_recommender_similarities', similarities, timeout=None)
+        cache.set(self.cache_key, similarities, timeout=None)
         return True
 
     def recommend(self, story_id, max_recommendations=10):
         # Get the similarities from cache
-        matrix_similarities = cache.get('cb_recommender_similarities')
+        matrix_similarities = cache.get(self.cache_key)
         if not matrix_similarities:
             print(f'\n\nThe recommender is not trained yet, training...\n\n')
             trainning = self.train()
@@ -61,10 +63,11 @@ class ContentRecommender:
         #print(f'\nMatrix similarities\n{matrix_similarities}')
 
         # Recommendations is an array with the story id and similarity predicted
-        recommendations = matrix_similarities.get(story_id)[:max_recommendations]
+        recommendations = matrix_similarities.get(story_id)
 
         recommendations_story = []
         if (recommendations):
+            recommendations = recommendations[:max_recommendations]
             for r in recommendations:
                 try:
                     recommendations_story.append(Story.objects.get(id=r[0]))
@@ -72,4 +75,3 @@ class ContentRecommender:
                     pass
         return recommendations_story
                     
-        

@@ -9,15 +9,19 @@ from main.models import Story, UserProfile
 
 from main.utils.ub_recommender import UserBasedRecommender
 
+
 def is_superuser(user):
     return user.is_superuser
+
 
 @login_required(login_url='/login/')
 @user_passes_test(is_superuser, login_url='/login/')
 def updateUBRecommender(request):
     
     ubr = UserBasedRecommender()
+    print('\n\n')
+    #ubr.train()
+    ubr.recommend(5)
+    print('\n\n')
 
-    ubr.train()
-    
     return JsonResponse({'message': 'success'})
