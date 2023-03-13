@@ -10,7 +10,7 @@ from main.models import Story, UserProfile, LikedStory
 
 class UserBasedRecommender:
     def __init__(self) -> None:
-        self.cache_users_key = 'ubr_users'
+        self.cache_most_rated_stories_key = 'ubr_most_rated_stories'
         self.cache_stories_key = 'ubr_stories'
         self.cache_cosines_key = 'ubr_cosines'
         self.timeout = None
@@ -38,10 +38,11 @@ class UserBasedRecommender:
         #print(f'Head table:\n{df.head()}')
 
 
-        # Count ratings
-        #agg_ratings = df.groupby('title1').agg(number_of_ratings = ('rating', 'count')).reset_index()
-        #x = agg_ratings.sort_values(by='number_of_ratings', ascending=False).head()
-        #print(f'agg ratings\n{x}')
+        # Count likes
+        agg_ratings = df.groupby('story_id').agg(number_of_ratings = ('rating', 'count')).reset_index()
+        agg_ratings_sorted = agg_ratings.sort_values(by='number_of_ratings', ascending=False)
+        cache.set(self.cache_most_rated_stories_key, agg_ratings_sorted, timeout=self.timeout)
+        #print(f'agg ratings\n{agg_ratings_sorted}')
 
 
         # Create matrix
@@ -58,52 +59,53 @@ class UserBasedRecommender:
         cosine_similarities_df = pd.DataFrame(cosine_similarities, index=matrix.index, columns=matrix.index)
         cache.set(self.cache_cosines_key, cosine_similarities_df, timeout=self.timeout)
 
-        # Cosine similatiries as dict
-        similarities = {}
-        for i, cs in enumerate(cosine_similarities):
-            similar_indices = cs.argsort()[:-50:-1]
-            similarities[matrix.index[i]] = [(matrix.index[x], cs[x]) for x in similar_indices][1:]
-        #print(f'Similarities\n{similarities}')
-
-
-        # Save recommendations in cache
-        cache.set(self.cache_users_key, similarities, timeout=self.timeout)
         return True
 
     # Return stories
     def recommend(self, user_id, max_recommendations=10):
-        users_similarities = cache.get(self.cache_users_key)
+        most_rated_stories = cache.get(self.cache_most_rated_stories_key)
         stories_matrix = cache.get(self.cache_stories_key)
         cosines = cache.get(self.cache_cosines_key)
-        #print(stories_matrix)
+        
+        strong_recommended = round(max_recommendations / 2)
 
 
-        if not users_similarities:
-            print(f'\n\nThe recommender is not trained yet, training...\n\n')
-            trainning = self.train()
-            if trainning:
-                return self.recommend(user_id=user_id, max_recommendations=max_recommendations)
-            return []
+        # Stories matrix only with user's row
+        user_row = stories_matrix[stories_matrix.index == user_id]
+        #print(f'picked row\n{user_row}')
+        
+        # If user has no likes return popular stories
+        if user_row.empty:
+            # Limit of stories to process
+            most_rated_stories = most_rated_stories[:1000]
+            #print(f'most_rated_stories \n{most_rated_stories}')
+
+            # Get ids of most rated stories
+            mr_ids = most_rated_stories['story_id'].tolist()
+            # Crop most rated ids
+            mr_ids = mr_ids[:strong_recommended]
+
+
+            # Get random stories to fill the maximum
+            random_recommended = max_recommendations - len(mr_ids)
+            stories_random_ids = Story.objects.all().values('id').exclude(pk__in=mr_ids).order_by('?')
+            stories_random_ids = [x['id'] for x in stories_random_ids]
+            # Crop random ids
+            stories_random_ids = stories_random_ids[:random_recommended]
+
+
+            # Prepare ids to search
+            stories_to_search = stories_random_ids + mr_ids
+
+            # Get querysets
+            stories = Story.objects.filter(pk__in=stories_to_search).order_by('?')
+            return stories
 
 
         # Remove current user from matrix
         cosines.drop(index=user_id, inplace=True)
         similar_users = cosines[cosines[user_id]>0][user_id].sort_values(ascending=False)[:10]
-        #print(f'similar users\n{similar_users}')
 
-        # Get only ids
-        #similar_ids = [x[0] for x in similar_users]
-        
-        # Remove picked user ID from the candidate list
-        #cosine_similarities_df.drop(index=picked_userid, inplace=True)
-
-        # Take a look at the data
-        #cosine_similarities_df.head()
-
-
-        # Stories matrix only with user's row
-        user_row = stories_matrix[stories_matrix.index == user_id].dropna(axis=1, how='all')
-        #print(f'picked row\n{user_row}')
 
         # Stories matrix only without user's row
         similar_user_stories = stories_matrix[stories_matrix.index.isin(similar_users.index)].dropna(axis=1, how='all')
@@ -136,8 +138,6 @@ class UserBasedRecommender:
         sorted_stories_ids = item_score.sort_values(by='score', ascending=False)
 
         
-        # Recommend highest stories similarities
-        strong_recommended = round(max_recommendations / 2)
         # Cut only required stories
         sorted_stories_ids = sorted_stories_ids[:strong_recommended]
         sorted_stories_ids = sorted_stories_ids['story'].tolist()
