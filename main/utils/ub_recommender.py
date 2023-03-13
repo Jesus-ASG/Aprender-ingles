@@ -10,7 +10,10 @@ from main.models import Story, UserProfile, LikedStory
 
 class UserBasedRecommender:
     def __init__(self) -> None:
-        self.cache_key = 'ub_recommender_similarities'
+        self.cache_users_key = 'ubr_users'
+        self.cache_stories_key = 'ubr_stories'
+        self.cache_cosines_key = 'ubr_cosines'
+        self.timeout = None
     
     
     def train(self):
@@ -42,7 +45,8 @@ class UserBasedRecommender:
 
 
         # Create matrix
-        matrix = df.pivot_table(index='user_profile_id', columns='title1', values='rating').fillna(0)
+        matrix = df.pivot_table(index='user_profile_id', columns='story_id', values='rating').fillna(0)
+        cache.set(self.cache_stories_key, matrix, timeout=self.timeout)
         #print(f'Matrix\n{matrix.head()}')
 
 
@@ -50,8 +54,11 @@ class UserBasedRecommender:
         cosine_similarities = cosine_similarity(matrix)
         #print(f'Cosine similarities\n{cosine_similarities}')
 
+        # Cosine similarities as dataframe
+        cosine_similarities_df = pd.DataFrame(cosine_similarities, index=matrix.index, columns=matrix.index)
+        cache.set(self.cache_cosines_key, cosine_similarities_df, timeout=self.timeout)
 
-        # Map cosine similatiries
+        # Cosine similatiries as dict
         similarities = {}
         for i, cs in enumerate(cosine_similarities):
             similar_indices = cs.argsort()[:-50:-1]
@@ -60,24 +67,78 @@ class UserBasedRecommender:
 
 
         # Save recommendations in cache
-        cache.set(self.cache_key, similarities, timeout=None)
+        cache.set(self.cache_users_key, similarities, timeout=self.timeout)
         return True
 
-
+    # Return stories
     def recommend(self, user_id, max_recommendations=10):
-        # Get the similarities from cache
-        matrix_similarities = cache.get(self.cache_key)
-        if not matrix_similarities:
+        users_similarities = cache.get(self.cache_users_key)
+        stories_matrix = cache.get(self.cache_stories_key)
+        cosines = cache.get(self.cache_cosines_key)
+
+        print(stories_matrix)
+
+        if not users_similarities:
             print(f'\n\nThe recommender is not trained yet, training...\n\n')
             trainning = self.train()
             if trainning:
                 return self.recommend(user_id=user_id, max_recommendations=max_recommendations)
             return []
-        #print(f'\nMatrix similarities\n{matrix_similarities}')
 
-        # Similar users is an array with the users id and similarity predicted
-        similar_users = matrix_similarities.get(user_id)
-        if similar_users:
-            similar_users = similar_users[:max_recommendations]
 
-        print(f'{similar_users}')
+        # Remove current user from matrix
+        cosines.drop(index=user_id, inplace=True)
+        similar_users = cosines[cosines[user_id]>0][user_id].sort_values(ascending=False)[:10]
+        print(f'similar users\n{similar_users}')
+
+        
+        stories_ids = []
+        excluded_ids = []
+        strong_recommended = round(max_recommendations / 1.5)
+        random_recommended = max_recommendations - strong_recommended
+
+        # Get only ids
+        #similar_ids = [x[0] for x in similar_users]
+        
+        # Remove picked user ID from the candidate list
+        #cosine_similarities_df.drop(index=picked_userid, inplace=True)
+
+        # Take a look at the data
+        #cosine_similarities_df.head()
+
+
+        # Stories matrix only with user's row
+        user_row = stories_matrix[stories_matrix.index == user_id].dropna(axis=1, how='all')
+        #print(f'picked row\n{user_row}')
+
+        # Stories matrix only without user's row
+        similar_user_stories = stories_matrix[stories_matrix.index.isin(similar_users.index)].dropna(axis=1, how='all')
+        #print(f'similar user stories\n{similar_user_stories}')
+
+
+        item_score = {}
+
+        # Iterate by columns
+        for i in similar_user_stories.columns:
+            story_rating = similar_user_stories[i]
+            
+            total = 0
+            # Similar users id
+            for u in similar_users.index:
+                score = similar_users[u] * story_rating[u]
+                total += score
+            
+            item_score[i] = total
+
+        # Convert dictionary to pandas dataframe
+        item_score = pd.DataFrame(item_score.items(), columns=['story', 'score'])
+        # Sort by score
+        ranked_item_score = item_score.sort_values(by='score', ascending=False)
+
+        print(f'Ranked stories\n{ranked_item_score.head(10)}')
+
+        list_ids = ranked_item_score['story'].tolist()
+        print(f'List ids\n{list_ids}')
+        return list_ids
+        
+        

@@ -21,7 +21,7 @@ def updateUBRecommender(request):
     ubr = UserBasedRecommender()
     print('\n\n')
     #ubr.train()
-    ubr.recommend(5)
+    ubr.recommend(1, max_recommendations=6)
     print('\n\n')
 
     return JsonResponse({'message': 'success'})
