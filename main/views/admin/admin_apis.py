@@ -17,11 +17,6 @@ def is_superuser(user):
 @login_required(login_url='/login/')
 @user_passes_test(is_superuser, login_url='/login/')
 def updateUBRecommender(request):
-    
     ubr = UserBasedRecommender()
-    print('\n\n')
-    #ubr.train()
-    ubr.recommend(1, max_recommendations=6)
-    print('\n\n')
-
-    return JsonResponse({'message': 'success'})
+    if ubr.train():
+        return JsonResponse({'message': 'success'})

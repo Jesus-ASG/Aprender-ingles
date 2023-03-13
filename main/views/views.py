@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
 from ..models import Story, Tag
+from main.utils.ub_recommender import UserBasedRecommender  
 
 stories_per_page = 8
 
@@ -16,8 +17,11 @@ def index(request):
     if request.method == 'GET':
         page_title = 'Recommended'
         message_if_empty = ''
-        stories = Story.objects.all()
-
+        ubr = UserBasedRecommender()
+        user_profile = request.user.profile
+        stories = ubr.recommend(user_profile.id, max_recommendations=6)
+        #print(user_profile.id)
+        #stories = Story.objects.all()
         context = {
             'page_title': page_title,
             'message_if_empty': message_if_empty,

@@ -75,8 +75,8 @@ class UserBasedRecommender:
         users_similarities = cache.get(self.cache_users_key)
         stories_matrix = cache.get(self.cache_stories_key)
         cosines = cache.get(self.cache_cosines_key)
+        #print(stories_matrix)
 
-        print(stories_matrix)
 
         if not users_similarities:
             print(f'\n\nThe recommender is not trained yet, training...\n\n')
@@ -89,13 +89,7 @@ class UserBasedRecommender:
         # Remove current user from matrix
         cosines.drop(index=user_id, inplace=True)
         similar_users = cosines[cosines[user_id]>0][user_id].sort_values(ascending=False)[:10]
-        print(f'similar users\n{similar_users}')
-
-        
-        stories_ids = []
-        excluded_ids = []
-        strong_recommended = round(max_recommendations / 1.5)
-        random_recommended = max_recommendations - strong_recommended
+        #print(f'similar users\n{similar_users}')
 
         # Get only ids
         #similar_ids = [x[0] for x in similar_users]
@@ -117,13 +111,19 @@ class UserBasedRecommender:
 
 
         item_score = {}
-
+        excluded_ids = []
         # Iterate by columns
-        for i in similar_user_stories.columns:
+        for i, j in zip(similar_user_stories.columns, user_row.columns):
+            # if user selected has rated story jumps to another column
+            if user_row[j][user_id] > 0:
+                excluded_ids.append(j)
+                continue
+            
             story_rating = similar_user_stories[i]
             
             total = 0
             # Similar users id
+            
             for u in similar_users.index:
                 score = similar_users[u] * story_rating[u]
                 total += score
@@ -133,12 +133,30 @@ class UserBasedRecommender:
         # Convert dictionary to pandas dataframe
         item_score = pd.DataFrame(item_score.items(), columns=['story', 'score'])
         # Sort by score
-        ranked_item_score = item_score.sort_values(by='score', ascending=False)
+        sorted_stories_ids = item_score.sort_values(by='score', ascending=False)
 
-        print(f'Ranked stories\n{ranked_item_score.head(10)}')
+        
+        # Recommend highest stories similarities
+        strong_recommended = round(max_recommendations / 2)
+        # Cut only required stories
+        sorted_stories_ids = sorted_stories_ids[:strong_recommended]
+        sorted_stories_ids = sorted_stories_ids['story'].tolist()
 
-        list_ids = ranked_item_score['story'].tolist()
-        print(f'List ids\n{list_ids}')
-        return list_ids
+        # Recommend random stories
+        random_recommended = max_recommendations - len(sorted_stories_ids)
+
+        # search ids
+        excluded_ids = excluded_ids + sorted_stories_ids
+        stories_random_ids = Story.objects.all().values('id').exclude(pk__in=excluded_ids).order_by('?')
+        stories_random_ids = [x['id'] for x in stories_random_ids]
+
+        # Crop stories
+        stories_random_ids = stories_random_ids[:random_recommended]
+
+        # Get stories queryset
+        stories_to_search = sorted_stories_ids + stories_random_ids
+        stories_recommended = Story.objects.filter(pk__in=stories_to_search).order_by('?')
+
+        return stories_recommended
         
         
