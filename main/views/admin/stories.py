@@ -9,7 +9,7 @@ from django.shortcuts import redirect, render
 from main.forms import HistoriaForm
 from main.models import Story, Tag
 
-from main.utils.content_recommender import ContentRecommender
+from main.utils.cb_recommender import ContentBasedRecommender
 
 
 def is_superuser(user):
@@ -57,7 +57,7 @@ def create(request):
             return render(request, 'admin/story_form.html', context)
         storyF.save()
 
-        recommender = ContentRecommender()
+        recommender = ContentBasedRecommender()
         recommender.train()
         return redirect('view_pages', route=story_obj.route)
 
@@ -94,7 +94,7 @@ def update(request, story_id):
             context["error"] = "Ya existe una historia con ese título"
             return render(request, 'admin/story_form.html', context)
         storyF.save()
-        recommender = ContentRecommender()
+        recommender = ContentBasedRecommender()
         recommender.train()
         return redirect('index_admin')
         
@@ -105,7 +105,7 @@ def delete(request, story_id):
     try:
         historia = Story.objects.get(id=story_id)
         historia.delete()
-        recommender = ContentRecommender()
+        recommender = ContentBasedRecommender()
         recommender.train()
         return redirect('index_admin')
     except:

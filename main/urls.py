@@ -43,7 +43,8 @@ urlpatterns = [
     path('api/exercise/request_answer/', exercise_apis.request_answer, name="request_exercise_answer"),
 
     
-    path('api/update/user-based-recommender/', admin_apis.updateUBRecommender, name="ub_recommender"),
+    path('api/content-based-recommender/update', admin_apis.updateCBRecommender, name="update_cb_recommender"),
+    path('api/user-based-recommender/update', admin_apis.updateUBRecommender, name="update_ub_recommender"),
 
     path('register', auth_views.register, name='register'),
 

@@ -1,11 +1,9 @@
 import pandas as pd
-import numpy as np
 
 from django.core.cache import cache
 from sklearn.metrics.pairwise import cosine_similarity
 
-from django.contrib.auth.models import User
-from main.models import Story, UserProfile, LikedStory
+from main.models import Story, LikedStory
 
 
 class UserBasedRecommender:
@@ -66,7 +64,17 @@ class UserBasedRecommender:
         most_rated_stories = cache.get(self.cache_most_rated_stories_key)
         stories_matrix = cache.get(self.cache_stories_key)
         cosines = cache.get(self.cache_cosines_key)
+
+        # Check if recommender is trained
+        if most_rated_stories is None or stories_matrix is None or cosines is None:
+            print(f'\n\nThe recommender is not trained yet, training...\n\n')
+            trainning = self.train()
+            if trainning:
+                return self.recommend(user_id=user_id, max_recommendations=max_recommendations)
+            else:
+                return Story.objects.none()
         
+        # Integer to know how many similar user stories recommend
         strong_recommended = round(max_recommendations / 2)
 
 

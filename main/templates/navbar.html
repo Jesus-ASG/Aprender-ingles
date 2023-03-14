@@ -24,9 +24,11 @@
 				<li class="nav-item">
 					<a class="nav-link fw-bold" aria-current="page" href="{% url 'index' %}">Story Quest</a>
 				</li>
+				{% if request.user.is_authenticated %}
 				<li class="nav-item">
 					<a class="nav-link fw-bold" aria-current="page" href="{% url 'stories' %}">Gallery</a>
 				</li>
+				{% endif %}
 			</ul>
 
 			{% if request.user.is_authenticated %}

@@ -9,7 +9,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from main.models import Story
 
 
-class ContentRecommender:
+class ContentBasedRecommender:
     def __init__(self) -> None:
         self.cache_key = 'cb_recommender_similarities'
     
@@ -64,6 +64,7 @@ class ContentRecommender:
 
         # Recommendations is an array with the story id and similarity predicted
         recommendations = matrix_similarities.get(story_id)
+        #print(f'\n\n{recommendations}\n\n')
 
         recommendations_story = []
         if (recommendations):

@@ -11,7 +11,7 @@ from django.forms.models import model_to_dict
 from main.models import Story, Score, RepeatPhrase
 from main.forms import ScoreForm
 
-from main.utils.content_recommender import ContentRecommender
+from main.utils.cb_recommender import ContentBasedRecommender
 
 # expiration time for cache in seconds
 expiration_time = 86400
@@ -48,7 +48,7 @@ def storyInfo(request, route):
     cache.delete(f'evaluated_story_{story.id}')
 
     # Get recommendations
-    recommender = ContentRecommender()
+    recommender = ContentBasedRecommender()
     recommendations_list = recommender.recommend(story_id=story.id, max_recommendations=4)
 
     # check if user likes the story
