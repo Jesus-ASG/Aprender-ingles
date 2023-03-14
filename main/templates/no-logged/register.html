@@ -4,7 +4,46 @@
 
 {% block title %} Crea una cuenta {% endblock %}
 
-{% block navbar %} {% include 'navbar/navbar-guest.html' %} {% endblock %}
+{% block page-styles %}
+<style>
+    .main-form-container {
+        display: block;
+        width: 400px;
+        text-align: left;
+        margin: auto;
+        margin-top: 30px;
+        background-color: #fff;
+        border-radius: 10px;
+    }
+
+    .main-form-container a {
+        text-decoration: none;
+    }
+
+    .pass input {
+        outline: none;
+        border: none;
+        width: 90%;
+    }
+
+    .pass span {
+        background-color: #fff;
+        border: none;
+        text-align: right;
+        display: inline-block;
+    }
+
+    .pass span:hover {
+        cursor: pointer;
+    }
+
+    .error-pass {
+        font-weight: bold;
+        color: red;
+    }
+</style>
+
+{% endblock %}
 
 {% block content %}
 <!-- REGISTER FORM -->
