@@ -1,14 +1,9 @@
 function setTitle(f_counter) {
-    let f_classes = {
-        "paper": "mx-1",
-        "front": "px-1",
-        "back": "px-1"
-    };
-    document.getElementById("story_title").innerHTML = createFlipHTML(db_title.title1, db_title.title2, f_counter, f_classes);
+    document.getElementById("story_title").innerHTML = createFlipHTML(db_title.title1, db_title.title2, f_counter);
 }
 
 
-function loadLikes(){
+function loadLikes() {
     let btn = document.getElementById("like_counter_btn").children[0];
     let lbl = document.getElementById("like_counter_lbl");
 
@@ -17,10 +12,10 @@ function loadLikes(){
     else
         btn.classList.add("far");
 
-	lbl.innerText = db_story_likes_number;
+    lbl.innerText = db_story_likes_number;
 }
 
-function likeFunction(e){
+function likeFunction(e) {
     let lbl = document.getElementById("like_counter_lbl");
     try {
         let likes = parseInt(lbl.textContent);
@@ -44,24 +39,24 @@ function likeFunction(e){
         e.target.classList.toggle("far");
         e.target.classList.toggle("fas");
         db_story_liked = !db_story_liked;
-    } catch (error) {}
+    } catch (error) { }
 }
 
 
-function loadSaved(){
+function loadSaved() {
     let btn = document.getElementById("save_story_btn").children[0];
     let lbl = document.getElementById("save_story_lbl");
-    if (db_story_saved){
+    if (db_story_saved) {
         lbl.innerText = 'Saved';
         btn.classList.toggle("fas");
     }
-    else{
+    else {
         lbl.innerText = 'Save';
         btn.classList.toggle("far");
     }
 }
 
-function saveFunction(e){
+function saveFunction(e) {
     let lbl = document.getElementById("save_story_lbl");
     try {
         const csrftoken = getCookie('csrftoken');
@@ -86,7 +81,7 @@ function saveFunction(e){
 
         e.target.classList.toggle("far");
         e.target.classList.toggle("fas");
-    } catch (error) {}
+    } catch (error) { }
 }
 
 
@@ -120,14 +115,14 @@ function setScoresLabels(f_counter) {
     let table_scores = document.getElementById("scores_table");
     let table_no_scores = table_scores.querySelector("[name = no_scores]");
     let table_header = table_scores.querySelector("[name = table_header]");
-    
+
 
     table_scores.querySelector("[name = title]").innerHTML = createFlipHTML("Scores table", "Tabla de puntuaciones", f_counter, f_classes);
 
     if (table_no_scores)
         table_no_scores.innerHTML = createFlipHTML("No records yet", "Aún no hay registros", f_counter, f_classes);
-    
-    if (table_header){
+
+    if (table_header) {
         let html = `
         <th scope="col" class="fs-4">`+ createFlipHTML("Position", "Posición", f_counter, f_classes) + `</th>
         <th scope="col" class="fs-4">`+ createFlipHTML("Score", "Puntaje", f_counter, f_classes) + `</th>
@@ -137,14 +132,14 @@ function setScoresLabels(f_counter) {
     }
 }
 
-function setRelatedTitle(f_counter){
+function setRelatedTitle(f_counter) {
     let related_title = document.getElementById("related_title");
-	let f_classes = {
-		"paper": "mx-1",
-		"front": "px-1",
-		"back": "px-1"
-	};
-	related_title.innerHTML = createFlipHTML("Related", "Relacionado", f_counter, f_classes);
+    let f_classes = {
+        "paper": "mx-1",
+        "front": "px-1",
+        "back": "px-1"
+    };
+    related_title.innerHTML = createFlipHTML("Related", "Relacionado", f_counter, f_classes);
 }
 
 function cleanStorage() {

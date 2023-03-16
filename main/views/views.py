@@ -32,6 +32,16 @@ def index(request):
 
 
 @login_required(login_url='/login/')
+def profile(request):
+    if request.method == 'GET':
+        profile = request.user.profile
+        context = {
+            'profile': profile
+        }
+        return render(request, 'user/profile.html', context)
+
+
+@login_required(login_url='/login/')
 def storiesGallery(request):    
     if request.method == 'GET':
         # Get query params

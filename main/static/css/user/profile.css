@@ -1,0 +1,111 @@
+.circle-progress {
+	width: 100%;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 1rem;
+}
+
+.progress-level {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 300px;
+	height: 300px;
+	border-radius: 50%;
+	/* 320 is the maximum */
+
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+	transform: rotate(200deg);
+}
+
+.profile-picture {
+	display: inline-block;
+	transform: rotate(-200deg);
+	width: 250px;
+	height: 250px;
+}
+
+.profile-picture img {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.level {
+	position: relative;
+}
+
+.level h3 {
+	position: absolute;
+	top: -2rem;
+	left: 50%;
+	transform: translateX(-50%);
+	border-radius: 10px;
+	font-size: 2rem;
+	color: #fff;
+	width: 110px;
+	background: #c85;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.profile-info-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}
+
+.link-btn-container {
+	padding-left: 30px;
+	padding-right: 30px;
+	margin: 10px 0 10px 0;
+}
+
+.link-btn {
+	color: #000;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #bbfff3;
+	border-radius: 20px;
+}
+
+.link-btn p {
+	padding: 0.5rem;
+}
+
+.link-btn:hover {
+	color: #000;
+	font-weight: 500;
+}
+
+@media only screen and (max-width: 400px) {
+	.progress-level {
+		width: 250px;
+		height: 250px;
+	}
+
+	.profile-picture {
+		width: 208px;
+		height: 208px;
+	}
+
+	.level h3 {
+		width: 90px;
+		font-size: 1.9rem;
+	}
+
+	.link-btn-container {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
