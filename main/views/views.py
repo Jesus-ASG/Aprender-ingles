@@ -1,12 +1,9 @@
-import json
-
-from django.core import serializers
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
-from ..models import Story, Tag
+from main.models import Story, Tag
 from main.utils.ub_recommender import UserBasedRecommender  
 
 stories_per_page = 8

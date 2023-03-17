@@ -12,6 +12,8 @@ from main.models import Story, Score, RepeatPhrase
 from main.forms import ScoreForm
 
 from main.utils.cb_recommender import ContentBasedRecommender
+from main.utils.level_manager import LevelManager
+
 
 # expiration time for cache in seconds
 expiration_time = 86400
@@ -228,6 +230,10 @@ def storyContent(request, route, page_number):
             cache.set(f'story_answers_{story.id}', cache_story_answers, expiration_time)
 
             user_profile.xp += results.get('score', 0)
+            # update level
+            lvl_obj = LevelManager()
+            level_statistics = lvl_obj.get_level_statistics(user_profile.xp)
+            user_profile.level = level_statistics['level']
             user_profile.save()
 
         return JsonResponse(cache_story_answers)

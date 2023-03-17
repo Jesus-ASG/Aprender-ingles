@@ -108,6 +108,7 @@ class UserProfile(models.Model):
     # link one to one to the django user
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     xp = models.IntegerField(default=0)
+    level = models.FloatField(default=1)
     
     # extra fields
     stories_scores = models.ManyToManyField(Story, related_name='users_scored', through='Score')

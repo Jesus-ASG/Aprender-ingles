@@ -25,7 +25,7 @@
           </div>
         </div>
         <div class="level">
-          <h3>1</h3>
+          <h3>{{ profile.level|to_int }}</h3>
         </div>
       </div>
     </div>
@@ -40,7 +40,7 @@
               <span class="fs-4 fw-bold" style="color: #ff2126">
                 <i class="fa-heart fas"></i>
               </span>
-              <p>See liked stories</p>
+              <p>See your liked stories</p>
             </a>
           </div>
         </div>
@@ -51,7 +51,7 @@
               <span class="fs-4 fw-bold" style="color:#5cffab;">
                 <i class="fa-bookmark fas"></i>
               </span>
-              <p>See saved stories</p>
+              <p>See your saved stories</p>
             </a>
 
           </div>
@@ -66,6 +66,7 @@
 {% block page-scripts %}
 <script>
   let db_user_xp = "{{ profile.xp }}";
+  let db_progress_xp = "{{ profile.level|decimal_part }}"
 
 </script>
 
@@ -78,16 +79,16 @@
 
   let progress_lvl_dom = document.getElementById('progress_level');
   let progress_value = 0;
-  let progress_end_value = 50;
+  let progress_end_value = parseInt(db_progress_xp * 100);
   let speed = 20;
 
   let progress_lvl = setInterval(() => {
-    progress_value++;
     progress_lvl_dom.style.background = `
-    conic-gradient(#23fbb7 ${progress_value * 3.6}deg, #bbfff3 ${progress_value * 3.2}deg)
+    conic-gradient(#23fbb7 ${progress_value * 3.2}deg, #bbfff3 ${progress_value * 3.2}deg)
     `;
     if (progress_value == progress_end_value)
       clearInterval(progress_lvl);
+    progress_value++;
   }, speed);
 
 
