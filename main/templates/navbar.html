@@ -1,8 +1,8 @@
 {% load static %}
+{% load filters %}
 
 <!-- Navbar-->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark"
-	style="position: sticky; top: 0; left: 0; width: 100%; z-index: 500;">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-custom-properties">
 	<div class="container-fluid">
 		<a href="{% url 'index' %}">
 			<img src="{% static 'img/logo.png' %}" width="50px" alt="logo.png" class="logo-nav-bar">
@@ -36,7 +36,7 @@
 			<ul class="navbar-nav text-center">
 
 				<!-- Dropdown notifications -->
-				<li class="nav-item dropdown me-3">
+				<li class="nav-item dropdown me-3 center-by-flex">
 					<a class="nav-link dropdown-toggle" href="#" id="profile_dropdown1" role="button" data-bs-toggle="dropdown"
 						aria-haspopup="true" aria-expanded="false">
 						<span class="position-relative">
@@ -73,16 +73,36 @@
 				<!-- End Dropdown notifications -->
 
 				<!-- Dropdown profile options -->
-				<li class="nav-item dropdown me-2">
+				<li class="nav-item dropdown me-2 center-by-flex">
 					<a class="nav-link dropdown-toggle" href="#" id="profile_dropdown" role="button" data-bs-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false">
-						<span><i class="fa fa-user fa-lg" aria-hidden="true"></i></span>
+						aria-haspopup="true" aria-expanded="false" style="">
+						<!--<span><i class="fa fa-user fa-lg" aria-hidden="true"></i></span>-->
+						<div class="navbar-circle-progress">
+							<div class="navbar-progress-level">
+								<div class="navbar-profile-picture">
+									<img src="{% static 'img/profile_pictures/pp3.jpg' %}" alt="Not found">
+								</div>
+							</div>
+							<div class="navbar-level">
+								<h3>{{ request.user.profile.level|to_int }}</h3>
+							</div>
+						</div>
 					</a>
 					<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="profile_dropdown">
 						<li>
 							<a class="dropdown-item" href="{% url 'profile' %}">
-								<span class="me-1"><i class="fa fa-user fa-lg"></i></span>
-								<p class="d-inline-block">{{ request.user.username|title }}</p>
+								<!-- <span class="me-1"><i class="fa fa-user fa-lg"></i></span> -->
+								<div class="navbar-circle-progress">
+									<div class="navbar-progress-level">
+										<div class="navbar-profile-picture">
+											<img src="{% static 'img/profile_pictures/pp3.jpg' %}" alt="Not found">
+										</div>
+									</div>
+									<div class="navbar-level">
+										<h3>{{ request.user.profile.level|to_int }}</h3>
+									</div>
+								</div>
+								<p class="d-inline-block text-center w-100 mt-1">{{ request.user.username|title }}</p>
 							</a>
 						</li>
 

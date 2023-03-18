@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
 from main.models import Story, Tag
-from main.utils.ub_recommender import UserBasedRecommender  
+from main.utils.ub_recommender import UserBasedRecommender
+from main.utils.level_manager import LevelManager
 
 stories_per_page = 8
 
@@ -32,8 +33,15 @@ def index(request):
 def profile(request):
     if request.method == 'GET':
         profile = request.user.profile
+
+        lvl_obj = LevelManager()
+        level_statistics = lvl_obj.get_level_statistics(profile.xp)
+        print(f'\n\n')
+        print(f'Profile xp: {profile.xp}\nLevel statistics:\n{level_statistics}')
+        print(f'\n\n')
         context = {
-            'profile': profile
+            'profile': profile,
+            'level_statistics': level_statistics
         }
         return render(request, 'user/profile.html', context)
 

@@ -8,6 +8,12 @@ h5 {
 	padding: 0;
 }
 
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
 body {
 	margin: 0;
 	padding: 0;
@@ -15,11 +21,7 @@ body {
 	font-style: normal;
 }
 div,
-span {
-	margin: 0;
-	padding: 0;
-}
-
+span,
 p {
 	margin: 0;
 	padding: 0;

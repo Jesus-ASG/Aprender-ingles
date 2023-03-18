@@ -28,6 +28,14 @@
           <h3>{{ profile.level|to_int }}</h3>
         </div>
       </div>
+      <div class="row my-2">
+        <div class="col-12 text-center">
+          <!-- 
+            {{ profile.xp }} / {{ level_statistics.lvl_xp_end }}
+          -->
+          {{ level_statistics.progress_xp|to_int }} / {{ level_statistics.range_xp }}
+        </div>
+      </div>
     </div>
 
     <div class="col-12 col-md-6 text-center">
@@ -64,12 +72,6 @@
 {% endblock %}
 
 {% block page-scripts %}
-<script>
-  let db_user_xp = "{{ profile.xp }}";
-  let db_progress_xp = "{{ profile.level|decimal_part }}"
-
-</script>
-
 <script>
   let f_counter = { "start": 0, "end": 0 };
 

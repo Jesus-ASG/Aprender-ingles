@@ -23,8 +23,10 @@ class LevelManager:
 
 		statistics = {
 			'level': level,
-			'xp_start': xp_start,
-			'xp_end': xp_end,
-			'progress_xp': progress_xp
+			'lvl_xp_start': xp_start,
+			'lvl_xp_end': xp_end,
+			'progress_xp': progress_xp,
+			'range_xp': range_xp
 		}
 		return statistics
+	
