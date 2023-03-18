@@ -14,6 +14,7 @@
   <div class="row mt-3">
     <div class="col-12 page-title-container">
       <h1 class="fs-1" id="page_title">Profile</h1>
+
     </div>
   </div>
   <div class="row">
@@ -21,18 +22,49 @@
       <div class="circle-progress">
         <div class="progress-level" id="progress_level">
           <div class="profile-picture my-3">
-            <img src="{% static 'img/profile_pictures/pp3.jpg' %}" alt="Not found">
+            {% if profile.default_profile_image %}
+            <img src="{{ profile.default_profile_image }}" alt="Not found" id="profile_image">
+            {% else %}
+            <img src="{% static 'img/profile_pictures/pp3.jpg' %}" alt="Not found" id="profile_image">
+            {% endif %}
           </div>
         </div>
         <div class="level">
           <h3>{{ profile.level|to_int }}</h3>
         </div>
+        <div id="change_profile_picture" data-bs-toggle="modal" data-bs-target="#modal_change_pp">
+          <span><i class="fa-solid fa-camera"></i></span>
+        </div>
+        <div class="modal fade" id="modal_change_pp" tabindex="-1" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title  col-11 text-center">Change image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+              </div>
+
+              <div class="modal-body">
+                <form method="post" id="change_img_form">
+                  {% csrf_token %}
+                  {{ default_image_form.as_p }}
+                </form>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-secondary" style="background-color: #f2864b;"
+                  form="change_img_form" data-bs-dismiss="modal">
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="row my-2">
         <div class="col-12 text-center">
-          <!-- 
-            {{ profile.xp }} / {{ level_statistics.lvl_xp_end }}
-          -->
+          <!-- {{ profile.xp }} / {{ level_statistics.lvl_xp_end }} -->
           {{ level_statistics.progress_xp|to_int }} / {{ level_statistics.range_xp }}
         </div>
       </div>
@@ -92,6 +124,20 @@
       clearInterval(progress_lvl);
     progress_value++;
   }, speed);
+
+
+  let profile_image = document.getElementById('profile_image');
+  profile_image.addEventListener('mouseenter', (e) => {
+    let change_image_btn = document.getElementById('change_profile_picture');
+    change_image_btn.style.opacity = '1';
+    change_image_btn.style.visibility = 'visible';
+  });
+
+  let change_image_btn = document.getElementById('change_profile_picture');
+  change_image_btn.addEventListener('mouseleave', (e) => {
+    change_image_btn.style.opacity = '0';
+    change_image_btn.style.visibility = 'hidden';
+  });
 
 
 </script>

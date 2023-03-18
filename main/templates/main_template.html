@@ -38,35 +38,38 @@
 
 <body>
 
-	{% include 'navbar.html' %}
+	<div style="min-height: 100vh; position: relative; padding-bottom: 2rem;">
+		{% include 'navbar.html' %}
 
-	{% block content %} {% endblock %}
+		{% block content %} {% endblock %}
+	</div>
 
 	<!-- FOOTER -->
-	<footer class="bg-dark text-center text-white"
-		style="position: absolute; left: 0; bottom: 0px; margin-top: 100px; width: 100%;">
-		<div class="container p-2">
-			<p class="fs-5">¡Puedes visitar los siguientes enlaces!</p>
-			<div>
-				<a class="footer-icon m-3 fs-5" href="https://github.com/Jesus-ASG" target="_blank" role="button">
-					<span><i class="fa-brands fa-github fa-lg"></i></span>
-				</a>
-				<a class="footer-icon m-3 fs-5" href="#/" role="button">
-					<span><i class="fa-brands fa-instagram fa-lg"></i></span>
-				</a>
-				<a class="footer-icon m-3 fs-5" href="#/" role="button">
-					<span><i class="fa-brands fa-facebook fa-lg"></i></span>
-				</a>
-				<a class="footer-icon m-3 fs-5" href="#/" role="button">
-					<span><i class="fa-brands fa-twitter fa-lg"></i></span>
-				</a>
+	<div class="footer-container">
+		<footer class="bg-dark text-center text-white footer-custom-properties">
+			<div class="container">
+				<h2 class="">Contact</h2>
+				<div class="contact-links">
+					<a class="footer-icon me-3 fs-5" href="https://github.com/Jesus-ASG" target="_blank" role="button">
+						<span><i class="fa-brands fa-github fa-lg"></i></span>
+					</a>
+					<a class="footer-icon me-3 fs-5" href="#/" role="button">
+						<span><i class="fa-brands fa-instagram fa-lg"></i></span>
+					</a>
+					<a class="footer-icon me-3 fs-5" href="#/" role="button">
+						<span><i class="fa-brands fa-facebook fa-lg"></i></span>
+					</a>
+					<a class="footer-icon me-3 fs-5" href="#/" role="button">
+						<span><i class="fa-brands fa-twitter fa-lg"></i></span>
+					</a>
+				</div>
 			</div>
-		</div>
-		<!-- Grid container -->
-		<div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.2);">
-			© Jesús A. Serrano Graciano 2023
-		</div>
-	</footer>
+			<!-- Grid container -->
+			<div class="author">
+				© Jesús A. Serrano Graciano 2023
+			</div>
+		</footer>
+	</div>
 
 	<script src="{% static 'resources/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js' %}"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

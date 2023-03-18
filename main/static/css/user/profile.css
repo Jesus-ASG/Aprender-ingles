@@ -41,6 +41,7 @@
 
 .level h3 {
 	position: absolute;
+	z-index: 300;
 	top: -2rem;
 	left: 50%;
 	transform: translateX(-50%);
@@ -88,6 +89,35 @@
 	font-weight: 500;
 }
 
+#change_profile_picture {
+	position: absolute;
+	display: flex;
+	opacity: 0;
+	visibility: hidden;
+	align-items: center;
+	justify-content: center;
+	z-index: 600;
+	width: 250px;
+	height: 250px;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.8);
+	transition: all 0.3s ease-in-out;
+	z-index: 200;
+}
+
+#change_profile_picture:hover {
+	cursor: pointer;
+}
+
+#change_profile_picture i {
+	color: #a9a0a0;
+	font-size: 4rem;
+}
+
+.circle-progress:hover > #change_profile_picture i {
+	color: #fff;
+}
+
 @media only screen and (max-width: 400px) {
 	.progress-level {
 		width: 250px;
@@ -107,5 +137,14 @@
 	.link-btn-container {
 		padding-left: 10px;
 		padding-right: 10px;
+	}
+
+	#change_profile_picture {
+		width: 208px;
+		height: 208px;
+	}
+
+	.modal-open {
+		padding: 0 !important;
 	}
 }

@@ -1,9 +1,10 @@
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
-from main.models import Story, Tag
+from main.models import Story, Tag, UserProfile
+from main.forms import SelectDefaultImageForm
 from main.utils.ub_recommender import UserBasedRecommender
 from main.utils.level_manager import LevelManager
 
@@ -31,19 +32,35 @@ def index(request):
 
 @login_required(login_url='/login/')
 def profile(request):
-    if request.method == 'GET':
-        profile = request.user.profile
 
-        lvl_obj = LevelManager()
-        level_statistics = lvl_obj.get_level_statistics(profile.xp)
-        print(f'\n\n')
-        print(f'Profile xp: {profile.xp}\nLevel statistics:\n{level_statistics}')
-        print(f'\n\n')
-        context = {
-            'profile': profile,
-            'level_statistics': level_statistics
-        }
+    profile = request.user.profile
+    default_image_form = SelectDefaultImageForm(instance=profile)
+
+    lvl_obj = LevelManager()
+    level_statistics = lvl_obj.get_level_statistics(profile.xp)
+
+    context = {
+        'profile': profile,
+        'level_statistics': level_statistics,
+        'default_image_form': default_image_form
+    }
+
+    if request.method == 'GET':
         return render(request, 'user/profile.html', context)
+    
+    if request.method == 'POST':
+        default_image_form = SelectDefaultImageForm(request.POST or None)
+        if not default_image_form.is_valid():
+            return render(request, 'user/profile.html', context)
+        
+        profile_obj = UserProfile.objects.get(user=request.user)
+        profile_obj.default_profile_image = default_image_form.cleaned_data['default_profile_image']
+        profile_obj.save()
+        
+        #context['success'] = True
+        # Update
+        return redirect('profile')
+        #return render(request, 'user/profile.html', context)
 
 
 @login_required(login_url='/login/')

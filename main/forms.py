@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Tag, Story, Page, Dialogue, Image, RepeatPhrase, Score
+from .models import Tag, Story, Page, Dialogue, Image, RepeatPhrase, Score, UserProfile
 
 
 class NewUserForm(UserCreationForm):
@@ -17,6 +17,12 @@ class NewUserForm(UserCreationForm):
 		if commit:
 			user.save()
 		return user
+
+
+class SelectDefaultImageForm(forms.ModelForm):
+	class Meta:
+		model = UserProfile
+		fields = ['default_profile_image']
 
 
 class CategoriaForm(forms.ModelForm):

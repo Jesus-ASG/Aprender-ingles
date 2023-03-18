@@ -24,7 +24,6 @@ body {
 	font-family: "Poppins", "Roboto", sans-serif;
 	position: relative;
 	min-height: 100vh;
-	padding-bottom: 200px;
 	background-color: #fafafa;
 }
 
@@ -33,6 +32,36 @@ body {
 	background-color: #fff;
 	box-shadow: rgb(50 50 93 / 25%) 0px 6px 12px -2px,
 		rgb(0 0 0 / 30%) 0px 3px 7px -3px;
+}
+
+.footer-container {
+	position: relative;
+	width: 100%;
+	min-height: 110px;
+}
+
+.footer-custom-properties {
+	position: absolute;
+	left: 0;
+	bottom: 0px;
+	width: 100%;
+	min-height: 110px;
+}
+
+.footer-custom-properties h2 {
+	font-size: 1.3rem;
+	font-weight: 500;
+	margin: 0.5rem 0 0.5rem 0;
+}
+
+.footer-custom-properties .contact-links {
+	margin: 0.5rem 0 0.5rem 0;
+}
+
+.footer-custom-properties .author {
+	font-size: 0.9rem;
+	margin: 0.3em 0 0.3em 0;
+	background-color: rgba(0, 0, 0, 0.2);
 }
 
 .footer-icon {

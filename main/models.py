@@ -105,15 +105,26 @@ class Story(models.Model):
 class UserProfile(models.Model):
     class Meta:
         db_table = prefix + 'user_profile'
-    # link one to one to the django user
+    # key for link one to one to the django user
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    xp = models.IntegerField(default=0)
-    level = models.FloatField(default=1)
     
     # extra fields
     stories_scores = models.ManyToManyField(Story, related_name='users_scored', through='Score')
     liked_stories = models.ManyToManyField(Story, related_name='users_liked', through='LikedStory')
     saved_stories = models.ManyToManyField(Story, related_name='saved_by', through='SavedStory')
+
+    xp = models.IntegerField(default=0)
+    level = models.FloatField(default=1)
+
+    DEFAULT_PROFILE_IMAGE_CHOICES = [
+        ('/static/img/profile_pictures/pp1.jpg', 'Friendly bear'),
+        ('/static/img/profile_pictures/pp2.jpg', 'Thoughtful cat'),
+        ('/static/img/profile_pictures/pp3.jpg', 'Hungry panda'),
+        ('/static/img/profile_pictures/pp4.jpg', 'Cute Hamster'),
+        ('/static/img/profile_pictures/pp5.jpg', 'Tall giraffe'),
+        ('/static/img/profile_pictures/pp6.jpg', 'Chilly bird'),
+    ]
+    default_profile_image = models.CharField(max_length=50, choices=DEFAULT_PROFILE_IMAGE_CHOICES, blank=True, null=True)
 
     def __str__(self) -> str:
         return f'username: {self.user.username}'

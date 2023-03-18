@@ -80,7 +80,11 @@
 						<div class="navbar-circle-progress">
 							<div class="navbar-progress-level">
 								<div class="navbar-profile-picture">
+									{% if request.user.profile.default_profile_image %}
+									<img src="{{ request.user.profile.default_profile_image }}" alt="Not found">
+									{% else %}
 									<img src="{% static 'img/profile_pictures/pp3.jpg' %}" alt="Not found">
+									{% endif %}
 								</div>
 							</div>
 							<div class="navbar-level">
@@ -95,7 +99,11 @@
 								<div class="navbar-circle-progress">
 									<div class="navbar-progress-level">
 										<div class="navbar-profile-picture">
+											{% if request.user.profile.default_profile_image %}
+											<img src="{{ request.user.profile.default_profile_image }}" alt="Not found">
+											{% else %}
 											<img src="{% static 'img/profile_pictures/pp3.jpg' %}" alt="Not found">
+											{% endif %}
 										</div>
 									</div>
 									<div class="navbar-level">
