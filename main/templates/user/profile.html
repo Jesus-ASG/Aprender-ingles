@@ -14,7 +14,6 @@
   <div class="row mt-3">
     <div class="col-12 page-title-container">
       <h1 class="fs-1" id="page_title">Profile</h1>
-
     </div>
   </div>
   <div class="row">
@@ -37,26 +36,63 @@
         </div>
         <div class="modal fade" id="modal_change_pp" tabindex="-1" aria-labelledby="exampleModalLabel"
           aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title  col-11 text-center">Change image</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                <h5 class="modal-title col-11 text-center">Change profile image</h5>
+                <div class="col-1 text-center">
+
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                </div>
               </div>
 
               <div class="modal-body">
-                <form method="post" id="change_img_form">
-                  {% csrf_token %}
-                  {{ default_image_form.as_p }}
-                </form>
+                <div class="row">
+
+                  <div class="col-12">
+                    <form method="post" id="change_img_form" class="row">
+                      {% csrf_token %}
+                      {% for value, label in default_image_form.default_profile_image.field.choices %}
+                      {% if value %}
+                      <div class="col-6 col-lg-3 text-center">
+                        <div class="square-box">
+                          <div class="square-content">
+                            {% if default_image_form.default_profile_image.value|to_str == value|to_str %}
+                            <input type="radio" name="{{ default_image_form.default_profile_image.name }}"
+                              value="{{ value }}" checked
+                              id="{{ default_image_form.default_profile_image.id_for_label }}_{{ value }}">
+                            <span id="default_pp" hidden></span>
+                            {% else %}
+                            <input type="radio" name="{{ default_image_form.default_profile_image.name }}"
+                              value="{{ value }}"
+                              id="{{ default_image_form.default_profile_image.id_for_label }}_{{ value }}">
+                            {% endif %}
+                            <label for="{{ default_image_form.default_profile_image.id_for_label }}_{{ value }}">
+                              <img src="{{ value }}" alt="{{ label }}">
+                            </label>
+                          </div>
+
+                        </div>
+                      </div>
+                      {% endif %}
+                      {% endfor %}
+                    </form>
+                  </div>
+                </div>
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-secondary" style="background-color: #f2864b;"
-                  form="change_img_form" data-bs-dismiss="modal">
-                  Save
-                </button>
+                <div class="col-12 text-center">
+                  <button type="button" class="btn hover-scale m-1"
+                    style="background-color: #f2864b; border-radius: 20px; color:#fff;"
+                    data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn hover-scale m-1"
+                    style="background-color: #ff5100; border-radius: 20px; color:#fff;" form="change_img_form"
+                    data-bs-dismiss="modal">
+                    Save
+                  </button>
+                </div>
+
               </div>
             </div>
           </div>
@@ -104,41 +140,5 @@
 {% endblock %}
 
 {% block page-scripts %}
-<script>
-  let f_counter = { "start": 0, "end": 0 };
-
-  document.getElementById('page_title').innerHTML = createFlipHTML('Profile', 'Perfil', f_counter);
-
-  setFunctionality(f_counter);
-
-  let progress_lvl_dom = document.getElementById('progress_level');
-  let progress_value = 0;
-  let progress_end_value = parseInt(db_progress_xp * 100);
-  let speed = 20;
-
-  let progress_lvl = setInterval(() => {
-    progress_lvl_dom.style.background = `
-    conic-gradient(#23fbb7 ${progress_value * 3.2}deg, #bbfff3 ${progress_value * 3.2}deg)
-    `;
-    if (progress_value == progress_end_value)
-      clearInterval(progress_lvl);
-    progress_value++;
-  }, speed);
-
-
-  let profile_image = document.getElementById('profile_image');
-  profile_image.addEventListener('mouseenter', (e) => {
-    let change_image_btn = document.getElementById('change_profile_picture');
-    change_image_btn.style.opacity = '1';
-    change_image_btn.style.visibility = 'visible';
-  });
-
-  let change_image_btn = document.getElementById('change_profile_picture');
-  change_image_btn.addEventListener('mouseleave', (e) => {
-    change_image_btn.style.opacity = '0';
-    change_image_btn.style.visibility = 'hidden';
-  });
-
-
-</script>
+<script src="{% static 'js/user/profile.js' %}"></script>
 {% endblock %}
