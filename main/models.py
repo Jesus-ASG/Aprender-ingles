@@ -109,7 +109,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     
     # extra fields
-    stories_scores = models.ManyToManyField(Story, related_name='users_scored', through='Score')
+    scored_stories = models.ManyToManyField(Story, related_name='users_scored', through='Score')
     liked_stories = models.ManyToManyField(Story, related_name='users_liked', through='LikedStory')
     saved_stories = models.ManyToManyField(Story, related_name='saved_by', through='SavedStory')
 
@@ -166,12 +166,20 @@ class Score(models.Model):
     score_limit = models.IntegerField(default=1)
 
     # Percentages
+    score_percentage = models.FloatField(default=0)
     writing_percentage = models.FloatField(default=100)
     comprehension_percentage = models.FloatField(default=100)
     speaking_percentage = models.FloatField(default=100)
     
     def __str__(self) -> str:
-        return f'username: {self.user_profile.user.username}, story: {self.story.title1}, score: {self.score}'
+        string = f"""
+            date: {self.date}
+            username: {self.user_profile.user.username}
+            story: {self.story.title1}
+            score_percentage: {self.score_percentage}
+            """
+        #f'username: {self.user_profile.user.username}, story: {self.story.title1}, score: {self.score}'
+        return string
 
 
 # Page

@@ -11,6 +11,7 @@ from django.forms.models import model_to_dict
 from main.models import Story, Score, RepeatPhrase
 from main.forms import ScoreForm
 
+from main.utils.evaluate_story import rateSkills
 from main.utils.cb_recommender import ContentBasedRecommender
 from main.utils.level_manager import LevelManager
 
@@ -19,26 +20,6 @@ from main.utils.level_manager import LevelManager
 expiration_time = 86400
 points_per_correct_answer = 100
 tolerance_error = 3
-
-
-def rateSkills(max_percentage):
-    grades = ['S+', 'S', 'S-', 'A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-']
-    iterations = 0
-    delta = 4
-    aux = 100
-
-    ranges = []
-    for _ in range(len(grades)):
-        ranges.append(round(aux, 2))
-        aux -= delta
-
-    iterations = 0
-    for i in range(len(ranges)-1):
-        if ranges[i] >= max_percentage > ranges[i+1]:
-            break
-        else:
-            iterations += 1
-    return grades[iterations]
 
 
 @login_required(login_url='/login/')
@@ -220,6 +201,9 @@ def storyContent(request, route, page_number):
             max_percentage = float(results.get('score')) / float(results.get('score_limit'))
             max_percentage = max_percentage * 100
             max_percentage = round(max_percentage, 2)
+
+            score_form_obj.score_percentage = max_percentage
+
             letter_grade = rateSkills(max_percentage)
 
             score_form_obj.save()

@@ -137,6 +137,47 @@
     </div>
   </div>
 </div>
+
+<div class="container main-content">
+  <div class="row mt-3">
+    <div class="col-12 page-title-container">
+      <h2 class="fs-1" id="archive_title">High scores</h2>
+    </div>
+  </div>
+  <div class="row" id="scores_table">
+    <div class="col-12 mt-3 text-center">
+      <h3 class="fs-2" name="title"></h3>
+    </div>
+    <div class="col-12 fs-3 text-center">
+      {% if not u_high_scores %}
+      <h3 name="no_scores"></h3>
+      {% else %}
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr name="table_header">
+              <th scope="col" class="fs-4">Grade</th>
+              <th scope="col" class="fs-4">Story</th>
+              <th scope="col" class="fs-4">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for score in u_high_scores %}
+            <tr>
+              <th scope="row" class="fs-6"> {{ score.grade }}</th>
+              <td class="fs-6">{{ score.score.story.title1 }}</td>
+              <td class="fs-6">{{ score.score.date|date:"j/n/Y" }} {{ score.score.date|time:"g:i a" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% endif %}
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block page-scripts %}

@@ -81,7 +81,8 @@ class ScoreForm(forms.ModelForm):
 	class Meta:
 		model = Score
 		fields = '__all__'
-		exclude = ['user_profile', 'story', 'date', 'score', 'score_limit', 'writing_percentage', 'comprehension_percentage', 'speaking_percentage']
+		exclude = ['user_profile', 'story', 'date', 'score', 'score_limit', 
+	     'score_percentage','writing_percentage', 'comprehension_percentage', 'speaking_percentage']
 
 
 class PageForm(forms.ModelForm):
