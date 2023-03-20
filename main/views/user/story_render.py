@@ -1,5 +1,4 @@
 import json
-import re
 
 from django.core.cache import cache
 
@@ -11,15 +10,13 @@ from django.forms.models import model_to_dict
 from main.models import Story, Score, RepeatPhrase
 from main.forms import ScoreForm
 
-from main.utils.evaluate_story import rateSkills
+from main.utils.evaluate_story import rateSkills, evaluateAnswers
 from main.utils.cb_recommender import ContentBasedRecommender
 from main.utils.level_manager import LevelManager
 
 
 # expiration time for cache in seconds
 expiration_time = 86400
-points_per_correct_answer = 100
-tolerance_error = 3
 
 
 @login_required(login_url='/login/')
@@ -51,13 +48,7 @@ def storyInfo(request, route):
     
     if scores:
         high_score = scores[0]
-        letter_grade = ''
-
-        max_percentage = float(high_score.get('score')) / float(high_score.get('score_limit'))
-        max_percentage = max_percentage * 100
-        max_percentage = round(max_percentage, 2)
-
-        letter_grade = rateSkills(max_percentage)
+        letter_grade = rateSkills(high_score.get('score_percentage'))
         
         high_score['letter_grade'] = letter_grade
 
@@ -221,115 +212,3 @@ def storyContent(request, route, page_number):
             user_profile.save()
 
         return JsonResponse(cache_story_answers)
-
-
-def evaluateAnswers(story, story_answers):
-    # count all elements
-    exercises_number = 0
-    pages = story.pages.all()
-    for p in pages:
-        repeat_phrases = p.repeat_phrases.all()
-        exercises_number  += len(repeat_phrases)
-
-    results = {
-        "score": 0, 
-        "writing_percentage": 0, 
-        "comprehension_percentage": 0, 
-        "speaking_percentage": 0
-    }
-    
-    for page in story_answers["pages"]:
-        for exercise in page["exercises"]:
-            match exercise["type"]:
-                case "repeat_phrase":
-                    rp = RepeatPhrase.objects.get(id=int(exercise["id"]))
-                    answ_r = cleanStr(rp.content1)
-                    answ_u = cleanStr(exercise["answer"])
-                    rp_results = evaluateRepeatPhrase(answ_r, answ_u)
-
-                    results["score"] += rp_results["score"]
-                    results["writing_percentage"] += rp_results["writing_percentage"]
-                    results["comprehension_percentage"] += rp_results["comprehension_percentage"]
-                    results["speaking_percentage"] += rp_results["speaking_percentage"]
-                    
-    
-    wp_t = (results["writing_percentage"] / exercises_number) * 100
-    cp_t = (results["comprehension_percentage"] / exercises_number) * 100
-    sp_t = (results["speaking_percentage"] / exercises_number) * 100
-
-    results["score"] = int(results["score"])
-    results["score_limit"] = exercises_number * points_per_correct_answer
-
-    results["writing_percentage"] = round(wp_t, 2)
-    results["comprehension_percentage"] = round(cp_t, 2)
-    results["speaking_percentage"] = round(sp_t, 2)
-    
-    return results
-
-
-def cleanStr(string):
-    only_alpha_numerics = re.sub(r'[^A-Za-z0-9 ]+', ' ', string)
-    only_one_space = re.sub(' +', ' ', only_alpha_numerics)
-    lower_strip = only_one_space.lower().strip()
-    return lower_strip
-
-
-def searchPage(page_id, page_list):
-    return list(filter(lambda x: x["id"] == page_id, page_list))
-
-
-def evaluateRepeatPhrase(answer_right, answer_user):
-    if answer_user == "":
-        results = {
-            "score": 0, 
-            "writing_percentage": 1, 
-            "comprehension_percentage": 0, 
-            "speaking_percentage": 0
-        }
-        return results
-
-    answer_right = answer_right.split(' ')
-    answer_user = answer_user.split(' ')
-
-    index = 0
-    total_words = len(answer_right)
-    total_user_words = len(answer_user)
-    correct_words = 0
-    incorrect_words = 0
-
-    len_diff = abs(total_words - total_user_words)
-
-    for i in range(total_words):
-        for j in range(index, total_user_words):
-            if answer_right[i] == answer_user[j]:
-                correct_words = correct_words + 1
-                index = j + 1
-                break
-
-    
-    incorrect_words = incorrect_words + len_diff
-
-    score = 0
-    writing_percentage = 1
-    comprehension_percentage = 0
-    speaking_percentage = 0
-    
-    quit_points = (incorrect_words / (total_words * tolerance_error ))
-
-    comprehension_percentage = (correct_words / total_words) - quit_points
-
-    speaking_percentage = (correct_words / total_words) - quit_points
-    score = points_per_correct_answer - quit_points * points_per_correct_answer
-    
-    comprehension_percentage = 0 if (comprehension_percentage < 0) else comprehension_percentage
-    speaking_percentage = 0 if (speaking_percentage < 0) else speaking_percentage
-    score = 0 if (score < 0) else score
-
-    results = {
-        "score": score, 
-        "writing_percentage": writing_percentage, 
-        "comprehension_percentage": comprehension_percentage, 
-        "speaking_percentage": speaking_percentage
-    }
-    return results
-

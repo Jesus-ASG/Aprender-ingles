@@ -131,18 +131,16 @@
 
 #change_profile_picture {
 	position: absolute;
+	z-index: inherit;
 	display: flex;
 	opacity: 0;
-	visibility: hidden;
 	align-items: center;
 	justify-content: center;
-	z-index: 600;
 	width: 250px;
 	height: 250px;
 	border-radius: 50%;
 	background: rgba(0, 0, 0, 0.8);
 	transition: all 0.3s ease-in-out;
-	z-index: 200;
 }
 
 #change_profile_picture:hover {
@@ -209,6 +207,15 @@ input[type="radio"] {
 	display: none;
 }
 /* End modal profile pics */
+
+/*High scores table*/
+.story_link {
+	font-size: 1rem;
+}
+.story_link a {
+	color: var(--turquoise-active);
+	font-weight: 600;
+}
 
 @media only screen and (max-width: 400px) {
 	.progress-level {

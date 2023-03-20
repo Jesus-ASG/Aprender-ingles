@@ -1,20 +1,3 @@
-/*
-let progress_lvl_dom = document.getElementById('progress_level');
-let progress_value = 0;
-let progress_end_value = parseInt(db_progress_xp * 100);
-let speed = 20;
-
-
-let progress_lvl = setInterval(() => {
-  progress_lvl_dom.style.background = `
-    conic-gradient(#23fbb7 ${progress_value * 3.2}deg, #bbfff3 ${progress_value * 3.2}deg)
-    `;
-  if (progress_value == progress_end_value)
-    clearInterval(progress_lvl);
-  progress_value++;
-}, speed);
-
-*/
 let progress_lvl_dom = document.getElementById('progress_level');
 let progress_lvl_value = parseInt(db_progress_xp * 100);
 
@@ -30,38 +13,14 @@ progressAnimation(progress_comprehension_dom, db_comprehension_average);
 progressAnimation(progress_speaking_dom, db_speaking_average);
 
 
-
-function progressAnimation(progress, end_value, fill_to) {
-  let deg = 3.6;
-  if (fill_to)
-    deg = fill_to / 100
-  let progress_value = 0;
-  let speed = 20;
-
-  let progress_interval = setInterval(() => {
-    progress.style.background = `
-      conic-gradient(#23fbb7 ${progress_value * deg}deg, #bbfff3 ${progress_value * deg}deg)
-      `;
-    if (progress_value == end_value)
-      clearInterval(progress_interval);
-    progress_value++;
-  }, speed);
-}
-
-
-let profile_image = document.getElementById('profile_image');
-profile_image.addEventListener('mouseenter', (e) => {
-  let change_image_btn = document.getElementById('change_profile_picture');
-  change_image_btn.style.opacity = '1';
-  change_image_btn.style.visibility = 'visible';
+let change_profile_picture = document.getElementById('change_profile_picture');
+change_profile_picture.addEventListener('mouseenter', (e) => {
+  change_profile_picture.style.opacity = '1';
 });
 
-let change_image_btn = document.getElementById('change_profile_picture');
-change_image_btn.addEventListener('mouseleave', (e) => {
-  change_image_btn.style.opacity = '0';
-  change_image_btn.style.visibility = 'hidden';
+change_profile_picture.addEventListener('mouseleave', (e) => {
+  change_profile_picture.style.opacity = '0';
 });
-
 
 // Add event listener for select
 let default_ppi = document.querySelectorAll('#change_img_form img');
@@ -90,3 +49,22 @@ else {
 document.getElementById('change_profile_picture').addEventListener('click', e => {
   default_pp_sb.click();
 });
+
+
+
+function progressAnimation(progress, end_value, fill_to) {
+  let deg = 3.6;
+  if (fill_to)
+    deg = fill_to / 100
+  let progress_value = 0;
+  let speed = 20;
+
+  let progress_interval = setInterval(() => {
+    progress.style.background = `
+      conic-gradient(#23fbb7 ${progress_value * deg}deg, #bbfff3 ${progress_value * deg}deg)
+      `;
+    if (progress_value == end_value)
+      clearInterval(progress_interval);
+    progress_value++;
+  }, speed);
+}

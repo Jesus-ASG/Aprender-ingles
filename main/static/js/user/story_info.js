@@ -86,11 +86,6 @@ function saveFunction(e) {
 
 
 function setStatisticsLabels(f_counter) {
-    let f_classes = {
-        "paper": "mx-1",
-        "front": "px-1",
-        "back": "px-1"
-    };
     let results_dom = document.getElementById("results");
     let score_lbl1 = `High score: ${db_high_score}pts`;
     let score_lbl2 = `Puntuación más alta: ${db_high_score}pts`;
@@ -100,33 +95,27 @@ function setStatisticsLabels(f_counter) {
     let speaking = results_dom.querySelector("[name = speaking]");
 
     // Titles
-    results_dom.querySelector("[name = title_score]").innerHTML = createFlipHTML(score_lbl1, score_lbl2, f_counter, f_classes);
-    comprehension.querySelector("[name = title]").innerHTML = createFlipHTML("Comprehension", "Comprensión", f_counter, f_classes);
-    writing.querySelector("[name = title]").innerHTML = createFlipHTML("Writing", "Escritura", f_counter, f_classes);
-    speaking.querySelector("[name = title]").innerHTML = createFlipHTML("Speaking", "Pronunciación", f_counter, f_classes);
+    results_dom.querySelector("[name = title_score]").innerHTML = createFlipHTML(score_lbl1, score_lbl2, f_counter);
+    comprehension.querySelector("[name = title]").innerHTML = createFlipHTML("Comprehension", "Comprensión", f_counter);
+    writing.querySelector("[name = title]").innerHTML = createFlipHTML("Writing", "Escritura", f_counter);
+    speaking.querySelector("[name = title]").innerHTML = createFlipHTML("Speaking", "Pronunciación", f_counter);
 }
 
 function setScoresLabels(f_counter) {
-    let f_classes = {
-        "paper": "mx-1",
-        "front": "px-1",
-        "back": "px-1"
-    };
     let table_scores = document.getElementById("scores_table");
     let table_no_scores = table_scores.querySelector("[name = no_scores]");
     let table_header = table_scores.querySelector("[name = table_header]");
 
-
-    table_scores.querySelector("[name = title]").innerHTML = createFlipHTML("Scores table", "Tabla de puntuaciones", f_counter, f_classes);
+    table_scores.querySelector("[name = title]").innerHTML = createFlipHTML("Scores table", "Tabla de puntuaciones", f_counter);
 
     if (table_no_scores)
-        table_no_scores.innerHTML = createFlipHTML("No records yet", "Aún no hay registros", f_counter, f_classes);
+        table_no_scores.innerHTML = createFlipHTML("No records yet", "Aún no hay registros", f_counter);
 
     if (table_header) {
         let html = `
-        <th scope="col" class="fs-4">`+ createFlipHTML("Position", "Posición", f_counter, f_classes) + `</th>
-        <th scope="col" class="fs-4">`+ createFlipHTML("Score", "Puntaje", f_counter, f_classes) + `</th>
-        <th scope="col" class="fs-4">`+ createFlipHTML("Date", "Fecha", f_counter, f_classes) + `</th>
+        <th scope="col" class="fs-4">`+ createFlipHTML("Position", "Posición", f_counter) + `</th>
+        <th scope="col" class="fs-4">`+ createFlipHTML("Score", "Puntaje", f_counter) + `</th>
+        <th scope="col" class="fs-4">`+ createFlipHTML("Date", "Fecha", f_counter) + `</th>
         `;
         table_header.innerHTML = html;
     }
@@ -134,12 +123,7 @@ function setScoresLabels(f_counter) {
 
 function setRelatedTitle(f_counter) {
     let related_title = document.getElementById("related_title");
-    let f_classes = {
-        "paper": "mx-1",
-        "front": "px-1",
-        "back": "px-1"
-    };
-    related_title.innerHTML = createFlipHTML("Related", "Relacionado", f_counter, f_classes);
+    related_title.innerHTML = createFlipHTML("Related", "Relacionado", f_counter);
 }
 
 function cleanStorage() {
