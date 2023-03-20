@@ -38,7 +38,7 @@
 	border-radius: 50%;
 	/* 320 is the maximum */
 
-	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+	box-shadow: rgba(224, 224, 233, 0.2) 0px 7px 29px 0px;
 	transform: rotate(200deg);
 }
 

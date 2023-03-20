@@ -1,4 +1,6 @@
 def rateSkills(max_percentage):
+    if not max_percentage:
+        return '?'
     grades = ['S+', 'S', 'S-', 'A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-']
     iterations = 0
     delta = 4

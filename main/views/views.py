@@ -41,23 +41,33 @@ def profile(request):
     lvl_obj = LevelManager()
     level_statistics = lvl_obj.get_level_statistics(profile.xp)
 
+    statistics = {
+        'level': level_statistics
+    }
+
     context = {
         'profile': profile,
-        'level_statistics': level_statistics,
+        'statistics': statistics,
         'default_image_form': default_image_form
     }
 
     if request.method == 'GET':
-        """
-        avgs = Score.objects.filter(user_profile=profile, score__gt=0).aggregate(
+        # Averages
+        avgs = Score.objects.filter(user_profile=profile, score_percentage__gt=0).aggregate(
             Avg('writing_percentage'), Avg('comprehension_percentage'), Avg('speaking_percentage')
         )
         
-        wpa = avgs['writing_percentage__avg']
-        cpa = avgs['comprehension_percentage__avg']
-        spa = avgs['speaking_percentage__avg']
-
-        """
+        wa = avgs['writing_percentage__avg']
+        ca = avgs['comprehension_percentage__avg']
+        sa = avgs['speaking_percentage__avg']
+        
+        wg = rateSkills(wa)
+        cg = rateSkills(ca)
+        sg = rateSkills(sa)
+        
+        context['statistics']['writing'] = { 'average': wa, 'grade':wg }
+        context['statistics']['comprehension'] = { 'average': ca, 'grade':cg }
+        context['statistics']['speaking'] = { 'average': sa, 'grade':sg }
         
         max_scores = Score.objects.filter(user_profile=profile).values('story').annotate(max_score_percentage=Max('score_percentage'))
         
@@ -70,6 +80,7 @@ def profile(request):
             if not i.story in [x['score'].story for x in u_high_scores]:
                 grade = rateSkills(i.score_percentage)
                 u_high_scores.append({'score': i, 'grade': grade})
+        
         
         context['u_high_scores'] = u_high_scores
 

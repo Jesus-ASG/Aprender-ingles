@@ -13,10 +13,13 @@
 
 	--f-light-green: #49eb4b;
 	--f-light-green-active: #3dd33f;
+
+	--turquoise: #bbfff3;
+	--turquoise-active: #23fbb7;
 }
 
 ::selection {
-	background: var(--light-green);
+	background: var(--turquoise);
 	color: #000;
 }
 

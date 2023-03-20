@@ -100,8 +100,7 @@
       </div>
       <div class="row my-2">
         <div class="col-12 text-center">
-          <!-- {{ profile.xp }} / {{ level_statistics.lvl_xp_end }} -->
-          {{ level_statistics.progress_xp|to_int }} / {{ level_statistics.range_xp }}
+          {{ statistics.level.progress_xp|to_int }} / {{ statistics.level.range_xp }}
         </div>
       </div>
     </div>
@@ -137,11 +136,49 @@
     </div>
   </div>
 </div>
+<div class="container main-content">
+  <div class="row mt-3">
+    <div class="col-12 page-title-container">
+      <h2 class="fs-2" id="statistics_title">Statistics</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="statistics-container">
+      <div class="statistic-circle-progress" id="writing_average">
+        <div class="basic-progress-level">
+          <div class="label">
+            <h3>{{ statistics.writing.grade }}</h3>
+          </div>
+        </div>
+        <p class="statistic-title">Writing</p>
+      </div>
+
+      <div class="statistic-circle-progress" id="comprehension_average">
+        <div class="basic-progress-level">
+          <div class="label">
+            <h3>{{ statistics.comprehension.grade }}</h3>
+          </div>
+        </div>
+        <p class="statistic-title">Comprehension</p>
+      </div>
+
+      <div class="statistic-circle-progress" id="speaking_average">
+        <div class="basic-progress-level">
+          <div class="label">
+            <h3>{{ statistics.speaking.grade }}</h3>
+          </div>
+        </div>
+        <p class="statistic-title">Speaking</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <div class="container main-content">
   <div class="row mt-3">
     <div class="col-12 page-title-container">
-      <h2 class="fs-1" id="archive_title">High scores</h2>
+      <h2 class="fs-2" id="high_scores_title">High scores</h2>
     </div>
   </div>
   <div class="row" id="scores_table">
@@ -149,16 +186,13 @@
       <h3 class="fs-2" name="title"></h3>
     </div>
     <div class="col-12 fs-3 text-center">
-      {% if not u_high_scores %}
-      <h3 name="no_scores"></h3>
-      {% else %}
       <div class="table-responsive">
         <table class="table">
           <thead>
             <tr name="table_header">
-              <th scope="col" class="fs-4">Grade</th>
-              <th scope="col" class="fs-4">Story</th>
-              <th scope="col" class="fs-4">Date</th>
+              <th scope="col" class="fs-4" id="table_title_grade">Grade</th>
+              <th scope="col" class="fs-4" id="table_title_story">Story</th>
+              <th scope="col" class="fs-4" id="table_title_date">Date</th>
             </tr>
           </thead>
           <tbody>
@@ -168,12 +202,16 @@
               <td class="fs-6">{{ score.score.story.title1 }}</td>
               <td class="fs-6">{{ score.score.date|date:"j/n/Y" }} {{ score.score.date|time:"g:i a" }}</td>
             </tr>
+            {% empty %}
+            <tr>
+              <th scope="row" class="fs-6"> # </th>
+              <td class="fs-6"> # </td>
+              <td class="fs-6"> # </td>
+            </tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
-
-      {% endif %}
     </div>
   </div>
 </div>
@@ -181,5 +219,25 @@
 {% endblock %}
 
 {% block page-scripts %}
+<script>
+  let db_writing_average = parseInt('{{ statistics.writing.average }}') || 0;
+  let db_comprehension_average = parseInt('{{ statistics.comprehension.average }}') || 0;
+  let db_speaking_average = parseInt('{{ statistics.speaking.average }}') || 0;
+</script>
+<script>
+  let f_counter = { "start": 0, "end": 0 };
+  document.getElementById('page_title').innerHTML = createFlipHTML('Profile', 'Perfil', f_counter);
+  document.getElementById('statistics_title').innerHTML = createFlipHTML('Statistics', 'Estadísticas', f_counter);
+  document.getElementById('high_scores_title').innerHTML = createFlipHTML('High scores', 'Altos puntajes', f_counter);
+
+  document.querySelector('#writing_average .statistic-title').innerHTML = createFlipHTML('Writing', 'Escritura', f_counter);
+  document.querySelector('#comprehension_average .statistic-title').innerHTML = createFlipHTML('Comprehension', 'Comprensión', f_counter);
+  document.querySelector('#speaking_average .statistic-title').innerHTML = createFlipHTML('Speaking', 'Pronunciacion', f_counter);
+
+  document.getElementById('table_title_grade').innerHTML = createFlipHTML('Grade', 'Nota', f_counter);
+  document.getElementById('table_title_story').innerHTML = createFlipHTML('Story', 'Historia', f_counter);
+  document.getElementById('table_title_date').innerHTML = createFlipHTML('Date', 'Fecha', f_counter);
+  setFunctionality(f_counter);
+</script>
 <script src="{% static 'js/user/profile.js' %}"></script>
 {% endblock %}

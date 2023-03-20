@@ -1,9 +1,4 @@
-let f_counter = { "start": 0, "end": 0 };
-
-document.getElementById('page_title').innerHTML = createFlipHTML('Profile', 'Perfil', f_counter);
-
-setFunctionality(f_counter);
-
+/*
 let progress_lvl_dom = document.getElementById('progress_level');
 let progress_value = 0;
 let progress_end_value = parseInt(db_progress_xp * 100);
@@ -18,6 +13,40 @@ let progress_lvl = setInterval(() => {
     clearInterval(progress_lvl);
   progress_value++;
 }, speed);
+
+*/
+let progress_lvl_dom = document.getElementById('progress_level');
+let progress_lvl_value = parseInt(db_progress_xp * 100);
+
+let progress_writing_dom = document.querySelector('#writing_average .basic-progress-level');
+let progress_comprehension_dom = document.querySelector('#comprehension_average .basic-progress-level');
+let progress_speaking_dom = document.querySelector('#speaking_average .basic-progress-level');
+
+// Level progress is filled to 320°
+progressAnimation(progress_lvl_dom, progress_lvl_value, 320);
+
+progressAnimation(progress_writing_dom, db_writing_average);
+progressAnimation(progress_comprehension_dom, db_comprehension_average);
+progressAnimation(progress_speaking_dom, db_speaking_average);
+
+
+
+function progressAnimation(progress, end_value, fill_to) {
+  let deg = 3.6;
+  if (fill_to)
+    deg = fill_to / 100
+  let progress_value = 0;
+  let speed = 20;
+
+  let progress_interval = setInterval(() => {
+    progress.style.background = `
+      conic-gradient(#23fbb7 ${progress_value * deg}deg, #bbfff3 ${progress_value * deg}deg)
+      `;
+    if (progress_value == end_value)
+      clearInterval(progress_interval);
+    progress_value++;
+  }, speed);
+}
 
 
 let profile_image = document.getElementById('profile_image');
