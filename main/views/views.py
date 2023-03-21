@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Avg, Subquery, OuterRef, Max, Count
+from django.db.models import Q, Subquery, OuterRef, Max
 
 from main.models import Story, Tag, UserProfile, Score
 from main.forms import SelectDefaultImageForm
@@ -52,15 +52,31 @@ def profile(request):
     }
 
     if request.method == 'GET':
-        # Averages
-        avgs = Score.objects.filter(user_profile=profile, score_percentage__gt=0).aggregate(
-            Avg('writing_percentage'), Avg('comprehension_percentage'), Avg('speaking_percentage')
-        )
+        max_scores = Score.objects.filter(user_profile=profile).values('story').annotate(max_score_percentage=Max('score_percentage'))
         
-        wa = avgs['writing_percentage__avg']
-        ca = avgs['comprehension_percentage__avg']
-        sa = avgs['speaking_percentage__avg']
-        
+        subquery = max_scores.filter(story=OuterRef('story')).values('max_score_percentage')
+        user_scores = Score.objects.filter(user_profile=profile, score_percentage__in=Subquery(subquery))
+
+        # Uniques high scores
+        u_high_scores = []
+        user_scores = user_scores.order_by('-score_percentage', 'date')
+        for i in user_scores:
+            if not i.story in [x['score'].story for x in u_high_scores]:
+                grade = rateSkills(i.score_percentage)
+                u_high_scores.append({'score': i, 'grade': grade})
+
+        wa = 0
+        ca = 0
+        sa = 0
+        for i in u_high_scores:
+            wa += i['score'].writing_percentage
+            ca += i['score'].comprehension_percentage
+            sa += i['score'].speaking_percentage
+        num_elements = 1 if len(u_high_scores) <= 0 else len(u_high_scores)
+        wa = wa / num_elements
+        ca = ca / num_elements
+        sa = sa / num_elements
+
         wg = rateSkills(wa)
         cg = rateSkills(ca)
         sg = rateSkills(sa)
@@ -68,19 +84,6 @@ def profile(request):
         context['statistics']['writing'] = { 'average': wa, 'grade':wg }
         context['statistics']['comprehension'] = { 'average': ca, 'grade':cg }
         context['statistics']['speaking'] = { 'average': sa, 'grade':sg }
-        
-        max_scores = Score.objects.filter(user_profile=profile).values('story').annotate(max_score_percentage=Max('score_percentage'))
-        
-        subquery = max_scores.filter(story=OuterRef('story')).values('max_score_percentage')
-        user_scores = Score.objects.filter(user_profile=profile, score_percentage__in=Subquery(subquery))
-
-        u_high_scores = []
-        user_scores = user_scores.order_by('-score_percentage', 'date')
-        for i in user_scores:
-            if not i.story in [x['score'].story for x in u_high_scores]:
-                grade = rateSkills(i.score_percentage)
-                u_high_scores.append({'score': i, 'grade': grade})
-        
         
         context['u_high_scores'] = u_high_scores
 
