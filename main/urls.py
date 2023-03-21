@@ -11,8 +11,6 @@ urlpatterns = [
     # General views
     path('', views.index, name='index'),
     path('profile/', views.profile, name='profile'),
-    path('saved/', views.savedStories, name='saved_stories'),
-    path('liked/', views.likedStories, name='liked_stories'),
 
     # Stories for admin
     path('myadmin/', stories.index, name = 'index_admin'),

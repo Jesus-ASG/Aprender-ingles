@@ -105,6 +105,7 @@ def profile(request):
 def storiesGallery(request):    
     if request.method == 'GET':
         # Get query params
+        q_collection = request.GET.get('collection')
         q_search = request.GET.get('s')
         q_tags = request.GET.getlist('tag')
         q_sort_date = request.GET.get('sort_date')
@@ -112,6 +113,7 @@ def storiesGallery(request):
         q_page = request.GET.get('p')
 
         filter_form = {
+            'collection': q_collection,
             's': q_search,
             'tags': q_tags,
             'sort_date': q_sort_date,
@@ -119,9 +121,22 @@ def storiesGallery(request):
         }
         
         user_profile = request.user.profile
-        page_title = 'Stories Gallery'
+        stories = None
+        page_title = ''
         message_if_empty = ''
-        stories = Story.objects.all().exclude(xp_required__gt = user_profile.xp).order_by('title1')
+        match q_collection:
+            case 'liked':
+                stories = Story.objects.filter(likedstory__user_profile=user_profile).exclude(xp_required__gt = user_profile.xp).order_by('-likedstory__date')
+                page_title = 'Your liked stories'
+                message_if_empty = "You don't have liked stories yet"
+            case 'saved':
+                page_title = 'Your saved stories'
+                stories = Story.objects.filter(savedstory__user_profile=user_profile).exclude(xp_required__gt = user_profile.xp).order_by('-savedstory__date')
+                message_if_empty = "You don't have saved stories yet"
+            case _:
+                page_title = 'Stories Gallery'
+                stories = Story.objects.all().exclude(xp_required__gt = user_profile.xp).order_by('-updated_at')
+
         tags = Tag.objects.all().order_by('name1')
         
         # Custom filters
@@ -189,8 +204,6 @@ def storiesGallery(request):
             query_params['p'] = stories.next_page_number()
             urls['next'] = '{}?{}'.format(request.path, query_params.urlencode())
         
-        
-        #print(f'\nPrev:{stories.has_previous()}\nNext:{stories.has_next()}\n')
 
         context = {
             'page_title': page_title,
@@ -202,34 +215,3 @@ def storiesGallery(request):
             'message_if_empty': message_if_empty,
         }
         return render(request, 'user/stories_gallery.html', context)
-    
-
-@login_required(login_url='/login/')
-def savedStories(request):
-    user_profile = request.user.profile
-    page_title = 'Your saved stories'
-    message_if_empty = "You don't have saved stories yet"
-    stories = Story.objects.filter(savedstory__user_profile=user_profile).order_by('-savedstory__date')
-
-    context = {
-        'page_title': page_title,
-        'stories': stories,
-        'message_if_empty': message_if_empty,
-    }
-    return render(request, 'user/index_user.html', context)
-
-
-@login_required(login_url='/login/')
-def likedStories(request):
-    user_profile = request.user.profile
-    page_title = 'Your favorite stories'
-    message_if_empty = "You don't have favorite stories yet"
-    stories = Story.objects.filter(likedstory__user_profile=user_profile).order_by('-likedstory__date')
-
-    context = {
-        'page_title': page_title,
-        'stories': stories,
-        'message_if_empty': message_if_empty,
-    }
-    return render(request, 'user/index_user.html', context)
-

@@ -111,7 +111,7 @@
 
         <div class="col-12">
           <div class="row link-btn-container">
-            <a href="{% url 'liked_stories' %}" class="hover-scale link-btn">
+            <a href="{% url 'stories' %}?collection=liked&p=1" class="hover-scale link-btn">
               <span class="fs-4 fw-bold" style="color: #ff2126">
                 <i class="fa-heart fas"></i>
               </span>
@@ -122,7 +122,7 @@
 
         <div class="col-12">
           <div class="row link-btn-container">
-            <a href="{% url 'saved_stories' %}" class="hover-scale link-btn">
+            <a href="{% url 'stories' %}?collection=saved&p=1" class="hover-scale link-btn">
               <span class="fs-4 fw-bold" style="color:#5cffab;">
                 <i class="fa-bookmark fas"></i>
               </span>

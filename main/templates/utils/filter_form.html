@@ -8,6 +8,7 @@
 <form class="row" action="{% url 'stories' %}" method="get" autocomplete="off">
   <div class="col-12">
     <div class="d-flex">
+      <input type="text" name="collection" value="{{ filter_form.collection|default:'' }}" hidden>
       <input class="me-2 search-bar" type="search" placeholder="Search story" aria-label="Search" id="search_input"
         name="s" value="{{ filter_form.s |default:'' }}">
       <button class="filter-button" type="submit">
@@ -147,13 +148,18 @@
       </div>
       <div class="d-inline-block m-auto">
         <!-- Clear filters  -->
-        <a class="filter-button" href="{% url 'index' %}">
+        <button class="filter-button" type="button" onclick="document.getElementById('clear_form_btn').click()">
           <span><i class="fa-solid fa-filter-circle-xmark"></i></span>
-        </a>
+        </button>
       </div>
     </div>
   </div>
-
-
   <input type="text" name="p" value="1" hidden>
+</form>
+
+<!-- Clear form -->
+<form class="row" action="{% url 'stories' %}" method="get" autocomplete="off" style="display: none;">
+  <input type="text" name="collection" value="{{ filter_form.collection|default:'' }}">
+  <input type="text" name="p" value="1" hidden>
+  <button type="submit" id="clear_form_btn"></button>
 </form>
