@@ -6,7 +6,7 @@
 	justify-content: space-between;
 	border-radius: 8px;
 	background-color: #fff;
-	color: var(--primary);
+	color: var(--bg-primary);
 	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 	border: none;
 }
@@ -28,7 +28,7 @@
 
 .filter-button:hover {
 	background-color: #fff;
-	color: var(--primary);
+	color: var(--bg-primary);
 }
 
 /*Search bar*/
@@ -67,7 +67,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: var(--primary);
+	color: var(--bg-primary);
 }
 
 /* Search bar */
@@ -116,7 +116,7 @@
 	color: #fff;
 	font-size: 0.9rem;
 	border-radius: 50%;
-	background: var(--primary);
+	background: var(--bg-primary);
 	transition: 0.3s;
 }
 .dropdown-btn.show .arrow-dwn {
@@ -175,8 +175,8 @@
 }
 .item.checked .checkbox,
 .item.checked .radio {
-	background-color: var(--primary);
-	border-color: var(--primary);
+	background-color: var(--bg-primary);
+	border-color: var(--bg-primary);
 }
 
 .checkbox .check-icon,
@@ -207,6 +207,11 @@
 .filter-button,
 .dropdown-btn,
 .search-bar {
-	outline: 1px solid var(--primary);
+	outline: 1px solid var(--bg-primary);
 	border-radius: 20px;
+}
+
+.filter-button:active,
+.filter-button:focus {
+	outline: 1px solid var(--bg-primary) !important;
 }

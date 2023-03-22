@@ -17,8 +17,10 @@
 	--turquoise: #bbfff3;
 	--turquoise-active: #23fbb7;
 
-	--primary: var(--f-orange);
-	--primary-active: var(--f-orange-active);
+	--bg-primary: var(--f-orange);
+	--bg-primary-active: var(--f-orange-active);
+	--c-primary: #fff;
+	--c-disabled: #acacac;
 }
 
 ::selection {

@@ -1,28 +1,35 @@
 {% load static %}
 {% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/utils/page_enumerator_bar.css' %}">
 {% endblock %}
 <div class="row my-3">
   <div class="col-12">
     <nav>
       <ul class="pagination justify-content-center">
-        <li class="page-item {% if not urls.prev %} disabled {% endif %}">
-          <a class="page-link" href="{{ urls.prev |default:'#' }}" tabindex="-1">
-            <span><i class="fa-solid fa-chevron-left"></i></span></a>
+        <li class="page-item {% if not urls.prev %} disabled cursor-not-allowed {% endif %}">
+          <a class="page-link" href="{{ urls.prev |default:'#' }}">
+            <span><i class="fa-solid fa-chevron-left"></i></span>
+          </a>
         </li>
 
         {% for page_num in page_range %}
         <li class="page-item">
           {% if not page_num.url == '#' %}
-          <a class="page-link" href="{{ page_num.url }}">{{ page_num.label }}</a>
+          <a class="page-link" href="{{ page_num.url }}">
+            <p>{{ page_num.label }}</p>
+          </a>
           {% else %}
-          <a class="page-link" style="cursor:default;">...</a>
+          <a class="page-link no-link">
+            <p>...</p>
+          </a>
           {% endif %}
         </li>
         {% endfor %}
 
-        <li class="page-item {% if not urls.next %} disabled {% endif %}">
+        <li class="page-item {% if not urls.next %} disabled cursor-not-allowed {% endif %}">
           <a class="page-link" href="{{ urls.next |default:'#' }}">
-            <span><i class="fa-solid fa-chevron-right"></i></span></a>
+            <span><i class="fa-solid fa-chevron-right"></i></span>
+          </a>
         </li>
       </ul>
     </nav>
