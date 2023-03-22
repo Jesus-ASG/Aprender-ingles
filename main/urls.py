@@ -11,9 +11,11 @@ urlpatterns = [
     # General views
     path('', views.index, name='index'),
     path('profile/', views.profile, name='profile'),
-
+    path('stories/', views.storiesList, name="stories"),
+    
     # Stories for admin
-    path('myadmin/', stories.index, name = 'index_admin'),
+    path('myadmin/', views.storiesList, name = 'index_admin'),
+
     path('myadmin/add-story/', stories.create, name = 'add_story'),
     path('myadmin/edit-story/<int:story_id>', stories.update, name = 'edit_story'),
     path('myadmin/del-story/<int:story_id>', stories.delete, name = 'delete_story'),
@@ -28,9 +30,7 @@ urlpatterns = [
     path('myadmin/add-page/<slug:route>/<int:page_type>/', pages.create, name='add_page'),
     path('myadmin/edit-page/<slug:route>/<int:page_type>/<int:page_id>/', pages.update, name='edit_page'),
     path('myadmin/del-page/<int:id>/', pages.delete, name='del_page'),
-
-    # Show stories
-    path('stories/', views.storiesGallery, name="stories"),
+    
     # Show stories content
     path('story/<slug:route>/', story_render.storyInfo, name = 'story_info'),
     path('story/<slug:route>/<int:page_number>/', story_render.storyContent, name='story_content'),

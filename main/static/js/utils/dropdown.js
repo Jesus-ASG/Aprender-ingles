@@ -1,3 +1,10 @@
+function clearSearchInput() {
+	let input = document.getElementById('search_input');
+	input.value = '';
+	input.focus();
+}
+
+
 const menu_items_list = document.getElementsByClassName("menu-items");
 
 for (let menu_items of menu_items_list) {
@@ -145,6 +152,7 @@ for (let menu_items of menu_items_list) {
 }
 
 // Sort by name
+/*
 let sort_by_name = document.getElementById('sort_by_name');
 let sort_by_name_icon = sort_by_name.querySelector('i');
 let sort_by_name_input = sort_by_name.querySelector('input');
@@ -160,3 +168,4 @@ sort_by_name.addEventListener('click', (e) => {
 	sort_by_name_icon.classList.toggle('fa-arrow-down-z-a');
 
 });
+*/

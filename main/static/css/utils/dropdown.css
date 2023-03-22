@@ -1,47 +1,89 @@
-.filter-button,
-.search-bar {
+.filter-button {
 	display: flex;
-	height: 2.5em;
-	margin: 1rem;
+	height: 2.5rem;
+	margin: auto;
 	align-items: center;
 	justify-content: space-between;
-	padding: 0 16px;
 	border-radius: 8px;
 	background-color: #fff;
-	color: #ff5f13;
+	color: var(--primary);
 	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 	border: none;
 }
 
+.form-sub-container {
+	display: flex;
+	width: 100%;
+	margin: 0.5rem 0 0.5rem 0;
+	align-items: center;
+	justify-content: center;
+}
+
 .filter-button {
 	cursor: pointer;
+	display: inline-block;
+	margin: 0rem 1rem 0rem 1rem;
+	width: 40px;
 }
 
 .filter-button:hover {
 	background-color: #fff;
-	color: #ff5f13;
+	color: var(--primary);
 }
 
+/*Search bar*/
 .search-bar {
-	cursor: text;
-	outline: none;
 	width: 100%;
+	height: 2.5rem;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	color: #333;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
-.search-bar:focus {
-	box-shadow: 0 0 0 0.2rem rgba(255, 95, 19, 0.5);
+
+.search-bar .text-input {
+	width: 100%;
+	height: 100%;
+	margin: auto;
 }
+.search-bar .text-input input {
+	width: 100%;
+	border: none;
+	outline: none;
+	height: 100%;
+}
+
+.search-bar .text-input input:focus {
+	border: none;
+}
+
+.search-bar .icon-left,
+.search-bar .icon-right {
+	margin: 0;
+	min-width: 40px;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--primary);
+}
+
+/* Search bar */
 
 .dropdown-container {
 	position: relative;
 	width: 100%;
-	max-width: 250px;
+	max-width: 100%;
 	min-width: 200px;
-	margin: 1rem;
 }
 .dropdown-btn {
 	display: flex;
-	height: 2.5em;
+	height: 2.5rem;
 	align-items: center;
+	width: inherit;
+	border: none;
 	justify-content: space-between;
 	padding: 0 16px;
 	border-radius: 8px;
@@ -49,7 +91,6 @@
 	background-color: #fff;
 	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
-
 .dropdown-grid-items input[type="checkbox"] {
 	opacity: 0;
 	display: none;
@@ -61,10 +102,9 @@
 }
 
 .dropdown-btn .btn-text {
-	font-size: 17px;
+	font-size: 1rem;
 	font-weight: 400;
 	color: #333;
-	margin-right: 10px;
 }
 .dropdown-btn .arrow-dwn,
 .dropdown-btn .left-icon {
@@ -72,9 +112,9 @@
 	height: 21px;
 	width: 21px;
 	color: #fff;
-	font-size: 14px;
+	font-size: 0.9rem;
 	border-radius: 50%;
-	background: #ff5f13;
+	background: var(--primary);
 	align-items: center;
 	justify-content: center;
 	transition: 0.3s;
@@ -95,12 +135,14 @@
 }
 .dropdown-btn.show ~ .dropdown-grid-items {
 	display: inline-block;
+	max-height: 60vh;
+	overflow-y: scroll;
 }
+
 .dropdown-grid-items .item {
 	align-items: center;
 	list-style: none;
 	min-height: 2.5em;
-	max-width: 200px;
 	cursor: pointer;
 	transition: 0.3s;
 	padding: 0 15px;
@@ -108,14 +150,15 @@
 
 	display: grid;
 	grid-template-columns: 16px minmax(0, 1fr);
-	gap: 5px;
+	gap: 3px;
 }
 .dropdown-grid-items .item:hover {
 	background-color: #fef3e7;
 }
 .item .item-text {
 	overflow-wrap: break-word;
-	font-size: 16px;
+	max-width: fit-content;
+	font-size: 0.9rem;
 	font-weight: 400;
 	color: #333;
 }
@@ -132,8 +175,8 @@
 }
 .item.checked .checkbox,
 .item.checked .radio {
-	background-color: #ff5f13;
-	border-color: #ff5f13;
+	background-color: var(--primary);
+	border-color: var(--primary);
 }
 
 .checkbox .check-icon,
@@ -159,4 +202,11 @@
 
 .item label {
 	display: none;
+}
+
+.filter-button,
+.dropdown-btn,
+.search-bar {
+	outline: 1px solid var(--primary);
+	border-radius: 20px;
 }

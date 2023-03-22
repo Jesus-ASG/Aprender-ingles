@@ -105,22 +105,32 @@ def profile(request):
 
 
 @login_required(login_url='/login/')
-def storiesGallery(request):    
+def storiesList(request):
+    
     if request.method == 'GET':
+        # Identify request
+        template = 'user/stories_gallery.html'
+        items_per_page = 8
+        match request.resolver_match.url_name:
+            case 'index_admin':
+                template = 'admin/index_admin.html'
+                items_per_page = 5
+            case 'stories':
+                template = 'user/stories_gallery.html'
+
+
         # Get query params
         q_collection = request.GET.get('collection')
         q_search = request.GET.get('s')
         q_tags = request.GET.getlist('tag')
-        q_sort_date = request.GET.get('sort_date')
-        q_sort_name = request.GET.get('sort_name')
+        q_sort = request.GET.get('sort')
         q_page = request.GET.get('p')
 
         filter_form = {
             'collection': q_collection,
             's': q_search,
             'tags': q_tags,
-            'sort_date': q_sort_date,
-            'sort_name': q_sort_name
+            'sort': q_sort
         }
         
         user_profile = request.user.profile
@@ -129,27 +139,23 @@ def storiesGallery(request):
         message_if_empty = ''
         match q_collection:
             case 'liked':
-                stories = Story.objects.filter(likedstory__user_profile=user_profile).exclude(xp_required__gt = user_profile.xp).order_by('-likedstory__date')
+                stories = Story.objects.filter(likedstory__user_profile=user_profile).exclude(xp_required__gt = user_profile.xp)
                 page_title = 'Your liked stories'
                 message_if_empty = "You don't have liked stories yet"
+                stories = stories.order_by('-likedstory__date')
             case 'saved':
                 page_title = 'Your saved stories'
-                stories = Story.objects.filter(savedstory__user_profile=user_profile).exclude(xp_required__gt = user_profile.xp).order_by('-savedstory__date')
+                stories = Story.objects.filter(savedstory__user_profile=user_profile).exclude(xp_required__gt = user_profile.xp)
                 message_if_empty = "You don't have saved stories yet"
+                stories = stories.order_by('-savedstory__date')
             case _:
                 page_title = 'Stories Gallery'
-                stories = Story.objects.all().exclude(xp_required__gt = user_profile.xp).order_by('-updated_at')
+                stories = Story.objects.all().exclude(xp_required__gt = user_profile.xp)
+                stories = stories.order_by('-updated_at')
 
         tags = Tag.objects.all().order_by('name1')
         
         # Custom filters
-        # Sort by name
-        if not q_sort_name == 'default':
-            if q_sort_name == 'a-z':
-                stories = stories.order_by('title1')
-            elif q_sort_name == 'z-a':
-                stories = stories.order_by('-title1')
-        
         # Search
         if q_search:
             stories = stories.filter(Q(title1__icontains=q_search) | Q(title2__icontains=q_search))
@@ -161,17 +167,20 @@ def storiesGallery(request):
                 stories = stories.filter(tags__id__in=q_tag_ids).distinct()
         except:
             pass
-
-        # Sort by date
-        if not q_sort_date == 'default':
-            if q_sort_date == 'updated':
-                stories = stories.order_by('-updated_at')
-            elif q_sort_date == 'created':
-                stories = stories.order_by('-created_at')
-
-
+                
+        # Sort
+        if not q_sort == 'default':
+            match q_sort:
+                case 'a-z':
+                    stories = stories.order_by('title1')
+                case 'updated':
+                    stories = stories.order_by('-updated_at')
+                case 'created':
+                    stories = stories.order_by('-created_at')
+        
+        
         # Paginate        
-        paginator = Paginator(stories, 8)
+        paginator = Paginator(stories, items_per_page)
         try:
             q_page = int(q_page)
             if q_page <=0:
@@ -217,4 +226,14 @@ def storiesGallery(request):
             'urls': urls,
             'message_if_empty': message_if_empty,
         }
-        return render(request, 'user/stories_gallery.html', context)
+
+        
+        return render(request, template, context)
+
+
+def remove_filter(l, item):
+    if item in l:
+        l.remove(item)
+    item = item[1:] if item.startswith('-') else f'-'+item
+    if item in l:
+        l.remove(item)

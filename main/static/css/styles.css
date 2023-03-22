@@ -16,11 +16,26 @@
 
 	--turquoise: #bbfff3;
 	--turquoise-active: #23fbb7;
+
+	--primary: var(--f-orange);
+	--primary-active: var(--f-orange-active);
 }
 
 ::selection {
 	background: var(--turquoise);
 	color: #000;
+}
+
+*::-webkit-scrollbar {
+	width: 8px;
+}
+*::-webkit-scrollbar-track {
+	background: #fff;
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: #dbd7d7;
+	border-radius: 20px;
 }
 
 body {

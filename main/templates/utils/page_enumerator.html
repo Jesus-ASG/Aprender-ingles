@@ -1,0 +1,47 @@
+{% load static %}
+{% block page-styles %}
+{% endblock %}
+<div class="row my-3">
+  <div class="col-12">
+    <nav>
+      <ul class="pagination justify-content-center">
+        <li class="page-item {% if not urls.prev %} disabled {% endif %}">
+          <a class="page-link" href="{{ urls.prev |default:'#' }}" tabindex="-1">
+            <span><i class="fa-solid fa-chevron-left"></i></span></a>
+        </li>
+
+        {% for page_num in page_range %}
+        <li class="page-item">
+          {% if not page_num.url == '#' %}
+          <a class="page-link" href="{{ page_num.url }}">{{ page_num.label }}</a>
+          {% else %}
+          <span class="page-link">...</span>
+          {% endif %}
+        </li>
+        {% endfor %}
+
+        <li class="page-item {% if not urls.next %} disabled {% endif %}">
+          <a class="page-link" href="{{ urls.next |default:'#' }}">
+            <span><i class="fa-solid fa-chevron-right"></i></span></a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+{% block page-scripts %}
+<script>
+  stylePagesBar();
+  function stylePagesBar() {
+    let url = window.location.href;
+    const navPageLinks = document.querySelectorAll('.page-link');
+    navPageLinks.forEach(link => {
+      let parent = link.parentElement;
+      if (link.href === url || (link.href.includes('?page=1') && window.location.search === '')) {
+        parent.classList.add('active');
+        parent.setAttribute('aria-current', 'page');
+      }
+    });
+  }
+</script>
+{% endblock %}
