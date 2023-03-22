@@ -109,14 +109,14 @@
 .dropdown-btn .arrow-dwn,
 .dropdown-btn .left-icon {
 	display: flex;
+	align-items: center;
+	justify-content: center;
 	height: 21px;
 	width: 21px;
 	color: #fff;
 	font-size: 0.9rem;
 	border-radius: 50%;
 	background: var(--primary);
-	align-items: center;
-	justify-content: center;
 	transition: 0.3s;
 }
 .dropdown-btn.show .arrow-dwn {

@@ -1,32 +1,11 @@
 {% extends 'main_template.html' %}
 {% load static %}
+{% load filters %}
 
 {% block title %} Admin Story Quest {% endblock %}
 
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/admin/index1.css' %}">
-<style>
-	.table tr {
-		vertical-align: middle;
-	}
-
-	.alert-fixed {
-		position: fixed;
-		right: 1rem;
-		top: 10%;
-		z-index: 100;
-	}
-
-	.update-btn {}
-
-	@media only screen and (max-width: 700px) {
-		.alert-fixed {
-			transform: translateX(50%);
-			right: 50%;
-			width: 90%;
-		}
-	}
-</style>
 {% endblock %}
 
 {% block content %}
@@ -62,7 +41,7 @@
 
 	<div class="tab-content remember-tab">
 
-		<!-- Stories table-->
+		<!-- Stories-->
 		<div class="row tab-pane active" role="tabpanel" id="stories">
 			<div class="row my-3">
 				<div class="col-12 text-center">
@@ -71,9 +50,32 @@
 						+ Add new story</a>
 				</div>
 			</div>
-			<hr>
 			<div>
+				<hr>
 				{% include 'utils/filter_form.html' %}
+				<hr>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<div class="select-rows">
+						<select class="form-select select" aria-label="Select rows number" id="select_items_number">
+
+							<option value="5" '{% if filter_form.items_number == 5 %}' selected '{% endif %}'>5 rows</option>
+							<option value="10" '{% if filter_form.items_number == 10 %}' selected '{% endif %}'>10 rows</option>
+							<option value="15" '{% if filter_form.items_number == 15 %}' selected '{% endif %}'>15 rows</option>
+
+							{% with '5 10 15' as values %}
+							<option '{% if not filter_form.items_number|to_str in values.split %}' selected '{% endif %}'
+								value="{{ filter_form.items_number }}" id="option_other_items_number">Other</option>
+							{% endwith %}
+
+						</select>
+						<div class="custom-rows-number">
+							<label for="input_items_number">Rows:</label>
+							<input type="number" id="input_items_number">
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="col-12 text-center">
@@ -138,7 +140,6 @@
 											<span style="color: #fff"><i class="fas fa-trash"></i></span>
 										</a>
 
-
 									</div>
 
 								</td>
@@ -152,109 +153,19 @@
 				{% include 'utils/page_enumerator.html' %}
 			</div>
 		</div>
-		<!-- End stories table-->
+		<!-- End stories-->
 
 		<!-- Tags table -->
 		<div class="row tab-pane" role="tabpanel" id="tags">
-			<div class="row mt-3">
-				<div class="col-12 text-center">
-					<a class="btn fw-bold hover-scale m-1" style="color: #fff; background-color: #ff5f13; border-radius: 10px;"
-						href="{% url 'add_tag' %}" role="button">
-						+ Add new tag</a>
-				</div>
-			</div>
-			<div class="col-12 text-center">
-				<div class="card-body table-responsive">
-					<table class="table">
-						<thead>
-							<tr>
-								<th class="fs-5 fw-bold">ID</th>
-								<th class="fs-5 fw-bold">English name</th>
-								<th class="fs-5 fw-bold">Spanish name</th>
-								<th class="fs-5 fw-bold">Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for tag in tags %}
-							<tr>
-								<td>{{ tag.id }}</td>
-								<td>{{ tag.name1 }}</td>
-								<td>{{ tag.name2 }}</td>
-
-								<td>
-									<div class="d-inline-block">
-										<a class="btn fs-5 p-2 action-btn m-2 hover-scale" href="{% url 'edit_tag' tag.id %}"
-											style="background-color: #77b9fc;" role="button" title="Edit tag">
-											<span style="color: #fff;"><i class="fas fa-pen"></i></span>
-										</a>
-
-										<a class="btn fs-5 p-2 action-btn m-2 hover-scale" href="{% url 'delete_tag' tag.id %}"
-											role="button" title="Delete tag" style="background-color: #f53126;">
-											<span style="color: #fff"><i class="fas fa-trash"></i></span>
-										</a>
-
-									</div>
-
-								</td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-			</div>
+			{% include 'admin/admin_tags.html' %}
 		</div>
 		<!-- End tags table -->
 
-		<!-- Recommenders section -->
+		<!-- Recommenders -->
 		<div class="row tab-pane" role="tabpanel" id="recommenders" style="min-height: 50vh;">
-			<div class="col-12 text-center">
-				<div class="card-body table-responsive">
-					<table class="table">
-						<thead>
-							<tr>
-								<th class="fs-5 fw-bold">Recommender type</th>
-								<th class="fs-5 fw-bold">Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							<!-- Row for content based recommender -->
-							<tr>
-								<td>
-									<p>Content based recommender</p>
-								</td>
-								<td>
-									<div class="d-inline-block">
-										<button onclick="updateCBRecommender()" class="btn fs-5 p-2 action-btn m-2 hover-scale"
-											style="background-color: #77b9fc;" title="Update content based recommender">
-											<span style="color: #fff;"><i class="fa-solid fa-arrows-rotate"></i></span>
-										</button>
-									</div>
-								</td>
-							</tr>
-							<!-- End of row for user based recommender -->
-
-							<!-- Row for user based recommender -->
-							<tr>
-								<td>
-									<p>User based recommender</p>
-								</td>
-								<td>
-									<div class="d-inline-block">
-										<button onclick="updateUBRecommender()" class="btn fs-5 p-2 action-btn m-2 hover-scale"
-											style="background-color: #77b9fc;" title="Update user based recommender">
-											<span style="color: #fff;"><i class="fa-solid fa-arrows-rotate"></i></span>
-										</button>
-									</div>
-								</td>
-							</tr>
-							<!-- End of row for user based recommender -->
-
-						</tbody>
-					</table>
-				</div>
-			</div>
+			{% include 'admin/admin_recommender.html' %}
 		</div>
-		<!-- End recommenders section -->
+		<!-- End recommenders -->
 	</div>
 </div>
 {% endblock %}
@@ -265,6 +176,41 @@
 	const URL_UPDATE_UB_RECOMMENDER = '{% url "update_ub_recommender" %}';
 </script>
 <script>
+
+	let select_items_number = document.getElementById('select_items_number');
+	let input_items_number = document.getElementById('input_items_number');
+	let option_other_items_number = document.getElementById('option_other_items_number');
+	let form_items_number = document.getElementById('form_items_number');
+
+	// Initialize - put to input the selected option
+	input_items_number.value = select_items_number.value;
+	// Display input if any of three above options was selected
+	if (option_other_items_number.selected)
+		input_items_number.parentElement.classList.add('d-inline-block');
+
+	// On change <select> value when value changes
+	select_items_number.addEventListener('change', (e) => {
+		form_items_number.value = select_items_number.value;
+		if (option_other_items_number.selected)
+			input_items_number.parentElement.classList.add('d-inline-block');
+		else
+			input_items_number.parentElement.classList.remove('d-inline-block');
+	});
+
+
+	$("#form_items_number").val(select_items_number.value);
+
+	$("#input_items_number").on('input propertychange', (e) => {
+		form_items_number.value = e.target.value;
+	});
+
+	input_items_number.addEventListener('keydown', (e) => {
+		let key = e.keyCode || e.which;
+		if (key == 13) // Code for enter
+			document.getElementById('submit_filter_form_btn').click();
+	});
+
+
 	function updateCBRecommender() {
 		const csrftoken = getCookie('csrftoken');
 		$.ajax({

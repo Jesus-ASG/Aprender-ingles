@@ -14,8 +14,7 @@ urlpatterns = [
     path('stories/', views.storiesList, name="stories"),
     
     # Stories for admin
-    path('myadmin/', views.storiesList, name = 'index_admin'),
-
+    path('myadmin/', stories.index, name = 'index_admin'),
     path('myadmin/add-story/', stories.create, name = 'add_story'),
     path('myadmin/edit-story/<int:story_id>', stories.update, name = 'edit_story'),
     path('myadmin/del-story/<int:story_id>', stories.delete, name = 'delete_story'),

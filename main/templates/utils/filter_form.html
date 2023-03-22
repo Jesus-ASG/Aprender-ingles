@@ -137,19 +137,24 @@
   </div>
   <!-- End of sort -->
 
-  <!-- Clear and search buttons -->
+  <!-- Clear and filter buttons -->
   <div class="col-12 col-sm-6 col-md-3">
     <div class="form-sub-container">
+      <!-- Clear filters -->
       <button class="filter-button" type="button" onclick="document.getElementById('clear_form_btn').click()">
-        <span><i class="fa-solid fa-filter-circle-xmark"></i></span>
+        <span class="flex-center"><i class="fa-solid fa-filter-circle-xmark"></i></span>
       </button>
 
-      <button class="filter-button" type="submit">
-        <span><i class="fa-solid fa-filter"></i></span>
+      <!-- Submit filter form -->
+      <button class="filter-button" type="submit" id="submit_filter_form_btn">
+        <span class="flex-center"><i class="fa-solid fa-filter"></i></span>
       </button>
     </div>
   </div>
   <!-- End of clear and search buttons -->
+  {% if filter_form.items_number %}
+  <input type="text" name="items_number" value="{{ filter_form.items_number }}" id="form_items_number" hidden>
+  {% endif %}
   <input type="text" name="p" value="1" hidden>
 </form>
 

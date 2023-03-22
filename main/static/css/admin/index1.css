@@ -43,3 +43,59 @@
 .tab-titles .active {
 	font-weight: bold;
 }
+
+.table tr {
+	vertical-align: middle;
+}
+
+.alert-fixed {
+	position: fixed;
+	right: 1rem;
+	top: 10%;
+	z-index: 100;
+}
+
+@media only screen and (max-width: 700px) {
+	.alert-fixed {
+		transform: translateX(50%);
+		right: 50%;
+		width: 90%;
+	}
+}
+
+.select-rows {
+	display: flex;
+	width: 100%;
+
+	flex-direction: row;
+	align-items: center;
+	flex-wrap: wrap;
+}
+.select-rows .select {
+	display: inline-block;
+	max-width: 250px;
+	min-width: 150px;
+	margin: 0.5rem 1rem 0.5rem 1rem;
+}
+
+.select-rows .select option:hover {
+	background-color: red !important;
+}
+
+.custom-rows-number {
+	max-width: 250px;
+	height: 100%;
+	margin: 0.5rem 1rem 0.5rem 1rem;
+	display: none;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+.custom-rows-number input {
+	border: none;
+	outline: none;
+	max-width: 100px;
+	text-align: center;
+	border-bottom: 1px solid var(--primary);
+	margin-left: 1rem;
+}

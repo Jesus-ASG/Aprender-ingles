@@ -10,6 +10,7 @@ from main.forms import HistoriaForm
 from main.models import Story, Tag
 
 from main.utils.cb_recommender import ContentBasedRecommender
+from main.utils.paginate_and_filter import paginate_stories
 
 
 def is_superuser(user):
@@ -19,12 +20,18 @@ def is_superuser(user):
 @login_required(login_url='/login/')
 @user_passes_test(is_superuser, login_url='/login/')
 def index(request):
-    stories = Story.objects.all()
-    tags = Tag.objects.all()
-    context = {
-        'stories': stories,
-        'tags': tags,
-    }
+    q_items = request.GET.get('items_number')
+    items_per_page = 5
+    if q_items:
+        try:
+            q_items = int(q_items)
+            if q_items > 0:
+                items_per_page = q_items
+        except:
+            pass
+    context = paginate_stories(request, items_per_page=items_per_page)
+    context['filter_form']['items_number'] = items_per_page
+
     return render(request, 'admin/index_admin.html', context)
 
 

@@ -15,7 +15,7 @@
           {% if not page_num.url == '#' %}
           <a class="page-link" href="{{ page_num.url }}">{{ page_num.label }}</a>
           {% else %}
-          <span class="page-link">...</span>
+          <a class="page-link" style="cursor:default;">...</a>
           {% endif %}
         </li>
         {% endfor %}
@@ -37,7 +37,7 @@
     const navPageLinks = document.querySelectorAll('.page-link');
     navPageLinks.forEach(link => {
       let parent = link.parentElement;
-      if (link.href === url || (link.href.includes('?page=1') && window.location.search === '')) {
+      if (link.href === url || (link.href.includes('?p=1') && window.location.search === '')) {
         parent.classList.add('active');
         parent.setAttribute('aria-current', 'page');
       }
