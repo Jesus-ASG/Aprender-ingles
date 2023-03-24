@@ -9,6 +9,9 @@ from io import BytesIO
 from django.core.files import File
 from django.core.files.base import ContentFile
 
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+
 from django.contrib.auth.models import User
 
 
@@ -263,6 +266,9 @@ class RepeatPhrase(models.Model):
     content2 = models.CharField(max_length=255)
     show_text = models.BooleanField(default=True)
     element_number = models.IntegerField()
+
+    def __str__(self) -> str:
+        return f'{self.page.id} - {self.content1}'
 # -------- -------- -------- --------
 
 
@@ -290,3 +296,26 @@ class Option(models.Model):
     answer2 = models.CharField(max_length=255)
     correct = models.BooleanField(default=False)
 # -------- -------- -------- --------
+
+class UserAnswer(models.Model):
+    class Meta:
+        db_table = prefix + 'exercise_answer'
+
+    # Keys
+    id = models.AutoField(primary_key=True)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='answers')
+    story = models.ForeignKey(Story, on_delete=models.CASCADE)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
+    # Key for different exercises
+    exercise_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    exercise_id = models.PositiveIntegerField()
+    exercise = GenericForeignKey('exercise_type', 'exercise_id')
+
+    answer = models.CharField(max_length=255, blank=True, default='')
+    submited = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        string = f'{self.user_profile.id} - {self.story.id} - {self.page.id}\n'
+        string += f'{self.exercise_type}, {self.exercise_id}, {self.exercise}\n'
+        string += f'{self.answer} -- {self.submited}'
+        return string

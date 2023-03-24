@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Tag, Story, Page, Dialogue, Image, RepeatPhrase, Score, UserProfile
+from .models import Tag, Story, Page, Dialogue, Image, RepeatPhrase, Score, UserProfile, UserAnswer
 
 
 class NewUserForm(UserCreationForm):
@@ -114,3 +114,8 @@ class RepeatPhraseForm(forms.ModelForm):
 		fields = '__all__'
 		exclude = ['page', 'content1', 'content2', 'element_number', 'show_text']
 
+
+class UserAnswerForm(forms.ModelForm):
+	class Meta:
+		model = UserAnswer
+		exclude = '__all__'

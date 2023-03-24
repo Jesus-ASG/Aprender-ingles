@@ -119,7 +119,7 @@
 
   <div class="row">
     <div class="col-12 mb-3 text-center">
-      <button id="btn_send_answers" onclick="sendAnswers()" type="button" class="btn btnr-f-orange fw-bold fs-5">
+      <button id="btn_send_answers" onclick="sendAnswers2()" type="button" class="btn btnr-f-orange fw-bold fs-5">
         {% if next_page is None %}
         Evaluate pages / evaluar páginas
         {% else %}
@@ -209,6 +209,8 @@
   let db_dialogues = {};
   let db_repeat_phrases = {};
 
+  let db_answers = {};
+
   try {
     db_subtitle.subtitle1 = '{{ current_page.subtitle1 }}';
   } catch (e) { }
@@ -223,6 +225,10 @@
   } catch (e) { }
   try {
     db_repeat_phrases = JSON.parse('{{ repeat_phrases |safe |escapejs }}');
+  } catch (e) { }
+
+  try {
+    db_answers = JSON.parse('{{ answers |safe |escapejs }}');
   } catch (e) { }
 </script>
 
@@ -252,11 +258,6 @@
   setFunctionality(total_translations);
 
   function setSubtitle(total_translations) {
-    let flipClasses = {
-      "paper": "mx-1",
-      "front": "px-1",
-      "back": "px-1"
-    };
 
     let sub1 = db_subtitle.subtitle1;
     let sub2 = db_subtitle.subtitle2;
@@ -264,19 +265,14 @@
       sub1 = "Page " + db_page_number;
       sub2 = "Página " + db_page_number;
     }
-    let html_subtitle = createFlipHTML(sub1, sub2, total_translations, flipClasses);
+    let html_subtitle = createFlipHTML(sub1, sub2, total_translations);
     document.getElementById("subtitle").outerHTML = html_subtitle;
   }
 
   function setAnswerQuestionsMessage(total_translations) {
-    let flipClasses = {
-      "paper": "mx-1",
-      "front": "px-1",
-      "back": "px-1"
-    };
     let text1 = "Make your best effort to answer!";
     let text2 = "¡Has tu mejor esfuerzo para contestar!";
-    document.getElementById("answer_questions_message").innerHTML = createFlipHTML(text1, text2, total_translations, flipClasses);
+    document.getElementById("answer_questions_message").innerHTML = createFlipHTML(text1, text2, total_translations);
   }
 </script>
 <script src="{% static 'js/user/answer_exercises.js' %}"></script>
