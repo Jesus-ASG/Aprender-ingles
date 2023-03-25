@@ -70,11 +70,12 @@
   <div class="row mt-3">
     <div class="col-2 text-center fs-1">
       {% if prev_page is None %}
-      <a href="{% url 'story_info' route=story.route %}" class="btn-back-next"><i
-          class='fa fa-arrow-circle-left'></i></a>
+      <a href="{% url 'story_info' route=story.route %}" class="btn-back-next" id="back_page_btn">
+        <i class='fa fa-arrow-circle-left'></i></a>
       {% else %}
-      <a href="{% url 'story_content' route=story.route page_number=prev_page %}" class="btn-back-next"><i
-          class='fa fa-arrow-circle-left'></i></a>
+      <a href="{% url 'story_content' route=story.route page_number=prev_page %}" class="btn-back-next"
+        id="back_page_btn">
+        <i class='fa fa-arrow-circle-left'></i></a>
       {% endif %}
     </div>
     <div class="col-8 text-center">
@@ -84,8 +85,9 @@
     </div>
     <div class="col-2 text-center fs-1">
       {% if next_page is not None %}
-      <a href="{% url 'story_content' route=story.route page_number=next_page %}" class="btn-back-next"><i
-          class='fa fa-arrow-circle-right'></i></a>
+      <a href="{% url 'story_content' route=story.route page_number=next_page %}" class="btn-back-next"
+        id="next_page_btn">
+        <i class='fa fa-arrow-circle-right'></i></a>
       {% endif %}
     </div>
   </div>
@@ -119,7 +121,7 @@
 
   <div class="row">
     <div class="col-12 mb-3 text-center">
-      <button id="btn_send_answers" onclick="sendAnswers2()" type="button" class="btn btnr-f-orange fw-bold fs-5">
+      <button id="btn_send_answers" type="button" class="btn btnr-f-orange fw-bold fs-5">
         {% if next_page is None %}
         Evaluate pages / evaluar páginas
         {% else %}
@@ -283,6 +285,18 @@
 </script>
 <script src="{% static 'js/user/answer_exercises.js' %}"></script>
 <script>
+  // Buttons for save answers
+
+  let btn_send_answers = document.getElementById('btn_send_answers')
+  if (btn_send_answers) btn_send_answers.addEventListener('click', (e) => { saveAnswers(true, true) });
+
+  let back_page_btn = document.getElementById('back_page_btn')
+  if (back_page_btn) back_page_btn.addEventListener('click', (e) => { saveAnswers(false, false) });
+
+  let next_page_btn = document.getElementById('next_page_btn')
+  if (next_page_btn) next_page_btn.addEventListener('click', (e) => { saveAnswers(false, false) });
+
+
   setVolumeFunctionality();
 </script>
 {% endblock %}

@@ -1,15 +1,13 @@
 import json
 
-from django.core.cache import cache
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 
 from django.shortcuts import render
-from django.http import HttpResponseNotFound, JsonResponse
+from django.http import JsonResponse
 from django.forms.models import model_to_dict
 
-from main.models import Story, Score, RepeatPhrase, Dialogue
+from main.models import Story, Score, RepeatPhrase
 from main.forms import ScoreForm, UserAnswer
 
 from main.utils.evaluate_story import rateSkills, evaluateAnswers, map_answers
@@ -17,17 +15,11 @@ from main.utils.cb_recommender import ContentBasedRecommender
 from main.utils.level_manager import LevelManager
 
 
-# expiration time for cache in seconds
-expiration_time = 86400
-
-
 @login_required(login_url='/login/')
 def storyInfo(request, route):
     user_profile = request.user.profile
     
     story = Story.objects.get(route=route)
-    cache.delete(f'story_answers_{story.id}')
-    cache.delete(f'evaluated_story_{story.id}')
 
     # Get recommendations
     recommender = ContentBasedRecommender()
@@ -51,7 +43,6 @@ def storyInfo(request, route):
     if scores:
         high_score = scores[0]
         letter_grade = rateSkills(high_score.get('score_percentage'))
-        
         high_score['letter_grade'] = letter_grade
 
 
@@ -71,156 +62,6 @@ def storyInfo(request, route):
         'high_score': high_score,
         }
     return render(request, 'user/story_info.html', context)
-
-
-@login_required(login_url='/login/')
-def storyContent2(request, route, page_number):
-    
-    story = Story.objects.get(route=route)
-
-    if request.method == "GET":
-        page_index = page_number - 1
-        pages = story.pages.all().order_by('date_created', 'time_created')
-        total_pages = len(pages)
-
-        prev_page = None
-        next_page = None
-        current_page = pages[page_index]
-
-        if page_index >= 1:
-            prev_page = page_number - 1 
-        if page_index < len(pages) - 1:
-            next_page = page_number + 1
-        
-        images = current_page.images.all()
-        dialogues = current_page.dialogues.all()
-        repeat_phrases = current_page.repeat_phrases.all()
-
-        dialogues = json.dumps(list(dialogues.values()))
-        repeat_phrases = json.dumps(list(repeat_phrases.values()))
-
-        images_json = []
-        for image in images:
-            x = model_to_dict(image)
-            x['image'] = x['image'].url
-            images_json.append(x)
-        images_json = json.dumps(images_json)
-        
-        context = {
-            'story': story,
-            'page_number': page_number,
-            'total_pages': total_pages,
-            'prev_page': prev_page,
-            'next_page': next_page,
-            'current_page': current_page,
-            'images': images,
-            'images_json': images_json,
-            'dialogues': dialogues,
-            'repeat_phrases': repeat_phrases
-            
-            }
-        
-        return render(request, 'user/story_render_'+str(current_page.page_type)+'.html', context)
-
-    if request.method == 'POST':
-        user_profile = request.user.profile
-        # Get data from client
-        evaluate = request.POST["evaluate"]
-        feedback_page_id = int(request.POST["feedback_page_id"])
-        user_story_answers = request.POST["story_answers"]
-
-        evaluate = json.loads(evaluate)
-        user_story_answers = json.loads(user_story_answers)
-        
-
-        feedback_page = None
-        cache_story_answers = cache.get(f'story_answers_{story.id}')
-        if cache_story_answers is None:
-            cache.set(f'story_answers_{story.id}', user_story_answers, expiration_time)
-            cache_story_answers = cache.get(f'story_answers_{story.id}')
-
-        cache_requested_page = list(filter(lambda x: x["id"] == feedback_page_id, cache_story_answers["pages"]))
-        
-        if cache_requested_page:
-            feedback_page = cache_requested_page[0]
-        else:
-            user_feedback_page = list(filter(lambda x: x["id"] == feedback_page_id, user_story_answers["pages"]))
-            
-            cache_story_answers["pages"].append(user_feedback_page[0])
-            cache.set(f'story_answers_{story.id}', cache_story_answers, expiration_time)
-            cache_story_answers = cache.get(f'story_answers_{story.id}')
-
-            cache_requested_page = list(filter(lambda x: x["id"] == feedback_page_id, cache_story_answers["pages"]))
-
-            feedback_page = cache_requested_page[0]
-
-        for exercise in feedback_page["exercises"]:
-            match exercise["type"]:
-                case "repeat_phrase":
-                    rp_answ = RepeatPhrase.objects.get(id=int(exercise["id"]))
-                    exercise["feedback"] = rp_answ.content1
-        
-        cache.set(f'story_answers_{story.id}', cache_story_answers, expiration_time)
-        cache_story_answers = cache.get(f'story_answers_{story.id}')
-
-
-        cache_evaluated_story = cache.get(f'evaluated_story_{story.id}')
-        if cache_evaluated_story is None:
-            cache_evaluated_story = False
-        
-        results = ""
-        if evaluate and not cache_evaluated_story:
-            # evaluate means give all califications
-            results = evaluateAnswers(story, cache_story_answers)
-            cache.set(f'evaluated_story_{story.id}', True, expiration_time)
-
-            score_form = ScoreForm(request.POST or None)
-            if not score_form.is_valid():
-                pass
-
-            score_form_obj = score_form.save(commit=False)
-
-            score_form_obj.user_profile = user_profile
-            score_form_obj.story = story
-
-            score_form_obj.score = results["score"]
-            score_form_obj.score_limit = results["score_limit"]
-            score_form_obj.writing_percentage = results["writing_percentage"]
-            score_form_obj.comprehension_percentage = results["comprehension_percentage"]
-            score_form_obj.speaking_percentage = results["speaking_percentage"]
-            
-            max_percentage = float(results.get('score')) / float(results.get('score_limit'))
-            max_percentage = max_percentage * 100
-            max_percentage = round(max_percentage, 2)
-
-            score_form_obj.score_percentage = max_percentage
-
-            letter_grade = rateSkills(max_percentage)
-
-            score_form_obj.save()
-
-            cache_story_answers["score"] = results
-            cache_story_answers["score"]["letter_grade"] = letter_grade
-
-            cache.set(f'story_answers_{story.id}', cache_story_answers, expiration_time)
-
-            user_profile.xp += results.get('score', 0)
-            # update level
-            lvl_obj = LevelManager()
-            level_statistics = lvl_obj.get_level_statistics(user_profile.xp)
-            user_profile.level = level_statistics['level']
-            user_profile.save()
-        return JsonResponse(cache_story_answers)
-
-#
-#
-#
-#
-#
-#
-#
-#
-
 
 
 @login_required(login_url='/login/')
@@ -254,17 +95,7 @@ def storyContent(request, route, page_number):
         answers = []
 
         if db_answers:
-            # Filter exersices
-            rp_answered = db_answers.filter(exercise_type=rp_content_type)
-            for i in rp_answered:
-                obj = {
-                    'exercise_id': i.exercise_id,
-                    'answer': i.answer,
-                    'feedback': i.exercise.content1,
-                    'submited': i.submited,
-                    'type': 'repeat_phrase'
-                }
-                answers.append(obj)
+            answers = map_answers(db_answers)
         
         score = None
         story_answered = UserAnswer.objects.filter(user_profile=user_profile, story=story).first()
@@ -275,9 +106,6 @@ def storyContent(request, route, page_number):
                 letter_grade = rateSkills(score['score_percentage'])
                 score['letter_grade'] = letter_grade
                 score = json.dumps(score, indent=4, sort_keys=True, default=str)
-                #print()
-                #print(f'Score\n{score}')
-                #print()
 
         answers = json.dumps(answers)
 
@@ -304,19 +132,17 @@ def storyContent(request, route, page_number):
             'repeat_phrases': repeat_phrases,
             'answers': answers,
             'score': score
-            }
-        
+            }        
         return render(request, 'user/story_render_'+str(current_page.page_type)+'.html', context)
 
-    if request.method == 'POST':
-        
+
+    if request.method == 'POST':        
         update = False
         if db_answers:
             if db_answers[0].submited:
                 return JsonResponse({'message': 'This page is already submited'})
             else: # update answers
                 update = True
-                
 
         # Get data from client
         evaluate = request.POST['evaluate']
@@ -328,7 +154,6 @@ def storyContent(request, route, page_number):
         submit = json.loads(submit)
         
         # Filter exercises
-        
         rp_answered = db_answers.filter(exercise_type=rp_content_type)
         
         # Save answers
@@ -366,9 +191,6 @@ def storyContent(request, route, page_number):
         
         results = ""
         if evaluate:
-            # evaluate means give all califications
-            #story_answers = user_profile.answers.filter(story=story)
-
             # Give form to answers
             answers = []
             if story_answers:
@@ -416,6 +238,7 @@ def storyContent(request, route, page_number):
             
             # Update story answers to evaluated
             story_answers.update(evaluated=True)
+            story_answers.update(submited=True)
             response['results'] = results
         
         return JsonResponse(response)

@@ -124,9 +124,6 @@ def evaluateAnswers(story, answers):
         "speaking_percentage": 0
     }
 
-    
-    
-
     for a in answers:
         match a['type']:
             case 'repeat_phrase':

@@ -35,84 +35,17 @@ for (let element of collections_sorted)
 	if (element.is_exercise)
 		page_answers.exercises.push(new Exercise(element.type, element.id, ''));
 
-
-////
-let ls_story_answers = JSON.parse(localStorage.getItem('story_answers_' + db_story_id));
-if (ls_story_answers) {
-	let current_page = ls_story_answers.pages.find(e => e.id === parseInt(db_page_id));
-	if (current_page);
-	//sendAnswers();
-}
-
+// if there are answers in the page
 if (db_answers.length > 0) {
 	// Check if is sumbited
 	let submited = db_answers[0].submited;
 	if (submited) {
-
-		showFeedback2(db_answers);
+		showUserAnswers(db_answers, true);
 		showStatistics(db_score);
-		/*
-		document.getElementById("btn_send_answers").outerHTML = `
-		<a href="` + URL_NEXT_PAGE + `" type="button" class="btn btnr-f-orange fw-bold fs-5">
-				Continue / Continuar
-		</a>
-		`;
-		$('button[name="mic_btn"]').attr("disabled", true);
-		
-		for (let answer of db_answers) {
-			switch (answer.type) {
-				case "repeat_phrase":
-					let rp = document.getElementById("repeat_phrase_" + answer.exercise_id);
-					let rp_ans = rp.querySelector("[name = user_answer]");
-					let feedback = rp.querySelector("[name = feedback]");
-					
-					rp_ans.innerHTML = `<strong>Your answer:</strong> "${answer.answer}"`;
-					feedback.innerHTML = `<strong>Right answer:</strong> "${answer.feedback}"`;
-					break;
-				}
-			}
-			
-			*/
-		/*
-		if (LAST_PAGE) {
-			let results_dom = document.getElementById("results");
-			results_dom.classList.remove("d-none");
-			let score_lbl1 = `Results: ${results.score}pts`;
-			let score_lbl2 = `Resultados: ${results.score}pts`;
-
-			let comprehension = results_dom.querySelector("[name = comprehension]");
-			let writing = results_dom.querySelector("[name = writing]");
-			let speaking = results_dom.querySelector("[name = speaking]");
-
-			let comprehension_progress = comprehension.querySelector("[name = progress]");
-			let writing_progress = writing.querySelector("[name = progress]");
-			let speaking_progress = speaking.querySelector("[name = progress]");
-
-			// Titles
-			results_dom.querySelector("[name = letter_grade]").innerText = results.letter_grade;
-			results_dom.querySelector("[name = title_score]").innerHTML = createFlipHTML(score_lbl1, score_lbl2, total_translations);
-			comprehension.querySelector("[name = title]").innerHTML = createFlipHTML("Comprehension", "Comprensión", total_translations);
-			writing.querySelector("[name = title]").innerHTML = createFlipHTML("Writing", "Escritura", total_translations);
-			speaking.querySelector("[name = title]").innerHTML = createFlipHTML("Speaking", "Pronunciación", total_translations);
-
-			// Values
-			comprehension_progress.style.width = `${results.comprehension_percentage}%`;
-			comprehension_progress["aria-valuenow"] = `${results.comprehension_percentage}%`;
-
-			writing_progress.style.width = `${results.writing_percentage}%`;
-			writing_progress["aria-valuenow"] = `${results.writing_percentage}%`;
-
-			speaking_progress.style.width = `${results.speaking_percentage}%`;
-			speaking_progress["aria-valuenow"] = `${results.speaking_percentage}%`;
-
-			setFunctionality(total_translations);
-		}
-		*/
-
 	}
+	else
+		showUserAnswers(db_answers, false);
 }
-
-
 
 
 
@@ -238,142 +171,18 @@ function capitalizeFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function sendAnswers() {
-	let ls_story_answers = JSON.parse(localStorage.getItem('story_answers_' + db_story_id));
-	if (ls_story_answers) {
-		let search = ls_story_answers.pages.find(e => e.id === parseInt(db_page_id));
-		if (search) {
-			//console.log("answers from this page have already been sent");
-			// just ask for feedback
-		}
-		else {
-			ls_story_answers.pages.push(page_answers);
-			//localStorage.removeItem('story_answers');
-			localStorage.setItem('story_answers_' + db_story_id, JSON.stringify(ls_story_answers));
-		}
-	}
-	else {
-		// this is the first page, so it is pushed
-		story_answers.pages.push(page_answers);
-		localStorage.setItem('story_answers_' + db_story_id, JSON.stringify(story_answers));
-	}
 
-	let clear_storage_on_click = (LAST_PAGE) ? 'onclick="clearStoryAnswersLocalStorage()"' : '';
-
-	let html_button = `
-	<a `+ clear_storage_on_click + ` href="` + URL_NEXT_PAGE + `" type="button" class="btn btnr-f-orange fw-bold fs-5">
-        Continue / Continuar
-    </a>
-	`;
-	document.getElementById("btn_send_answers").outerHTML = html_button;
-	///////////////////////////
-
-	let formData = new FormData();
-	// Tell if request will going to evaluate
-	let to_evaluate = false;
-	if (LAST_PAGE)
-		to_evaluate = true;
-	formData.append("evaluate", to_evaluate.toString());
-
-	// Tell what is the current page
-	formData.append("feedback_page_id", db_page_id);
-
-	// update ls_story answers
-	ls_story_answers = JSON.parse(localStorage.getItem('story_answers_' + db_story_id));
-	formData.append("story_answers", JSON.stringify(ls_story_answers))
-
-
-	const csrftoken = getCookie('csrftoken');
-	$.ajax({
-		type: "POST",
-		url: URL_ANSWER_PAGE,
-		data: formData,
-		processData: false,
-		contentType: false,
-		headers: { "X-CSRFToken": csrftoken },
-		success: function (response) {
-			showFeedback(response);
-		},
-		error: function (response) { }
-	});
-}
-
-function showFeedback(response) {
-	let current_page = response.pages.find(e => e.id === parseInt(db_page_id));
-	if (current_page) {
-		$('button[name="mic_btn"]').attr("disabled", true);
-		for (let exercise of current_page.exercises) {
-			switch (exercise.type) {
-				case "repeat_phrase":
-					let rp = document.getElementById("repeat_phrase_" + exercise.id);
-					let rp_ans = rp.querySelector("[name = user_answer]");
-					let feedback = rp.querySelector("[name = feedback]");
-
-					rp_ans.innerHTML = `<strong>Your answer:</strong> "${exercise.answer}"`;
-					feedback.innerHTML = `<strong>Right answer:</strong> "${exercise.feedback}"`;
-					break;
-			}
-		}
-	}
-
-	let results = response.score;
-	if (results) {
-		let results_dom = document.getElementById("results");
-		results_dom.classList.remove("d-none");
-		let score_lbl1 = `Results: ${results.score}pts`;
-		let score_lbl2 = `Resultados: ${results.score}pts`;
-
-		let comprehension = results_dom.querySelector("[name = comprehension]");
-		let writing = results_dom.querySelector("[name = writing]");
-		let speaking = results_dom.querySelector("[name = speaking]");
-
-		let comprehension_progress = comprehension.querySelector("[name = progress]");
-		let writing_progress = writing.querySelector("[name = progress]");
-		let speaking_progress = speaking.querySelector("[name = progress]");
-
-		// Titles
-		results_dom.querySelector("[name = letter_grade]").innerText = results.letter_grade;
-		results_dom.querySelector("[name = title_score]").innerHTML = createFlipHTML(score_lbl1, score_lbl2, total_translations);
-		comprehension.querySelector("[name = title]").innerHTML = createFlipHTML("Comprehension", "Comprensión", total_translations);
-		writing.querySelector("[name = title]").innerHTML = createFlipHTML("Writing", "Escritura", total_translations);
-		speaking.querySelector("[name = title]").innerHTML = createFlipHTML("Speaking", "Pronunciación", total_translations);
-
-		// Values
-		comprehension_progress.style.width = `${results.comprehension_percentage}%`;
-		comprehension_progress["aria-valuenow"] = `${results.comprehension_percentage}%`;
-
-		writing_progress.style.width = `${results.writing_percentage}%`;
-		writing_progress["aria-valuenow"] = `${results.writing_percentage}%`;
-
-		speaking_progress.style.width = `${results.speaking_percentage}%`;
-		speaking_progress["aria-valuenow"] = `${results.speaking_percentage}%`;
-
-		setFunctionality(total_translations);
-	}
-}
-
-function clearStoryAnswersLocalStorage() {
-	localStorage.removeItem('story_answers_' + db_story_id)
-}
-
-
-
-/*
-
-
-*/
-
-function sendAnswers2() {
+function saveAnswers(submit, show_feedback) {
 	// Read all repeat phrases exersices
 	let formData = new FormData();
-	let submit = true;
+
 	let evaluate = false;
-	if (LAST_PAGE)
+	if (LAST_PAGE && submit)
 		evaluate = true;
+
 	formData.append("evaluate", evaluate.toString());
 	formData.append("submit", submit.toString());
 	formData.append("answers", JSON.stringify(page_answers.exercises));
-
 
 	const csrftoken = getCookie('csrftoken');
 	$.ajax({
@@ -385,26 +194,25 @@ function sendAnswers2() {
 		headers: { "X-CSRFToken": csrftoken },
 		success: function (response) {
 			console.log(response);
-			//if (response.message == 'success') 
-			//	window.location.reload();
-			showFeedback2(response.answers);
+			showUserAnswers(response.answers, show_feedback);
 			showStatistics(response.results);
-
 		},
 		error: function (response) { }
 	});
-
 }
 
-function showFeedback2(answers) {
+function showUserAnswers(answers, show_feedback) {
 	if (!answers)
 		return;
-	document.getElementById("btn_send_answers").outerHTML = `
+
+	if (show_feedback) {
+		document.getElementById("btn_send_answers").outerHTML = `
 		<a href="` + URL_NEXT_PAGE + `" type="button" class="btn btnr-f-orange fw-bold fs-5">
-				Continue / Continuar
+		Continue / Continuar
 		</a>
 		`;
-	$('button[name="mic_btn"]').attr("disabled", true);
+		$('button[name="mic_btn"]').attr("disabled", true);
+	}
 
 	for (let answer of answers) {
 		switch (answer.type) {
@@ -414,15 +222,17 @@ function showFeedback2(answers) {
 				let feedback = rp.querySelector("[name = feedback]");
 
 				rp_ans.innerHTML = `<strong>Your answer:</strong> "${answer.answer}"`;
-				feedback.innerHTML = `<strong>Right answer:</strong> "${answer.feedback}"`;
+				if (show_feedback) {
+					feedback.innerHTML = `<strong>Right answer:</strong> "${answer.feedback}"`;
+				}
 				break;
 		}
 	}
 }
 
 function showStatistics(results) {
-	if (!results)
-		return
+	if (!hasContent(results))
+		return;
 	let results_dom = document.getElementById("results");
 	results_dom.classList.remove("d-none");
 	let score_lbl1 = `Results: ${results.score}pts`;
@@ -454,5 +264,4 @@ function showStatistics(results) {
 	speaking_progress["aria-valuenow"] = `${results.speaking_percentage}%`;
 
 	setFunctionality(total_translations);
-
 }

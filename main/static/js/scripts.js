@@ -3,39 +3,39 @@ const currentURL = window.location.href;
 const navLinks = document.querySelectorAll('.nav-link');
 // Loop through the links
 navLinks.forEach(link => {
-// If the link URL matches the current URL, add the active class to it
-if (link.href === currentURL) 
-	link.classList.add('active');
+	// If the link URL matches the current URL, add the active class to it
+	if (link.href === currentURL)
+		link.classList.add('active');
 });
 
 
 function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
+	let cookieValue = null;
+	if (document.cookie && document.cookie !== '') {
 		const cookies = document.cookie.split(';');
 		for (let i = 0; i < cookies.length; i++) {
 			const cookie = cookies[i].trim();
 			// Does this cookie string begin with the name we want?
 			if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+				break;
 			}
 		}
-    }
-    return cookieValue;
+	}
+	return cookieValue;
 }
 
 function makeAdjustable(element) {
 	element.style.height = (element.style.fontSize) / 2;
 	element.style.height = `${element.scrollHeight}px`;
-	
+
 	element.addEventListener("keyup", e => {
 		element.style.height = (element.style.fontSize) / 2;
 		let h = e.target.scrollHeight;
 		element.style.height = `${h}px`;
 	});
 
-	element.addEventListener("mousewheel", (e)=>{
+	element.addEventListener("mousewheel", (e) => {
 		if (!element.matches(':focus')) {
 			e.preventDefault();
 			window.scrollBy(0, e.deltaY);
@@ -45,4 +45,12 @@ function makeAdjustable(element) {
 	$(window).on("load resize", () => {
 		element.style.height = `${element.scrollHeight}px`;
 	});
+}
+
+function hasContent(object) {
+	if (object == undefined || object == null)
+		return false;
+	try {
+		return (Object.keys(object).length > 0)
+	} catch (e) { return false; }
 }
