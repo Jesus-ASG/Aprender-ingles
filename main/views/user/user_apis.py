@@ -2,7 +2,12 @@ from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
-from main.models import Story
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
+from main.models import Story, UserAnswer
 
 
 @login_required(login_url='/login/')
@@ -58,6 +63,11 @@ def saveStory(request, story_id):
 
 
 @login_required(login_url='/login/')
-def filterStories(request):
-    
-    pass
+def deleteAnswers(request, story_id):
+    #if request.method == 'POST':
+    profile = request.user.profile
+    story = Story.objects.get(pk=story_id)
+    story_answers = UserAnswer.objects.filter(user_profile=profile, story=story)
+    story_answers.delete()
+
+    return JsonResponse({'message': 'success', 'action': 'story answers objects deleted'})

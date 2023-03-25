@@ -12,7 +12,7 @@ from django.forms.models import model_to_dict
 from main.models import Story, Score, RepeatPhrase, Dialogue
 from main.forms import ScoreForm, UserAnswer
 
-from main.utils.evaluate_story import rateSkills, evaluateAnswers
+from main.utils.evaluate_story import rateSkills, evaluateAnswers, map_answers
 from main.utils.cb_recommender import ContentBasedRecommender
 from main.utils.level_manager import LevelManager
 
@@ -117,6 +117,7 @@ def storyContent2(request, route, page_number):
             'images_json': images_json,
             'dialogues': dialogues,
             'repeat_phrases': repeat_phrases
+            
             }
         
         return render(request, 'user/story_render_'+str(current_page.page_type)+'.html', context)
@@ -247,24 +248,36 @@ def storyContent(request, route, page_number):
     
     db_answers = user_profile.answers.filter(page=current_page)
 
+    rp_content_type = ContentType.objects.get_for_model(RepeatPhrase)
 
     if request.method == "GET":
         answers = []
 
         if db_answers:
             # Filter exersices
-            rp_content_type = ContentType.objects.get_for_model(RepeatPhrase)
-            
-            rp_answered = db_answers.filter(exercise_type=rp_content_type).values()
-            #rp_answered = rp_answered.values('exercise_id', 'answer', 'exercise__content1', 'submited')
+            rp_answered = db_answers.filter(exercise_type=rp_content_type)
             for i in rp_answered:
-                i['type'] = 'repeat_phrase'
-                answers.append(i)
-
-            print()
-            for i in answers:
-                print(i)
-            print()
+                obj = {
+                    'exercise_id': i.exercise_id,
+                    'answer': i.answer,
+                    'feedback': i.exercise.content1,
+                    'submited': i.submited,
+                    'type': 'repeat_phrase'
+                }
+                answers.append(obj)
+        
+        score = None
+        story_answered = UserAnswer.objects.filter(user_profile=user_profile, story=story).first()
+        if story_answered:
+            if story_answered.evaluated:
+                score = Score.objects.filter(user_profile=user_profile, story=story).order_by('-date').values().first()
+                
+                letter_grade = rateSkills(score['score_percentage'])
+                score['letter_grade'] = letter_grade
+                score = json.dumps(score, indent=4, sort_keys=True, default=str)
+                #print()
+                #print(f'Score\n{score}')
+                #print()
 
         answers = json.dumps(answers)
 
@@ -290,6 +303,7 @@ def storyContent(request, route, page_number):
             'dialogues': dialogues,
             'repeat_phrases': repeat_phrases,
             'answers': answers,
+            'score': score
             }
         
         return render(request, 'user/story_render_'+str(current_page.page_type)+'.html', context)
@@ -303,17 +317,18 @@ def storyContent(request, route, page_number):
             else: # update answers
                 update = True
                 
-                #return JsonResponse({'message': 'Answers updated'})
-                
+
         # Get data from client
+        evaluate = request.POST['evaluate']
         submit = request.POST['submit']
         answers = request.POST['answers']
         
+        evaluate = json.loads(evaluate)
         answers = json.loads(answers)
         submit = json.loads(submit)
         
         # Filter exercises
-        rp_content_type = ContentType.objects.get_for_model(RepeatPhrase)
+        
         rp_answered = db_answers.filter(exercise_type=rp_content_type)
         
         # Save answers
@@ -321,12 +336,16 @@ def storyContent(request, route, page_number):
             match exercise['type']:
                 case 'repeat_phrase':
                     rp = repeat_phrases.get(pk=int(exercise['id']))
+                    
                     if update:
                         answer_update_obj = rp_answered.filter(exercise_id=rp.pk)
-                        answer_update_obj.update(
-                            answer=exercise['answer'],
-                            submited=submit,
-                        )
+                        if exercise['answer'] == '':
+                            answer_update_obj.update(submited=submit)
+                        else:
+                            answer_update_obj.update(
+                                answer=exercise['answer'],
+                                submited=submit,
+                            )
                     else:
                         answer_obj = UserAnswer.objects.create(
                             user_profile=user_profile,
@@ -337,14 +356,30 @@ def storyContent(request, route, page_number):
                             answer=exercise['answer'],
                             submited=submit,
                         )
-        
+        # Get objects updated
+        story_answers = UserAnswer.objects.filter(user_profile=user_profile, story=story)
+        db_answers = story_answers.filter(page=current_page)
+        feedback_answers = map_answers(db_answers)
 
-        """
+        response = {}
+        response['answers'] = feedback_answers
+        
         results = ""
-        if evaluate and not cache_evaluated_story:
+        if evaluate:
             # evaluate means give all califications
-            results = evaluateAnswers(story, cache_story_answers)
-            cache.set(f'evaluated_story_{story.id}', True, expiration_time)
+            #story_answers = user_profile.answers.filter(story=story)
+
+            # Give form to answers
+            answers = []
+            if story_answers:
+                evaluated = story_answers[0].evaluated
+                if evaluated:
+                    return JsonResponse({'message': 'This story is already answered'})
+                
+                # Map all the story answers
+                answers = map_answers(story_answers)
+            
+            results = evaluateAnswers(story, answers)
 
             score_form = ScoreForm(request.POST or None)
             if not score_form.is_valid():
@@ -368,13 +403,9 @@ def storyContent(request, route, page_number):
             score_form_obj.score_percentage = max_percentage
 
             letter_grade = rateSkills(max_percentage)
+            results['letter_grade'] = letter_grade
 
             score_form_obj.save()
-
-            cache_story_answers["score"] = results
-            cache_story_answers["score"]["letter_grade"] = letter_grade
-
-            cache.set(f'story_answers_{story.id}', cache_story_answers, expiration_time)
 
             user_profile.xp += results.get('score', 0)
             # update level
@@ -382,6 +413,9 @@ def storyContent(request, route, page_number):
             level_statistics = lvl_obj.get_level_statistics(user_profile.xp)
             user_profile.level = level_statistics['level']
             user_profile.save()
-        #return JsonResponse(cache_story_answers)
-        """
-        return JsonResponse({'message': 'success'})
+            
+            # Update story answers to evaluated
+            story_answers.update(evaluated=True)
+            response['results'] = results
+        
+        return JsonResponse(response)

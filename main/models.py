@@ -9,7 +9,7 @@ from io import BytesIO
 from django.core.files import File
 from django.core.files.base import ContentFile
 
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 
 from django.contrib.auth.models import User
@@ -313,6 +313,7 @@ class UserAnswer(models.Model):
 
     answer = models.CharField(max_length=255, blank=True, default='')
     submited = models.BooleanField(default=False)
+    evaluated = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         string = f'{self.user_profile.id} - {self.story.id} - {self.page.id}\n'

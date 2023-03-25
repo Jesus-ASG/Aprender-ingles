@@ -129,6 +129,7 @@
     </div>
   </div>
 </div>
+<!-- Statistics -->
 <div class="container main-content">
   <div class="row mt-3 py-3 d-none" id="results">
     <div class="col-12 mb-3 text-center">
@@ -210,6 +211,7 @@
   let db_repeat_phrases = {};
 
   let db_answers = {};
+  let db_score = {};
 
   try {
     db_subtitle.subtitle1 = '{{ current_page.subtitle1 }}';
@@ -229,6 +231,10 @@
 
   try {
     db_answers = JSON.parse('{{ answers |safe |escapejs }}');
+  } catch (e) { }
+
+  try {
+    db_score = JSON.parse('{{ score |safe |escapejs }}');
   } catch (e) { }
 </script>
 

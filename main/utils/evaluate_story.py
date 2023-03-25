@@ -1,9 +1,29 @@
 import re
 from main.models import RepeatPhrase
+from django.contrib.contenttypes.models import ContentType
 
 
 points_per_correct_answer = 100
 tolerance_error = 3
+
+
+def map_answers(db_answers):
+    mapped_list = []
+    if db_answers:
+        # Filter exersices
+        rp_content_type = ContentType.objects.get_for_model(RepeatPhrase)
+        rp_answered = db_answers.filter(exercise_type=rp_content_type)
+        for i in rp_answered:
+            obj = {
+                'exercise_id': i.exercise_id,
+                'answer': i.answer,
+                'feedback': i.exercise.content1,
+                'submited': i.submited,
+                'type': 'repeat_phrase'
+            }
+            mapped_list.append(obj)
+    return mapped_list
+
 
 def cleanStr(string):
     only_alpha_numerics = re.sub(r'[^A-Za-z0-9 ]+', ' ', string)
@@ -93,36 +113,33 @@ def evaluateRepeatPhrase(answer_right, answer_user):
     return results
 
 
-def evaluateAnswers(story, story_answers):
+def evaluateAnswers(story, answers):
     # count all elements
     exercises_number = 0
-    pages = story.pages.all()
-    for p in pages:
-        repeat_phrases = p.repeat_phrases.all()
-        exercises_number  += len(repeat_phrases)
-
+    exercises_number = len(answers)
     results = {
         "score": 0, 
         "writing_percentage": 0, 
         "comprehension_percentage": 0, 
         "speaking_percentage": 0
     }
-    
-    for page in story_answers["pages"]:
-        for exercise in page["exercises"]:
-            match exercise["type"]:
-                case "repeat_phrase":
-                    rp = RepeatPhrase.objects.get(id=int(exercise["id"]))
-                    answ_r = cleanStr(rp.content1)
-                    answ_u = cleanStr(exercise["answer"])
-                    rp_results = evaluateRepeatPhrase(answ_r, answ_u)
 
-                    results["score"] += rp_results["score"]
-                    results["writing_percentage"] += rp_results["writing_percentage"]
-                    results["comprehension_percentage"] += rp_results["comprehension_percentage"]
-                    results["speaking_percentage"] += rp_results["speaking_percentage"]
-                    
     
+    
+
+    for a in answers:
+        match a['type']:
+            case 'repeat_phrase':
+                correct_answer = cleanStr(a['feedback'])
+                user_answer = cleanStr(a['answer'])
+                rp_results = evaluateRepeatPhrase(correct_answer, user_answer)
+
+                results["score"] += rp_results["score"]
+                results["writing_percentage"] += rp_results["writing_percentage"]
+                results["comprehension_percentage"] += rp_results["comprehension_percentage"]
+                results["speaking_percentage"] += rp_results["speaking_percentage"]
+    
+
     wp_t = (results["writing_percentage"] / exercises_number) * 100
     cp_t = (results["comprehension_percentage"] / exercises_number) * 100
     sp_t = (results["speaking_percentage"] / exercises_number) * 100
@@ -135,3 +152,4 @@ def evaluateAnswers(story, story_answers):
     results["speaking_percentage"] = round(sp_t, 2)
     
     return results
+    

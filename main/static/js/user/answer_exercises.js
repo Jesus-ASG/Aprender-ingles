@@ -48,11 +48,67 @@ if (db_answers.length > 0) {
 	// Check if is sumbited
 	let submited = db_answers[0].submited;
 	if (submited) {
+
+		showFeedback2(db_answers);
+		showStatistics(db_score);
+		/*
 		document.getElementById("btn_send_answers").outerHTML = `
 		<a href="` + URL_NEXT_PAGE + `" type="button" class="btn btnr-f-orange fw-bold fs-5">
-        Continue / Continuar
-    </a>
+				Continue / Continuar
+		</a>
 		`;
+		$('button[name="mic_btn"]').attr("disabled", true);
+		
+		for (let answer of db_answers) {
+			switch (answer.type) {
+				case "repeat_phrase":
+					let rp = document.getElementById("repeat_phrase_" + answer.exercise_id);
+					let rp_ans = rp.querySelector("[name = user_answer]");
+					let feedback = rp.querySelector("[name = feedback]");
+					
+					rp_ans.innerHTML = `<strong>Your answer:</strong> "${answer.answer}"`;
+					feedback.innerHTML = `<strong>Right answer:</strong> "${answer.feedback}"`;
+					break;
+				}
+			}
+			
+			*/
+		/*
+		if (LAST_PAGE) {
+			let results_dom = document.getElementById("results");
+			results_dom.classList.remove("d-none");
+			let score_lbl1 = `Results: ${results.score}pts`;
+			let score_lbl2 = `Resultados: ${results.score}pts`;
+
+			let comprehension = results_dom.querySelector("[name = comprehension]");
+			let writing = results_dom.querySelector("[name = writing]");
+			let speaking = results_dom.querySelector("[name = speaking]");
+
+			let comprehension_progress = comprehension.querySelector("[name = progress]");
+			let writing_progress = writing.querySelector("[name = progress]");
+			let speaking_progress = speaking.querySelector("[name = progress]");
+
+			// Titles
+			results_dom.querySelector("[name = letter_grade]").innerText = results.letter_grade;
+			results_dom.querySelector("[name = title_score]").innerHTML = createFlipHTML(score_lbl1, score_lbl2, total_translations);
+			comprehension.querySelector("[name = title]").innerHTML = createFlipHTML("Comprehension", "Comprensión", total_translations);
+			writing.querySelector("[name = title]").innerHTML = createFlipHTML("Writing", "Escritura", total_translations);
+			speaking.querySelector("[name = title]").innerHTML = createFlipHTML("Speaking", "Pronunciación", total_translations);
+
+			// Values
+			comprehension_progress.style.width = `${results.comprehension_percentage}%`;
+			comprehension_progress["aria-valuenow"] = `${results.comprehension_percentage}%`;
+
+			writing_progress.style.width = `${results.writing_percentage}%`;
+			writing_progress["aria-valuenow"] = `${results.writing_percentage}%`;
+
+			speaking_progress.style.width = `${results.speaking_percentage}%`;
+			speaking_progress["aria-valuenow"] = `${results.speaking_percentage}%`;
+
+			setFunctionality(total_translations);
+		}
+		*/
+
 	}
 }
 
@@ -209,8 +265,8 @@ function sendAnswers() {
         Continue / Continuar
     </a>
 	`;
-	///////////////////////////
 	document.getElementById("btn_send_answers").outerHTML = html_button;
+	///////////////////////////
 
 	let formData = new FormData();
 	// Tell if request will going to evaluate
@@ -262,11 +318,6 @@ function showFeedback(response) {
 
 	let results = response.score;
 	if (results) {
-		let flipClasses = {
-			"paper": "mx-1",
-			"front": "px-1",
-			"back": "px-1"
-		};
 		let results_dom = document.getElementById("results");
 		results_dom.classList.remove("d-none");
 		let score_lbl1 = `Results: ${results.score}pts`;
@@ -282,10 +333,10 @@ function showFeedback(response) {
 
 		// Titles
 		results_dom.querySelector("[name = letter_grade]").innerText = results.letter_grade;
-		results_dom.querySelector("[name = title_score]").innerHTML = createFlipHTML(score_lbl1, score_lbl2, total_translations, flipClasses);
-		comprehension.querySelector("[name = title]").innerHTML = createFlipHTML("Comprehension", "Comprensión", total_translations, flipClasses);
-		writing.querySelector("[name = title]").innerHTML = createFlipHTML("Writing", "Escritura", total_translations, flipClasses);
-		speaking.querySelector("[name = title]").innerHTML = createFlipHTML("Speaking", "Pronunciación", total_translations, flipClasses);
+		results_dom.querySelector("[name = title_score]").innerHTML = createFlipHTML(score_lbl1, score_lbl2, total_translations);
+		comprehension.querySelector("[name = title]").innerHTML = createFlipHTML("Comprehension", "Comprensión", total_translations);
+		writing.querySelector("[name = title]").innerHTML = createFlipHTML("Writing", "Escritura", total_translations);
+		speaking.querySelector("[name = title]").innerHTML = createFlipHTML("Speaking", "Pronunciación", total_translations);
 
 		// Values
 		comprehension_progress.style.width = `${results.comprehension_percentage}%`;
@@ -316,6 +367,10 @@ function sendAnswers2() {
 	// Read all repeat phrases exersices
 	let formData = new FormData();
 	let submit = true;
+	let evaluate = false;
+	if (LAST_PAGE)
+		evaluate = true;
+	formData.append("evaluate", evaluate.toString());
 	formData.append("submit", submit.toString());
 	formData.append("answers", JSON.stringify(page_answers.exercises));
 
@@ -330,8 +385,74 @@ function sendAnswers2() {
 		headers: { "X-CSRFToken": csrftoken },
 		success: function (response) {
 			console.log(response);
+			//if (response.message == 'success') 
+			//	window.location.reload();
+			showFeedback2(response.answers);
+			showStatistics(response.results);
+
 		},
 		error: function (response) { }
 	});
+
+}
+
+function showFeedback2(answers) {
+	if (!answers)
+		return;
+	document.getElementById("btn_send_answers").outerHTML = `
+		<a href="` + URL_NEXT_PAGE + `" type="button" class="btn btnr-f-orange fw-bold fs-5">
+				Continue / Continuar
+		</a>
+		`;
+	$('button[name="mic_btn"]').attr("disabled", true);
+
+	for (let answer of answers) {
+		switch (answer.type) {
+			case "repeat_phrase":
+				let rp = document.getElementById("repeat_phrase_" + answer.exercise_id);
+				let rp_ans = rp.querySelector("[name = user_answer]");
+				let feedback = rp.querySelector("[name = feedback]");
+
+				rp_ans.innerHTML = `<strong>Your answer:</strong> "${answer.answer}"`;
+				feedback.innerHTML = `<strong>Right answer:</strong> "${answer.feedback}"`;
+				break;
+		}
+	}
+}
+
+function showStatistics(results) {
+	if (!results)
+		return
+	let results_dom = document.getElementById("results");
+	results_dom.classList.remove("d-none");
+	let score_lbl1 = `Results: ${results.score}pts`;
+	let score_lbl2 = `Resultados: ${results.score}pts`;
+
+	let comprehension = results_dom.querySelector("[name = comprehension]");
+	let writing = results_dom.querySelector("[name = writing]");
+	let speaking = results_dom.querySelector("[name = speaking]");
+
+	let comprehension_progress = comprehension.querySelector("[name = progress]");
+	let writing_progress = writing.querySelector("[name = progress]");
+	let speaking_progress = speaking.querySelector("[name = progress]");
+
+	// Titles
+	results_dom.querySelector("[name = letter_grade]").innerText = results.letter_grade;
+	results_dom.querySelector("[name = title_score]").innerHTML = createFlipHTML(score_lbl1, score_lbl2, total_translations);
+	comprehension.querySelector("[name = title]").innerHTML = createFlipHTML("Comprehension", "Comprensión", total_translations);
+	writing.querySelector("[name = title]").innerHTML = createFlipHTML("Writing", "Escritura", total_translations);
+	speaking.querySelector("[name = title]").innerHTML = createFlipHTML("Speaking", "Pronunciación", total_translations);
+
+	// Values
+	comprehension_progress.style.width = `${results.comprehension_percentage}%`;
+	comprehension_progress["aria-valuenow"] = `${results.comprehension_percentage}%`;
+
+	writing_progress.style.width = `${results.writing_percentage}%`;
+	writing_progress["aria-valuenow"] = `${results.writing_percentage}%`;
+
+	speaking_progress.style.width = `${results.speaking_percentage}%`;
+	speaking_progress["aria-valuenow"] = `${results.speaking_percentage}%`;
+
+	setFunctionality(total_translations);
 
 }

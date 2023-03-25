@@ -126,6 +126,18 @@ function setRelatedTitle(f_counter) {
     related_title.innerHTML = createFlipHTML("Related", "Relacionado", f_counter);
 }
 
-function cleanStorage() {
-    localStorage.removeItem('story_answers_' + db_story_id);
+function deleteAnswers() {
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+        type: "POST",
+        url: URL_DELETE_ANSWERS,
+        headers: { "X-CSRFToken": csrftoken },
+        success: function (response) {
+            if (response.message == 'success') {
+                document.getElementById('start_answer_story').click();
+            }
+        },
+        error: function (response) { }
+    });
+
 }

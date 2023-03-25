@@ -79,8 +79,8 @@
 	<div class="row my-3">
 		<div class="col-12 text-center">
 			{% if total_pages > 0 %}
-			<a onclick="cleanStorage()" href="{% url 'story_content' route=story.route page_number=page_number %}"
-				class="btn btnr-f-orange fs-5 fw-bold">Start / Iniciar</a>
+			<a href="{% url 'story_content' route=story.route page_number=page_number %}" id="start_answer_story"></a>
+			<button onclick="deleteAnswers()" class="btn btnr-f-orange fs-5 fw-bold">Start / Iniciar</button>
 			{% else %}
 			<button class="btn btnr-f-orange fs-5 fw-bold" disabled>Soon / Próximamente</button>
 			{% endif %}
@@ -210,6 +210,7 @@
 <script>
 	const URL_LIKE_STORY = '{% url "like_story" story.id %}';
 	const URL_SAVE_STORY = '{% url "save_story" story.id %}';
+	const URL_DELETE_ANSWERS = '{% url "delete_answers" story.id %}';
 
 	let db_title = {};
 	let db_story_id = '{{ story.id }}';

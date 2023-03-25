@@ -37,6 +37,8 @@ urlpatterns = [
     # Another functions
     path('api/user/like-story/<int:story_id>', user_apis.likeStory, name = 'like_story'),
     path('api/user/save-story/<int:story_id>', user_apis.saveStory, name = 'save_story'),
+    path('api/user/delete-answers/<int:story_id>', user_apis.deleteAnswers, name = 'delete_answers'),
+
     
     path('api/exercise/request_answer/', exercise_apis.request_answer, name="request_exercise_answer"),
 
