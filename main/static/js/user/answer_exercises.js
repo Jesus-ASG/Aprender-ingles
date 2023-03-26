@@ -207,7 +207,7 @@ function showUserAnswers(answers, show_feedback) {
 
 	if (show_feedback) {
 		document.getElementById("btn_send_answers").outerHTML = `
-		<a href="` + URL_NEXT_PAGE + `" type="button" class="btn btnr-f-orange fw-bold fs-5">
+		<a href="` + URL_NEXT_PAGE + `" type="button" class="btn btnr-f-orange fs-5">
 		Continue / Continuar
 		</a>
 		`;

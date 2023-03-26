@@ -58,7 +58,7 @@ function progressAnimation(progress, end_value, fill_to) {
     deg = fill_to / 100
   let progress_value = 0;
   let speed = 20;
-
+  //conic-gradient(#23fbb7 ${progress_value * deg}deg, #bbfff3 ${progress_value * deg}deg)
   let progress_interval = setInterval(() => {
     progress.style.background = `
       conic-gradient(#23fbb7 ${progress_value * deg}deg, #bbfff3 ${progress_value * deg}deg)

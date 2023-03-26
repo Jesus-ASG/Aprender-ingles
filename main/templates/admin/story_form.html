@@ -42,11 +42,13 @@
 {% block content %}
 <div class="container main-content">
 	<div class="row mt-3">
-		<div class="col-2 text-start fs-1">
-			<a href="{% url 'index_admin' %}" class="btn-back-next"><i class='fa fa-arrow-circle-left'></i></a>
+		<div class="col-2 back-btn-container">
+			<a href="{% url 'index_admin' %}">
+				<span><i class="fa-solid fa-arrow-left"></i></span>
+			</a>
 		</div>
-		<div class="col-8">
-			<h2 class="fs-2 fw-bold text-center">{{ action_type }}</h2>
+		<div class="col-8 page-title-container">
+			<h2 class="fs-1">{{ action_type }}</h2>
 		</div>
 	</div>
 

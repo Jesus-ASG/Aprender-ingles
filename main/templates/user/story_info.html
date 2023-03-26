@@ -10,16 +10,17 @@
 
 {% block content %}
 <div class="container main-content">
-
-	<div class="row mt-3">
-		<div class="col-2 text-start fs-1">
-			<a href="{% url 'index' %}" class="btn-back-next"><i class='fa fa-arrow-circle-left'></i></a>
+	<!-- 
+		<div class="row mt-3">
+			<div class="col-2 text-start fs-1">
+				<a href="{% url 'index' %}" class="btn-back-next"><i class='fa fa-arrow-circle-left'></i></a>
+			</div>
 		</div>
-	</div>
+	-->
 
 	<div class="row mt-3">
-		<div class="col-12 text-center">
-			<h1 class="fs-2 fw-bold" id="story_title"></h1>
+		<div class="col-12 page-title-container">
+			<h1 class="fs-1" id="story_title">Profile</h1>
 		</div>
 	</div>
 
@@ -80,7 +81,7 @@
 		<div class="col-12 text-center">
 			{% if total_pages > 0 %}
 			<a href="{% url 'story_content' route=story.route page_number=page_number %}"
-				class="btn btnr-f-orange fs-5 fw-bold m-2" id="start_answer_story">
+				class="btn btnr-f-orange fs-5 fw-bold m-2" id="start_answer_story" style="background-color: #fc7932;">
 				Continue
 			</a>
 			<button onclick="deleteAnswers()" class="btn btnr-f-orange fs-5 fw-bold m-2">Start</button>
@@ -183,14 +184,17 @@
 	</div>
 	<div class="row my-3"></div>
 </div>
+
+
 {% if not recommendations_list|length == 0 %}
-<div class="container main-content py-3">
+<!-- Content based recommender -->
+<div class="container main-content">
 	<div class="row mt-3">
-		<div class="col-12 text-center">
-			<h2 class="fs-2" id="related_title">Related</h2>
+		<div class="col-12 page-title-container">
+			<h1 class="fs-1" id="related_title">Related</h1>
 		</div>
 	</div>
-	<hr>
+
 	<div class="row my-3 w-100">
 		{% for sr in recommendations_list %}
 		<div class="col-6 col-sm-4 col-md-3 p-3">

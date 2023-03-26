@@ -11,7 +11,7 @@ class UserBasedRecommender:
         self.cache_most_rated_stories_key = 'ubr_most_rated_stories'
         self.cache_stories_key = 'ubr_stories'
         self.cache_cosines_key = 'ubr_cosines'
-        self.timeout = None
+        self.timeout = 1800
     
     
     def train(self):
@@ -67,7 +67,7 @@ class UserBasedRecommender:
 
         # Check if recommender is trained
         if most_rated_stories is None or stories_matrix is None or cosines is None:
-            print(f'\n\nThe recommender is not trained yet, training...\n\n')
+            #print(f'\n\nThe recommender is not trained yet, training...\n\n')
             trainning = self.train()
             if trainning:
                 return self.recommend(user_id=user_id, max_recommendations=max_recommendations)

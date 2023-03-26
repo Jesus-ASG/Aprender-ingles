@@ -12,13 +12,12 @@
 <div class="container main-content">
 
 	<div class="row mt-3">
-		<div class="col-12 text-center">
+		<div class="col-12 page-title-container">
 			<h2 class="fs-1">{{ page_title }}</h2>
 		</div>
 	</div>
 
-	<hr>
-	<div class="row my-3 w-100" id="query_results">
+	<div class="row my-3 w-100" id="query_results" style="justify-content: center; margin: 0;">
 		{% for story in stories %}
 		<div class="col-12 col-md-6 p-3" name="story_slot" id="story_{{ story.id }}">
 			<div class="col-12 new-card-container text-center">

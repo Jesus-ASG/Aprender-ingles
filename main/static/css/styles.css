@@ -153,19 +153,6 @@ body {
 	box-shadow: 0 0 0 0.2rem var(--f-orange-shadow);
 }
 
-.btn-back-next {
-	transition: all 0.2s ease-in-out;
-	display: inline-block;
-}
-
-.btn-back-next:hover {
-	transform: scale(1.1);
-}
-
-.btn-back-next i {
-	color: var(--light-red);
-}
-
 .hover-scale {
 	transition: all 0.2s ease-in-out;
 	display: inline-block;
@@ -186,6 +173,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	flex-wrap: wrap;
 }
 
 /* Center with flex */

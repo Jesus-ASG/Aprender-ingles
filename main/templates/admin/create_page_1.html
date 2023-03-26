@@ -65,11 +65,13 @@
 <!-- Template 1 -->
 <div class="container main-content">
   <div class="row mt-3">
-    <div class="col-2 text-start fs-1">
-      <a href="{% url 'view_pages' story.route %}" class="btn-back-next"><i class='fa fa-arrow-circle-left'></i></a>
+    <div class="col-2 back-btn-container">
+      <a href="{% url 'view_pages' story.route %}" class="btn-back-next">
+        <span><i class="fa-solid fa-arrow-left"></i></span>
+      </a>
     </div>
-    <div class="col-8 d-flex">
-      <h2 class="fs-2 fw-bold m-auto">Template 1</h2>
+    <div class="col-8 page-title-container">
+      <h2 class="fs-2">Template 1</h2>
     </div>
   </div>
   <div class="row mt-3">

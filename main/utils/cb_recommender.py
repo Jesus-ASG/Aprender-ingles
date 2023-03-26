@@ -12,6 +12,7 @@ from main.models import Story
 class ContentBasedRecommender:
     def __init__(self) -> None:
         self.cache_key = 'cb_recommender_similarities'
+        self.timeout = None
     
 
     def train(self, max_data=5000):
@@ -48,14 +49,14 @@ class ContentBasedRecommender:
             similarities[stories['id'].iloc[i]] = [(stories['id'][x], cosine_similarities[i][x]) for x in similar_indices][1:]
         
         # Set the similarities into cache
-        cache.set(self.cache_key, similarities, timeout=None)
+        cache.set(self.cache_key, similarities, timeout=self.timeout)
         return True
 
     def recommend(self, story_id, max_recommendations=10):
         # Get the similarities from cache
         matrix_similarities = cache.get(self.cache_key)
         if not matrix_similarities:
-            print(f'\n\nThe recommender is not trained yet, training...\n\n')
+            #print(f'\n\nThe recommender is not trained yet, training...\n\n')
             trainning = self.train()
             if trainning:
                 return self.recommend(story_id=story_id, max_recommendations=max_recommendations)

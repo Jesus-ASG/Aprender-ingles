@@ -76,6 +76,15 @@ class HistoriaForm(forms.ModelForm):
 		label = 'Categorías',
 	)
 
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+
+		# Sort tags by name
+		self.fields['tags'].widget.choices = sorted(
+			self.fields['tags'].widget.choices,
+			key=lambda choice: choice[1].lower()
+    )
+
 
 class ScoreForm(forms.ModelForm):
 	class Meta:

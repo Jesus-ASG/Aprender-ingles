@@ -94,3 +94,12 @@
 .play-audio-container .icon-active path {
 	fill: #fff !important;
 }
+
+.icon-volume-range {
+	color: #77b9fc;
+}
+
+.volume-input {
+	opacity: 0;
+	transition: all 0.3s ease-in-out;
+}

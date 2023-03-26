@@ -4,14 +4,16 @@
 <!-- Navbar-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-custom-properties">
 	<div class="container-fluid">
+		<!-- 
 		<a href="{% url 'index' %}">
-			<img src="{% static 'img/logo.png' %}" width="50px" alt="logo.png" class="logo-nav-bar">
+			<img src="{% static 'img/sq_logo.png' %}" width="30px" alt="sq_logo.png" class="logo-nav-bar">
 		</a>
-
+	-->
+		<a href="#"></a>
 		<ul class="navbar-nav flex-row d-md-flex">
 			<li class="nav-item">
 				<a class="nav-link" href="{% url 'index' %}">
-					<span><i class="fas fa-home fa-lg"></i></span>
+					<img src="{% static 'img/sq_logos/sq_white.png' %}" width="30px" alt="sq_logo.png" class="logo-nav-bar">
 				</a>
 			</li>
 		</ul>
@@ -22,11 +24,13 @@
 		<div class="collapse navbar-collapse" id="navbarCollapse">
 			<ul class="navbar-nav mb-2 me-auto mb-lg-0 fs-5 text-center">
 				<li class="nav-item">
-					<a class="nav-link fw-bold" aria-current="page" href="{% url 'index' %}">Story Quest</a>
+					<a class="nav-link" aria-current="page" href="{% url 'index' %}">
+						Story Quest
+					</a>
 				</li>
 				{% if request.user.is_authenticated %}
 				<li class="nav-item">
-					<a class="nav-link fw-bold" aria-current="page" href="{% url 'stories' %}">Gallery</a>
+					<a class="nav-link" aria-current="page" href="{% url 'stories' %}">Gallery</a>
 				</li>
 				{% endif %}
 			</ul>
