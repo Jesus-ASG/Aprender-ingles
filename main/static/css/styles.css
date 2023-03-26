@@ -4,7 +4,9 @@
 	--orange: #f2864b;
 	--light-green: #49eb4b;
 	--light-green-active: #3dd33f;
-	--light-blue: #77b9fc;
+
+	--light-blue: #cbe5ff;
+	--light-blue-active: #77b9fc;
 	--light-red: #bd2b24;
 
 	--f-orange: #ff5f13;
@@ -17,10 +19,19 @@
 	--turquoise: #bbfff3;
 	--turquoise-active: #23fbb7;
 
+	--yellow: #fdfda4;
+	--yellow-active: #fafa14;
+
 	--bg-primary: var(--f-orange);
 	--bg-primary-active: var(--f-orange-active);
 	--c-primary: #fff;
 	--c-disabled: #acacac;
+
+	--test-color: #fcffcb;
+	--test-color-active: #e1e16b;
+
+	--bg-xp-light: var(--light-blue);
+	--bg-xp-strong: var(--light-blue-active);
 }
 
 ::selection {

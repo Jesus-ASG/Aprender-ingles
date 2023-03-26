@@ -30,7 +30,6 @@
 	<link rel="stylesheet" href="{% static 'css/flip_text.css' %}" type="text/css">
 	<link rel="stylesheet" href="{% static 'css/utils/nabvar.css' %}" type="text/css">
 	<link rel="stylesheet" href="{% static 'css/utils/arrows.css' %}">
-	<link rel="stylesheet" href="{% static 'css/not_found.css' %}" type="text/css">
 
 	<!-- Page styles-->
 	{% block page-styles %} {% endblock %}
@@ -85,8 +84,8 @@
 		let db_progress_xp_percentage = parseInt(db_progress_xp * 100);
 
 		$(".navbar-progress-level").css({
-			'background': `conic-gradient(#23fbb7 ${db_progress_xp_percentage * 3.2}deg,
-		 #bbfff3 ${db_progress_xp_percentage * 3.2}deg)`
+			'background': `conic-gradient( var(--bg-xp-strong) ${db_progress_xp_percentage * 3.2}deg,
+			var(--bg-xp-light) ${db_progress_xp_percentage * 3.2}deg)`
 		});
 
 

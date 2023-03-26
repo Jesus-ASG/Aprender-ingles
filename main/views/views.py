@@ -2,6 +2,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Subquery, OuterRef, Max
+from django.http import HttpResponseNotFound
 
 from main.models import Story, Tag, UserProfile, Score
 from main.forms import SelectDefaultImageForm
@@ -11,9 +12,15 @@ from main.utils.level_manager import LevelManager
 from main.utils.evaluate_story import rateSkills
 from main.utils.paginate_and_filter import paginate_stories
 
-stories_per_page = 8
+
+def not_found_page(request, exception):
+    return render(request, 'utils/404_page.html', {})
+
+def test_not_found(request):
+    return render(request, 'utils/404_page.html', {})
 
 def index(request):
+    
     if not request.user.is_authenticated:
         return render(request, 'no-logged/home.html')
     if request.method == 'GET':
@@ -113,10 +120,3 @@ def storiesList(request):
         
         return render(request, 'user/stories_gallery.html', context)
 
-
-def remove_filter(l, item):
-    if item in l:
-        l.remove(item)
-    item = item[1:] if item.startswith('-') else f'-'+item
-    if item in l:
-        l.remove(item)

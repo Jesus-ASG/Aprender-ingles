@@ -61,7 +61,7 @@ function progressAnimation(progress, end_value, fill_to) {
   //conic-gradient(#23fbb7 ${progress_value * deg}deg, #bbfff3 ${progress_value * deg}deg)
   let progress_interval = setInterval(() => {
     progress.style.background = `
-      conic-gradient(#23fbb7 ${progress_value * deg}deg, #bbfff3 ${progress_value * deg}deg)
+      conic-gradient( var(--bg-xp-strong) ${progress_value * deg}deg, var(--bg-xp-light) ${progress_value * deg}deg)
       `;
     if (progress_value == end_value)
       clearInterval(progress_interval);
