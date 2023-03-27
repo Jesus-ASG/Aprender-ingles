@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 
 
 points_per_correct_answer = 100
-tolerance_error = 3
+tolerance_error = 4
 
 
 def map_answers(db_answers):
@@ -57,8 +57,8 @@ def rateSkills(max_percentage):
     return grades[iterations]
 
 
-def evaluateRepeatPhrase(answer_right, answer_user):
-    if answer_user == "":
+def evaluateRepeatPhrase(user_answer, correct_answer):
+    if user_answer == "":
         results = {
             "score": 0, 
             "writing_percentage": 1, 
@@ -67,47 +67,44 @@ def evaluateRepeatPhrase(answer_right, answer_user):
         }
         return results
 
-    answer_right = answer_right.split(' ')
-    answer_user = answer_user.split(' ')
+    user_answer = user_answer.split(' ')
+    correct_answer = correct_answer.split(' ')
 
-    index = 0
-    total_words = len(answer_right)
-    total_user_words = len(answer_user)
+    total_user_words = len(user_answer)
+    total_correct_words = len(correct_answer)
+    
     correct_words = 0
-    incorrect_words = 0
+    penalty_words = total_user_words - total_correct_words if total_user_words > total_correct_words else 0
 
-    len_diff = abs(total_words - total_user_words)
-
-    for i in range(total_words):
-        for j in range(index, total_user_words):
-            if answer_right[i] == answer_user[j]:
+    index_user = 0
+    index_correct = 0
+    
+    for i in range(index_user, total_user_words):
+        for j in range(index_correct, total_correct_words):
+            if user_answer[i] == correct_answer[j]:
                 correct_words = correct_words + 1
-                index = j + 1
+                index_correct = j + 1
+                index_user += 1
                 break
 
-    
-    incorrect_words = incorrect_words + len_diff
-
     score = 0
-    writing_percentage = 1
-    comprehension_percentage = 0
+    
     speaking_percentage = 0
-    
-    quit_points = (incorrect_words / (total_words * tolerance_error ))
+    quit_points = 0
+    if tolerance_error != 0:
+        quit_points = penalty_words / (total_correct_words * tolerance_error )
 
-    comprehension_percentage = (correct_words / total_words) - quit_points
+    speaking_percentage = (correct_words / total_correct_words) - abs(quit_points)
+    speaking_percentage = 0 if speaking_percentage < 0 else speaking_percentage
+    speaking_percentage = round(speaking_percentage, 2)
 
-    speaking_percentage = (correct_words / total_words) - quit_points
     score = points_per_correct_answer - quit_points * points_per_correct_answer
-    
-    comprehension_percentage = 0 if (comprehension_percentage < 0) else comprehension_percentage
-    speaking_percentage = 0 if (speaking_percentage < 0) else speaking_percentage
     score = 0 if (score < 0) else score
 
     results = {
-        "score": score, 
-        "writing_percentage": writing_percentage, 
-        "comprehension_percentage": comprehension_percentage, 
+        "score": round(score, 2), 
+        "writing_percentage": 1, 
+        "comprehension_percentage": speaking_percentage, 
         "speaking_percentage": speaking_percentage
     }
     return results
@@ -116,7 +113,10 @@ def evaluateRepeatPhrase(answer_right, answer_user):
 def evaluateAnswers(story, answers):
     # count all elements
     exercises_number = 0
-    exercises_number = len(answers)
+    pages = story.pages.all()
+    for p in pages:
+        exercises_number  += p.repeat_phrases.all().count()
+    
     results = {
         "score": 0, 
         "writing_percentage": 0, 
@@ -129,7 +129,7 @@ def evaluateAnswers(story, answers):
             case 'repeat_phrase':
                 correct_answer = cleanStr(a['feedback'])
                 user_answer = cleanStr(a['answer'])
-                rp_results = evaluateRepeatPhrase(correct_answer, user_answer)
+                rp_results = evaluateRepeatPhrase(user_answer, correct_answer)
 
                 results["score"] += rp_results["score"]
                 results["writing_percentage"] += rp_results["writing_percentage"]
