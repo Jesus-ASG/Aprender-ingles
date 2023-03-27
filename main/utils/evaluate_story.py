@@ -147,6 +147,10 @@ def evaluateAnswers(story, answers):
     results["writing_percentage"] = round(wp_t, 2)
     results["comprehension_percentage"] = round(cp_t, 2)
     results["speaking_percentage"] = round(sp_t, 2)
+
+    score_percentage = results["writing_percentage"] + results['comprehension_percentage'] + results['speaking_percentage']
+    score_percentage = score_percentage / 3
+    results['score_percentage'] = round(score_percentage, 2)
     
     return results
     

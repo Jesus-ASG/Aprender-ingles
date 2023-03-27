@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="{% static 'css/user/story_render.css' %}">
 <link rel="stylesheet" href="{% static 'css/user/story_info.css' %}">
 <link rel="stylesheet" href="{% static 'css/utils/arrows.css' %}">
+<link rel="stylesheet" href="{% static 'css/user/profile.css' %}">
 <style>
   .img-t-1 {
     width: 33%;
@@ -134,58 +135,8 @@
   </div>
 </div>
 <!-- Statistics -->
-<div class="container main-content">
-  <div class="row mt-3 py-3 d-none" id="results">
-    <div class="col-12 mb-3 text-center">
-      <h3 class="fs-2" name="title_score"></h3>
-    </div>
-    <div class="col-12 col-md-6 text-center mb-3">
-      <div class="d-inline-block">
-        <div class="container-letter p-1 box-shadow">
-          <div class="letter-grade">
-            <h3 name="letter_grade"></h3>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-6">
-
-      <div class="row my-3" name="comprehension">
-        <div class="col-12">
-          <h3 class="fs-6 text-center" name="title"></h3>
-        </div>
-        <div class="col-12">
-          <div class="progress w-75 progress-styles">
-            <div class="progress-bar" role="progressbar" name="progress" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row my-3" name="speaking">
-        <div class="col-12">
-          <h3 class="fs-6 text-center" name="title"></h3>
-        </div>
-        <div class="col-12">
-          <div class="progress w-75 progress-styles">
-            <div class="progress-bar" role="progressbar" name="progress" aria-valuemin="0" aria-valuemax="100">
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row my-3" name="writing">
-        <div class="col-12">
-          <h3 class="fs-6 text-center" name="title"></h3>
-        </div>
-        <div class="col-12">
-          <div class="progress w-75 progress-styles">
-            <div class="progress-bar" role="progressbar" name="progress" aria-valuemin="0" aria-valuemax="100">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="container main-content d-none" id="results">
+  {% include 'utils/story_statistics.html' %}
 </div>
 {% if next_page is None %}
 <input id="next_page_input" type="text" value="{% url 'story_info' route=story.route %}" hidden>

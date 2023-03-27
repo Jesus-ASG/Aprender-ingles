@@ -193,7 +193,7 @@ function saveAnswers(submit, show_feedback) {
 		contentType: false,
 		headers: { "X-CSRFToken": csrftoken },
 		success: function (response) {
-			console.log(response);
+			//console.log(response);
 			showUserAnswers(response.answers, show_feedback);
 			showStatistics(response.results);
 		},
@@ -235,33 +235,39 @@ function showStatistics(results) {
 		return;
 	let results_dom = document.getElementById("results");
 	results_dom.classList.remove("d-none");
-	let score_lbl1 = `Results: ${results.score}pts`;
-	let score_lbl2 = `Resultados: ${results.score}pts`;
+	let score_lbl1 = `Score`;
+	let score_lbl2 = `Puntaje`;
 
-	let comprehension = results_dom.querySelector("[name = comprehension]");
 	let writing = results_dom.querySelector("[name = writing]");
+	let comprehension = results_dom.querySelector("[name = comprehension]");
 	let speaking = results_dom.querySelector("[name = speaking]");
 
-	let comprehension_progress = comprehension.querySelector("[name = progress]");
-	let writing_progress = writing.querySelector("[name = progress]");
-	let speaking_progress = speaking.querySelector("[name = progress]");
+	let writing_progress = writing.querySelector(".linear-progress-value");
+	let comprehension_progress = comprehension.querySelector(".linear-progress-value");
+	let speaking_progress = speaking.querySelector(".linear-progress-value");
 
 	// Titles
-	results_dom.querySelector("[name = letter_grade]").innerText = results.letter_grade;
+	results_dom.querySelector(".statistics-container .label h3").innerText = results.letter_grade;
+
 	results_dom.querySelector("[name = title_score]").innerHTML = createFlipHTML(score_lbl1, score_lbl2, total_translations);
-	comprehension.querySelector("[name = title]").innerHTML = createFlipHTML("Comprehension", "Comprensión", total_translations);
 	writing.querySelector("[name = title]").innerHTML = createFlipHTML("Writing", "Escritura", total_translations);
+	comprehension.querySelector("[name = title]").innerHTML = createFlipHTML("Comprehension", "Comprensión", total_translations);
 	speaking.querySelector("[name = title]").innerHTML = createFlipHTML("Speaking", "Pronunciación", total_translations);
 
 	// Values
-	comprehension_progress.style.width = `${results.comprehension_percentage}%`;
-	comprehension_progress["aria-valuenow"] = `${results.comprehension_percentage}%`;
-
 	writing_progress.style.width = `${results.writing_percentage}%`;
-	writing_progress["aria-valuenow"] = `${results.writing_percentage}%`;
-
+	comprehension_progress.style.width = `${results.comprehension_percentage}%`;
 	speaking_progress.style.width = `${results.speaking_percentage}%`;
-	speaking_progress["aria-valuenow"] = `${results.speaking_percentage}%`;
 
+	// Info about percentage
+	writing_progress.parentElement.title = `${results.writing_percentage}%`;
+	comprehension_progress.parentElement.title = `${results.comprehension_percentage}%`;
+	speaking_progress.parentElement.title = `${results.speaking_percentage}%`;
+
+	results_dom.querySelector('.statistic-title').innerText = `${results.score_percentage} / 100`;
+
+	let score_bar_dom = document.querySelector('#score_circle_progress .basic-progress-level');
+	let end_value = parseInt(results.score_percentage) || 0;
+	progressAnimation(score_bar_dom, end_value);
 	setFunctionality(total_translations);
 }

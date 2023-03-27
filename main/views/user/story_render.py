@@ -37,7 +37,7 @@ def storyInfo(request, route):
         story_saved = True
     story_saved = json.dumps(story_saved)
     
-    scores = Score.objects.filter(user_profile=user_profile, story=story).order_by('-score').values()
+    scores = Score.objects.filter(user_profile=user_profile, story=story).order_by('-score_percentage', 'date').values()
     high_score = None
     
     if scores:
@@ -218,13 +218,9 @@ def storyContent(request, route, page_number):
             score_form_obj.comprehension_percentage = results["comprehension_percentage"]
             score_form_obj.speaking_percentage = results["speaking_percentage"]
             
-            max_percentage = float(results.get('score')) / float(results.get('score_limit'))
-            max_percentage = max_percentage * 100
-            max_percentage = round(max_percentage, 2)
+            score_form_obj.score_percentage = results['score_percentage']
 
-            score_form_obj.score_percentage = max_percentage
-
-            letter_grade = rateSkills(max_percentage)
+            letter_grade = rateSkills(results['score_percentage'])
             results['letter_grade'] = letter_grade
 
             score_form_obj.save()

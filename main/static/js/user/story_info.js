@@ -87,8 +87,8 @@ function saveFunction(e) {
 
 function setStatisticsLabels(f_counter) {
     let results_dom = document.getElementById("results");
-    let score_lbl1 = `High score: ${db_high_score}pts`;
-    let score_lbl2 = `Puntuación más alta: ${db_high_score}pts`;
+    let score_lbl1 = `Best score`;
+    let score_lbl2 = `Mejor puntaje`;
 
     let comprehension = results_dom.querySelector("[name = comprehension]");
     let writing = results_dom.querySelector("[name = writing]");

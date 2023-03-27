@@ -39,7 +39,10 @@
 	width: 200px;
 	height: 200px;
 	margin: 0 1rem 0 1rem;
-	background: conic-gradient(#23fbb7 60deg, #bbfff3 60deg);
+	background: conic-gradient(
+		var(--bg-xp-strong) 60deg,
+		var(--bg-xp-light) 60deg
+	);
 	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 .basic-progress-level .label {
