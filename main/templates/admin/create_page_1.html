@@ -5,6 +5,27 @@
 
 {% block page-styles %}
 <style>
+  .exercise-sep {
+    box-shadow: rgba(245, 159, 61, 0.5) 0px 10px 10px -8px;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .cancel-save-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cancel-save-container * {
+    display: inline-block;
+    min-width: 100px;
+    max-width: 200px;
+    margin: 1rem;
+  }
+
   .img-t-1 {
     width: 33%;
     height: auto;
@@ -77,7 +98,7 @@
   <div class="row mt-3">
     <div class="col-12 text-center">
       <label class="form-label fs-5" for="sub1">Agrega un subtítulo en inglés</label>
-      <input class="fs-1 text-center form-control" id="sub1" placeholder="Subtítulo en inglés" autocomplete="false"
+      <input class="fs-2 text-center form-control" id="sub1" placeholder="Subtítulo en inglés" autocomplete="false"
         value="{{ page.subtitle1 | default:'' }}"></input>
     </div>
   </div>
@@ -85,7 +106,7 @@
   <div class="row mt-3">
     <div class="col-12 text-center">
       <label class="form-label fs-5" for="sub2">Agrega un subtítulo en español</label>
-      <input class="fs-1 text-center form-control" id="sub2" placeholder="Subtítulo en español" autocomplete="false"
+      <input class="fs-2 text-center form-control" id="sub2" placeholder="Subtítulo en español" autocomplete="false"
         value="{{ page.subtitle2 | default:'' }}"></input>
     </div>
   </div>
@@ -126,53 +147,67 @@
               imagen</button>
           </div>
         </div>
-
       </div>
-      <div class="fs-5">
+
+      <div class="col-12">
+        <h2 class="fs-3 text-center my-3">Contenido</h2>
+      </div>
+      <div class="col-12">
         <div id="content_area"></div>
       </div>
-      <div class="row mb-3">
-        <div class="col-12 text-center">
-          <button onclick="addDialogue()" class="btn btn-primary shadow-none w-50 fs-5 
-            fw-bold btn-add-dialog" id="add_dialog" type="button"> Agregar diálogo </button>
+
+      <div class="row">
+        <div class="col-12 col-md-8">
+          <select class="form-select" id="content_selected">
+            <option selected>- Selecciona un contenido -</option>
+            <option value="0">Texto</option>
+            <option value="1">Diálogo</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-4 mb-3">
+          <button class="btn btn-primary shadow-none fw-bold w-100" type="button" onclick="addContent()"> Agregar
+          </button>
         </div>
       </div>
+
     </div>
   </div>
-  <hr>
-  <div class="row mb-3">
-    <div class="col-12">
-      <h2 class="fs-2 text-center my-3">Ejercicios</h2>
+</div>
+
+<!-- Exercises area -->
+<div class="container main-content">
+  <div class="row mt-3">
+    <div class="col-12 page-title-container">
+      <h1 class="fs-3">Ejercicios</h1>
     </div>
+  </div>
+
+  <div class="row mb-3">
     <div class="col-12">
       <span id="exercises_area"></span>
     </div>
 
-
     <div class="col-12 col-md-8">
-      <select class="form-select fs-5" id="exercise_selected">
+      <select class="form-select" id="exercise_selected">
         <option selected>- Selecciona un ejercicio -</option>
         <option value="0">Repetir oración</option>
         <option value="1">Próximamente</option>
       </select>
     </div>
-    <div class="col-12 col-md-4">
-      <button class="btn btn-primary shadow-none fs-5 fw-bold w-100" type="button" onclick="addExercise()"> Agregar
-      </button>
-    </div>
 
-    <br><br><br>
+    <div class="col-12 col-md-4 mb-3">
+      <button class="btn btn-primary shadow-none fw-bold w-100" type="button" onclick="addExercise()">Agregar</button>
+    </div>
   </div>
-  <hr>
-  <div class="row mb-3">
-    <div class="col-12 col-md-6 text-center">
-      <a href="{% url 'view_pages' story.route %}" class="btn btn-danger shadow-none fs-5 fw-bold w-100" type="button">
-        Cancelar</a>
-    </div>
-    <div class="col-12 col-md-6 text-center">
-      <button class="btn btn-primary shadow-none fs-5 fw-bold w-100" onclick="savePage()"> Guardar página
-      </button>
-    </div>
+  <!-- End of exercises area -->
+</div>
+<div class="container">
+  <div class="cancel-save-container">
+
+    <a href="{% url 'view_pages' story.route %}" class="btn btn-danger shadow-none fw-bold w-100" type="button">
+      Cancelar</a>
+    <button class="btn btn-primary shadow-none fw-bold w-100" onclick="savePage()">Guardar</button>
+
   </div>
 
 </div>
@@ -190,11 +225,15 @@
 
   let default_cover = '{{ story.cover.url }}';
   let db_images = {};
+  let db_texts = {};
   let db_dialogues = {};
   let db_repeat_phrases = {};
 
   try {
     db_images = JSON.parse('{{ images_json |safe }}');
+  } catch (e) { }
+  try {
+    db_texts = JSON.parse('{{ texts |safe |escapejs }}');
   } catch (e) { }
   try {
     db_dialogues = JSON.parse('{{ dialogues |safe |escapejs }}');
@@ -234,6 +273,9 @@
         case "image":
           max_elem++;
           break;
+        case "text":
+          loadText(element);
+          break;
         case "dialogue":
           loadDialogue(element);
           break;
@@ -242,6 +284,15 @@
           break;
       }
     }
+  }
+
+  function loadText(text) {
+    addText();
+    let html_text = document.getElementById("element_" + (max_elem - 1));
+
+    html_text.querySelector('[name = id]').value = text.id;
+    html_text.querySelector('[name = language1]').value = text.language1;
+    html_text.querySelector('[name = language2]').value = text.language2;
   }
 
   function loadDialogue(dialogue) {

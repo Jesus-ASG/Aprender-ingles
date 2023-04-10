@@ -1,14 +1,18 @@
 let objects_deleted = {
+    "texts": [],
     "dialogues": [],
     "repeatPhrases": []
 };
 
 function deleteElement(id) {
-    let element_to_delete = document.getElementById("element_"+id);
-    let id_database = element_to_delete.querySelectorAll('[name = id]')[0].value
-    if (id_database){
+    let element_to_delete = document.getElementById("element_" + id);
+    let id_database = element_to_delete.querySelector('[name = id]').value
+    if (id_database) {
         let name = element_to_delete.getAttribute("name");
-        switch(name){
+        switch (name) {
+            case "texts":
+                objects_deleted.texts.push(id_database);
+                break;
             case "dialogues":
                 objects_deleted.dialogues.push(id_database);
                 break;
@@ -18,11 +22,11 @@ function deleteElement(id) {
             default:
         }
     }
-    
+
     element_to_delete.remove();
-    
+
     let html =
-      `
+        `
     <div class="alert alert-success alert-dismissible fade show mb-2 mt-2" role="alert">
         <div style="text-align: center;">
             <strong>Elemento eliminado correctamente</strong>
@@ -31,8 +35,6 @@ function deleteElement(id) {
     </div>
     `;
     document.getElementById("alert_removed_success").innerHTML = html;
-
-    console.log(objects_deleted);
 }
 
 function restoreImage() {
@@ -42,21 +44,34 @@ function restoreImage() {
 
 function changeImg(input) {
     if (input.value == "")
-      	restoreImage();
+        restoreImage();
     if (input.files && input.files[0]) {
-		let reader = new FileReader();
-		reader.onload = function (e) {
-			$("#img_showed").attr("src", e.target.result);
-		};
-		reader.readAsDataURL(input.files[0]);
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            $("#img_showed").attr("src", e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
     }
 }
 
 
 function savePage() {
     let formData = new FormData();
-	// Contents
-	// Dialogues
+    // Contents
+    // Texts
+    let texts = document.getElementsByName('texts');
+    let jsonTexts = [];
+    for (let text of texts) {
+        let jsonText = {
+            "id": text.querySelector('[name = id]').value,
+            "element_number": text.querySelector('[name = element_number]').value,
+            "language1": text.querySelector('[name = language1]').value,
+            "language2": text.querySelector('[name = language2]').value
+        }
+        jsonTexts.push(jsonText);
+    }
+
+    // Dialogues
     let dialogues = document.getElementsByName('dialogues');
     let jsonDialogues = [];
     for (let i = 0; i < dialogues.length; i++) {
@@ -71,7 +86,7 @@ function savePage() {
         jsonDialogues.push(d);
     }
 
-	// Images
+    // Images
     let images = document.getElementsByName("images");
     let imageData = [];
     for (let i = 0; i < images.length; i++) {
@@ -84,11 +99,11 @@ function savePage() {
     }
 
 
-	// Exercises
-	// Repeat phrases
-	let repeatPhrases = document.getElementsByName('repeatPhrases');
-	let jsonRepeatPhrases = [];
-	for (let i = 0; i < repeatPhrases.length; i++) {
+    // Exercises
+    // Repeat phrases
+    let repeatPhrases = document.getElementsByName('repeatPhrases');
+    let jsonRepeatPhrases = [];
+    for (let i = 0; i < repeatPhrases.length; i++) {
         let rp = {
             "id": repeatPhrases[i].querySelectorAll('[name = id]')[0].value,
             "element_number": repeatPhrases[i].querySelectorAll('[name = element_number]')[0].value,
@@ -100,13 +115,14 @@ function savePage() {
     }
 
 
-	// Build Json to send
+    // Build Json to send
     let jsonData = {
         "page_id": page_id,
         "sub1": sub1 = document.getElementById('sub1').value,
         "sub2": sub2 = document.getElementById('sub2').value,
+        "texts": jsonTexts,
         "dialogues": jsonDialogues,
-		"repeatPhrases": jsonRepeatPhrases,
+        "repeatPhrases": jsonRepeatPhrases,
         "imageData": imageData,
         "deleted": objects_deleted
     }
@@ -117,7 +133,7 @@ function savePage() {
       console.log(key, value);
     });
     */
-    
+
     const csrftoken = getCookie('csrftoken');
     $.ajax({
         type: "POST",
@@ -127,7 +143,7 @@ function savePage() {
         contentType: false,  // Tell jQuery not to set the content type
         headers: { "X-CSRFToken": csrftoken },
         success: function (response) {
-            switch (response.message){
+            switch (response.message) {
                 case "success":
                     window.location.href = URL_VIEW_PAGES;
                     break;
@@ -137,5 +153,5 @@ function savePage() {
             //console.log(response);
         }
     });
-    
+
 }

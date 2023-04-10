@@ -162,6 +162,7 @@
 
   let db_subtitle = {};
   let db_images = {};
+  let db_texts = {};
   let db_dialogues = {};
   let db_repeat_phrases = {};
 
@@ -176,6 +177,9 @@
   } catch (e) { }
   try {
     db_images = JSON.parse('{{ images_json |safe }}');
+  } catch (e) { }
+  try {
+    db_texts = JSON.parse('{{ texts |safe |escapejs }}');
   } catch (e) { }
   try {
     db_dialogues = JSON.parse('{{ dialogues |safe |escapejs }}');
@@ -206,6 +210,9 @@
   for (let element of collections_sorted) {
     switch (element.type) {
       case "image":
+        break;
+      case "text":
+        renderText(element, total_translations);
         break;
       case "dialogue":
         renderDialogue(element, total_translations);

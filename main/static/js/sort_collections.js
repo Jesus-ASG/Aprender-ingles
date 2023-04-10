@@ -8,6 +8,16 @@ if (db_images.length > 0)
 		image.is_exercise = false;
 		collections_sorted.push(image);
 	}
+
+// Texts
+if (db_texts.length > 0) {
+	for (let text of db_texts) {
+		text.type = "text";
+		text.is_exercise = false;
+		collections_sorted.push(text);
+	}
+}
+
 // Dialogues
 if (db_dialogues.length > 0)
 	for (let dialogue of db_dialogues) {

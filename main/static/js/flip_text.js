@@ -22,6 +22,15 @@ function createFlipHTML(text1, text2, counter, flipClasses) {
 
 		let max = words1.length > words2.length ? words1.length : words2.length;
 		for (let j = 0; j < max; j++) {
+			let has_content = true;
+			try {
+				if (words1[j] == '' || words1[j] == '')
+					has_content = false;
+			} catch (e) { }
+
+			if (!has_content)
+				continue;
+
 			html += `<div class="paper paper_` + counter.end + ` ` + flipClasses.paper + `">`;
 
 			if ((j < words1.length) && (j < words2.length)) {

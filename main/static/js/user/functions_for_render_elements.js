@@ -1,4 +1,23 @@
 // Contents
+
+// Text
+function renderText(text, total_translations) {
+	let text1 = text.language1.replace(/\n/g, '<span></span>|');
+	let text2 = text.language2.replace(/\n/g, '<span></span>|');
+	let flipClasses = {
+		"paper": "fs-5 mx-1",
+		"front": "px-1",
+		"back": "px-1"
+	};
+
+	document.getElementById("content_area").outerHTML =
+		createFlipHTML(text1, text2, total_translations, flipClasses) +
+		`
+	<div id="content_area"></div>
+	`;
+}
+
+// Dialogue
 function renderDialogue(dialogue, total_translations) {
 	let text1 = dialogue.content1.replace(/\n/g, '<span></span>|');
 	let text2 = dialogue.content2.replace(/\n/g, '<span></span>|');

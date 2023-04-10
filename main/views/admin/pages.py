@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 from django.forms.models import model_to_dict
 
-from main.models import Story, Page, Image, Dialogue, RepeatPhrase
+from main.models import Story, Page, Image, Text, Dialogue, RepeatPhrase
 from main.forms import DialogueForm, ImageForm, PageForm, RepeatPhraseForm
 
 
@@ -88,12 +88,34 @@ def create(request, route, page_type):
             images_to_submit.append(imgObj)
             imgForm = ImageForm(request.POST or None, request.FILES or None)
         
+        # save texts
+        texts_to_submit = []
+        texts = data["texts"]
+        for t in texts:
+            if t['language1'] == '' or t['language1'] == '':
+                return JsonResponse({'message': 'texts contents cannot have empty values'})
+            
+            textObj = Text()
+            textObj.page = pgObj
+
+            if t['id'] != '':
+                textObj = Text.objects.get(id=int(t['id']))
+            
+            textObj.language1 = t['language1']
+            textObj.language2 = t['language2']
+            textObj.element_number = t['element_number']
+            
+            texts_to_submit.append(textObj)
+            #print(textObj)
+        
+        #print('\n')
+
         # saving dialogs
         dialogues_to_submit = []
         dialogues = data["dialogues"]
         for d in dialogues:
             if d["name"] == "" or d["language1"] == "" or d["language2"] == "":
-                return JsonResponse({'message': 'error catched in for'})
+                return JsonResponse({'message': 'dialogues contents cannot have empty values'})
             
             diaObj = diaForm.save(commit=False)
             if d["id"] != "":
@@ -128,6 +150,13 @@ def create(request, route, page_type):
 
         # Delete objects that were deleted
         deleted = data["deleted"]
+        deleted_texts = deleted['texts']
+        for d in deleted_texts:
+            try:
+                Text.objects.get(id=int(d)).delete()
+            except:
+                pass
+
         deleted_dialogues = deleted["dialogues"]
         for d in deleted_dialogues:
             try:
@@ -150,6 +179,9 @@ def create(request, route, page_type):
         # Images
         for image in images_to_submit:
             image.save()
+
+        for text in texts_to_submit:
+            text.save()
         
         # Dialogues
         for dialogue in dialogues_to_submit:
@@ -173,17 +205,19 @@ def update(request, route, page_type, page_id):
         page = story.pages.get(id=page_id)
 
         images = page.images.all()
+        texts = page.texts.all()
         dialogues = page.dialogues.all()
         repeat_phrases = page.repeat_phrases.all()
 
         # get values from query set
-        #page = model_to_dict(page)
+        
+        texts = list(texts.values())
         dialogues = list(dialogues.values())
         repeat_phrases = list(repeat_phrases.values())
         
         
         # cast list to json
-        #page = json.dumps(page)
+        texts = json.dumps(texts)
         dialogues = json.dumps(dialogues)
         repeat_phrases = json.dumps(repeat_phrases)
 
@@ -201,7 +235,8 @@ def update(request, route, page_type, page_id):
             'page': page, 
             'page_type': page_type,
             'images': images, 
-            'images_json': images_json, 
+            'images_json': images_json,
+            'texts': texts,
             'dialogues': dialogues, 
             'repeat_phrases': repeat_phrases
         }

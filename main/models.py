@@ -250,6 +250,21 @@ class Dialogue(models.Model):
     content2 = models.CharField(max_length=255)
     color = models.CharField(max_length=7, default='#000000')
     element_number = models.IntegerField()
+
+
+class Text(models.Model):
+    class Meta:
+        db_table = prefix + 'text'
+    # keys
+    id = models.AutoField(primary_key=True)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='texts')
+    
+    language1 = models.TextField(null=False, blank=False)
+    language2 = models.TextField(null=False, blank=False)
+    element_number = models.IntegerField()
+
+    def __str__(self) -> str:
+        return f'id: {self.id}, l1: {self.language1}, l2: {self.language2}'
 # -------- -------- -------- --------
 
 

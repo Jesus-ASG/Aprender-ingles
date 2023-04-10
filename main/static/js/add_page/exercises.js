@@ -13,12 +13,12 @@ function addExercise() {
 function repeatPhrase() {
   let html =
     `
-    <div class="mb-3" id="element_`+ max_elem + `" name="repeatPhrases">
-      <hr>
+    <div class="exercise-sep" id="element_`+ max_elem + `" name="repeatPhrases">
+      
       <div class="row">
         <div class="col-12 d-flex">
           <div class="col-10 col-md-11">
-            <h3 class="fs-3 text-center my-3">Repetir oración</h3>
+            <h3 class="fs-4 text-center my-3">Repetir oración</h3>
           </div>
           <div class="col-2 col-md-1 d-flex align-items-center">
             <button class="btn btn-danger shadow-none" type="button" title="Eliminar elemento" data-bs-toggle="modal"
@@ -46,15 +46,15 @@ function repeatPhrase() {
 
       <div class="row">
         <div class="col-12 mb-2">
-        <label class="form-label fs-5" for="repP1_`+ max_elem + `">Escribe el contenido en inglés</label>
-          <textarea class="form-control fs-5 txta" type="text" id="repP1_`+ max_elem + `" name="language1" placeholder="Contenido en inglés"
+        <label class="form-label" for="repP1_`+ max_elem + `">Escribe el contenido en inglés</label>
+          <textarea class="form-control txta" type="text" id="repP1_`+ max_elem + `" name="language1" placeholder="Contenido en inglés"
             maxlength="255"></textarea>
         </div>
       </div>
       <div class="row">
         <div class="col-12 mb-2">
-        <label class="form-label fs-5" for="repP2_`+ max_elem + `">Escribe el contenido en español</label>
-          <textarea class="form-control fs-5 txta" type="text" id="repP2_`+ max_elem + `" name="language2"
+        <label class="form-label" for="repP2_`+ max_elem + `">Escribe el contenido en español</label>
+          <textarea class="form-control txta" type="text" id="repP2_`+ max_elem + `" name="language2"
             placeholder="Contenido en español" maxlength="255"></textarea>
         </div>
       </div>
@@ -67,9 +67,9 @@ function repeatPhrase() {
           </div>
         </div>
       </div>
-      <input value="`+max_elem+`" name="element_number" hidden>
+      <input value="`+ max_elem + `" name="element_number" hidden>
       <input name="id" hidden>
-      <hr>
+      
     </div>
     <span id="exercises_area"></span>
   `;
