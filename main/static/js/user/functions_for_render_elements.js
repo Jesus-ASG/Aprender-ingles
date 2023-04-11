@@ -1,3 +1,10 @@
+// General
+let titleClasses = {
+	"paper": "",
+	"front": "px-1 fw-bold",
+	"back": "px-1 fw-bold"
+}
+
 // Contents
 
 // Text
@@ -23,7 +30,7 @@ function renderDialogue(dialogue, total_translations) {
 	let text2 = dialogue.content2.replace(/\n/g, '<span></span>|');
 
 	let flipClasses = {
-		"paper": "fs-5 mx-1",
+		"paper": "fs-5",
 		"front": "px-1",
 		"back": "px-1"
 	};
@@ -42,7 +49,7 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 	let text1 = repeat_phrase.content1.replace(/\n/g, '<span></span>|').trim();
 	let text2 = repeat_phrase.content2.replace(/\n/g, '<span></span>|').trim();
 	let flipClasses = {
-		"paper": "mx-1 fw-bold fst-italic text-dark",
+		"paper": "fst-italic text-dark",
 		"front": "px-1",
 		"back": "px-1"
 	};
@@ -54,7 +61,10 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 
 	document.getElementById("exercises_area").outerHTML =
 		`
-	<div class="row mt-3 fs-5" id="repeat_phrase_${repeat_phrase.id}" >
+	<div class="row mt-3 fs-5 exercise-sep" id="repeat_phrase_${repeat_phrase.id}" >
+	<div class="col-12">
+			<h3 class="fs-4 text-center">${createFlipHTML('Listen and repeat', 'Escucha y repite', total_translations, titleClasses)}</h3>
+		</div>
 	<!-- Controls -->
 	<div class="row my-3 text-center">
 		<!-- Sound -->
@@ -116,7 +126,7 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 				</div>
 		</div>
 		</div>
-		<hr>
+		
 		<input name="database_id" value="`+ repeat_phrase.id + `" hidden>
 	</div><span id="exercises_area">`;
 
@@ -128,4 +138,42 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 	btn_rp.addEventListener('mouseleave', (e) => {
 		document.getElementById("volume_range_" + repeat_phrase.id).style.opacity = 0;
 	});
+
+	user_answers.push(new Exercise(repeat_phrase.type, repeat_phrase.id, ''));
 }
+
+
+function renderSpellcheck(spellcheck, total_translations) {
+	let scriptClasses = {
+		"paper": "fst-italic text-dark",
+		"front": "px-1",
+		"back": "px-1"
+	};
+
+	document.getElementById("exercises_area").outerHTML =
+
+		`
+	<div class="row mt-3 fs-5 exercise-sep" id="spellcheck_${spellcheck.id}">
+		<div class="col-12">
+			<h3 class="fs-4 text-center">`+ createFlipHTML('Spellcheck', 'Revisar ortografía', total_translations, titleClasses) + `</h3>
+		</div>
+		<div class="col-12">
+			
+			<p> ${createFlipHTML('Write and fix: "' + spellcheck.wrong_text + '"', 'Traducción: "' + spellcheck.translated_right_text + '"', total_translations, scriptClasses)} </p>
+			
+			<span class="fs-5 text-muted mb-2"> <strong>Your answer:</strong> </span>
+			<textarea class="form-control mb-2 txta fs-5" type="text" placeholder="Write the fixed text"></textarea>
+			
+		</div>
+	</div>
+	`;
+	let txta = document.querySelector('#spellcheck_' + spellcheck.id + ' textarea');
+	makeAdjustable(txta);
+
+	user_answers.push(new Exercise(spellcheck.type, spellcheck.id, ''));
+	$('#spellcheck_' + spellcheck.id + ' textarea').on('input propertychange', (e) => {
+		let search = user_answers.find(e => e.id === spellcheck.id);
+		search.answer = e.target.value;
+	});
+}
+

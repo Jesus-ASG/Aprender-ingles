@@ -1,5 +1,5 @@
 import re
-from main.models import RepeatPhrase
+from main.models import RepeatPhrase, Spellcheck
 from django.contrib.contenttypes.models import ContentType
 
 
@@ -10,7 +10,7 @@ tolerance_error = 4
 def map_answers(db_answers):
     mapped_list = []
     if db_answers:
-        # Filter exersices
+        # Repeat phrases
         rp_content_type = ContentType.objects.get_for_model(RepeatPhrase)
         rp_answered = db_answers.filter(exercise_type=rp_content_type)
         for i in rp_answered:
@@ -22,6 +22,20 @@ def map_answers(db_answers):
                 'type': 'repeat_phrase'
             }
             mapped_list.append(obj)
+
+        # spellchecks
+        spc_content_type = ContentType.objects.get_for_model(Spellcheck)
+        spc_answered = db_answers.filter(exercise_type=spc_content_type)
+        for i in spc_answered:
+            obj = {
+                'exercise_id': i.exercise_id,
+                'answer': i.answer,
+                'feedback': i.exercise.right_text,
+                'submited': i.submited,
+                'type': 'spellcheck'
+            }
+            mapped_list.append(obj)
+
     return mapped_list
 
 
@@ -116,6 +130,7 @@ def evaluateAnswers(story, answers):
     pages = story.pages.all()
     for p in pages:
         exercises_number  += p.repeat_phrases.all().count()
+        exercises_number += p.spellchecks.all().count()
     
     results = {
         "score": 0, 
@@ -135,6 +150,13 @@ def evaluateAnswers(story, answers):
                 results["writing_percentage"] += rp_results["writing_percentage"]
                 results["comprehension_percentage"] += rp_results["comprehension_percentage"]
                 results["speaking_percentage"] += rp_results["speaking_percentage"]
+
+            case 'spellcheck':
+                results["score"] += 200
+                results["writing_percentage"] += 1
+                results["comprehension_percentage"] += 1
+                results["speaking_percentage"] += 1
+
     
 
     wp_t = (results["writing_percentage"] / exercises_number) * 100

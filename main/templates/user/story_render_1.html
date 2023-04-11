@@ -165,6 +165,7 @@
   let db_texts = {};
   let db_dialogues = {};
   let db_repeat_phrases = {};
+  let db_spellchecks = {};
 
   let db_answers = {};
   let db_score = {};
@@ -187,6 +188,9 @@
   try {
     db_repeat_phrases = JSON.parse('{{ repeat_phrases |safe |escapejs }}');
   } catch (e) { }
+  try {
+    db_spellchecks = JSON.parse('{{ spellchecks |safe |escapejs  }}');
+  } catch (e) { }
 
   try {
     db_answers = JSON.parse('{{ answers |safe |escapejs }}');
@@ -198,6 +202,21 @@
 </script>
 
 <script src="{% static 'js/sort_collections.js' %}"></script>
+<script>
+  let user_answers = [];
+
+  class Exercise {
+    constructor(type, id, answer) {
+      this.type = type;
+      this.id = parseInt(id);
+      this.answer = answer;
+    }
+    toString() {
+      return `Type-> ${this.type} Id-> ${this.id}, Answer-> ${this.answer}`;
+    }
+  }
+
+</script>
 <script src="{% static 'js/user/functions_for_render_elements.js' %}"></script>
 <script>
   let total_translations = { "start": 0, "end": 0 };
@@ -219,6 +238,9 @@
         break;
       case "repeat_phrase":
         renderRepeatPhrase(element, total_translations);
+        break;
+      case "spellcheck":
+        renderSpellcheck(element, total_translations);
         break;
     }
   }

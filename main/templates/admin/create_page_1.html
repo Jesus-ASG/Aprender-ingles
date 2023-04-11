@@ -5,12 +5,6 @@
 
 {% block page-styles %}
 <style>
-  .exercise-sep {
-    box-shadow: rgba(245, 159, 61, 0.5) 0px 10px 10px -8px;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-  }
-
   .cancel-save-container {
     display: flex;
     flex-direction: row;
@@ -191,7 +185,7 @@
       <select class="form-select" id="exercise_selected">
         <option selected>- Selecciona un ejercicio -</option>
         <option value="0">Repetir oración</option>
-        <option value="1">Próximamente</option>
+        <option value="1">Revisar ortografía</option>
       </select>
     </div>
 
@@ -228,6 +222,7 @@
   let db_texts = {};
   let db_dialogues = {};
   let db_repeat_phrases = {};
+  let db_spellchecks = {};
 
   try {
     db_images = JSON.parse('{{ images_json |safe }}');
@@ -241,11 +236,9 @@
   try {
     db_repeat_phrases = JSON.parse('{{ repeat_phrases |safe |escapejs  }}');
   } catch (e) { }
-
-  //for (let d of db_dialogues)
-  //console.log(d);
-  //for (let i of db_repeat_phrases)
-  //console.log(i);
+  try {
+    db_spellchecks = JSON.parse('{{ spellchecks |safe |escapejs  }}');
+  } catch (e) { }
 
   /* For page type 1 */
   let max_elem = 0;
@@ -282,6 +275,9 @@
         case "repeat_phrase":
           loadRepeatPhrase(element);
           break;
+        case "spellcheck":
+          loadSpellcheck(element);
+          break;
       }
     }
   }
@@ -312,10 +308,21 @@
   function loadRepeatPhrase(repeat_phrase) {
     repeatPhrase();
     let html_repeat_phrase = document.getElementById("element_" + (max_elem - 1));
+
     html_repeat_phrase.querySelector('[name = id]').value = repeat_phrase.id;
     html_repeat_phrase.querySelector('[name = language1]').value = repeat_phrase.content1;
     html_repeat_phrase.querySelector('[name = language2]').value = repeat_phrase.content2;
     html_repeat_phrase.querySelector('[name = show_text]').checked = repeat_phrase.show_text;
+  }
+
+  function loadSpellcheck(spellcheck) {
+    addSpellcheck();
+    let html_spellcheck = document.getElementById("element_" + (max_elem - 1));
+
+    html_spellcheck.querySelector('[name = id]').value = spellcheck.id;
+    html_spellcheck.querySelector('[name = wrong_text]').value = spellcheck.wrong_text;
+    html_spellcheck.querySelector('[name = right_text]').value = spellcheck.right_text;
+    html_spellcheck.querySelector('[name = translated_right_text]').value = spellcheck.translated_right_text;
   }
 
 

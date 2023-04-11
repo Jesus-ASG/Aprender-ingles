@@ -237,6 +237,22 @@ class Image(models.Model):
         super(Image, self).delete(*args, **kwargs)
 
 
+# Text
+class Text(models.Model):
+    class Meta:
+        db_table = prefix + 'text'
+    # keys
+    id = models.AutoField(primary_key=True)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='texts')
+    
+    language1 = models.TextField(null=False, blank=False)
+    language2 = models.TextField(null=False, blank=False)
+    element_number = models.IntegerField()
+
+    def __str__(self) -> str:
+        return f'id: {self.id}, l1: {self.language1}, l2: {self.language2}'
+
+
 # Dialogue
 class Dialogue(models.Model):
     class Meta:
@@ -252,19 +268,6 @@ class Dialogue(models.Model):
     element_number = models.IntegerField()
 
 
-class Text(models.Model):
-    class Meta:
-        db_table = prefix + 'text'
-    # keys
-    id = models.AutoField(primary_key=True)
-    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='texts')
-    
-    language1 = models.TextField(null=False, blank=False)
-    language2 = models.TextField(null=False, blank=False)
-    element_number = models.IntegerField()
-
-    def __str__(self) -> str:
-        return f'id: {self.id}, l1: {self.language1}, l2: {self.language2}'
 # -------- -------- -------- --------
 
 
@@ -284,7 +287,21 @@ class RepeatPhrase(models.Model):
 
     def __str__(self) -> str:
         return f'{self.page.id} - {self.content1}'
-# -------- -------- -------- --------
+
+
+# Spellcheck
+class Spellcheck(models.Model):
+    class Meta:
+        db_table = prefix + 'spellcheck'
+
+    # keys
+    id = models.AutoField(primary_key=True)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='spellchecks')
+    # fields
+    wrong_text = models.CharField(max_length=600)
+    right_text = models.CharField(max_length=600)
+    translated_right_text = models.CharField(max_length=600)
+    element_number = models.IntegerField()
 
 
 # Ask and answer
@@ -310,7 +327,7 @@ class Option(models.Model):
     answer1 = models.CharField(max_length=255)
     answer2 = models.CharField(max_length=255)
     correct = models.BooleanField(default=False)
-# -------- -------- -------- --------
+
 
 class UserAnswer(models.Model):
     class Meta:

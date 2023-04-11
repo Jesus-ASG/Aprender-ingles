@@ -1,7 +1,8 @@
 let objects_deleted = {
     "texts": [],
     "dialogues": [],
-    "repeatPhrases": []
+    "repeatPhrases": [],
+    "spellchecks": []
 };
 
 function deleteElement(id) {
@@ -18,6 +19,9 @@ function deleteElement(id) {
                 break;
             case "repeatPhrases":
                 objects_deleted.repeatPhrases.push(id_database);
+                break;
+            case "spellchecks":
+                objects_deleted.spellchecks.push(id_database);
                 break;
             default:
         }
@@ -114,6 +118,20 @@ function savePage() {
         jsonRepeatPhrases.push(rp);
     }
 
+    // Spellchecks
+    let spellchecks = document.getElementsByName('spellchecks');
+    let jsonSpellchecks = [];
+    for (let s of spellchecks) {
+        let jsonS = {
+            "id": s.querySelector('[name = id]').value,
+            "element_number": s.querySelector('[name = element_number]').value,
+            "wrong_text": s.querySelector('[name = wrong_text]').value,
+            "right_text": s.querySelector('[name = right_text]').value,
+            "translated_right_text": s.querySelector('[name = translated_right_text]').value
+        }
+        jsonSpellchecks.push(jsonS);
+    }
+
 
     // Build Json to send
     let jsonData = {
@@ -123,6 +141,7 @@ function savePage() {
         "texts": jsonTexts,
         "dialogues": jsonDialogues,
         "repeatPhrases": jsonRepeatPhrases,
+        "spellchecks": jsonSpellchecks,
         "imageData": imageData,
         "deleted": objects_deleted
     }

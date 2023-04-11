@@ -2,7 +2,7 @@ function createFlipHTML(text1, text2, counter, flipClasses) {
 
 	if (!flipClasses) {
 		flipClasses = {
-			"paper": "mx-1",
+			"paper": "",
 			"front": "px-1",
 			"back": "px-1"
 		};

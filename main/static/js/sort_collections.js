@@ -34,5 +34,13 @@ if (db_repeat_phrases.length > 0)
 		repeat_phrase.is_exercise = true;
 		collections_sorted.push(repeat_phrase);
 	}
+
+if (db_spellchecks.length > 0)
+	for (let spellcheck of db_spellchecks) {
+		spellcheck.type = "spellcheck";
+		spellcheck.is_exercise = true;
+		collections_sorted.push(spellcheck);
+	}
+
 // Sort
 collections_sorted.sort((a, b) => a.element_number - b.element_number);

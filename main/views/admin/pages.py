@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 from django.forms.models import model_to_dict
 
-from main.models import Story, Page, Image, Text, Dialogue, RepeatPhrase
+from main.models import Story, Page, Image, Text, Dialogue, RepeatPhrase, Spellcheck
 from main.forms import DialogueForm, ImageForm, PageForm, RepeatPhraseForm
 
 
@@ -60,9 +60,6 @@ def create(request, route, page_type):
         data = request.POST["data"]
         data = json.loads(data)
         
-        #print(f'\n\n{data}\n\n')
-        #print(f'\n\n{objects_deleted}\n\n')
-
         # creating page
         pgObj = pgForm.save(commit=False)
         if data["page_id"] != "":
@@ -74,7 +71,7 @@ def create(request, route, page_type):
         pgObj.page_type = page_type
         
         
-        # saving images
+        # Images
         images_to_submit = []
         imageFiles = request.FILES.getlist("imageFiles[]")
         imageData = data["imageData"]
@@ -88,7 +85,7 @@ def create(request, route, page_type):
             images_to_submit.append(imgObj)
             imgForm = ImageForm(request.POST or None, request.FILES or None)
         
-        # save texts
+        # Texts
         texts_to_submit = []
         texts = data["texts"]
         for t in texts:
@@ -101,16 +98,13 @@ def create(request, route, page_type):
             if t['id'] != '':
                 textObj = Text.objects.get(id=int(t['id']))
             
+            textObj.element_number = t['element_number']
             textObj.language1 = t['language1']
             textObj.language2 = t['language2']
-            textObj.element_number = t['element_number']
-            
-            texts_to_submit.append(textObj)
-            #print(textObj)
-        
-        #print('\n')
 
-        # saving dialogs
+            texts_to_submit.append(textObj)
+
+        # Dialogues
         dialogues_to_submit = []
         dialogues = data["dialogues"]
         for d in dialogues:
@@ -121,20 +115,21 @@ def create(request, route, page_type):
             if d["id"] != "":
                 diaObj = Dialogue.objects.get(id=int(d["id"]))
             diaObj.page = pgObj
+            diaObj.element_number = d["element_number"]
+
             diaObj.name = d["name"]
             diaObj.content1 = d["language1"]
             diaObj.content2 = d["language2"]
             diaObj.color = d["color"]
-            diaObj.element_number = d["element_number"]
             dialogues_to_submit.append(diaObj)
             diaForm = DialogueForm(request.POST or None)
         
-        # saving repeatPhrases
+        # Repeat phrases
         repeatPhrases_to_submit = []
         repeatPhrases = data["repeatPhrases"]
         for rp in repeatPhrases:
             if rp["language1"] == "" or rp["language2"] == "":
-                return JsonResponse({'message': 'error catched in for'})
+                return JsonResponse({'message': 'repeat phrases empty fields'})
             
             rpPObj = repPForm.save(commit=False)
             if rp["id"] != "":
@@ -147,32 +142,41 @@ def create(request, route, page_type):
             repeatPhrases_to_submit.append(rpPObj)
             repPForm = RepeatPhraseForm(request.POST or None)    
         
+        # Spellchecks
+        spellchecks_to_submit = []
+        spellchecks = data['spellchecks']
+        for s in spellchecks:
+            if s['wrong_text'] == '' or s['right_text'] == '' or s['translated_right_text']=='':
+                return JsonResponse({'message': 'spellchecks empty fields'})
+            
+            spcObj = Spellcheck()
+            spcObj.page = pgObj
+            if s['id'] != '':
+                spcObj = Spellcheck.objects.get(id=int(s['id']))
+            
+            spcObj.element_number = s['element_number']
+            spcObj.wrong_text = s['wrong_text']
+            spcObj.right_text = s['right_text']
+            spcObj.translated_right_text = s['translated_right_text']
+            spellchecks_to_submit.append(spcObj)
+
 
         # Delete objects that were deleted
         deleted = data["deleted"]
-        deleted_texts = deleted['texts']
-        for d in deleted_texts:
-            try:
-                Text.objects.get(id=int(d)).delete()
-            except:
-                pass
+        for d in deleted['texts']:
+            safe_delete(Text, d)
 
-        deleted_dialogues = deleted["dialogues"]
-        for d in deleted_dialogues:
-            try:
-                Dialogue.objects.get(id=int(d)).delete()
-            except:
-                pass
+        for d in deleted['dialogues']:
+            safe_delete(Dialogue, d)
         
-        deleted_repeatPhrases = deleted["repeatPhrases"]
-        for d in deleted_repeatPhrases:
-            try:
-                RepeatPhrase.objects.get(id=int(d)).delete()
-            except:
-                pass
+        for d in deleted['repeatPhrases']:
+            safe_delete(RepeatPhrase, d)
+
+        for d in deleted['spellchecks']:
+            safe_delete(Spellcheck, d)
         
+
         # Save all
-        
         pgObj.save()
         
         # Content
@@ -187,9 +191,13 @@ def create(request, route, page_type):
         for dialogue in dialogues_to_submit:
             dialogue.save()
         
-        # Repeat Phrases
+        # Repeat phrases
         for repeatPhrase in repeatPhrases_to_submit:
             repeatPhrase.save()
+
+        # Spellchecks
+        for spc in spellchecks_to_submit:
+            spc.save()
         
         return JsonResponse({'message': 'success'})
         
@@ -208,21 +216,21 @@ def update(request, route, page_type, page_id):
         texts = page.texts.all()
         dialogues = page.dialogues.all()
         repeat_phrases = page.repeat_phrases.all()
+        spellchecks = page.spellchecks.all()
 
-        # get values from query set
-        
+        # get values list from query set
         texts = list(texts.values())
         dialogues = list(dialogues.values())
         repeat_phrases = list(repeat_phrases.values())
-        
+        spellchecks = list(spellchecks.values())
         
         # cast list to json
         texts = json.dumps(texts)
         dialogues = json.dumps(dialogues)
         repeat_phrases = json.dumps(repeat_phrases)
+        spellchecks = json.dumps(spellchecks)
 
         # image different to get url image instead image
-        
         images_json = []
         for image in images:
             x = model_to_dict(image)
@@ -238,7 +246,8 @@ def update(request, route, page_type, page_id):
             'images_json': images_json,
             'texts': texts,
             'dialogues': dialogues, 
-            'repeat_phrases': repeat_phrases
+            'repeat_phrases': repeat_phrases,
+            'spellchecks': spellchecks
         }
 
     except:
@@ -258,3 +267,10 @@ def delete(request, id):
             return HttpResponse(status=200)
         except:
             return HttpResponseBadRequest('')
+
+
+def safe_delete(model, id):
+    try:
+        model.objects.get(id=int(id)).delete()
+    except:
+        pass

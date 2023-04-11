@@ -1,40 +1,3 @@
-class StoryAnswers {
-	constructor(id, pages) {
-		this.id = parseInt(id);
-		this.pages = pages;
-	}
-}
-
-class PageAnswers {
-	constructor(id, exercises) {
-		this.id = parseInt(id);
-		this.exercises = exercises;
-	}
-	toString() {
-		return `Id-> ${this.id}, Exercises-> ${this.exercises}`;
-	}
-}
-
-class Exercise {
-	constructor(type, id, answer) {
-		this.type = type;
-		this.id = parseInt(id);
-		this.answer = answer;
-	}
-	toString() {
-		return `Type-> ${this.type} Id-> ${this.id}, Answer-> ${this.answer}`;
-	}
-}
-
-// creates object story
-let story_answers = new StoryAnswers(db_story_id, []);
-// Creates object for current page answers
-let page_answers = new PageAnswers(db_page_id, []);
-// Fill current page answers with exercises from database
-for (let element of collections_sorted)
-	if (element.is_exercise)
-		page_answers.exercises.push(new Exercise(element.type, element.id, ''));
-
 // if there are answers in the page
 if (db_answers.length > 0) {
 	// Check if is sumbited
@@ -46,8 +9,6 @@ if (db_answers.length > 0) {
 	else
 		showUserAnswers(db_answers, false);
 }
-
-
 
 let speaking_currently = false;
 let waiting_for_voice = false;
@@ -83,9 +44,8 @@ recognition.onresult = (e) => {
 		if (e.results[i].isFinal)
 			transcript += e.results[i][0].transcript;
 
-	let search = page_answers.exercises.find(e => e.id === parseInt(db_exercise_id));
-
-	transcript = capitalizeFirstLetter(transcript)
+	let search = user_answers.find(e => e.id === parseInt(db_exercise_id));
+	transcript = capitalizeFirstLetter(transcript);
 	search.answer = transcript;
 	answer_paragraph.innerHTML = `<strong>Your answer:</strong> "${transcript}"`;
 }
@@ -182,7 +142,7 @@ function saveAnswers(submit, show_feedback) {
 
 	formData.append("evaluate", evaluate.toString());
 	formData.append("submit", submit.toString());
-	formData.append("answers", JSON.stringify(page_answers.exercises));
+	formData.append("answers", JSON.stringify(user_answers));
 
 	const csrftoken = getCookie('csrftoken');
 	$.ajax({
@@ -224,6 +184,18 @@ function showUserAnswers(answers, show_feedback) {
 				rp_ans.innerHTML = `<strong>Your answer:</strong> "${answer.answer}"`;
 				if (show_feedback) {
 					feedback.innerHTML = `<strong>Right answer:</strong> "${answer.feedback}"`;
+				}
+				break;
+			case "spellcheck":
+				let spc = document.getElementById("spellcheck_" + answer.exercise_id);
+				if (show_feedback) {
+					spc.querySelector('span').innerText = `Your answer: "${answer.answer}"`;
+					spc.querySelector('textarea').outerHTML =
+						` <br>
+					<span class="fs-5 text-success mb-2"> <strong>Right answer: "${answer.feedback}"</strong> </span>
+					`;
+				} else {
+					spc.querySelector('textarea').value = answer.answer;
 				}
 				break;
 		}

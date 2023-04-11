@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 
-from main.models import Story, Score, RepeatPhrase
+from main.models import Story, Score, RepeatPhrase, Spellcheck
 from main.forms import ScoreForm, UserAnswer
 
 from main.utils.evaluate_story import rateSkills, evaluateAnswers, map_answers
@@ -87,10 +87,12 @@ def storyContent(request, route, page_number):
     texts = current_page.texts.all()
     dialogues = current_page.dialogues.all()
     repeat_phrases = current_page.repeat_phrases.all()
+    spellchecks = current_page.spellchecks.all()
     
     db_answers = user_profile.answers.filter(page=current_page)
 
     rp_content_type = ContentType.objects.get_for_model(RepeatPhrase)
+    spc_content_type = ContentType.objects.get_for_model(Spellcheck)
 
     if request.method == "GET":
         answers = []
@@ -113,6 +115,7 @@ def storyContent(request, route, page_number):
         texts = json.dumps(list(texts.values()))
         dialogues = json.dumps(list(dialogues.values()))
         repeat_phrases = json.dumps(list(repeat_phrases.values()))
+        spellchecks = json.dumps(list(spellchecks.values()))
 
         images_json = []
         for image in images:
@@ -133,6 +136,7 @@ def storyContent(request, route, page_number):
             'texts': texts,
             'dialogues': dialogues,
             'repeat_phrases': repeat_phrases,
+            'spellchecks': spellchecks,
             'answers': answers,
             'score': score
             }        
@@ -158,6 +162,7 @@ def storyContent(request, route, page_number):
         
         # Filter exercises
         rp_answered = db_answers.filter(exercise_type=rp_content_type)
+        spc_answered = db_answers.filter(exercise_type=spc_content_type)
         
         # Save answers
         for exercise in answers:
@@ -184,6 +189,30 @@ def storyContent(request, route, page_number):
                             answer=exercise['answer'],
                             submited=submit,
                         )
+                case 'spellcheck':
+                    spc = spellchecks.get(pk=int(exercise['id']))
+                    
+                    if update:
+                        answer_update_obj = spc_answered.filter(exercise_id=spc.pk)
+                        if exercise['answer'] == '':
+                            answer_update_obj.update(submited=submit)
+                        else:
+                            answer_update_obj.update(
+                                answer=exercise['answer'],
+                                submited=submit,
+                            )
+                    else:
+                        answer_obj = UserAnswer.objects.create(
+                            user_profile=user_profile,
+                            story=story,
+                            page=current_page,
+                            exercise_type=ContentType.objects.get_for_model(spc),
+                            exercise_id=spc.pk,
+                            answer=exercise['answer'],
+                            submited=submit,
+                        )
+
+
         # Get objects updated
         story_answers = UserAnswer.objects.filter(user_profile=user_profile, story=story)
         db_answers = story_answers.filter(page=current_page)
