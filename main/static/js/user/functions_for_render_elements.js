@@ -165,7 +165,7 @@ function renderSpellcheck(spellcheck, total_translations) {
 			<textarea class="form-control mb-2 txta fs-5" type="text" placeholder="Write the fixed text"></textarea>
 			
 		</div>
-	</div>
+	</div><span id="exercises_area">
 	`;
 	let txta = document.querySelector('#spellcheck_' + spellcheck.id + ' textarea');
 	makeAdjustable(txta);

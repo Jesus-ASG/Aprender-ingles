@@ -74,8 +74,7 @@ def rateSkills(max_percentage):
 def evaluateRepeatPhrase(user_answer, correct_answer):
     if user_answer == "":
         results = {
-            "score": 0, 
-            "writing_percentage": 1, 
+            "score": 0,
             "comprehension_percentage": 0, 
             "speaking_percentage": 0
         }
@@ -116,10 +115,60 @@ def evaluateRepeatPhrase(user_answer, correct_answer):
     score = 0 if (score < 0) else score
 
     results = {
-        "score": round(score, 2), 
-        "writing_percentage": 1, 
+        "score": round(score, 2),
         "comprehension_percentage": speaking_percentage, 
         "speaking_percentage": speaking_percentage
+    }
+    return results
+
+
+def evaluateSpellcheck(user_answer, correct_answer):
+    if user_answer == "":
+        results = {
+            "score": 0, 
+            "writing_percentage": 0, 
+            "comprehension_percentage": 0
+        }
+        return results
+    
+    user_answer = user_answer.split(' ')
+    correct_answer = correct_answer.split(' ')
+
+    total_user_words = len(user_answer)
+    total_correct_words = len(correct_answer)
+    
+    correct_words = 0
+    penalty_words = total_user_words - total_correct_words if total_user_words > total_correct_words else 0
+
+    index_user = 0
+    index_correct = 0
+    
+    for i in range(index_user, total_user_words):
+        for j in range(index_correct, total_correct_words):
+            if user_answer[i] == correct_answer[j]:
+                correct_words = correct_words + 1
+                index_correct = j + 1
+                index_user += 1
+                break
+
+    score = 0
+    
+    writing_percentage = 0
+    quit_points = 0
+    if tolerance_error != 0:
+        quit_points = penalty_words / (total_correct_words * tolerance_error )
+
+    writing_percentage = (correct_words / total_correct_words) - abs(quit_points)
+    writing_percentage = 0 if writing_percentage < 0 else writing_percentage
+    writing_percentage = round(writing_percentage, 2)
+
+    score = points_per_correct_answer - quit_points * points_per_correct_answer
+    score = 0 if (score < 0) else score
+
+    results = {
+        "score": round(score, 2), 
+        "writing_percentage": writing_percentage, 
+        "comprehension_percentage": writing_percentage
     }
     return results
 
@@ -127,17 +176,25 @@ def evaluateRepeatPhrase(user_answer, correct_answer):
 def evaluateAnswers(story, answers):
     # count all elements
     exercises_number = 0
+    rp_count = 0
+    spc_count = 0
     pages = story.pages.all()
     for p in pages:
-        exercises_number  += p.repeat_phrases.all().count()
-        exercises_number += p.spellchecks.all().count()
+        rp_count  += p.repeat_phrases.all().count()
+        spc_count += p.spellchecks.all().count()
     
+    exercises_number = rp_count + spc_count
+
     results = {
         "score": 0, 
         "writing_percentage": 0, 
         "comprehension_percentage": 0, 
-        "speaking_percentage": 0
+        "speaking_percentage": 0,
+        "score_percentage": 0
     }
+    if exercises_number <= 0:
+        return results
+
 
     for a in answers:
         match a['type']:
@@ -147,21 +204,27 @@ def evaluateAnswers(story, answers):
                 rp_results = evaluateRepeatPhrase(user_answer, correct_answer)
 
                 results["score"] += rp_results["score"]
-                results["writing_percentage"] += rp_results["writing_percentage"]
                 results["comprehension_percentage"] += rp_results["comprehension_percentage"]
                 results["speaking_percentage"] += rp_results["speaking_percentage"]
 
             case 'spellcheck':
-                results["score"] += 200
-                results["writing_percentage"] += 1
-                results["comprehension_percentage"] += 1
-                results["speaking_percentage"] += 1
+                correct_answer = a['feedback']
+                user_answer = a['answer']
+                spc_results = evaluateSpellcheck(user_answer, correct_answer)
 
-    
+                results["score"] += spc_results["score"]
+                results["writing_percentage"] += spc_results["writing_percentage"]
+                results["comprehension_percentage"] += spc_results["comprehension_percentage"]
+                
 
-    wp_t = (results["writing_percentage"] / exercises_number) * 100
+    # Execises count
+    writing_count = spc_count
+    speaking_count = rp_count
+
+    wp_t = (results["writing_percentage"] / writing_count) * 100 if writing_count > 0 else 100
+    sp_t = (results["speaking_percentage"] / speaking_count) * 100 if speaking_count > 0 else 100
+
     cp_t = (results["comprehension_percentage"] / exercises_number) * 100
-    sp_t = (results["speaking_percentage"] / exercises_number) * 100
 
     results["score"] = int(results["score"])
     results["score_limit"] = exercises_number * points_per_correct_answer
@@ -170,8 +233,9 @@ def evaluateAnswers(story, answers):
     results["comprehension_percentage"] = round(cp_t, 2)
     results["speaking_percentage"] = round(sp_t, 2)
 
-    score_percentage = results["writing_percentage"] + results['comprehension_percentage'] + results['speaking_percentage']
-    score_percentage = score_percentage / 3
+    #score_percentage = results["writing_percentage"] + results['comprehension_percentage'] + results['speaking_percentage']
+    #score_percentage = score_percentage / 3
+    score_percentage = results['comprehension_percentage']
     results['score_percentage'] = round(score_percentage, 2)
     
     return results

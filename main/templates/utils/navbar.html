@@ -71,6 +71,17 @@
 				</li>
 				 End Dropdown notifications -->
 
+				<!-- Show admin -->
+				{% if request.user.is_superuser %}
+				<ul class="navbar-nav mb-2 me-2 mb-lg-0 fs-5 text-center">
+					<li class="nav-item center-by-flex">
+						<a class="nav-link" aria-current="page" href="{% url 'index_admin' %}">
+							Admin
+						</a>
+					</li>
+				</ul>
+				{% endif %}
+
 				<!-- Dropdown profile options -->
 				<li class="nav-item dropdown me-2 center-by-flex">
 					<a class="nav-link dropdown-toggle" href="#" id="profile_dropdown" role="button" data-bs-toggle="dropdown"
