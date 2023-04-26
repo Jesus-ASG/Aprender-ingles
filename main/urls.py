@@ -1,6 +1,6 @@
 from django.urls import path
 from main.views.admin import pages, tags, stories, admin_apis
-from main.views.user import story_render, user_apis, exercise_apis
+from main.views.user import flashcard_collection, story_render, user_apis, exercise_apis
 from main.views import views, auth_views
 
 # para cargar imagenes
@@ -33,6 +33,10 @@ urlpatterns = [
     # Show stories content
     path('story/<slug:route>/', story_render.storyInfo, name = 'story_info'),
     path('story/<slug:route>/<int:page_number>/', story_render.storyContent, name='story_content'),
+
+    # Flashcards
+    path('flashcards/', flashcard_collection.index, name='flashcards_collection'),
+    path('flashcards/add/', flashcard_collection.create, name='add_flashcards_collection'),
 
     # Another functions
     path('api/user/like-story/<int:story_id>', user_apis.likeStory, name = 'like_story'),

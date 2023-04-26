@@ -304,36 +304,11 @@ class Spellcheck(models.Model):
     element_number = models.IntegerField()
 
 
-# Ask and answer
-class Question(models.Model):
-    class Meta:
-        db_table = prefix + 'question'
-    # keys
-    id = models.AutoField(primary_key=True)
-    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='questions')
-    # fields
-    question1 = models.CharField(max_length=255)
-    question2 = models.CharField(max_length=255)
-    element_number = models.IntegerField()
-
-
-class Option(models.Model):
-    class Meta:
-        db_table = prefix + 'option'
-    # keys
-    id = models.AutoField(primary_key=True)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='options')
-    # fields
-    answer1 = models.CharField(max_length=255)
-    answer2 = models.CharField(max_length=255)
-    correct = models.BooleanField(default=False)
-
-
 class UserAnswer(models.Model):
     class Meta:
-        db_table = prefix + 'exercise_answer'
+        db_table = prefix + 'user_answer'
 
-    # Keys
+    # keys
     id = models.AutoField(primary_key=True)
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='answers')
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
@@ -342,7 +317,7 @@ class UserAnswer(models.Model):
     exercise_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     exercise_id = models.PositiveIntegerField()
     exercise = GenericForeignKey('exercise_type', 'exercise_id')
-
+    # fields
     answer = models.CharField(max_length=255, blank=True, default='')
     submited = models.BooleanField(default=False)
     evaluated = models.BooleanField(default=False)
@@ -352,3 +327,35 @@ class UserAnswer(models.Model):
         string += f'{self.exercise_type}, {self.exercise_id}, {self.exercise}\n'
         string += f'{self.answer} -- {self.submited}'
         return string
+
+
+class FlashcardCollection(models.Model):
+    class Meta:
+        db_table = prefix + 'flashcard_collection'
+
+    # keys
+    id = models.AutoField(primary_key=True)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='flashcards_collections')
+
+    # fields
+    collection_name = models.CharField(max_length=100, blank=False, null=False, default='New Collection')
+    description = models.CharField(max_length=255, blank=True, default='')
+    
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+
+class Flashcard(models.Model):
+    class Meta:
+        db_table = prefix + 'flashcard'
+
+    # keys
+    id = models.AutoField(primary_key=True)
+    flashcard_collection = models.ForeignKey(FlashcardCollection, on_delete=models.CASCADE, related_name='flashcards')
+
+    # fields
+    color = models.CharField(max_length=7, default='#cbe5ff')
+    content1 = models.CharField(max_length=255)
+    content2 = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
