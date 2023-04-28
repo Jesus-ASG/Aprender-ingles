@@ -35,8 +35,10 @@ urlpatterns = [
     path('story/<slug:route>/<int:page_number>/', story_render.storyContent, name='story_content'),
 
     # Flashcards
-    path('flashcards/', flashcard_collection.index, name='flashcards_collection'),
+    path('flashcards/', flashcard_collection.index, name='flashcards_collections'),
     path('flashcards/add/', flashcard_collection.create, name='add_flashcards_collection'),
+    path('flashcards/del/<int:fc_collection_id>/', flashcard_collection.delete, name='del_flashcards_collection'),
+    path('flashcards/edit/<int:fc_collection_id>/', flashcard_collection.update, name='edit_flashcards_collection'),
 
     # Another functions
     path('api/user/like-story/<int:story_id>', user_apis.likeStory, name = 'like_story'),

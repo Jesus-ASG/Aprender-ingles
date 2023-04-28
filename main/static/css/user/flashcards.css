@@ -1,0 +1,57 @@
+.flashcards_collection {
+	border: 1px solid #000;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.flashcard_collection_container {
+	border: 1px solid var(--yellow-active);
+	background-color: var(--yellow);
+	border-radius: 20px;
+	display: inline-block;
+	margin: 1rem;
+	padding: 1rem;
+	width: 250px;
+}
+
+.flash_title {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 0.5rem;
+}
+
+.flash_title .action-buttons {
+	width: 50px;
+	text-align: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.flash_title .action-buttons button:hover {
+	cursor: pointer;
+}
+
+.flashcard_collection_container h3 {
+	font-size: 1rem;
+	font-weight: 500;
+}
+.flashcard_collection_container p {
+	font-size: 0.8rem;
+	color: var(--c-disabled);
+}
+
+.action-buttons button {
+	font-size: 0.8rem;
+	border-radius: 50%;
+	width: 26px;
+	height: 26px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: auto;
+}
+.action-buttons button i {
+	display: inline-block;
+}

@@ -31,7 +31,7 @@ def create(request):
     if request.method == 'POST':
         collection_name = request.POST.get('collection_name')
         if collection_name == '':
-            return redirect(reverse('flashcards'))
+            return redirect(reverse('flashcards_collections'))
         
         description = request.POST.get('description')
         FlashcardCollection.objects.create(
@@ -40,4 +40,31 @@ def create(request):
             description=description,
         )
 
-        return redirect(reverse('flashcards'))
+        return redirect(reverse('flashcards_collections'))
+
+
+def delete(request, fc_collection_id):
+    if request.method == 'POST':
+        try:
+            collection = FlashcardCollection.objects.get(pk=fc_collection_id)
+            collection.delete()
+            return JsonResponse({'message': 'success'})
+        except:
+            return JsonResponse({'message': 'error'})
+
+
+def update(request, fc_collection_id):
+    if request.method == 'POST':
+        collection = FlashcardCollection.objects.get(pk=fc_collection_id)
+
+        collection_name = request.POST.get('collection_name')
+        if collection_name == '':
+            return redirect(reverse('flashcards_collections'))
+        
+        description = request.POST.get('description')
+
+        collection.collection_name = collection_name
+        collection.description = description
+        collection.save()
+
+        return redirect(reverse('flashcards_collections'))
