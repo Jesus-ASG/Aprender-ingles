@@ -22,7 +22,8 @@
 
 	<div class="row mt-3">
 		<div class="col-12 page-title-container">
-			<h1 class="fs-1">Flashcards</h1>
+			<h1 class="fs-1">{{ fc_collection.collection_name }}</h1>
+			<p>{{ fc_collection.description }}</p>
 		</div>
 	</div>
 
@@ -30,129 +31,59 @@
 	<div class="row">
 		<div class="col-12 text-end mb-3">
 			<button class="btn btn-success mt-3" style="color:#fff;" href="#" type="button" title="Create a new collection"
-				data-bs-toggle="modal" data-bs-target="#add_new_collection">
+				data-bs-toggle="modal" data-bs-target="#add_new_flashcard">
 				+
 			</button>
 		</div>
-		<div class="flashcards_collection">
-			{% for fcc in flashcards_collections %}
-			<div class="flashcard_collection_container" id="flashcards_collection_{{fcc.id}}" href="#">
-				<div class="flash_title">
-					<h3>{{ fcc.collection_name }}</h3>
-					<div class="action-buttons">
-						<div>
-							<button class="btn btn-info shadow-none" type="button" title="Editar colección" data-bs-toggle="modal"
-								data-bs-target="#modal_edit_{{fcc.id}}">
-								<i class="fa-solid fa-pen"></i>
-							</button>
-						</div>
-						<div>
-							<button class="btn btn-danger shadow-none" type="button" title="Eliminar colección" data-bs-toggle="modal"
-								data-bs-target="#modal_delete_{{fcc.id}}">
-								<i class="fa-solid fa-trash"></i>
-							</button>
-						</div>
-					</div>
-				</div>
-				<hr>
-				{% if fcc.description %}
-				<p>{{ fcc.description }}</p>
-				{% else %}
-				<p>{{ fcc.collection_name }}</p>
-				{% endif %}
-				<!-- Modal Edit collection -->
-				<div class="modal fade" id="modal_edit_{{fcc.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
-					aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title c-primary col-11 text-center fw-bold">Editar colección de flashcards</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-							</div>
-							<div class="modal-body">
-								<form action="{% url 'edit_flashcards_collection' fcc.id %}" autocomplete="off" method="post"
-									id="nc_form_{{ fcc.id }}" class="form-label-bold">
-									{% csrf_token %}
-									<div class="mb-2">
-										<label for="nc_name_{{ fcc.id }}" class="form-label c-primary">Nombre de la colección</label>
-										<input type="text" class="form-control" name="collection_name" id="nc_name_{{ fcc.id }}"
-											placeholder="Nombre de la colección" maxlength="100" value="{{ fcc.collection_name }}" required>
-									</div>
-									<div class="mb-2">
-										<label for="nc_description_{{ fcc.id }}" class="form-label c-primary">Descripción</label>
-										<input type="text" class="form-control" name="description" id="nc_description_{{ fcc.id }}"
-											placeholder="Agrega una pequeña descripción" maxlength="255" value="{{ fcc.description }}">
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-								<button type="sumbit" class="btn btn-primary" form="nc_form_{{ fcc.id }}">Guardar</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- End of Modal Edit collection -->
-				<!-- Modal Delete collection -->
-				<div class="modal fade" id="modal_delete_{{fcc.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
-					aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title  col-11 text-center">¿Desea eliminar esta colección?</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-								<button type="button" class="btn btn-danger" onclick="deleteCollection('{{fcc.id}}')"
-									data-bs-dismiss="modal">
-									Eliminar</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- End of Modal Delete collection -->
 
-			</div>
-			{% empty %}
-			<div class="col-12 text-center mb-3">
-				<h2 class="fs-3" style="font-weight: 500;">You don't have flashcards collections yet</h2>
-			</div>
-			{% endfor %}
+		{% for fc in flashcards %}
+		<div class="flashcards">
+			{{ fc.front }} / {{ fc.back }}
 		</div>
-
+		{% empty %}
+		<div class="col-12 text-center mb-3">
+			<h2 class="fs-3" style="font-weight: 500;">Esta colección no tiene flashcards aún</h2>
+		</div>
+		{% endfor %}
 
 	</div>
 
 </div>
 <!-- Modals -->
 <!-- Add new collection -->
-<div class="modal fade" id="add_new_collection" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="add_new_flashcard" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title c-primary col-11 text-center fw-bold">Crear una nueva colección de flashcards</h5>
+				<h5 class="modal-title c-primary col-11 text-center fw-bold">Crear una nueva flashcard</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
 			</div>
 			<div class="modal-body">
-				<form action="{% url 'add_flashcards_collection' %}" autocomplete="off" method="post" id="nc_form"
+				<form action="{% url 'add_flashcard' fc_collection.id %}" autocomplete="off" method="post" id="nfc_form"
 					class="form-label-bold">
 					{% csrf_token %}
 					<div class="mb-2">
-						<label for="nc_name" class="form-label c-primary">Nombre de la colección</label>
-						<input type="text" class="form-control" name="collection_name" id="nc_name"
-							placeholder="Nombre de la colección" maxlength="100" required>
+						<label for="fc_front" class="form-label c-primary">Frente</label>
+						<input type="text" class="form-control" name="front" id="fc_front" placeholder="Texto principal"
+							maxlength="100" required>
 					</div>
+
 					<div class="mb-2">
-						<label for="nc_description" class="form-label c-primary">Descripción</label>
-						<input type="text" class="form-control" name="description" id="nc_description"
-							placeholder="Agrega una pequeña descripción" maxlength="255">
+						<label for="fc_reverse" class="form-label c-primary">Reverso</label>
+						<input type="text" class="form-control" name="back" id="fc_reverse" placeholder="Texto al reverso"
+							maxlength="255">
+					</div>
+
+					<div class="mb-2">
+						<label for="nc_color" class="form-label fw-bold">Color</label>
+						<input class="form-control form-control-color text-center shadow-none" type="color" name="color"
+							id="nc_color" value="#cbe5ff">
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-				<button type="sumbit" class="btn btn-primary" form="nc_form">Agregar</button>
+				<button type="sumbit" class="btn btn-primary" form="nfc_form">Agregar</button>
 			</div>
 		</div>
 	</div>
@@ -163,6 +94,9 @@
 {% endblock %}
 
 {% block page-scripts %}
+<script>
+	document.querySelector('.flashcards_collections_link').classList.add('active');
+</script>
 <script>
 	function deleteCollection(collection_id) {
 
@@ -183,32 +117,5 @@
 			}
 		});
 	}
-</script>
-<script>
-	//const db_stories = JSON.parse('{{ stories_json|escapejs }}');
-
-	//let search_input = document.getElementById("search_input");
-	//search_input.addEventListener('keyup', (e) => { filterData(e.target.value) });
-	/*
-	function filterData(string) {
-		string = string.toLowerCase();
-		const filtered_items = db_stories
-			.filter(item =>
-				item.fields.title1.toLowerCase().includes(string) || item.fields.title2.toLowerCase().includes(string) ||
-				item.fields.description1.toLowerCase().includes(string) || item.fields.description2.toLowerCase().includes(string)
-			);
-		let hide_items = document.getElementsByName("story_slot");
-		for (let i of hide_items) {
-			i.classList.add("hide");
-			i.classList.remove("show");
-		}
-
-		for (let i of filtered_items) {
-			let x = document.getElementById("story_" + i.pk);
-			x.classList.add("show");
-			x.classList.remove("hide");
-		}
-	}
-	*/
 </script>
 {% endblock %}

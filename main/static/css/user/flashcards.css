@@ -1,5 +1,4 @@
 .flashcards_collection {
-	border: 1px solid #000;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -11,9 +10,18 @@
 	background-color: var(--yellow);
 	border-radius: 20px;
 	display: inline-block;
-	margin: 1rem;
+	margin: 1.25rem;
 	padding: 1rem;
 	width: 250px;
+	position: relative;
+}
+
+.flashcard_collection_container a {
+	text-decoration: none;
+	color: inherit;
+	display: inline-block;
+	width: 100%;
+	height: 100%;
 }
 
 .flash_title {
@@ -22,14 +30,17 @@
 	margin-bottom: 0.5rem;
 }
 
-.flash_title .action-buttons {
+.action-buttons {
 	width: 50px;
 	text-align: center;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	position: absolute;
+	right: 0;
+	top: 0;
 }
-.flash_title .action-buttons button:hover {
+.action-buttons button:hover {
 	cursor: pointer;
 }
 
@@ -43,6 +54,7 @@
 }
 
 .action-buttons button {
+	z-index: 10;
 	font-size: 0.8rem;
 	border-radius: 50%;
 	width: 26px;
@@ -50,7 +62,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin: auto;
+	margin: 0.5rem;
 }
 .action-buttons button i {
 	display: inline-block;

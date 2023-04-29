@@ -355,7 +355,7 @@ class Flashcard(models.Model):
 
     # fields
     color = models.CharField(max_length=7, default='#cbe5ff')
-    content1 = models.CharField(max_length=255)
-    content2 = models.CharField(max_length=255)
+    front = models.CharField(max_length=255)
+    back = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)

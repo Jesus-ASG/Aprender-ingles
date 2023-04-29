@@ -172,6 +172,9 @@
 
 {% block page-scripts %}
 <script>
+	document.querySelector('.admin_link').classList.add('active');
+</script>
+<script>
 	const URL_UPDATE_CB_RECOMMENDER = '{% url "update_cb_recommender" %}';
 	const URL_UPDATE_UB_RECOMMENDER = '{% url "update_ub_recommender" %}';
 </script>

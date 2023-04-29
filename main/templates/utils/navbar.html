@@ -30,10 +30,11 @@
 				</li>
 				{% if request.user.is_authenticated %}
 				<li class="nav-item">
-					<a class="nav-link" aria-current="page" href="{% url 'stories' %}">Gallery</a>
+					<a class="nav-link stories_gallery_link" aria-current="page" href="{% url 'stories' %}">Gallery</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" aria-current="page" href="{% url 'flashcards_collections' %}">Flashcards</a>
+					<a class="nav-link flashcards_collections_link" aria-current="page"
+						href="{% url 'flashcards_collections' %}">Flashcards</a>
 				</li>
 				{% endif %}
 			</ul>
@@ -41,44 +42,11 @@
 			{% if request.user.is_authenticated %}
 
 			<ul class="navbar-nav text-center">
-
-				<!-- Dropdown notifications 
-				<li class="nav-item dropdown me-3 center-by-flex">
-					<a class="nav-link dropdown-toggle" href="#" id="profile_dropdown1" role="button" data-bs-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false">
-						<span class="position-relative">
-							<i class="fas fa-bell fa-lg" aria-hidden="true">
-								
-									<span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger"
-										style="font-size: 0.7rem;font-weight: 600; left: 150%;">
-										10+
-										<span class="visually-hidden">unread messages</span>
-									</span>
-								
-									<span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger  rounded-circle"
-										style="font-size: 0.7rem;">
-										<span class="visually-hidden">New alerts</span>
-									</span>
-								
-							</i>
-						</span>
-					</a>
-					<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="profile_dropdown1">
-						<li>
-							<a class="dropdown-item" href="#/">
-								<span class="me-1"><i></i></span>
-								<p class="d-inline-block">No new notifications</p>
-							</a>
-						</li>
-					</ul>
-				</li>
-				 End Dropdown notifications -->
-
 				<!-- Show admin -->
 				{% if request.user.is_superuser %}
 				<ul class="navbar-nav mb-2 me-2 mb-lg-0 fs-5 text-center">
 					<li class="nav-item center-by-flex">
-						<a class="nav-link" aria-current="page" href="{% url 'index_admin' %}">
+						<a class="nav-link admin_link" aria-current="page" href="{% url 'index_admin' %}">
 							Admin
 						</a>
 					</li>

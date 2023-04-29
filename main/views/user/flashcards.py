@@ -14,33 +14,51 @@ from main.forms import ScoreForm, UserAnswer
 
 
 @login_required(login_url='/login/')
-def index(request):
+def index(request, fc_collection_id):
+    # Check if owns the flashcard
     profile = request.user.profile
-    flashcards_collections = FlashcardCollection.objects.filter(user_profile=profile)
+    fc_collection = FlashcardCollection.objects.get(pk=fc_collection_id)
+    has_collection = profile.flashcards_collections.filter(pk=fc_collection.id).exists()
+    if not has_collection:
+        return redirect(reverse('flashcards_collections'))
+
+    flashcards = fc_collection.flashcards.order_by('-updated_at')
 
     if request.method == 'GET':
         context = {
-            'flashcards_collections': flashcards_collections
+            'fc_collection': fc_collection,
+            'flashcards': flashcards,
         }
-
-        return render(request, 'user/flashcards_collections.html', context)
+        return render(request, 'user/flashcards.html', context)
 
 
 @login_required(login_url='/login/')
-def create(request):
+def create(request, fc_collection_id):
     if request.method == 'POST':
-        collection_name = request.POST.get('collection_name')
-        if collection_name == '':
+        # Check if owns the flashcard
+        profile = request.user.profile
+        fc_collection = FlashcardCollection.objects.get(pk=fc_collection_id)
+        has_collection = profile.flashcards_collections.filter(pk=fc_collection.id).exists()
+        if not has_collection:
+            return redirect(reverse('flashcards_collections'))
+
+        # Save flashcard
+        front = request.POST.get('front')
+        if front == '':
             return redirect(reverse('flashcards_collections'))
         
-        description = request.POST.get('description')
-        FlashcardCollection.objects.create(
-            user_profile=request.user.profile,
-            collection_name=collection_name,
-            description=description,
-        )
+        back = request.POST.get('back')
+        color = request.POST.get('color')
 
-        return redirect(reverse('flashcards_collections'))
+        #print(f'\n{front}\n{back}\n{color}\n')
+        
+        Flashcard.objects.create(
+            flashcard_collection=fc_collection,
+            front=front,
+            back=back,
+            color=color,
+        )
+        return redirect(reverse('flashcards', args=[fc_collection_id]))
 
 
 def delete(request, fc_collection_id):
