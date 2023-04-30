@@ -67,3 +67,28 @@
 .action-buttons button i {
 	display: inline-block;
 }
+
+.flashcards {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+.flashcard-container {
+	position: relative;
+	margin-left: 0.5rem;
+	margin-right: 0.5rem;
+}
+
+.flashcard-front,
+.flashcard-back {
+	background-color: var(--yellow);
+	border-radius: 20px;
+	display: inline-block;
+	margin: 1.25rem;
+	padding: 1rem;
+	width: 250px;
+}
+.flashcard-front:hover {
+	cursor: pointer;
+}

@@ -6,15 +6,6 @@
 
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/user/flashcards.css' %}">
-<style>
-	.show {
-		display: block;
-	}
-
-	.hide {
-		display: none;
-	}
-</style>
 {% endblock %}
 
 {% block content %}
@@ -36,15 +27,95 @@
 			</button>
 		</div>
 
-		{% for fc in flashcards %}
 		<div class="flashcards">
-			{{ fc.front }} / {{ fc.back }}
+			{% for fc in flashcards %}
+			<div class="flashcard-container" id="flashcard_{{fc.id}}">
+				<div class="flashcard flashcard-front" style="background-color: {{ fc.color }};">
+					<p name="front">{{ fc.front }}</p>
+					<p name="back" class="d-none">{{ fc.back }}</p>
+				</div>
+				<!--
+					<div class="flashcard-back d-none" style="background-color: {{ fc.color }};">
+						<p>{{ fc.back }}</p>
+					</div>
+				-->
+				<div class="action-buttons">
+					<button class="btn btn-info shadow-none" type="button" title="Editar colección" data-bs-toggle="modal"
+						data-bs-target="#modal_edit_{{fc.id}}">
+						<i class="fa-solid fa-pen"></i>
+					</button>
+					<button class="btn btn-danger shadow-none" type="button" title="Eliminar colección" data-bs-toggle="modal"
+						data-bs-target="#modal_delete_{{fc.id}}">
+						<i class="fa-solid fa-trash"></i>
+					</button>
+				</div>
+				<!-- Modal Edit collection -->
+				<div class="modal fade" id="modal_edit_{{fc.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+					aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title c-primary col-11 text-center fw-bold">Editar flashcard</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+							</div>
+							<div class="modal-body">
+								<form action="{% url 'edit_flashcard' fc.id %}" autocomplete="off" method="post"
+									id="nc_form_{{ fc.id }}" class="form-label-bold">
+									{% csrf_token %}
+									<div class="mb-2">
+										<label for="fc_front" class="form-label c-primary">Frente</label>
+										<input type="text" class="form-control" name="front" id="fc_front" placeholder="Texto principal"
+											maxlength="100" value="{{ fc.front }}" required>
+									</div>
+
+									<div class="mb-2">
+										<label for="fc_reverse" class="form-label c-primary">Reverso</label>
+										<input type="text" class="form-control" name="back" id="fc_reverse" placeholder="Texto al reverso"
+											maxlength="255" value="{{ fc.back }}">
+									</div>
+
+									<div class="mb-2">
+										<label for="nc_color" class="form-label fw-bold">Color</label>
+										<input class="form-control form-control-color text-center shadow-none" type="color" name="color"
+											id="nc_color" value="{{ fc.color }}">
+									</div>
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+								<button type="sumbit" class="btn btn-primary" form="nc_form_{{ fc.id }}">Guardar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- End of Modal Edit collection -->
+				<!-- Modal Delete collection -->
+				<div class="modal fade" id="modal_delete_{{fc.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+					aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title col-11 text-center">¿Desea eliminar esta flashcard?</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+								<button type="button" class="btn btn-danger" onclick="deleteFlashcard('{{fc.id}}')"
+									data-bs-dismiss="modal">
+									Eliminar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- End of Modal Delete collection -->
+
+			</div>
+			{% empty %}
+			<div class="col-12 text-center mb-3">
+				<h2 class="fs-3" style="font-weight: 500;">No tienes colecciones de flashcards aún</h2>
+			</div>
+			{% endfor %}
 		</div>
-		{% empty %}
-		<div class="col-12 text-center mb-3">
-			<h2 class="fs-3" style="font-weight: 500;">Esta colección no tiene flashcards aún</h2>
-		</div>
-		{% endfor %}
 
 	</div>
 
@@ -77,7 +148,7 @@
 					<div class="mb-2">
 						<label for="nc_color" class="form-label fw-bold">Color</label>
 						<input class="form-control form-control-color text-center shadow-none" type="color" name="color"
-							id="nc_color" value="#cbe5ff">
+							id="nc_color" value="#fdfda4">
 					</div>
 				</form>
 			</div>
@@ -98,9 +169,32 @@
 	document.querySelector('.flashcards_collections_link').classList.add('active');
 </script>
 <script>
-	function deleteCollection(collection_id) {
+	let flashcards = document.querySelectorAll('.flashcard');
+	flashcards.forEach(fc => {
+		fc.addEventListener('click', (e) => {
+			let front = fc.querySelector('[name=front]');
+			let back = fc.querySelector('[name=back]');
 
-		let url_delete_collection = "{% url 'del_flashcards_collection' 0 %}".replace('0', collection_id);
+			if (front.classList.contains('d-none')) {
+				front.classList.remove('d-none');
+				front.classList.add('d-block');
+
+				back.classList.add('d-none');
+				back.classList.remove('d-block');
+			}
+
+			else {
+				back.classList.remove('d-none');
+				back.classList.add('d-block');
+
+				front.classList.add('d-none');
+				front.classList.remove('d-block');
+			}
+		});
+	});
+
+	function deleteFlashcard(flashcard_id) {
+		let url_delete_collection = "{% url 'del_flashcard' 0 %}".replace('0', flashcard_id);
 		const csrftoken = getCookie('csrftoken');
 		$.ajax({
 			type: "POST",
@@ -109,7 +203,7 @@
 			success: function (response) {
 				//console.log(response);
 				if (response.message == 'success') {
-					document.getElementById('flashcards_collection_' + collection_id).remove();
+					document.getElementById('flashcard_' + flashcard_id).remove();
 				}
 			},
 			error: function (response) {

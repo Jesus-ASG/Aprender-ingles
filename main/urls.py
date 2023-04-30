@@ -36,13 +36,15 @@ urlpatterns = [
 
     # Flashcards collections
     path('flashcards/', flashcard_collection.index, name='flashcards_collections'),
-    path('flashcards/add/', flashcard_collection.create, name='add_flashcards_collection'),
-    path('flashcards/del/<int:fc_collection_id>/', flashcard_collection.delete, name='del_flashcards_collection'),
-    path('flashcards/edit/<int:fc_collection_id>/', flashcard_collection.update, name='edit_flashcards_collection'),
+    path('flashcards/collection/add/', flashcard_collection.create, name='add_flashcards_collection'),
+    path('flashcards/collection/del/<int:fc_collection_id>/', flashcard_collection.delete, name='del_flashcards_collection'),
+    path('flashcards/collection/edit/<int:fc_collection_id>/', flashcard_collection.update, name='edit_flashcards_collection'),
 
     # Flashcards
     path('flashcards/<int:fc_collection_id>/', flashcards.index, name='flashcards'),
     path('flashcards/<int:fc_collection_id>/add/', flashcards.create, name='add_flashcard'),
+    path('flashcards/del/<int:flashcard_id>/', flashcards.delete, name='del_flashcard'),
+    path('flashcards/edit/<int:flashcard_id>/', flashcards.update, name='edit_flashcard'),
 
     # Another functions
     path('api/user/like-story/<int:story_id>', user_apis.likeStory, name = 'like_story'),
