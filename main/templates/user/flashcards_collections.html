@@ -13,21 +13,22 @@
 
 	<div class="row mt-3">
 		<div class="col-12 page-title-container">
-			<h1 class="fs-1">Flashcards collections</h1>
+			<h1 class="fs-1 text-center">Colecciones de flashcards</h1>
 		</div>
 	</div>
 
 	<hr>
 	<div class="row">
-		<div class="col-12 text-end mb-3">
-			<button class="btn btn-success mt-3" style="color:#fff;" href="#" type="button" title="Create a new collection"
-				data-bs-toggle="modal" data-bs-target="#add_new_collection">
-				+
+		<div class="col-12 text-center mb-3">
+			<button class="btn mt-3" href="#" type="button" title="Crear una nueva colección" data-bs-toggle="modal"
+				data-bs-target="#add_new_collection">
+				<span class="text-success fs-3"><i class="fa-solid fa-plus"></i></span>
+				<p>Agregar nueva colección</p>
 			</button>
 		</div>
 		<div class="flashcards_collection">
 			{% for fcc in flashcards_collections %}
-			<div class="flashcard_collection_container" id="flashcards_collection_{{fcc.id}}">
+			<div class="flashcard_collection_container flashcard-shadow" id="flashcards_collection_{{fcc.id}}">
 				<a href="{% url 'flashcards' fcc.id %}">
 					<div class="flash_title">
 						<h3>{{ fcc.collection_name }}</h3>
@@ -40,16 +41,39 @@
 					<p>{{ fcc.collection_name }}</p>
 					{% endif %}
 				</a>
-				<div class="action-buttons">
-					<button class="btn btn-info shadow-none" type="button" title="Editar colección" data-bs-toggle="modal"
-						data-bs-target="#modal_edit_{{fcc.id}}">
-						<i class="fa-solid fa-pen"></i>
-					</button>
-					<button class="btn btn-danger shadow-none" type="button" title="Eliminar colección" data-bs-toggle="modal"
-						data-bs-target="#modal_delete_{{fcc.id}}">
-						<i class="fa-solid fa-trash"></i>
-					</button>
+				<div class="flashcard-menu-container">
+					<div class="dropdown">
+						<button class="btn btn-secondary dropdown-toggle flashcard-menu-button" type="button"
+							id="flashcards_collections_dropdown_{{ fcc.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="fa-solid fa-ellipsis-vertical"></i>
+						</button>
+						<!-- Dropdown menu -->
+						<ul class="dropdown-menu" aria-labelledby="flashcards_collections_dropdown_{{ fcc.id }}">
+							<ul class="flashcard-menu">
+								<li>
+									<button class="btn shadow-none" type="button" title="Editar colección" data-bs-toggle="modal"
+										data-bs-target="#modal_edit_{{fcc.id}}">
+										<span class="text-info">
+											<i class="fa-solid fa-pen"></i>
+										</span>
+										<p>Editar</p>
+									</button>
+								</li>
+								<li>
+									<button class="btn shadow-none" type="button" title="Eliminar colección" data-bs-toggle="modal"
+										data-bs-target="#modal_delete_{{fcc.id}}">
+										<span class="text-danger">
+											<i class="fa-solid fa-trash"></i>
+										</span>
+										<p>Eliminar</p>
+									</button>
+								</li>
+							</ul>
+						</ul>
+						<!-- End of dropdown menu -->
+					</div>
 				</div>
+
 				<!-- Modal Edit collection -->
 				<div class="modal fade" id="modal_edit_{{fcc.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
 					aria-hidden="true">

@@ -6,7 +6,6 @@
 }
 
 .flashcard_collection_container {
-	border: 1px solid var(--yellow-active);
 	background-color: var(--yellow);
 	border-radius: 20px;
 	display: inline-block;
@@ -47,10 +46,17 @@
 .flashcard_collection_container h3 {
 	font-size: 1rem;
 	font-weight: 500;
+	width: 85%;
+	text-align: center;
 }
+
+.flashcard_collection_container hr {
+	color: #585800;
+}
+
 .flashcard_collection_container p {
 	font-size: 0.8rem;
-	color: var(--c-disabled);
+	color: #464646;
 }
 
 .action-buttons button {
@@ -91,4 +97,70 @@
 }
 .flashcard-front:hover {
 	cursor: pointer;
+}
+
+.flashcard-menu-container .dropdown {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+.flashcard-shadow {
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+		rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+.flashcard-shadow:hover {
+	background-color: #ffff71;
+}
+
+.flashcard-menu-button {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0);
+	border: none;
+}
+.flashcard-menu-button i {
+	font-size: 1rem;
+	color: rgb(98, 98, 98);
+}
+
+.flashcard-menu-button:hover {
+	background-color: rgba(0, 0, 0, 0.25);
+}
+.flashcard-menu-button:hover i {
+	color: #fff;
+}
+.flashcard-menu-button:focus {
+	box-shadow: none;
+	outline: none;
+	background-color: rgba(0, 0, 0, 0.25);
+}
+.flashcard-menu-button:focus i {
+	color: #fff;
+}
+
+.flashcard-menu {
+	list-style: none;
+}
+
+.flashcard-menu li button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+.flashcard-menu li button:hover {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.flashcard-menu li button span {
+	font-size: 0.9rem;
+	margin-right: 8px;
+}
+.flashcard-menu li button p {
+	font-size: 0.9rem;
 }

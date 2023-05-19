@@ -28,6 +28,12 @@ p {
 	font-weight: 400;
 }
 
+ul,
+li {
+	margin: 0;
+	padding: 0;
+}
+
 .fs-1,
 .fs-2,
 .fs-3,
