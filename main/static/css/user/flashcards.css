@@ -59,6 +59,14 @@
 	color: #464646;
 }
 
+.flashcard-text {
+	width: 85%;
+	height: 100%;
+}
+.flashcard-text:hover {
+	cursor: pointer;
+}
+
 .action-buttons button {
 	z-index: 10;
 	font-size: 0.8rem;
@@ -81,22 +89,30 @@
 	justify-content: center;
 }
 .flashcard-container {
-	position: relative;
-	margin-left: 0.5rem;
-	margin-right: 0.5rem;
-}
-
-.flashcard-front,
-.flashcard-back {
-	background-color: var(--yellow);
 	border-radius: 20px;
 	display: inline-block;
 	margin: 1.25rem;
 	padding: 1rem;
 	width: 250px;
+	position: relative;
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+		rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
-.flashcard-front:hover {
-	cursor: pointer;
+
+.flashcard-container::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0);
+	border-radius: 20px;
+	pointer-events: none; /* Ensures the pseudo-element doesn't interfere with mouse events */
+}
+
+.flashcard-container:hover::before {
+	background-color: rgba(255, 255, 255, 0.15);
 }
 
 .flashcard-menu-container .dropdown {

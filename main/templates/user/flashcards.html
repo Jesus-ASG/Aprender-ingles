@@ -2,7 +2,7 @@
 {% load static %}
 {% load filters %}
 
-{% block title %} Flashcards {% endblock %}
+{% block title %} {{ fc_collection.collection_name }} {% endblock %}
 
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/user/flashcards.css' %}">
@@ -12,43 +12,74 @@
 <div class="container main-content">
 
 	<div class="row mt-3">
-		<div class="col-12 page-title-container">
-			<h1 class="fs-1">{{ fc_collection.collection_name }}</h1>
-			<p>{{ fc_collection.description }}</p>
+		<div class="col-2 back-btn-container">
+			<a href="{% url 'flashcards_collections' %}" id="back_page_btn">
+				<span><i class="fa-solid fa-arrow-left"></i></span>
+			</a>
+		</div>
+		<div class="col-8 page-title-container">
+			<h1 class="fs-1 text-center">{{ fc_collection.collection_name }}</h1>
+		</div>
+		<div class="col-2 next-btn-container">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<p class="text-center">{{ fc_collection.description }}</p>
 		</div>
 	</div>
 
 	<hr>
 	<div class="row">
-		<div class="col-12 text-end mb-3">
-			<button class="btn btn-success mt-3" style="color:#fff;" href="#" type="button" title="Create a new collection"
-				data-bs-toggle="modal" data-bs-target="#add_new_flashcard">
-				+
+		<div class="col-12 text-center mb-3">
+			<button class="btn mt-3" href="#" type="button" title="Crear una flashcard" data-bs-toggle="modal"
+				data-bs-target="#add_new_flashcard">
+				<span class="text-success fs-3"><i class="fa-solid fa-plus"></i></span>
+				<p>Agregar nueva flashcard</p>
 			</button>
 		</div>
 
 		<div class="flashcards">
 			{% for fc in flashcards %}
-			<div class="flashcard-container" id="flashcard_{{fc.id}}">
-				<div class="flashcard flashcard-front" style="background-color: {{ fc.color }};">
+			<div class="flashcard-container" style="background-color: {{ fc.color }};" id="flashcard_{{fc.id}}">
+				<div class="flashcard-text">
 					<p name="front">{{ fc.front }}</p>
 					<p name="back" class="d-none">{{ fc.back }}</p>
 				</div>
-				<!--
-					<div class="flashcard-back d-none" style="background-color: {{ fc.color }};">
-						<p>{{ fc.back }}</p>
+
+				<div class="flashcard-menu-container">
+					<div class="dropdown">
+						<button class="btn btn-secondary dropdown-toggle flashcard-menu-button" type="button"
+							id="flashcards_collections_dropdown_{{ fc.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="fa-solid fa-ellipsis-vertical"></i>
+						</button>
+						<!-- Dropdown menu -->
+						<ul class="dropdown-menu" aria-labelledby="flashcards_collections_dropdown_{{ fc.id }}">
+							<ul class="flashcard-menu">
+								<li>
+									<button class="btn shadow-none" type="button" title="Editar colección" data-bs-toggle="modal"
+										data-bs-target="#modal_edit_{{fc.id}}">
+										<span class="text-info">
+											<i class="fa-solid fa-pen"></i>
+										</span>
+										<p>Editar</p>
+									</button>
+								</li>
+								<li>
+									<button class="btn shadow-none" type="button" title="Eliminar colección" data-bs-toggle="modal"
+										data-bs-target="#modal_delete_{{fc.id}}">
+										<span class="text-danger">
+											<i class="fa-solid fa-trash"></i>
+										</span>
+										<p>Eliminar</p>
+									</button>
+								</li>
+							</ul>
+						</ul>
+						<!-- End of dropdown menu -->
 					</div>
-				-->
-				<div class="action-buttons">
-					<button class="btn btn-info shadow-none" type="button" title="Editar colección" data-bs-toggle="modal"
-						data-bs-target="#modal_edit_{{fc.id}}">
-						<i class="fa-solid fa-pen"></i>
-					</button>
-					<button class="btn btn-danger shadow-none" type="button" title="Eliminar colección" data-bs-toggle="modal"
-						data-bs-target="#modal_delete_{{fc.id}}">
-						<i class="fa-solid fa-trash"></i>
-					</button>
 				</div>
+
 				<!-- Modal Edit collection -->
 				<div class="modal fade" id="modal_edit_{{fc.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
 					aria-hidden="true">
@@ -112,7 +143,8 @@
 			</div>
 			{% empty %}
 			<div class="col-12 text-center mb-3">
-				<h2 class="fs-3" style="font-weight: 500;">No tienes colecciones de flashcards aún</h2>
+				<h2 class="fs-4 text-muted" style="font-weight: 400; font-style: italic;">Aún no tienes flashcards en esta
+					colección</h2>
 			</div>
 			{% endfor %}
 		</div>
@@ -169,7 +201,7 @@
 	document.querySelector('.flashcards_collections_link').classList.add('active');
 </script>
 <script>
-	let flashcards = document.querySelectorAll('.flashcard');
+	let flashcards = document.querySelectorAll('.flashcard-text');
 	flashcards.forEach(fc => {
 		fc.addEventListener('click', (e) => {
 			let front = fc.querySelector('[name=front]');
