@@ -2,6 +2,7 @@
 import re
 from django.utils.text import slugify
 
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import redirect, render
@@ -13,12 +14,12 @@ from main.utils.cb_recommender import ContentBasedRecommender
 from main.utils.paginate_and_filter import paginate_stories
 
 
-def is_superuser(user):
-    return user.is_superuser
+def is_staff(user):
+    return user.is_staff
 
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def index(request):
     q_items = request.GET.get('items_number')
     items_per_page = 5
@@ -32,11 +33,14 @@ def index(request):
     context = paginate_stories(request, items_per_page=items_per_page)
     context['filter_form']['items_number'] = items_per_page
 
+    users = User.objects.exclude(id=request.user.id).values('id', 'username', 'email', 'is_staff', 'is_superuser')
+    context['users'] = [request.user] + list(users)
+
     return render(request, 'admin/index_admin.html', context)
 
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def create(request):
     action_type = 'Make a new story'
     storyF = HistoriaForm()
@@ -70,7 +74,7 @@ def create(request):
 
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def update(request, story_id):
     try:
         story = Story.objects.get(id=story_id)
@@ -107,7 +111,7 @@ def update(request, story_id):
         
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def delete(request, story_id):
     try:
         historia = Story.objects.get(id=story_id)

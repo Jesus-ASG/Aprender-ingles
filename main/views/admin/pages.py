@@ -12,12 +12,12 @@ from main.forms import DialogueForm, ImageForm, PageForm, RepeatPhraseForm
 MAX_PAGE_TYPES = 1
 
 
-def is_superuser(user):
-    return user.is_superuser
+def is_staff(user):
+    return user.is_staff
 
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def index(request, route):
     try:
         story = Story.objects.get(route=route)
@@ -28,7 +28,7 @@ def index(request, route):
 
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def create(request, route, page_type):
     if not 0 < page_type <= MAX_PAGE_TYPES:
         return HttpResponseNotFound()
@@ -203,7 +203,7 @@ def create(request, route, page_type):
         
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def update(request, route, page_type, page_id):
     if not 0 < page_type <= MAX_PAGE_TYPES:
         return HttpResponseNotFound()
@@ -258,7 +258,7 @@ def update(request, route, page_type, page_id):
 
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def delete(request, id):
     if request.method == "POST":
         try:

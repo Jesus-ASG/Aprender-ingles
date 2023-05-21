@@ -1,5 +1,6 @@
 from django.urls import path
 from main.views.admin import pages, tags, stories, admin_apis
+from main.views.admin import users_management as um
 from main.views.user import flashcard_collection, flashcards, story_render, user_apis, exercise_apis
 from main.views import views, auth_views
 
@@ -29,6 +30,10 @@ urlpatterns = [
     path('myadmin/add-page/<slug:route>/<int:page_type>/', pages.create, name='add_page'),
     path('myadmin/edit-page/<slug:route>/<int:page_type>/<int:page_id>/', pages.update, name='edit_page'),
     path('myadmin/del-page/<int:id>/', pages.delete, name='del_page'),
+
+    # Users management
+    path('myadmin/users_management/del/<int:user_id>/', um.delete, name='management_del_user'),
+    path('myadmin/users_management/edit/<int:user_id>/', um.update, name='management_edit_user'),
     
     # Show stories content
     path('story/<slug:route>/', story_render.storyInfo, name = 'story_info'),

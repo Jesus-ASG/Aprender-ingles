@@ -44,3 +44,48 @@
     </table>
   </div>
 </div>
+
+
+{% block page-scripts %}
+<script>
+  function updateCBRecommender() {
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+      type: "POST",
+      url: URL_UPDATE_CB_RECOMMENDER,
+      headers: { "X-CSRFToken": csrftoken },
+      success: function (response) {
+        //console.log(response);
+        if (response.message == 'success') {
+          let alert_success = document.querySelector('.alert-success');
+          alert_success.querySelector('strong').innerText = "Content based recommender updated successfully";
+          alert_success.classList.add('show');
+        }
+      },
+      error: function (response) {
+        //console.log(response);
+      }
+    });
+  }
+
+  function updateUBRecommender() {
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+      type: "POST",
+      url: URL_UPDATE_UB_RECOMMENDER,
+      headers: { "X-CSRFToken": csrftoken },
+      success: function (response) {
+        //console.log(response);
+        if (response.message == 'success') {
+          let alert_success = document.querySelector('.alert-success');
+          alert_success.querySelector('strong').innerText = "User based recommender updated successfully";
+          alert_success.classList.add('show');
+        }
+      },
+      error: function (response) {
+        //console.log(response);
+      }
+    });
+  }
+</script>
+{% endblock %}

@@ -27,15 +27,23 @@
 		<ul class="nav nav-tabs">
 			<li class="nav-item" role="presentation">
 				<a class="nav-link active" aria-current="page" href="#stories" aria-controls="stories" role="tab"
-					data-bs-toggle="tab" onclick="">Stories</a>
+					data-bs-toggle="tab">Stories</a>
 			</li>
 			<li class="nav-item" role="presentation">
-				<a class="nav-link" href="#tags" aria-controls="tags" role="tab" data-bs-toggle="tab" onclick="">Tags</a>
+				<a class="nav-link" href="#tags" aria-controls="tags" role="tab" data-bs-toggle="tab">Tags</a>
 			</li>
+			{% if request.user.is_superuser %}
 			<li class="nav-item" role="presentation">
-				<a class="nav-link" href="#recommenders" aria-controls="tags" role="tab" data-bs-toggle="tab"
-					onclick="">Recommenders</a>
+				<a class="nav-link" href="#recommenders" aria-controls="tags" role="tab" data-bs-toggle="tab">Recommenders</a>
 			</li>
+			{% endif %}
+
+			{% if request.user.is_superuser %}
+			<li class="nav-item" role="presentation">
+				<a class="nav-link" href="#users_management" aria-controls="tags" role="tab" data-bs-toggle="tab">Users
+					management</a>
+			</li>
+			{% endif %}
 		</ul>
 	</div>
 
@@ -162,10 +170,20 @@
 		<!-- End tags table -->
 
 		<!-- Recommenders -->
+		{% if request.user.is_superuser %}
 		<div class="row tab-pane" role="tabpanel" id="recommenders" style="min-height: 50vh;">
 			{% include 'admin/admin_recommender.html' %}
 		</div>
+		{% endif %}
 		<!-- End recommenders -->
+
+		<!-- Users management -->
+		{% if request.user.is_superuser %}
+		<div class="row tab-pane" role="tabpanel" id="users_management" style="min-height: 50vh;">
+			{% include 'admin/admin_users_management.html' %}
+		</div>
+		{% endif %}
+		<!-- End users management -->
 	</div>
 </div>
 {% endblock %}
@@ -214,45 +232,7 @@
 	});
 
 
-	function updateCBRecommender() {
-		const csrftoken = getCookie('csrftoken');
-		$.ajax({
-			type: "POST",
-			url: URL_UPDATE_CB_RECOMMENDER,
-			headers: { "X-CSRFToken": csrftoken },
-			success: function (response) {
-				//console.log(response);
-				if (response.message == 'success') {
-					let alert_success = document.querySelector('.alert-success');
-					alert_success.querySelector('strong').innerText = "Content based recommender updated successfully";
-					alert_success.classList.add('show');
-				}
-			},
-			error: function (response) {
-				//console.log(response);
-			}
-		});
-	}
 
-	function updateUBRecommender() {
-		const csrftoken = getCookie('csrftoken');
-		$.ajax({
-			type: "POST",
-			url: URL_UPDATE_UB_RECOMMENDER,
-			headers: { "X-CSRFToken": csrftoken },
-			success: function (response) {
-				//console.log(response);
-				if (response.message == 'success') {
-					let alert_success = document.querySelector('.alert-success');
-					alert_success.querySelector('strong').innerText = "User based recommender updated successfully";
-					alert_success.classList.add('show');
-				}
-			},
-			error: function (response) {
-				//console.log(response);
-			}
-		});
-	}
 
 	function closeAlert() {
 		let alert_success = document.querySelector('.alert-success');

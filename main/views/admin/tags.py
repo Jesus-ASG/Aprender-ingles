@@ -6,12 +6,12 @@ from main.forms import CategoriaForm
 from main.models import Tag
 
 
-def is_superuser(user):
-    return user.is_superuser
+def is_staff(user):
+    return user.is_staff
 
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def create(request):
     action_type = 'Add a new tag'
     tagF = CategoriaForm()
@@ -34,7 +34,7 @@ def create(request):
 
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def update(request, tag_id):
     try:
         tag = Tag.objects.get(id=tag_id)
@@ -62,7 +62,7 @@ def update(request, tag_id):
 
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def delete(request, tag_id):
     categoria = Tag.objects.get(id=tag_id)
     categoria.delete()
