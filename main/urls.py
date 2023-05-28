@@ -1,5 +1,5 @@
 from django.urls import path
-from main.views.admin import pages, tags, stories, admin_apis
+from main.views.admin import pages, tags, stories, recommenders
 from main.views.admin import users_management as um
 from main.views.user import flashcard_collection, flashcards, story_render, user_apis, exercise_apis
 from main.views import views, auth_views
@@ -31,6 +31,11 @@ urlpatterns = [
     path('myadmin/edit-page/<slug:route>/<int:page_type>/<int:page_id>/', pages.update, name='edit_page'),
     path('myadmin/del-page/<int:id>/', pages.delete, name='del_page'),
 
+    # Recommenders
+    path('myadmin/recommenders/', recommenders.index, name="recommenders"),
+    path('myadmin/recommenders/content-based-recommender/update', recommenders.updateCBRecommender, name="update_cb_recommender"),
+    path('myadmin/recommenders/user-based-recommender/update', recommenders.updateUBRecommender, name="update_ub_recommender"),
+
     # Users management
     path('myadmin/users_management/del/<int:user_id>/', um.delete, name='management_del_user'),
     path('myadmin/users_management/edit/<int:user_id>/', um.update, name='management_edit_user'),
@@ -58,10 +63,6 @@ urlpatterns = [
 
     
     path('api/exercise/request_answer/', exercise_apis.request_answer, name="request_exercise_answer"),
-
-    
-    path('api/content-based-recommender/update', admin_apis.updateCBRecommender, name="update_cb_recommender"),
-    path('api/user-based-recommender/update', admin_apis.updateUBRecommender, name="update_ub_recommender"),
 
     path('register', auth_views.register, name='register'),
 

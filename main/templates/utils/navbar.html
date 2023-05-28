@@ -37,22 +37,52 @@
 			{% if request.user.is_authenticated %}
 
 			<ul class="navbar-nav text-center">
-				<!-- Show admin -->
-				{% if request.user.is_staff %}
-				<ul class="navbar-nav mb-2 me-2 mb-lg-0 fs-5 text-center">
-					<li class="nav-item center-by-flex">
-						<a class="nav-link admin_link" aria-current="page" href="{% url 'index_admin' %}">
-							Admin
-						</a>
-					</li>
-				</ul>
-				{% endif %}
+				<!-- Dropdown admin options -->
+				{% if request.user.is_staff or request.user.is_superuser%}
+				<li class="nav-item dropdown fs-5 text-center me-2 center-by-flex">
+					<!-- dropdown toggler -->
+					<a class="nav-link admin_link dropdown-toggle" href="#" id="admin_dropdown" role="button"
+						data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Admin
+					</a>
+					<!-- end of dropdown toggler -->
+					<!-- dropdown menu -->
+					<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="admin_dropdown">
+						{% if request.user.is_superuser %}
+						<li class="nav-item">
+							<a class="dropdown-item" href="{% url 'index_admin' %}">
+								<span class="me-1"><i class="fas fa-user-gear"></i></span>
+								<p class="d-inline-block">Admin</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="dropdown-item" href="{% url 'recommenders' %}">
+								<span class="me-1"><i class="fas fa-user-gear"></i></span>
+								<p class="d-inline-block">Recomendadores</p>
+							</a>
+						</li>
+						{% endif %}
+					</ul>
+					<!-- end of dropdown menu -->
+					<!-- Show admin -->
+					<!--
 
+						<ul class="navbar-nav mb-2 me-2 mb-lg-0 fs-5 text-center">
+							<li class="nav-item center-by-flex">
+								<a class="nav-link admin_link" aria-current="page" href="{% url 'index_admin' %}">
+									Admin
+								</a>
+							</li>
+						</ul>
+					-->
+					<!-- End Dropdown admin options -->
+
+				</li>
+				{% endif %}
 				<!-- Dropdown profile options -->
 				<li class="nav-item dropdown me-2 center-by-flex">
 					<a class="nav-link dropdown-toggle" href="#" id="profile_dropdown" role="button" data-bs-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false" style="">
-						<!--<span><i class="fa fa-user fa-lg" aria-hidden="true"></i></span>-->
+						aria-haspopup="true" aria-expanded="false">
 						<div class="navbar-circle-progress">
 							<div class="navbar-progress-level">
 								<div class="navbar-profile-picture">

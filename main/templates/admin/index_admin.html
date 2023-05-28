@@ -32,11 +32,6 @@
 			<li class="nav-item" role="presentation">
 				<a class="nav-link" href="#tags" aria-controls="tags" role="tab" data-bs-toggle="tab">Tags</a>
 			</li>
-			{% if request.user.is_superuser %}
-			<li class="nav-item" role="presentation">
-				<a class="nav-link" href="#recommenders" aria-controls="tags" role="tab" data-bs-toggle="tab">Recommenders</a>
-			</li>
-			{% endif %}
 
 			{% if request.user.is_superuser %}
 			<li class="nav-item" role="presentation">
@@ -169,14 +164,6 @@
 		</div>
 		<!-- End tags table -->
 
-		<!-- Recommenders -->
-		{% if request.user.is_superuser %}
-		<div class="row tab-pane" role="tabpanel" id="recommenders" style="min-height: 50vh;">
-			{% include 'admin/admin_recommender.html' %}
-		</div>
-		{% endif %}
-		<!-- End recommenders -->
-
 		<!-- Users management -->
 		{% if request.user.is_superuser %}
 		<div class="row tab-pane" role="tabpanel" id="users_management" style="min-height: 50vh;">
@@ -191,10 +178,6 @@
 {% block page-scripts %}
 <script>
 	document.querySelector('.admin_link').classList.add('active');
-</script>
-<script>
-	const URL_UPDATE_CB_RECOMMENDER = '{% url "update_cb_recommender" %}';
-	const URL_UPDATE_UB_RECOMMENDER = '{% url "update_ub_recommender" %}';
 </script>
 <script>
 
@@ -230,9 +213,6 @@
 		if (key == 13) // Code for enter
 			document.getElementById('submit_filter_form_btn').click();
 	});
-
-
-
 
 	function closeAlert() {
 		let alert_success = document.querySelector('.alert-success');
