@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.http import HttpResponseNotFound
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 
 from main.forms import CategoriaForm
@@ -12,58 +12,53 @@ def is_staff(user):
 
 @login_required(login_url='/login/')
 @user_passes_test(is_staff, login_url='/login/')
-def create(request):
-    action_type = 'Add a new tag'
-    tagF = CategoriaForm()
-
-    context = {
-        'action_type':action_type,
-        'tag_form': tagF,
-    }
-
+def index(request):
     if request.method == 'GET':
-        return render(request, 'admin/tag_form.html', context)
+        tags = Tag.objects.all().order_by('name1')
+        context = {
+            'tags': tags
+        }
+        return render(request, 'admin/tags.html', context)
+
+
+@login_required(login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
+def create(request):
+    tagF = CategoriaForm()
     
     if request.method == 'POST':
         tagF = CategoriaForm(request.POST or None)
         if not tagF.is_valid():
-            return render(request, 'admin/tag_form.html', context)
+            return redirect('tags')
         
         tagF.save()
-        return redirect('index_admin')
+        return redirect('tags')
 
 
 @login_required(login_url='/login/')
 @user_passes_test(is_staff, login_url='/login/')
 def update(request, tag_id):
-    try:
-        tag = Tag.objects.get(id=tag_id)
-    except:
-        return HttpResponseNotFound()
-    
-    action_type = 'Edit tag'
-    tagF = CategoriaForm(instance=tag)
-    context = {
-        'action_type':action_type,
-        'tag_form': tagF,
-    }
-
-    if request.method == 'GET':
-        return render(request, 'admin/tag_form.html', context)
-    
     if request.method == 'POST':
-        tagF = CategoriaForm(request.POST or None, instance=tag)
-        context["tag_form"] = tagF
-        if not tagF.is_valid():
-            return render(request, 'admin/tag_form.html', context)
+        tag = Tag.objects.get(id=tag_id)
+        if tag:
+            tagF = CategoriaForm(instance=tag)
         
-        tagF.save()
-        return redirect('index_admin')
+            tagF = CategoriaForm(request.POST or None, instance=tag)
+            if not tagF.is_valid():
+                return redirect('tags')
+            
+            tagF.save()
+            return redirect('tags')
 
 
 @login_required(login_url='/login/')
 @user_passes_test(is_staff, login_url='/login/')
 def delete(request, tag_id):
-    categoria = Tag.objects.get(id=tag_id)
-    categoria.delete()
-    return redirect('index_admin')
+    if request.method == 'POST':
+        tag = Tag.objects.get(id=tag_id)
+        if tag:
+            tag.delete()
+            return JsonResponse({'message': 'success'})
+        else:
+            return JsonResponse({'message:' 'not found'})
+

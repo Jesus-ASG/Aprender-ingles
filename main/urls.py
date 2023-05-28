@@ -21,9 +21,10 @@ urlpatterns = [
     path('myadmin/del-story/<int:story_id>', stories.delete, name = 'delete_story'),
 
     # Tags
+    path('myadmin/tags', tags.index, name = 'tags'),
     path('myadmin/add-tag', tags.create, name = 'add_tag'),
     path('myadmin/edit-tag/<int:tag_id>', tags.update, name = 'edit_tag'),
-    path('myadmin/del-tag/<int:tag_id>', tags.delete, name = 'delete_tag'),
+    path('myadmin/del-tag/<int:tag_id>', tags.delete, name = 'del_tag'),
 
     # Pages
     path('myadmin/view-pages/<slug:route>/', pages.index, name='view_pages'),

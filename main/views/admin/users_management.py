@@ -3,7 +3,7 @@ import json
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import redirect
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
+from django.http import JsonResponse
 from django.forms.models import model_to_dict
 
 from main.models import Story, UserProfile

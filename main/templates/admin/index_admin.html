@@ -29,9 +29,6 @@
 				<a class="nav-link active" aria-current="page" href="#stories" aria-controls="stories" role="tab"
 					data-bs-toggle="tab">Stories</a>
 			</li>
-			<li class="nav-item" role="presentation">
-				<a class="nav-link" href="#tags" aria-controls="tags" role="tab" data-bs-toggle="tab">Tags</a>
-			</li>
 
 			{% if request.user.is_superuser %}
 			<li class="nav-item" role="presentation">
@@ -157,12 +154,6 @@
 			</div>
 		</div>
 		<!-- End stories-->
-
-		<!-- Tags table -->
-		<div class="row tab-pane" role="tabpanel" id="tags">
-			{% include 'admin/admin_tags.html' %}
-		</div>
-		<!-- End tags table -->
 
 		<!-- Users management -->
 		{% if request.user.is_superuser %}
