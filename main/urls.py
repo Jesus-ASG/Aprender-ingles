@@ -15,7 +15,7 @@ urlpatterns = [
     path('stories/', views.storiesList, name="stories"),
     
     # Stories for admin
-    path('myadmin/', stories.index, name = 'index_admin'),
+    path('myadmin/stories', stories.index, name = 'stories'),
     path('myadmin/add-story/', stories.create, name = 'add_story'),
     path('myadmin/edit-story/<int:story_id>', stories.update, name = 'edit_story'),
     path('myadmin/del-story/<int:story_id>', stories.delete, name = 'delete_story'),
@@ -38,6 +38,7 @@ urlpatterns = [
     path('myadmin/recommenders/user-based-recommender/update', recommenders.updateUBRecommender, name="update_ub_recommender"),
 
     # Users management
+    path('myadmin/users_management/', um.index, name='management_users'),
     path('myadmin/users_management/del/<int:user_id>/', um.delete, name='management_del_user'),
     path('myadmin/users_management/edit/<int:user_id>/', um.update, name='management_edit_user'),
     

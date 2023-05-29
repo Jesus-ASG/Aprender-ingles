@@ -36,13 +36,13 @@ def index(request):
     users = User.objects.exclude(id=request.user.id).values('id', 'username', 'email', 'is_staff', 'is_superuser')
     context['users'] = [request.user] + list(users)
 
-    return render(request, 'admin/index_admin.html', context)
+    return render(request, 'admin/stories.html', context)
 
 
 @login_required(login_url='/login/')
 @user_passes_test(is_staff, login_url='/login/')
 def create(request):
-    action_type = 'Make a new story'
+    action_type = 'Agregar historia'
     storyF = HistoriaForm()
     context = {
         'action_type': action_type,
@@ -81,7 +81,7 @@ def update(request, story_id):
     except:
         return HttpResponseNotFound()
     
-    action_type = 'Edit story'
+    action_type = 'Editar historia'
     storyF = HistoriaForm(instance=story)
     context = {
         'action_type': action_type,
@@ -107,7 +107,7 @@ def update(request, story_id):
         storyF.save()
         recommender = ContentBasedRecommender()
         recommender.train()
-        return redirect('index_admin')
+        return redirect('stories')
         
 
 @login_required(login_url='/login/')
@@ -118,6 +118,6 @@ def delete(request, story_id):
         historia.delete()
         recommender = ContentBasedRecommender()
         recommender.train()
-        return redirect('index_admin')
+        return redirect('stories')
     except:
         return HttpResponseBadRequest('')
