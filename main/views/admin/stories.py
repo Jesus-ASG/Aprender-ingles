@@ -107,7 +107,7 @@ def update(request, story_id):
         storyF.save()
         recommender = ContentBasedRecommender()
         recommender.train()
-        return redirect('stories')
+        return redirect('admin_stories')
         
 
 @login_required(login_url='/login/')
@@ -118,6 +118,6 @@ def delete(request, story_id):
         historia.delete()
         recommender = ContentBasedRecommender()
         recommender.train()
-        return redirect('stories')
+        return redirect('admin_stories')
     except:
         return HttpResponseBadRequest('')

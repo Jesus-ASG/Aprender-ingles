@@ -50,7 +50,7 @@
 					<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="admin_dropdown">
 						{% if request.user.is_staff %}
 						<li class="nav-item">
-							<a class="dropdown-item" href="{% url 'stories' %}">
+							<a class="dropdown-item" href="{% url 'admin_stories' %}">
 								<span class="me-1"><i class="fa-solid fa-book"></i></span>
 								<p class="d-inline-block">Historias</p>
 							</a>
