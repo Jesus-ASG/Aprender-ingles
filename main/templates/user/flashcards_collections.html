@@ -25,13 +25,12 @@
 				<p>Agregar nueva colección</p>
 			</button>
 		</div>
-		<div class="flashcards_collection">
+		<div class="flashcards">
 			{% for fcc in flashcards_collections %}
-			<div class="flashcard_collection_container flashcard-shadow" id="flashcards_collection_{{fcc.id}}">
+			<div class="flashcard-container" style="background-color: {{ fcc.color }};" id="flashcards_collection_{{fcc.id}}">
 				<a href="{% url 'flashcards' fcc.id %}">
-					<div class="flash_title">
+					<div class="flash-title">
 						<h3>{{ fcc.collection_name }}</h3>
-
 					</div>
 					<hr>
 					{% if fcc.description %}
@@ -74,8 +73,7 @@
 				</div>
 
 				<!-- Modal Edit collection -->
-				<div class="modal fade" id="modal_edit_{{fcc.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
-					aria-hidden="true">
+				<div class="modal fade" id="modal_edit_{{fcc.id}}" tabindex="-1" aria-hidden="true">
 					<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 						<div class="modal-content">
 							<div class="modal-header">
@@ -86,15 +84,23 @@
 								<form action="{% url 'edit_flashcards_collection' fcc.id %}" autocomplete="off" method="post"
 									id="nc_form_{{ fcc.id }}" class="form-label-bold">
 									{% csrf_token %}
+
 									<div class="mb-2">
 										<label for="nc_name_{{ fcc.id }}" class="form-label c-primary">Nombre de la colección</label>
 										<input type="text" class="form-control" name="collection_name" id="nc_name_{{ fcc.id }}"
 											placeholder="Nombre de la colección" maxlength="100" value="{{ fcc.collection_name }}" required>
 									</div>
+
 									<div class="mb-2">
 										<label for="nc_description_{{ fcc.id }}" class="form-label c-primary">Descripción</label>
 										<input type="text" class="form-control" name="description" id="nc_description_{{ fcc.id }}"
 											placeholder="Agrega una pequeña descripción" maxlength="255" value="{{ fcc.description }}">
+									</div>
+
+									<div class="mb-2">
+										<label for="nc_color_{{ fcc.id }}" class="form-label fw-bold">Color</label>
+										<input class="form-control form-control-color text-center shadow-none" type="color" name="color"
+											id="nc_color_{{ fcc.id }}" value="{{ fcc.color }}">
 									</div>
 								</form>
 							</div>
@@ -107,13 +113,18 @@
 				</div>
 				<!-- End of Modal Edit collection -->
 				<!-- Modal Delete collection -->
-				<div class="modal fade" id="modal_delete_{{fcc.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
-					aria-hidden="true">
+				<div class="modal fade" id="modal_delete_{{fcc.id}}" tabindex="-1" aria-hidden="true">
 					<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 						<div class="modal-content">
 							<div class="modal-header">
-								<h5 class="modal-title  col-11 text-center">¿Desea eliminar esta colección?</h5>
+								<h5 class="modal-title  col-11 text-center">¿Desea eliminar esta colección y todas sus flashcards?</h5>
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+							</div>
+							<div class="modal-body">
+								<p class="text-center text-primary"><i class="fa-solid fa-circle-info"></i>
+									Eliminar: "{{ fcc.collection_name|cut_str:30 }}"</p>
+								<p class="text-center text-danger"><i class="fa-solid fa-triangle-exclamation"></i>
+									Esta acción no se puede deshacer.</p>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -161,6 +172,11 @@
 						<label for="nc_description" class="form-label c-primary">Descripción</label>
 						<input type="text" class="form-control" name="description" id="nc_description"
 							placeholder="Agrega una pequeña descripción" maxlength="255">
+					</div>
+					<div class="mb-2">
+						<label for="nc_color" class="form-label fw-bold">Color</label>
+						<input class="form-control form-control-color text-center shadow-none" type="color" name="color"
+							id="nc_color" value="#fdfda4">
 					</div>
 				</form>
 			</div>

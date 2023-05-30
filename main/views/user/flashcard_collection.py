@@ -34,10 +34,12 @@ def create(request):
             return redirect(reverse('flashcards_collections'))
         
         description = request.POST.get('description')
+        color = request.POST.get('color')
         FlashcardCollection.objects.create(
             user_profile=request.user.profile,
             collection_name=collection_name,
             description=description,
+            color=color,
         )
 
         return redirect(reverse('flashcards_collections'))
@@ -62,9 +64,11 @@ def update(request, fc_collection_id):
             return redirect(reverse('flashcards_collections'))
         
         description = request.POST.get('description')
+        color = request.POST.get('color')
 
         collection.collection_name = collection_name
         collection.description = description
+        collection.color = color
         collection.save()
 
         return redirect(reverse('flashcards_collections'))

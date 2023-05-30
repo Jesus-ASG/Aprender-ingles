@@ -1,5 +1,5 @@
 * Tener python 3.10 o superior
-* Tener un gestor de bd como xampp o wamp
+* Tener un gestor de bd de mysql, también puede ser con xampp, wamp o lampp
 * Crear un entorno virtual:
   * python -m venv env
 * Activar el entorno virtual:

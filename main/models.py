@@ -338,6 +338,7 @@ class FlashcardCollection(models.Model):
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='flashcards_collections')
 
     # fields
+    color = models.CharField(max_length=7, default='#cbe5ff')
     collection_name = models.CharField(max_length=100, blank=False, null=False, default='New Collection')
     description = models.CharField(max_length=255, blank=True, default='')
     

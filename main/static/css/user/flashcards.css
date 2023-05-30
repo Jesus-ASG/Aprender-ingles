@@ -1,85 +1,9 @@
-.flashcards_collection {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: center;
-}
-
-.flashcard_collection_container {
-	background-color: var(--yellow);
-	border-radius: 20px;
-	display: inline-block;
-	margin: 1.25rem;
-	padding: 1rem;
-	width: 250px;
-	position: relative;
-}
-
-.flashcard_collection_container a {
-	text-decoration: none;
-	color: inherit;
-	display: inline-block;
-	width: 100%;
-	height: 100%;
-}
-
-.flash_title {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 0.5rem;
-}
-
-.action-buttons {
-	width: 50px;
-	text-align: center;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	position: absolute;
-	right: 0;
-	top: 0;
-}
-.action-buttons button:hover {
-	cursor: pointer;
-}
-
-.flashcard_collection_container h3 {
-	font-size: 1rem;
-	font-weight: 500;
-	width: 85%;
-	text-align: center;
-}
-
-.flashcard_collection_container hr {
-	color: #585800;
-}
-
-.flashcard_collection_container p {
-	font-size: 0.8rem;
-	color: #464646;
-}
-
 .flashcard-text {
 	width: 85%;
 	height: 100%;
 }
 .flashcard-text:hover {
 	cursor: pointer;
-}
-
-.action-buttons button {
-	z-index: 10;
-	font-size: 0.8rem;
-	border-radius: 50%;
-	width: 26px;
-	height: 26px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 0.5rem;
-}
-.action-buttons button i {
-	display: inline-block;
 }
 
 .flashcards {
@@ -113,6 +37,27 @@
 
 .flashcard-container:hover::before {
 	background-color: rgba(255, 255, 255, 0.15);
+}
+
+.flashcard-container a {
+	text-decoration: none;
+	color: inherit;
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+}
+
+.flashcard-container h3 {
+	font-size: 1rem;
+	font-weight: 500;
+	width: 85%;
+	text-align: center;
+}
+
+.flash-title {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 0.5rem;
 }
 
 .flashcard-menu-container .dropdown {

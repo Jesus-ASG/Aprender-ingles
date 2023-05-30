@@ -23,3 +23,11 @@ def to_int(x):
 def decimal_part(x, decimals=2):
     x = x - int(x)
     return round(x, decimals)
+
+
+@register.filter
+def cut_str(x, n):
+    if len(x) > n:
+        return x[:n].strip() + '...'
+    else:
+        return x

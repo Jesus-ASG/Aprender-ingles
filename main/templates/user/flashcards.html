@@ -106,9 +106,9 @@
 									</div>
 
 									<div class="mb-2">
-										<label for="nc_color" class="form-label fw-bold">Color</label>
+										<label for="nc_color_{{ fc.id }}" class="form-label fw-bold">Color</label>
 										<input class="form-control form-control-color text-center shadow-none" type="color" name="color"
-											id="nc_color" value="{{ fc.color }}">
+											id="nc_color_{{ fc.id }}" value="{{ fc.color }}">
 									</div>
 								</form>
 							</div>
@@ -128,6 +128,12 @@
 							<div class="modal-header">
 								<h5 class="modal-title col-11 text-center">¿Desea eliminar esta flashcard?</h5>
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+							</div>
+							<div class="modal-body">
+								<p class="text-center text-primary"><i class="fa-solid fa-circle-info"></i>
+									Eliminar: "{{ fc.front|cut_str:30 }}"</p>
+								<p class="text-center text-danger"><i class="fa-solid fa-triangle-exclamation"></i>
+									Esta acción no se puede deshacer.</p>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
