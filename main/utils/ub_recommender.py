@@ -28,7 +28,20 @@ class UserBasedRecommender:
             return timeout
         except:
             return default
+        
     
+    def update_timeout(self):
+        most_rated_stories = cache.get(self.cache_most_rated_stories_key)
+        stories_matrix = cache.get(self.cache_stories_key)
+        cosines = cache.get(self.cache_cosines_key)
+
+        if most_rated_stories is None or stories_matrix is None or cosines is None:
+            return
+
+        cache.set(self.cache_most_rated_stories_key, most_rated_stories, timeout=self.timeout)
+        cache.set(self.cache_stories_key, stories_matrix, timeout=self.timeout)
+        cache.set(self.cache_cosines_key, cosines, timeout=self.timeout)
+
     
     def train(self):
         # Get stories

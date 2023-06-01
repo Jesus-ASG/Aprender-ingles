@@ -73,7 +73,25 @@ def updateCBRecommender(request):
 @user_passes_test(is_superuser, login_url='/login/')
 def ubrSettings(request):
     if request.method == 'POST':    
-        return JsonResponse({'message': 'success'})
+        timeout = request.POST.get('timeout', 0)
+
+        ubr_obj = AppSettings.objects.filter(key='ubr').first()
+        if ubr_obj:
+            ubr_settings = json.loads(ubr_obj.value)
+            ubr_settings['timeout'] = timeout
+
+            ubr_settings = json.dumps(ubr_settings)
+            ubr_obj.value = ubr_settings
+            # Update object
+            ubr_obj.save()
+            # Update cache server
+            ubr = UserBasedRecommender()
+            ubr.update_timeout()
+            # success
+            return redirect('recommenders')
+        else:
+            # error
+            return redirect('recommenders')
     
 
 @login_required(login_url='/login/')
