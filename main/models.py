@@ -360,3 +360,15 @@ class Flashcard(models.Model):
     back = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
+
+
+class AppSettings(models.Model):
+    class Meta:
+        db_table = prefix + 'app_settings'
+    
+    # keys
+    id = models.AutoField(primary_key=True)
+    # fields
+    key = models.CharField(max_length=255)
+    value = models.CharField(max_length=255)
+    

@@ -1,4 +1,4 @@
-# content based recommender system
+import json
 import pandas as pd
 
 from django.core.cache import cache
@@ -6,13 +6,34 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-from main.models import Story
+from main.models import Story, AppSettings
 
 
 class ContentBasedRecommender:
     def __init__(self) -> None:
         self.cache_key = 'cb_recommender_similarities'
-        self.timeout = None
+        self.timeout = self.get_db_timeout(None)
+
+
+    @staticmethod
+    def get_db_timeout(default):
+        settings = AppSettings.objects.filter(key='cbr').first()
+        if not settings:
+            return default
+        try:
+            settings_dict = json.loads(settings.value)
+            timeout = int(settings_dict.get('timeout', default))
+            if timeout < 30:
+                timeout = None
+            return timeout
+        except:
+            return default
+        
+    
+    def update_timeout(self):
+        similarities = cache.get(self.cache_key)
+        if similarities:
+            cache.set(self.cache_key, similarities, timeout=self.timeout)
     
 
     def train(self, max_data=5000):

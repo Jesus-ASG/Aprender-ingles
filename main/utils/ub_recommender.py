@@ -1,9 +1,10 @@
+import json
 import pandas as pd
 
 from django.core.cache import cache
 from sklearn.metrics.pairwise import cosine_similarity
 
-from main.models import Story, LikedStory
+from main.models import Story, LikedStory, AppSettings
 
 
 class UserBasedRecommender:
@@ -11,7 +12,22 @@ class UserBasedRecommender:
         self.cache_most_rated_stories_key = 'ubr_most_rated_stories'
         self.cache_stories_key = 'ubr_stories'
         self.cache_cosines_key = 'ubr_cosines'
-        self.timeout = 1800
+        self.timeout = self.get_db_timeout(1800)
+
+    
+    @staticmethod
+    def get_db_timeout(default):
+        settings = AppSettings.objects.filter(key='ubr').first()
+        if not settings:
+            return default
+        try:
+            settings_dict = json.loads(settings.value)
+            timeout = int(settings_dict.get('timeout', default))
+            if timeout < 30:
+                timeout = None
+            return timeout
+        except:
+            return default
     
     
     def train(self):

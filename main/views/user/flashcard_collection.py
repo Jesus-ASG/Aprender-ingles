@@ -9,8 +9,6 @@ from django.http import JsonResponse
 from django.forms.models import model_to_dict
 
 from main.models import FlashcardCollection, Flashcard
-from main.forms import ScoreForm, UserAnswer
-
 
 
 @login_required(login_url='/login/')
@@ -49,6 +47,11 @@ def delete(request, fc_collection_id):
     if request.method == 'POST':
         try:
             collection = FlashcardCollection.objects.get(pk=fc_collection_id)
+
+            has_collection = request.profile.flashcards_collections.filter(pk=collection.id).exists()
+            if not has_collection:
+                return redirect(reverse('flashcards_collections'))
+            
             collection.delete()
             return JsonResponse({'message': 'success'})
         except:
@@ -58,6 +61,10 @@ def delete(request, fc_collection_id):
 def update(request, fc_collection_id):
     if request.method == 'POST':
         collection = FlashcardCollection.objects.get(pk=fc_collection_id)
+
+        has_collection = request.profile.flashcards_collections.filter(pk=collection.id).exists()
+        if not has_collection:
+            return redirect(reverse('flashcards_collections'))
 
         collection_name = request.POST.get('collection_name')
         if collection_name == '':
@@ -72,3 +79,4 @@ def update(request, fc_collection_id):
         collection.save()
 
         return redirect(reverse('flashcards_collections'))
+

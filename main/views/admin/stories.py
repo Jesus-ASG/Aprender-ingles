@@ -1,5 +1,6 @@
 # Historias
 import re
+import json
 from django.utils.text import slugify
 
 from django.contrib.auth.models import User
@@ -8,7 +9,7 @@ from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import redirect, render
 
 from main.forms import HistoriaForm
-from main.models import Story, Tag
+from main.models import Story, AppSettings
 
 from main.utils.cb_recommender import ContentBasedRecommender
 from main.utils.paginate_and_filter import paginate_stories
@@ -68,8 +69,14 @@ def create(request):
             return render(request, 'admin/story_form.html', context)
         storyF.save()
 
-        recommender = ContentBasedRecommender()
-        recommender.train()
+        # Check recommender configuration
+        cbr_settings = AppSettings.objects.filter(key='cbr').first()
+        if cbr_settings:
+            cbr_settings = json.loads(cbr_settings.value)
+            if cbr_settings.get('update_on_alter_stories', True):
+                recommender = ContentBasedRecommender()
+                recommender.train()
+
         return redirect('view_pages', route=story_obj.route)
 
 
@@ -105,8 +112,15 @@ def update(request, story_id):
             context["error"] = "Ya existe una historia con ese título"
             return render(request, 'admin/story_form.html', context)
         storyF.save()
-        recommender = ContentBasedRecommender()
-        recommender.train()
+
+        # Check recommender configuration
+        cbr_settings = AppSettings.objects.filter(key='cbr').first()
+        if cbr_settings:
+            cbr_settings = json.loads(cbr_settings.value)
+            if cbr_settings.get('update_on_alter_stories', True):
+                recommender = ContentBasedRecommender()
+                recommender.train()
+
         return redirect('admin_stories')
         
 
@@ -116,8 +130,15 @@ def delete(request, story_id):
     try:
         historia = Story.objects.get(id=story_id)
         historia.delete()
-        recommender = ContentBasedRecommender()
-        recommender.train()
+        
+        # Check recommender configuration
+        cbr_settings = AppSettings.objects.filter(key='cbr').first()
+        if cbr_settings:
+            cbr_settings = json.loads(cbr_settings.value)
+            if cbr_settings.get('update_on_alter_stories', True):
+                recommender = ContentBasedRecommender()
+                recommender.train()
+
         return redirect('admin_stories')
     except:
         return HttpResponseBadRequest('')

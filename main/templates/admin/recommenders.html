@@ -43,6 +43,11 @@
 									style="background-color: #77b9fc;" title="Update content based recommender">
 									<span style="color: #fff;"><i class="fa-solid fa-arrows-rotate"></i></span>
 								</button>
+
+								<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="modal"
+									data-bs-target="#cbr_settings">
+									<i class="fa-solid fa-gear"></i>
+								</button>
 							</div>
 						</td>
 					</tr>
@@ -59,6 +64,11 @@
 									style="background-color: #77b9fc;" title="Update user based recommender">
 									<span style="color: #fff;"><i class="fa-solid fa-arrows-rotate"></i></span>
 								</button>
+
+								<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="modal"
+									data-bs-target="#ubr_settings">
+									<i class="fa-solid fa-gear"></i>
+								</button>
 							</div>
 						</td>
 					</tr>
@@ -69,6 +79,78 @@
 		</div>
 	</div>
 </div>
+<!-- Modals -->
+<!-- Modal CBR settings -->
+<div class="modal fade" id="cbr_settings" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title col-11 text-center">Ajustes de CBR</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+			</div>
+			<div class="modal-body">
+				<form action="{% url 'cbr_settings' %}" autocomplete="off" method="post" id="cbr_settings_form"
+					class="form-label-bold">
+					{% csrf_token %}
+					<div class="mb-2">
+						<label for="ubr_timeout" class="form-label c-primary">Actualizar automáticamente (segundos)</label>
+						<input type="number" class="form-control" name="timeout" id="ubr_timeout" value="{{ cbr_settings.timeout }}"
+							required>
+						<p class="text-center text-primary"><i class="fa-solid fa-circle-info"></i> <span>Menos de 30 segundos
+								significa no actualizar automáticamente.</span>
+						</p>
+					</div>
+
+					<div class="mb-2">
+						<div class="form-check d-inline-block">
+							<input {% if cbr_settings.update_on_alter_stories %}checked{% endif %} class="form-check-input"
+								type="checkbox" name="update" id="cbr_update">
+							<label class="form-check-label" for="cbr_update">
+								Actualizar cada que se agregan, modifican o eliminan historias
+							</label>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+				<button type="sumbit" class="btn btn-primary" form="cbr_settings_form">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End of Modal CBR settings -->
+
+<!-- Modal UBR settings -->
+<div class="modal fade" id="ubr_settings" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title col-11 text-center">Ajustes de UBR</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+			</div>
+			<div class="modal-body">
+				<form action="{% url 'ubr_settings' %}" autocomplete="off" method="post" id="ubr_settings_form"
+					class="form-label-bold">
+					{% csrf_token %}
+					<div class="mb-2">
+						<label for="ubr_timeout" class="form-label c-primary">Actualizar automáticamente (segundos)</label>
+						<input type="number" class="form-control" name="collection_name" id="ubr_timeout"
+							value="{{ ubr_settings.timeout }}" required>
+						<p class="text-center text-primary"><i class="fa-solid fa-circle-info"></i> <span>Menos de 30 segundos
+								significa no actualizar automáticamente.</span>
+						</p>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+				<button type="sumbit" class="btn btn-primary" form="ubr_settings_form">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End of Modal UBR settings -->
 {% endblock %}
 
 {% block page-scripts %}
