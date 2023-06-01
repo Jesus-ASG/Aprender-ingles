@@ -1,12 +1,10 @@
-import json
-
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from main.utils.cb_recommender import ContentBasedRecommender
 from main.utils.ub_recommender import UserBasedRecommender
-from main.models import AppSettings
+from main.models import CBRSettings, UBRSettings
 
 def is_superuser(user):
     return user.is_superuser
@@ -16,13 +14,8 @@ def is_superuser(user):
 @user_passes_test(is_superuser, login_url='/login/')
 def index(request):
     if request.method == "GET":
-        ubr_settings = AppSettings.objects.filter(key='ubr').first()
-        if ubr_settings:
-            ubr_settings = json.loads(ubr_settings.value)
-
-        cbr_settings = AppSettings.objects.filter(key='cbr').first()
-        if cbr_settings:
-            cbr_settings = json.loads(cbr_settings.value)
+        ubr_settings = UBRSettings.objects.first()
+        cbr_settings = CBRSettings.objects.first()
         
         context = {
             'ubr_settings': ubr_settings,
@@ -34,24 +27,20 @@ def index(request):
 # Content based recommender
 @login_required(login_url='/login/')
 @user_passes_test(is_superuser, login_url='/login/')
-def cbrSettings(request):
+def cbrUpdateSettings(request):
     if request.method == 'POST':
         timeout = request.POST.get('timeout', 0)
         update = request.POST.get('update') == 'on'
 
-        cbr_obj = AppSettings.objects.filter(key='cbr').first()
-        if cbr_obj:
-            cbr_settings = json.loads(cbr_obj.value)
-            cbr_settings['timeout'] = timeout
-            cbr_settings['update_on_alter_stories'] = update
-
-            cbr_settings = json.dumps(cbr_settings)
-            cbr_obj.value = cbr_settings
+        recommender_settings = CBRSettings.objects.first()
+        if recommender_settings:
+            recommender_settings.timeout = timeout
+            recommender_settings.update_on_alter_stories = update
             # Update object
-            cbr_obj.save()
+            recommender_settings.save()
             # Update cache server
-            cbr = ContentBasedRecommender()
-            cbr.update_timeout()
+            recommender = ContentBasedRecommender()
+            recommender.update_timeout()
             # success
             return redirect('recommenders')
         else:
@@ -71,22 +60,18 @@ def updateCBRecommender(request):
 # User based recommender
 @login_required(login_url='/login/')
 @user_passes_test(is_superuser, login_url='/login/')
-def ubrSettings(request):
+def ubrUpdateSettings(request):
     if request.method == 'POST':    
         timeout = request.POST.get('timeout', 0)
 
-        ubr_obj = AppSettings.objects.filter(key='ubr').first()
-        if ubr_obj:
-            ubr_settings = json.loads(ubr_obj.value)
-            ubr_settings['timeout'] = timeout
-
-            ubr_settings = json.dumps(ubr_settings)
-            ubr_obj.value = ubr_settings
+        recommender_settings = UBRSettings.objects.first()
+        if recommender_settings:
+            recommender_settings.timeout = timeout
             # Update object
-            ubr_obj.save()
+            recommender_settings.save()
             # Update cache server
-            ubr = UserBasedRecommender()
-            ubr.update_timeout()
+            recommender = UserBasedRecommender()
+            recommender.update_timeout()
             # success
             return redirect('recommenders')
         else:

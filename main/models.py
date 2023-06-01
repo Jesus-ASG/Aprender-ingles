@@ -362,13 +362,29 @@ class Flashcard(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
 
-class AppSettings(models.Model):
+class CBRSettings(models.Model):
     class Meta:
-        db_table = prefix + 'app_settings'
-    
+        db_table = prefix + 'cbr_settings'
+
     # keys
     id = models.AutoField(primary_key=True)
     # fields
-    key = models.CharField(max_length=255)
-    value = models.CharField(max_length=255)
-    
+    timeout = models.IntegerField(default=0)
+    update_on_alter_stories = models.BooleanField(default=True)
+
+    def __str__(self) -> str:
+        return 'Timeout: {}, Update: {}'.format(self.timeout, self.update_on_alter_stories)
+
+
+class UBRSettings(models.Model):
+    class Meta:
+        db_table = prefix + 'ubr_settings'
+
+    # keys
+    id = models.AutoField(primary_key=True)
+    # fields
+    timeout = models.IntegerField(default=1800)
+
+    def __str__(self) -> str:
+        return 'Timeout: {}'.format(self.timeout)
+

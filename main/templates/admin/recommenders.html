@@ -93,8 +93,8 @@
 					class="form-label-bold">
 					{% csrf_token %}
 					<div class="mb-2">
-						<label for="ubr_timeout" class="form-label c-primary">Actualizar automáticamente (segundos)</label>
-						<input type="number" class="form-control" name="timeout" id="ubr_timeout" value="{{ cbr_settings.timeout }}"
+						<label for="cbr_timeout" class="form-label c-primary">Actualizar automáticamente (segundos)</label>
+						<input type="number" class="form-control" name="timeout" id="cbr_timeout" value="{{ cbr_settings.timeout }}"
 							required>
 						<p class="text-center text-primary"><i class="fa-solid fa-circle-info"></i> <span>Menos de 30 segundos
 								significa no actualizar automáticamente.</span>

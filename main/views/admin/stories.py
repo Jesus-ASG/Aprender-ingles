@@ -1,6 +1,5 @@
 # Historias
 import re
-import json
 from django.utils.text import slugify
 
 from django.contrib.auth.models import User
@@ -9,7 +8,7 @@ from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import redirect, render
 
 from main.forms import HistoriaForm
-from main.models import Story, AppSettings
+from main.models import Story, CBRSettings
 
 from main.utils.cb_recommender import ContentBasedRecommender
 from main.utils.paginate_and_filter import paginate_stories
@@ -70,10 +69,9 @@ def create(request):
         storyF.save()
 
         # Check recommender configuration
-        cbr_settings = AppSettings.objects.filter(key='cbr').first()
-        if cbr_settings:
-            cbr_settings = json.loads(cbr_settings.value)
-            if cbr_settings.get('update_on_alter_stories', True):
+        cbr_settings = CBRSettings.objects.first()
+        if cbr_settings:            
+            if cbr_settings.update_on_alter_stories:
                 recommender = ContentBasedRecommender()
                 recommender.train()
 
@@ -114,10 +112,9 @@ def update(request, story_id):
         storyF.save()
 
         # Check recommender configuration
-        cbr_settings = AppSettings.objects.filter(key='cbr').first()
-        if cbr_settings:
-            cbr_settings = json.loads(cbr_settings.value)
-            if cbr_settings.get('update_on_alter_stories', True):
+        cbr_settings = CBRSettings.objects.first()
+        if cbr_settings:            
+            if cbr_settings.update_on_alter_stories:
                 recommender = ContentBasedRecommender()
                 recommender.train()
 
@@ -132,10 +129,9 @@ def delete(request, story_id):
         historia.delete()
         
         # Check recommender configuration
-        cbr_settings = AppSettings.objects.filter(key='cbr').first()
-        if cbr_settings:
-            cbr_settings = json.loads(cbr_settings.value)
-            if cbr_settings.get('update_on_alter_stories', True):
+        cbr_settings = CBRSettings.objects.first()
+        if cbr_settings:            
+            if cbr_settings.update_on_alter_stories:
                 recommender = ContentBasedRecommender()
                 recommender.train()
 

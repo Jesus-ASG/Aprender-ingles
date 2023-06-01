@@ -37,8 +37,8 @@ urlpatterns = [
     path('myadmin/recommenders/content-based-recommender/update', recommenders.updateCBRecommender, name="update_cb_recommender"),
     path('myadmin/recommenders/user-based-recommender/update', recommenders.updateUBRecommender, name="update_ub_recommender"),
 
-    path('myadmin/recommenders/content-based-recommender/settings', recommenders.cbrSettings, name="cbr_settings"),
-    path('myadmin/recommenders/user-based-recommender/settings', recommenders.ubrSettings, name="ubr_settings"),
+    path('myadmin/recommenders/content-based-recommender/settings', recommenders.cbrUpdateSettings, name="cbr_settings"),
+    path('myadmin/recommenders/user-based-recommender/settings', recommenders.ubrUpdateSettings, name="ubr_settings"),
 
     # Users management
     path('myadmin/users_management/', um.index, name='management_users'),
