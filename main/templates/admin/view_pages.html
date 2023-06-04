@@ -23,34 +23,54 @@
   <section class="my-3">
     <div class="row text-center">
       <div class="col col-12">
+        <div class="select-template-section">
+          <!-- General template -->
+          <a class="template-2" href="{% url 'add_page' story.route 1 %}">
+            <div class="template-card">
+              <div style="width: 100%; height: 60px; display: flex; flex-direction: row;">
+                <span style="width: 60%;">
+                  <i style="margin: 0.5rem; font-size: 3rem; color:gray" class="fa-regular fa-image"></i>
+                </span>
+                <div
+                  style="width: 40%; margin: 0 0.5rem; height: 100%; align-items: center; display: flex; flex-direction: column;">
+                  <div class="brand-t-1" style="margin: 0; background-color: #fff;"></div>
+                  <div class="brand-t-1"></div>
+                  <div class="brand-t-1"></div>
+                  <div class="brand-t-1"></div>
+                </div>
+              </div>
+              <div
+                style="width: 100%; padding: 0 0.25rem 0 0.5rem; height: 50px; display: flex; flex-direction: column; align-items: center;">
+                <div class="brand-t-1"></div>
+                <div class="brand-t-1"></div>
+                <div class="brand-t-1"></div>
+              </div>
+              <div style="width: 100%; height: 70px; align-items: center; display: flex; justify-content: center;">
+                <span>
+                  <i style="margin: 0.5rem; font-size: 3rem; color: #77b9fc;" class="fa-solid fa-list-check"></i>
+                </span>
+              </div>
+            </div>
+            <p class="template-name">#1: Plantilla general</p>
+          </a>
+          <!-- End of general template -->
 
-        <a class="template" href="{% url 'add_page' story.route 1 %}">
-          <div class="t1-p1">
-            <div class="box-t1-1">
-              <img src="{% static 'img/image-icon.png' %}" alt="Default image">
+          <!-- Video and exercises template 
+          <a class="template-2">
+            <div class="template-card">
+              <div style="width: 100%; height: 110px; display: flex; justify-content: center; align-items: center;">
+                <span><i style="font-size: 3rem; color: gray;" class="fas fa-circle-play"></i></span>
+              </div>
+              <div style="width: 100%; height: 70px; align-items: center; display: flex; justify-content: center;">
+                <span>
+                  <i style="margin: 0.5rem; font-size: 3rem; color: #77b9fc;" class="fa-solid fa-list-check"></i>
+                </span>
+              </div>
             </div>
-            <div class="box-t1-2">
-              <span class="t1-line-s"></span>
-              <span class="t1-line-s"></span>
-              <span class="t1-line-s"></span>
-            </div>
-          </div>
-          <div class="t1-p2">
-            <div class="box-t1-3">
-              <span class="t1-line-l"></span>
-              <span class="t1-line-lb"></span>
-              <span class="t1-line-l"></span>
-            </div>
-          </div>
-          <div class="t1-p3">
-            <div class="box-t1-4">
-              <img src="{% static 'img/test.png' %}" alt="Default image">
-            </div>
-          </div>
-          <p>
-            #1: Plantilla general
-          </p>
-        </a>
+            <p class="template-name">#2: Video y ejercicios</p>
+          </a>
+           End of video and exercises template -->
+        </div>
       </div>
     </div>
   </section>

@@ -9,7 +9,7 @@ from main.models import Story, Page, Image, Text, Dialogue, RepeatPhrase, Spellc
 from main.forms import DialogueForm, ImageForm, PageForm, RepeatPhraseForm
 
 
-MAX_PAGE_TYPES = 1
+MAX_PAGE_TYPES = 2
 
 
 def is_staff(user):
