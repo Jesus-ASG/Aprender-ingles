@@ -17,6 +17,7 @@
     width: 0px;
   }
 </style>
+<link rel="stylesheet" href="{% static 'css/admin/create_page.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -29,13 +30,13 @@
       </a>
     </div>
     <div class="col-8 page-title-container">
-      <h2 class="fs-2">Template 1</h2>
+      <h2 class="fs-2">Plantilla 2</h2>
     </div>
   </div>
   <div class="row mt-3">
     <div class="col-12 text-center">
       <label class="form-label fs-5" for="sub1">Agrega un subtítulo en inglés</label>
-      <input class="fs-2 text-center form-control" id="sub1" placeholder="Subtítulo en inglés" autocomplete="false"
+      <input class="fs-5 text-center form-control" id="sub1" placeholder="Subtítulo en inglés" autocomplete="false"
         value="{{ page.subtitle1 | default:'' }}"></input>
     </div>
   </div>
@@ -43,68 +44,35 @@
   <div class="row mt-3">
     <div class="col-12 text-center">
       <label class="form-label fs-5" for="sub2">Agrega un subtítulo en español</label>
-      <input class="fs-2 text-center form-control" id="sub2" placeholder="Subtítulo en español" autocomplete="false"
+      <input class="fs-5 text-center form-control" id="sub2" placeholder="Subtítulo en español" autocomplete="false"
         value="{{ page.subtitle2 | default:'' }}"></input>
     </div>
   </div>
-
-  {% for i in images %}
-  <div name="images">
-    <input type="file" id="image" name="image" class="form-control" accept="image/*" onchange="changeImg(this)" hidden>
-    <input value="0" name="element_number" hidden>
-    <input value="{{ i.id |default:''}}" name="id" hidden>
-  </div>
-  {% empty %}
-  <div name="images">
-    <input type="file" id="image" name="image" class="form-control" accept="image/*" onchange="changeImg(this)" hidden>
-    <input value="0" name="element_number" hidden>
-    <input value="{{ i.id |default:''}}" name="id" hidden>
-  </div>
-  {% endfor %}
 
   <div class="mt-3" id="alert_removed_success"></div>
 
   <div class="row my-3">
     <div class="col-12">
-      <div class="img-t-1">
-        {% for i in images %}
-        <img class="box-shadow border-radius-10px" src="{{ i.image.url | default:story.cover.url }}"
-          alt="No se pudo cargar la imagen" id="img_showed">
-        {% empty %}
-        <img class="box-shadow border-radius-10px" src="{{ story.cover.url }}" alt="No se pudo cargar la imagen"
-          id="img_showed">
-        {% endfor %}
-        <div class="row mt-1">
-          <div class="col-12 col-md-6">
-            <button class="btn btn-primary shadow-none fs-6 w-100 fw-bold" type="button"
-              onclick="document.getElementById('image').click(); return false;">Cambiar imagen</button>
-          </div>
-          <div class="col-12 col-md-6">
-            <button class="btn btn-info shadow-none fs-6 w-100 fw-bold" onclick="restoreImage()" type="button">Restaurar
-              imagen</button>
-          </div>
-        </div>
-      </div>
 
       <div class="col-12">
         <h2 class="fs-3 text-center my-3">Contenido</h2>
       </div>
       <div class="col-12">
-        <div id="content_area"></div>
-      </div>
+        <div class="row mb-3">
+          <div class="col-12 col-md-8">
+            <input class="text-center form-control" id="video_url" placeholder="Url del video"
+              autocomplete="false"></input>
+          </div>
+          <div class="col-12 col-md-4">
+            <button class="btn btn-primary" onclick="loadVideo()">Cargar video</button>
+          </div>
+        </div>
+        <div id="video_showed" class="video-showed d-none">
+          <iframe class="video-frame" title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
+        </div>
 
-      <div class="row">
-        <div class="col-12 col-md-8">
-          <select class="form-select" id="content_selected">
-            <option selected>- Selecciona un contenido -</option>
-            <option value="0">Texto</option>
-            <option value="1">Diálogo</option>
-          </select>
-        </div>
-        <div class="col-12 col-md-4 mb-3">
-          <button class="btn btn-primary shadow-none fw-bold w-100" type="button" onclick="addContent()"> Agregar
-          </button>
-        </div>
       </div>
 
     </div>
@@ -192,6 +160,34 @@
 <script src="{% static 'js/add_page/exercises.js' %}"></script>
 <script src="{% static 'js/add_page/add_page.js' %}"></script>
 <script src="{% static 'js/sort_collections.js' %}"></script>
+
+<script>
+  function loadVideo() {
+    url = document.getElementById('video_url').value;
+    video_showed_container = document.getElementById('video_showed');
+    video = document.querySelector('#video_showed iframe')
+    valid_url = validateUrl(url);
+    if (true) {
+      video.src = url;
+      video_showed_container.classList.remove("d-none");
+      console.log(url);
+    }
+    else {
+      console.log("url not valid");
+    }
+  }
+
+  function validateUrl(url) {
+    if (url.startsWith("https://www.youtube.com/embed/"))
+      return url;
+    if (url.startsWith("https://www.youtube.com/watch?v=")) {
+      code = url.split("https://www.youtube.com/watch?v=")[1];
+      return "https://www.youtube.com/embed/" + code;
+    }
+    return "";
+  }
+
+</script>
 
 <script>
   if (page_id)

@@ -1,0 +1,26 @@
+.video-showed {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}
+
+.video-frame {
+	width: 90%;
+	height: 400px;
+}
+
+@media only screen and (max-width: 620px) {
+	.video-frame {
+		width: 90%;
+		height: 300px;
+	}
+}
+
+@media only screen and (max-width: 300px) {
+	.video-frame {
+		width: 100%;
+		height: 250px;
+	}
+}

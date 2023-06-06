@@ -46,9 +46,9 @@ def create(request):
 def delete(request, fc_collection_id):
     if request.method == 'POST':
         try:
+            profile = request.user.profile
             collection = FlashcardCollection.objects.get(pk=fc_collection_id)
-
-            has_collection = request.profile.flashcards_collections.filter(pk=collection.id).exists()
+            has_collection = profile.flashcards_collections.filter(pk=collection.id).exists()
             if not has_collection:
                 return redirect(reverse('flashcards_collections'))
             
@@ -60,9 +60,10 @@ def delete(request, fc_collection_id):
 
 def update(request, fc_collection_id):
     if request.method == 'POST':
+        profile = request.user.profile
         collection = FlashcardCollection.objects.get(pk=fc_collection_id)
 
-        has_collection = request.profile.flashcards_collections.filter(pk=collection.id).exists()
+        has_collection = profile.flashcards_collections.filter(pk=collection.id).exists()
         if not has_collection:
             return redirect(reverse('flashcards_collections'))
 
