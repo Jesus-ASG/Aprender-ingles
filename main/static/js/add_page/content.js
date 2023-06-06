@@ -13,6 +13,40 @@ function addContent() {
 	}
 }
 
+// Video Url
+function addVideoUrl() {
+	document.getElementById("content_area").outerHTML =
+		`
+		<div class="row exercise-sep" id="element_${max_elem}" name="videos">
+			<div class="row mb-3">
+				<div class="col-12">
+					<label class="form-label fs-5" for="video_url_input_${max_elem}">Agrega un video de
+						<a href="https://www.youtube.com" target="_blank" class="external-link" title="Ir a Youtube">
+							YouTube <span><i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 1rem;"></i></span>
+						</a>
+					</label>
+				</div>
+				<div class="col-12 col-md-8">
+					<input class="text-center form-control" id="video_url_input_${max_elem}" name="url"
+					placeholder="Url del video" autocomplete="false">
+					<input type="number" value="${max_elem}" name="element_number" hidden>
+					<input type="number" name="id" hidden>
+				</div>
+				<div class="col-12 col-md-4">
+					<button class="btn btn-primary w-100" onclick="verifyVideo(${max_elem})">Verificar video</button>
+				</div>
+				<div id="video_url_display_c_${max_elem}" class="video-showed d-none">
+					<iframe class="video-frame" title="YouTube video player" frameborder="0"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						allowfullscreen></iframe>
+				</div>
+			</div>
+    </div>
+		<div id="content_area"></div>
+	`;
+	max_elem++;
+}
+
 // Text
 function addText() {
 	document.getElementById("content_area").outerHTML =

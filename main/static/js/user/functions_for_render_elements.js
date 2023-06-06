@@ -6,6 +6,10 @@ let titleClasses = {
 }
 
 // Contents
+// Video url
+function renderVideoUrl() {
+
+}
 
 // Text
 function renderText(text, total_translations) {

@@ -58,21 +58,7 @@
         <h2 class="fs-3 text-center my-3">Contenido</h2>
       </div>
       <div class="col-12">
-        <div class="row mb-3">
-          <div class="col-12 col-md-8">
-            <input class="text-center form-control" id="video_url" placeholder="Url del video"
-              autocomplete="false"></input>
-          </div>
-          <div class="col-12 col-md-4">
-            <button class="btn btn-primary" onclick="loadVideo()">Cargar video</button>
-          </div>
-        </div>
-        <div id="video_showed" class="video-showed d-none">
-          <iframe class="video-frame" title="YouTube video player" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen></iframe>
-        </div>
-
+        <div id="content_area"></div>
       </div>
 
     </div>
@@ -162,18 +148,20 @@
 <script src="{% static 'js/sort_collections.js' %}"></script>
 
 <script>
-  function loadVideo() {
-    url = document.getElementById('video_url').value;
-    video_showed_container = document.getElementById('video_showed');
-    video = document.querySelector('#video_showed iframe')
+  function verifyVideo(element_number) {
+    element = document.getElementById('element_' + element_number);
+
+    url = element.querySelector('[name = url]').value;
+    video_showed_container = element.querySelector('.video-showed');
+    video = video_showed_container.children[0];
+
     valid_url = validateUrl(url);
-    if (true) {
-      video.src = url;
+    if (valid_url !== "") {
+      video.src = valid_url;
       video_showed_container.classList.remove("d-none");
-      console.log(url);
     }
     else {
-      console.log("url not valid");
+      video_showed_container.classList.add("d-none");
     }
   }
 
@@ -184,12 +172,17 @@
       code = url.split("https://www.youtube.com/watch?v=")[1];
       return "https://www.youtube.com/embed/" + code;
     }
+    if (url.startsWith("https://youtu.be/")) {
+      code = url.split("https://youtu.be/")[1];
+      return "https://www.youtube.com/embed/" + code;
+    }
     return "";
   }
 
 </script>
 
 <script>
+  addVideoUrl();
   if (page_id)
     loadPageType1();
 

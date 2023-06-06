@@ -11,6 +11,30 @@
 	height: 400px;
 }
 
+.external-link {
+	text-decoration: none;
+	color: #000;
+	transition: all 0.2s ease-in-out;
+}
+.external-link:hover {
+	color: #ff5f13;
+}
+
+.cancel-save-container {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+}
+
+.cancel-save-container * {
+	display: inline-block;
+	min-width: 100px;
+	max-width: 200px;
+	margin: 1rem;
+}
+
 @media only screen and (max-width: 620px) {
 	.video-frame {
 		width: 90%;
