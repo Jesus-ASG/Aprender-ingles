@@ -237,8 +237,8 @@ def update(request, route, page_type, page_id):
         story = Story.objects.get(route=route)
         page = story.pages.get(id=page_id)
 
-        videos = page.video_urls.all()
         images = page.images.all()
+        videos = page.video_urls.all()
         texts = page.texts.all()
         dialogues = page.dialogues.all()
         repeat_phrases = page.repeat_phrases.all()

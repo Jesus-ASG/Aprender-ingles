@@ -7,8 +7,29 @@ let titleClasses = {
 
 // Contents
 // Video url
-function renderVideoUrl() {
+function renderVideo(video) {
 
+	validated_url = "";
+	if (video.url.startsWith("https://www.youtube.com/embed/"))
+		validated_url = video.url;
+	else if (video.url.startsWith("https://www.youtube.com/watch?v=")) {
+		code = video.url.split("https://www.youtube.com/watch?v=")[1];
+		validated_url = "https://www.youtube.com/embed/" + code;
+	}
+	else if (video.url.startsWith("https://youtu.be/")) {
+		code = video.url.split("https://youtu.be/")[1];
+		validated_url = "https://www.youtube.com/embed/" + code;
+	}
+
+	document.getElementById("content_area").outerHTML =
+		`
+		<div class="video-showed">
+			<iframe src="${validated_url}" class="video-frame" title="YouTube video player" frameborder="0"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+				allowfullscreen></iframe>
+		</div>
+		<div id="content_area"></div>
+	`;
 }
 
 // Text

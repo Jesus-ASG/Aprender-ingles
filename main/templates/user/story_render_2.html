@@ -9,65 +9,28 @@
 <link rel="stylesheet" href="{% static 'css/utils/arrows.css' %}">
 <link rel="stylesheet" href="{% static 'css/user/profile.css' %}">
 <style>
-  .img-t-1 {
-    width: 33%;
-    height: auto;
-    align-items: center;
-    margin: 2%;
-    float: left;
-  }
-
-  .img-t-1 img {
-    margin: auto;
+  .video-frame {
     width: 100%;
-    display: inline-block;
+    height: 500px;
   }
 
-  .text-wrap {
-    width: auto;
-    text-align: justify;
-    float: right;
+  @media only screen and (max-width: 620px) {
+    .video-frame {
+      height: 300px;
+    }
   }
 
-  .txta {
-    background-color: #fff;
-    outline: none;
-    padding-bottom: 10px;
-    resize: none;
-    max-height: 150px;
-  }
-
-  .txta::-webkit-scrollbar {
-    width: 0px;
-  }
-
-  .change-img {
-    width: 20%;
-    min-width: 40px;
-    min-height: 40px;
-    background-color: #f89a16;
-    border-radius: 100%;
-    float: left;
-    position: relative;
-    margin-top: -50px;
-    margin-left: 2%;
-    transition: all 0.2s ease-in-out;
-  }
-
-  .change-img:hover {
-    transform: scale(1.1);
+  @media only screen and (max-width: 300px) {
+    .video-frame {
+      height: 250px;
+    }
   }
 </style>
 {% endblock %}
 
 {% block content %}
 
-<!-- Template 1 -->
-<div class="container main-content">
-  <div class="row mt-3">
-    <div class="col-12 text-center text-muted fs-4">{{ page_number }}/{{ total_pages }}</div>
-  </div>
-</div>
+<!-- Template 2 -->
 <div class="container main-content">
   <div class="row mt-3">
     <div class="col-2 back-btn-container">
@@ -81,11 +44,7 @@
       </a>
       {% endif %}
     </div>
-    <div class="col-8 page-title-container">
-      <h1 class="fs-1 text-center">
-        <div id="subtitle"></div>
-      </h1>
-    </div>
+    <div class="col-8 text-center text-muted fs-4">{{ page_number }}/{{ total_pages }}</div>
     <div class="col-2 next-btn-container">
       {% if next_page is not None %}
       <a href="{% url 'story_content' route=story.route page_number=next_page %}" id="next_page_btn">
@@ -94,21 +53,20 @@
       {% endif %}
     </div>
   </div>
+</div>
+<div class="container main-content">
+  <div class="row mt-3">
+    <div class="col-12 page-title-container">
+      <h1 class="fs-1 text-center">
+        <div id="subtitle"></div>
+      </h1>
+    </div>
+  </div>
 
   <div class="row my-3">
     <div class="col-12">
-      <div class="img-t-1">
-        {% for i in images %}
-        <img class="box-shadow border-radius-10px p-1" src="{{ i.image.url | default:story.cover.url }}"
-          alt="No se pudo cargar la imagen" id="img_showed">
-        {% empty %}
-        <img class="box-shadow border-radius-10px p-1" src="{{ story.cover.url }}" alt="No se pudo cargar la imagen"
-          id="img_showed">
-        {% endfor %}
-      </div>
       <!-- Content -->
       <div id="content_area"></div>
-
     </div>
   </div>
 
@@ -162,6 +120,7 @@
 
   let db_subtitle = {};
   let db_images = {};
+  let db_videos = [];
   let db_texts = {};
   let db_dialogues = {};
   let db_repeat_phrases = {};
@@ -178,6 +137,9 @@
   } catch (e) { }
   try {
     db_images = JSON.parse('{{ images_json |safe }}');
+  } catch (e) { }
+  try {
+    db_videos = JSON.parse('{{ videos |safe }}');
   } catch (e) { }
   try {
     db_texts = JSON.parse('{{ texts |safe |escapejs }}');
@@ -225,16 +187,13 @@
 
   setAnswerQuestionsMessage(total_translations);
 
+  // Sort collections
+  sortCollections();
   // Render elements
   for (let element of collections_sorted) {
     switch (element.type) {
-      case "image":
-        break;
-      case "text":
-        renderText(element, total_translations);
-        break;
-      case "dialogue":
-        renderDialogue(element, total_translations);
+      case "video":
+        renderVideo(element);
         break;
       case "repeat_phrase":
         renderRepeatPhrase(element, total_translations);

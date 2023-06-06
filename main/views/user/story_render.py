@@ -84,6 +84,7 @@ def storyContent(request, route, page_number):
         next_page = page_number + 1
 
     images = current_page.images.all()
+    videos = current_page.video_urls.all()
     texts = current_page.texts.all()
     dialogues = current_page.dialogues.all()
     repeat_phrases = current_page.repeat_phrases.all()
@@ -112,6 +113,7 @@ def storyContent(request, route, page_number):
 
         answers = json.dumps(answers)
 
+        videos = json.dumps(list(videos.values()))
         texts = json.dumps(list(texts.values()))
         dialogues = json.dumps(list(dialogues.values()))
         repeat_phrases = json.dumps(list(repeat_phrases.values()))
@@ -133,6 +135,7 @@ def storyContent(request, route, page_number):
             'current_page': current_page,
             'images': images,
             'images_json': images_json,
+            'videos': videos,
             'texts': texts,
             'dialogues': dialogues,
             'repeat_phrases': repeat_phrases,
