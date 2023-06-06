@@ -1,4 +1,5 @@
 let objects_deleted = {
+    "videos": [],
     "texts": [],
     "dialogues": [],
     "repeatPhrases": [],
@@ -11,6 +12,9 @@ function deleteElement(id) {
     if (id_database) {
         let name = element_to_delete.getAttribute("name");
         switch (name) {
+            case "videos":
+                objects_deleted.videos.push(id_database);
+                break;
             case "texts":
                 objects_deleted.texts.push(id_database);
                 break;
@@ -62,6 +66,18 @@ function changeImg(input) {
 function savePage() {
     let formData = new FormData();
     // Contents
+    // Videos
+    let videos = document.getElementsByName('videos');
+    let jsonVideos = [];
+    for (let video of videos) {
+        let jsonVideo = {
+            "id": video.querySelector('[name = id]').value,
+            "element_number": video.querySelector('[name = element_number]').value,
+            "url": video.querySelector('[name = url]').value
+        }
+        jsonVideos.push(jsonVideo);
+    }
+
     // Texts
     let texts = document.getElementsByName('texts');
     let jsonTexts = [];
@@ -138,6 +154,7 @@ function savePage() {
         "page_id": page_id,
         "sub1": sub1 = document.getElementById('sub1').value,
         "sub2": sub2 = document.getElementById('sub2').value,
+        "videos": jsonVideos,
         "texts": jsonTexts,
         "dialogues": jsonDialogues,
         "repeatPhrases": jsonRepeatPhrases,

@@ -86,7 +86,7 @@
       </a>
     </div>
     <div class="col-8 page-title-container">
-      <h2 class="fs-2">Template 1</h2>
+      <h2 class="fs-2">Plantilla 1</h2>
     </div>
   </div>
   <div class="row mt-3">
@@ -218,12 +218,16 @@
   let page_id = '{{ page.id }}';
 
   let default_cover = '{{ story.cover.url }}';
-  let db_images = {};
-  let db_texts = {};
-  let db_dialogues = {};
-  let db_repeat_phrases = {};
-  let db_spellchecks = {};
+  let db_videos = [];
+  let db_images = [];
+  let db_texts = [];
+  let db_dialogues = [];
+  let db_repeat_phrases = [];
+  let db_spellchecks = [];
 
+  try {
+    db_videos = JSON.parse('{{ videos |safe }}');
+  } catch (e) { }
   try {
     db_images = JSON.parse('{{ images_json |safe }}');
   } catch (e) { }
@@ -240,7 +244,7 @@
     db_spellchecks = JSON.parse('{{ spellchecks |safe |escapejs  }}');
   } catch (e) { }
 
-  /* For page type 1 */
+  /* Initialize max_elem */
   let max_elem = 0;
 
 </script>
@@ -251,8 +255,10 @@
 <script src="{% static 'js/sort_collections.js' %}"></script>
 
 <script>
-  if (page_id)
+  if (page_id) {
+    sortCollections();
     loadPageType1();
+  }
 
   function loadPageType1() {
     // change default image

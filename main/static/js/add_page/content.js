@@ -13,8 +13,8 @@ function addContent() {
 	}
 }
 
-// Video Url
-function addVideoUrl() {
+// Video
+function addVideo() {
 	document.getElementById("content_area").outerHTML =
 		`
 		<div class="row exercise-sep" id="element_${max_elem}" name="videos">
@@ -29,8 +29,8 @@ function addVideoUrl() {
 				<div class="col-12 col-md-8">
 					<input class="text-center form-control" id="video_url_input_${max_elem}" name="url"
 					placeholder="Url del video" autocomplete="false">
-					<input type="number" value="${max_elem}" name="element_number" hidden>
-					<input type="number" name="id" hidden>
+					<input value="${max_elem}" name="element_number" hidden>
+					<input name="id" hidden>
 				</div>
 				<div class="col-12 col-md-4">
 					<button class="btn btn-primary w-100" onclick="verifyVideo(${max_elem})">Verificar video</button>

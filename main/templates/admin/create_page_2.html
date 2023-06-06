@@ -36,7 +36,7 @@
   <div class="row mt-3">
     <div class="col-12 text-center">
       <label class="form-label fs-5" for="sub1">Agrega un subtítulo en inglés</label>
-      <input class="fs-5 text-center form-control" id="sub1" placeholder="Subtítulo en inglés" autocomplete="false"
+      <input class="fs-2 text-center form-control" id="sub1" placeholder="Subtítulo en inglés" autocomplete="false"
         value="{{ page.subtitle1 | default:'' }}"></input>
     </div>
   </div>
@@ -44,7 +44,7 @@
   <div class="row mt-3">
     <div class="col-12 text-center">
       <label class="form-label fs-5" for="sub2">Agrega un subtítulo en español</label>
-      <input class="fs-5 text-center form-control" id="sub2" placeholder="Subtítulo en español" autocomplete="false"
+      <input class="fs-2 text-center form-control" id="sub2" placeholder="Subtítulo en español" autocomplete="false"
         value="{{ page.subtitle2 | default:'' }}"></input>
     </div>
   </div>
@@ -115,12 +115,16 @@
   let page_id = '{{ page.id }}';
 
   let default_cover = '{{ story.cover.url }}';
-  let db_images = {};
-  let db_texts = {};
-  let db_dialogues = {};
-  let db_repeat_phrases = {};
-  let db_spellchecks = {};
+  let db_videos = [];
+  let db_images = [];
+  let db_texts = [];
+  let db_dialogues = [];
+  let db_repeat_phrases = [];
+  let db_spellchecks = [];
 
+  try {
+    db_videos = JSON.parse('{{ videos |safe }}');
+  } catch (e) { }
   try {
     db_images = JSON.parse('{{ images_json |safe }}');
   } catch (e) { }
@@ -137,7 +141,7 @@
     db_spellchecks = JSON.parse('{{ spellchecks |safe |escapejs  }}');
   } catch (e) { }
 
-  /* For page type 1 */
+  /* Initialize max_elem */
   let max_elem = 0;
 
 </script>
@@ -182,27 +186,20 @@
 </script>
 
 <script>
-  addVideoUrl();
-  if (page_id)
-    loadPageType1();
+  if (page_id) {
+    sortCollections();
+    loadPageType2();
+  }
+  else
+    addVideo();
 
-  function loadPageType1() {
-    // change default image
-    if (db_images.length > 0)
-      default_cover = db_images[0].image;
-
-    // Render them to the document
+  function loadPageType2() {
+    // Render document
     for (let element of collections_sorted) {
       element.element_number = max_elem;
       switch (element.type) {
-        case "image":
-          max_elem++;
-          break;
-        case "text":
-          loadText(element);
-          break;
-        case "dialogue":
-          loadDialogue(element);
+        case "video":
+          loadVideo(element);
           break;
         case "repeat_phrase":
           loadRepeatPhrase(element);
@@ -214,27 +211,12 @@
     }
   }
 
-  function loadText(text) {
-    addText();
-    let html_text = document.getElementById("element_" + (max_elem - 1));
-
-    html_text.querySelector('[name = id]').value = text.id;
-    html_text.querySelector('[name = language1]').value = text.language1;
-    html_text.querySelector('[name = language2]').value = text.language2;
-  }
-
-  function loadDialogue(dialogue) {
-    // add dialogue increases in 1 the id
-    addDialogue();
-    let html_dialogue = document.getElementById("element_" + (max_elem - 1));
-
-    html_dialogue.querySelector('[name = id]').value = dialogue.id;
-    html_dialogue.querySelector('[name = name]').value = dialogue.name;
-    html_dialogue.querySelector('[name = color]').value = dialogue.color;
-    html_dialogue.querySelector('[name = language1]').value = dialogue.content1;
-    html_dialogue.querySelector('[name = language2]').value = dialogue.content2;
-
-    $(".ch-color_" + (max_elem - 1)).css({ 'color': dialogue.color });
+  function loadVideo(video) {
+    addVideo();
+    let html_video = document.getElementById("element_" + (max_elem - 1));
+    html_video.querySelector('[name = id]').value = video.id;
+    html_video.querySelector('[name = url]').value = video.url;
+    verifyVideo(max_elem - 1);
   }
 
   function loadRepeatPhrase(repeat_phrase) {

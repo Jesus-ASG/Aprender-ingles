@@ -217,8 +217,8 @@ class VideoUrl(models.Model):
     id = models.AutoField(primary_key=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='video_urls')
     # fields
-    url = models.CharField(max_length=2048)
     element_number = models.IntegerField()
+    url = models.CharField(max_length=2048)
 
 
 # Image
@@ -229,8 +229,8 @@ class Image(models.Model):
     id = models.AutoField(primary_key=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='images')
     # fields
-    image = models.ImageField(upload_to='imagenes/img-pages/', null=True, blank=True)
     element_number = models.IntegerField()
+    image = models.ImageField(upload_to='imagenes/img-pages/', null=True, blank=True)
     
     def delete(self, *args, **kwargs):
         self.image.delete(save=False)

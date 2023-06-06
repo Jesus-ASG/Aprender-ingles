@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 from django.forms.models import model_to_dict
 
-from main.models import Story, Page, Image, Text, Dialogue, RepeatPhrase, Spellcheck
+from main.models import Story, Page, VideoUrl, Image, Text, Dialogue, RepeatPhrase, Spellcheck
 from main.forms import DialogueForm, ImageForm, PageForm, RepeatPhraseForm
 
 
@@ -84,7 +84,25 @@ def create(request, route, page_type):
             imgObj.element_number = imgD["element_number"]
             images_to_submit.append(imgObj)
             imgForm = ImageForm(request.POST or None, request.FILES or None)
-        
+
+        # Videos
+        videos_to_submit = []
+        videos = data.get("videos", [])
+        for v in videos:
+            if v['url'] == '':
+                return JsonResponse({'message': 'url content cannot be empty'})
+            video_obj = VideoUrl()
+            video_obj.page = pgObj
+
+            if v['id'] != '':
+                video_obj = VideoUrl.objects.get(id=int(v['id']))
+            
+            video_obj.element_number = v.get('element_number', 0)
+            video_obj.url = v['url']
+
+            videos_to_submit.append(video_obj)
+
+
         # Texts
         texts_to_submit = []
         texts = data["texts"]
@@ -163,6 +181,9 @@ def create(request, route, page_type):
 
         # Delete objects that were deleted
         deleted = data["deleted"]
+        for d in deleted['videos']:
+            safe_delete(VideoUrl, d)
+
         for d in deleted['texts']:
             safe_delete(Text, d)
 
@@ -180,6 +201,10 @@ def create(request, route, page_type):
         pgObj.save()
         
         # Content
+        # Videos
+        for video in videos_to_submit:
+            video.save()
+
         # Images
         for image in images_to_submit:
             image.save()
@@ -212,6 +237,7 @@ def update(request, route, page_type, page_id):
         story = Story.objects.get(route=route)
         page = story.pages.get(id=page_id)
 
+        videos = page.video_urls.all()
         images = page.images.all()
         texts = page.texts.all()
         dialogues = page.dialogues.all()
@@ -219,12 +245,14 @@ def update(request, route, page_type, page_id):
         spellchecks = page.spellchecks.all()
 
         # get values list from query set
+        videos = list(videos.values())
         texts = list(texts.values())
         dialogues = list(dialogues.values())
         repeat_phrases = list(repeat_phrases.values())
         spellchecks = list(spellchecks.values())
         
         # cast list to json
+        videos = json.dumps(videos)
         texts = json.dumps(texts)
         dialogues = json.dumps(dialogues)
         repeat_phrases = json.dumps(repeat_phrases)
@@ -242,6 +270,7 @@ def update(request, route, page_type, page_id):
             'story': story, 
             'page': page, 
             'page_type': page_type,
+            'videos': videos,
             'images': images, 
             'images_json': images_json,
             'texts': texts,
