@@ -1,3 +1,14 @@
+class Exercise {
+	constructor(type, id, answer) {
+		this.type = type;
+		this.id = parseInt(id);
+		this.answer = answer;
+	}
+	toString() {
+		return `Type-> ${this.type} Id-> ${this.id}, Answer-> ${this.answer}`;
+	}
+}
+
 // General
 let titleClasses = {
 	"paper": "",
@@ -6,7 +17,7 @@ let titleClasses = {
 }
 
 // Contents
-// Video url
+// Video
 function renderVideo(video) {
 
 	validated_url = "";

@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 from django.forms.models import model_to_dict
 
-from main.models import Story, Page, VideoUrl, Image, Text, Dialogue, RepeatPhrase, Spellcheck
+from main.models import Story, Page, Video, Image, Text, Dialogue, RepeatPhrase, Spellcheck
 from main.forms import DialogueForm, ImageForm, PageForm, RepeatPhraseForm
 
 
@@ -91,11 +91,11 @@ def create(request, route, page_type):
         for v in videos:
             if v['url'] == '':
                 return JsonResponse({'message': 'url content cannot be empty'})
-            video_obj = VideoUrl()
+            video_obj = Video()
             video_obj.page = pgObj
 
             if v['id'] != '':
-                video_obj = VideoUrl.objects.get(id=int(v['id']))
+                video_obj = Video.objects.get(id=int(v['id']))
             
             video_obj.element_number = v.get('element_number', 0)
             video_obj.url = v['url']
@@ -182,7 +182,7 @@ def create(request, route, page_type):
         # Delete objects that were deleted
         deleted = data["deleted"]
         for d in deleted['videos']:
-            safe_delete(VideoUrl, d)
+            safe_delete(Video, d)
 
         for d in deleted['texts']:
             safe_delete(Text, d)
@@ -238,7 +238,7 @@ def update(request, route, page_type, page_id):
         page = story.pages.get(id=page_id)
 
         images = page.images.all()
-        videos = page.video_urls.all()
+        videos = page.videos.all()
         texts = page.texts.all()
         dialogues = page.dialogues.all()
         repeat_phrases = page.repeat_phrases.all()

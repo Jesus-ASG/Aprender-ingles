@@ -8,7 +8,39 @@
 <link rel="stylesheet" href="{% static 'css/user/story_info.css' %}">
 <link rel="stylesheet" href="{% static 'css/utils/arrows.css' %}">
 <link rel="stylesheet" href="{% static 'css/user/profile.css' %}">
+
 <style>
+  .img-t-1 {
+    width: 33%;
+    height: auto;
+    align-items: center;
+    margin: 2%;
+    float: left;
+  }
+
+  .img-t-1 img {
+    margin: auto;
+    width: 100%;
+    display: inline-block;
+  }
+
+  .change-img {
+    width: 20%;
+    min-width: 40px;
+    min-height: 40px;
+    background-color: #f89a16;
+    border-radius: 100%;
+    float: left;
+    position: relative;
+    margin-top: -50px;
+    margin-left: 2%;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .change-img:hover {
+    transform: scale(1.1);
+  }
+
   .video-frame {
     width: 100%;
     height: 500px;
@@ -30,7 +62,6 @@
 
 {% block content %}
 
-<!-- Template 2 -->
 <div class="container main-content">
   <div class="row mt-3">
     <div class="col-2 back-btn-container">
@@ -54,6 +85,7 @@
     </div>
   </div>
 </div>
+<!-- Content area -->
 <div class="container main-content">
   <div class="row mt-3">
     <div class="col-12 page-title-container">
@@ -62,15 +94,17 @@
       </h1>
     </div>
   </div>
-
   <div class="row my-3">
     <div class="col-12">
-      <!-- Content -->
-      <div id="content_area"></div>
+      {% if current_page.page_type == 1 %}
+      {% include 'user/render_page/template_1.html' %}
+      {% elif current_page.page_type == 2 %}
+      {% include 'user/render_page/template_2.html' %}
+      {% endif %}
     </div>
   </div>
-
 </div>
+<!-- Ends of content area -->
 <div class="container main-content">
   <div class="row mt-3">
     <div class="col-12">
@@ -79,19 +113,21 @@
     </div>
     <div class="col-12"><span id="exercises_area"></span></div>
   </div>
+</div>
 
-  <div class="row">
-    <div class="col-12 mb-3 text-center">
-      <button id="btn_send_answers" type="button" class="btn btnr-f-orange fs-5">
-        {% if next_page is None %}
-        Evaluate pages / evaluar páginas
-        {% else %}
-        Send answers / Enviar respuestas
-        {% endif %}
+<div class="row my-3">
+  <div class="col-12 mb-3 text-center">
+    <!-- 
+      <button type="button" class="btn btnr-f-orange fs-5" title="Regresar">
+        <span><i class="fa-solid fa-book"></i></span>
       </button>
-    </div>
+    -->
+    <button id="btn_send_answers" type="button" class="btn btnr-f-orange fs-5" title="Enviar respuestas">
+      <span><i class="fa-solid fa-check"></i></span>
+    </button>
   </div>
 </div>
+
 <!-- Statistics -->
 <div class="container main-content d-none" id="results">
   {% include 'utils/story_statistics.html' %}
@@ -118,16 +154,20 @@
   let db_story_id = '{{ story.id }}';
   let db_page_id = '{{ current_page.id }}';
 
+  // Database elements
   let db_subtitle = {};
-  let db_images = {};
+  let db_images = [];
   let db_videos = [];
-  let db_texts = {};
-  let db_dialogues = {};
-  let db_repeat_phrases = {};
-  let db_spellchecks = {};
+  let db_texts = [];
+  let db_dialogues = [];
+  let db_repeat_phrases = [];
+  let db_spellchecks = [];
 
   let db_answers = {};
   let db_score = {};
+
+  // Save answers to send and evaluate it
+  let user_answers = [];
 
   try {
     db_subtitle.subtitle1 = '{{ current_page.subtitle1 }}';
@@ -164,21 +204,6 @@
 </script>
 
 <script src="{% static 'js/sort_collections.js' %}"></script>
-<script>
-  let user_answers = [];
-
-  class Exercise {
-    constructor(type, id, answer) {
-      this.type = type;
-      this.id = parseInt(id);
-      this.answer = answer;
-    }
-    toString() {
-      return `Type-> ${this.type} Id-> ${this.id}, Answer-> ${this.answer}`;
-    }
-  }
-
-</script>
 <script src="{% static 'js/user/functions_for_render_elements.js' %}"></script>
 <script>
   let total_translations = { "start": 0, "end": 0 };
@@ -186,14 +211,21 @@
   setSubtitle(total_translations);
 
   setAnswerQuestionsMessage(total_translations);
-
   // Sort collections
   sortCollections();
   // Render elements
   for (let element of collections_sorted) {
     switch (element.type) {
+      case "image":
+        break;
       case "video":
         renderVideo(element);
+        break;
+      case "text":
+        renderText(element, total_translations);
+        break;
+      case "dialogue":
+        renderDialogue(element, total_translations);
         break;
       case "repeat_phrase":
         renderRepeatPhrase(element, total_translations);

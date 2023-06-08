@@ -210,12 +210,12 @@ class Page(models.Model):
 
 
 # Video
-class VideoUrl(models.Model):
+class Video(models.Model):
     class Meta:
-        db_table = prefix + 'video_url'
+        db_table = prefix + 'video'
     # keys
     id = models.AutoField(primary_key=True)
-    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='video_urls')
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='videos')
     # fields
     element_number = models.IntegerField()
     url = models.CharField(max_length=2048)

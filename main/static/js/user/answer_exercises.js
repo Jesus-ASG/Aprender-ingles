@@ -168,7 +168,7 @@ function showUserAnswers(answers, show_feedback) {
 	if (show_feedback) {
 		document.getElementById("btn_send_answers").outerHTML = `
 		<a href="` + URL_NEXT_PAGE + `" type="button" class="btn btnr-f-orange fs-5">
-		Continue / Continuar
+		<span><i class="fa-solid fa-arrow-right"></i></span>
 		</a>
 		`;
 		$('button[name="mic_btn"]').attr("disabled", true);

@@ -84,7 +84,7 @@ def storyContent(request, route, page_number):
         next_page = page_number + 1
 
     images = current_page.images.all()
-    videos = current_page.video_urls.all()
+    videos = current_page.videos.all()
     texts = current_page.texts.all()
     dialogues = current_page.dialogues.all()
     repeat_phrases = current_page.repeat_phrases.all()
@@ -143,7 +143,7 @@ def storyContent(request, route, page_number):
             'answers': answers,
             'score': score
             }        
-        return render(request, 'user/story_render_'+str(current_page.page_type)+'.html', context)
+        return render(request, 'user/page_loader.html', context)
 
 
     if request.method == 'POST':        

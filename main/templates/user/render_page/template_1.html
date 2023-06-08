@@ -1,0 +1,10 @@
+<div class="img-t-1">
+  {% for i in images %}
+  <img class="box-shadow border-radius-10px p-1" src="{{ i.image.url | default:story.cover.url }}"
+    alt="No se pudo cargar la imagen" id="img_showed">
+  {% empty %}
+  <img class="box-shadow border-radius-10px p-1" src="{{ story.cover.url }}" alt="No se pudo cargar la imagen"
+    id="img_showed">
+  {% endfor %}
+</div>
+<div id="content_area"></div>
