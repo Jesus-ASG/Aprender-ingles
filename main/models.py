@@ -298,10 +298,38 @@ class Spellcheck(models.Model):
     id = models.AutoField(primary_key=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='spellchecks')
     # fields
+    element_number = models.IntegerField()
     wrong_text = models.CharField(max_length=600)
     right_text = models.CharField(max_length=600)
     translated_right_text = models.CharField(max_length=600)
+
+
+# Question
+class Question(models.Model):
+    class Meta:
+        db_table = prefix + 'question'
+    # keys
+    id = models.AutoField(primary_key=True)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='questions')
+    # fields
     element_number = models.IntegerField()
+    text = models.CharField(max_length=255)
+    t_text = models.CharField(max_length=255)
+    randomize_options = models.BooleanField(default=True)
+    
+
+# Question Option
+class QuestionOption(models.Model):
+    class Meta:
+        db_table = prefix + 'question_option'
+    # keys
+    id = models.AutoField(primary_key=True)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='options')
+    # fields
+    option_number = models.IntegerField(default=0)
+    text = models.CharField(max_length=255)
+    t_text = models.CharField(max_length=255)
+    correct = models.BooleanField(default=False)
 
 
 class UserAnswer(models.Model):

@@ -5,7 +5,7 @@
  * 'a' = 97
  * 'z' = 122
  */
-function generateId() {
+function generateFlipTextId() {
 	id = "";
 	for (let i = 0; i < 8; i++) {
 		num = Math.floor(Math.random() * 52);
@@ -51,7 +51,7 @@ HTMLElement.prototype.flipText = function (e) {
 	let flip_ids = [];
 	for (let i = 0; i < arr1.length; i++) {
 		// Id
-		paper_id = generateId();
+		paper_id = generateFlipTextId();
 
 		let words1 = arr1[i].replace(/ {2,}/g, ' ').trim(); // removes extra spaces
 		let words2 = arr2[i].replace(/ {2,}/g, ' ').trim(); // removes extra spaces
@@ -111,11 +111,9 @@ HTMLElement.prototype.flipText = function (e) {
 	this.innerHTML = html;
 	for (let id of flip_ids)
 		flipPapers(id);
-
 }
 
 function flipPapers(id) {
-
 	let papers = document.getElementsByClassName("paper_" + id);
 
 	for (let paper of papers) {

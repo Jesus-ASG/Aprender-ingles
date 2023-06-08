@@ -38,7 +38,7 @@ def create(request, route, page_type):
         return HttpResponseNotFound()
 
     if request.method == "GET":
-        return render(request, 'admin/create_page_'+str(page_type)+'.html', 
+        return render(request, 'admin/create_page.html', 
         {'story': story, 'page_type': page_type})
 
     if request.method == "POST":
@@ -283,7 +283,7 @@ def update(request, route, page_type, page_id):
         return HttpResponseNotFound()
     
     if request.method == "GET":
-        return render(request, 'admin/create_page_'+str(page_type)+'.html', context)
+        return render(request, 'admin/create_page.html', context)
 
 
 @login_required(login_url='/login/')

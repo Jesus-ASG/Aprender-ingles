@@ -1,3 +1,42 @@
+/* Template 1 */
+.img-t-1 {
+	width: 33%;
+	height: auto;
+	align-items: center;
+	margin: 2%;
+	float: left;
+}
+
+.img-t-1 img {
+	margin: auto;
+	width: 100%;
+	display: inline-block;
+}
+
+.text-wrap {
+	width: auto;
+	text-align: justify;
+	float: right;
+}
+
+.change-img {
+	width: 20%;
+	min-width: 40px;
+	min-height: 40px;
+	background-color: #f89a16;
+	border-radius: 100%;
+	float: left;
+	position: relative;
+	margin-top: -50px;
+	margin-left: 2%;
+	transition: all 0.2s ease-in-out;
+}
+
+.change-img:hover {
+	transform: scale(1.1);
+}
+
+/* Template 2 */
 .video-showed {
 	display: flex;
 	align-items: center;
@@ -47,4 +86,17 @@
 		width: 100%;
 		height: 250px;
 	}
+}
+
+/* Textarea */
+.txta {
+	background-color: #fff;
+	outline: none;
+	padding-bottom: 10px;
+	resize: none;
+	max-height: 150px;
+}
+
+.txta::-webkit-scrollbar {
+	width: 0px;
 }
