@@ -55,11 +55,15 @@
         <div class="row mt-1">
           <div class="col-12 col-md-6">
             <button class="btn btn-primary shadow-none fs-6 w-100 fw-bold" type="button"
-              onclick="document.getElementById('image').click(); return false;">Cambiar imagen</button>
+              onclick="document.getElementById('image').click(); return false;" title="Cambiar imagen">
+              <span><i class="fa-solid fa-file-image"></i></span>
+            </button>
           </div>
           <div class="col-12 col-md-6">
-            <button class="btn btn-info shadow-none fs-6 w-100 fw-bold" onclick="restoreImage()" type="button">Restaurar
-              imagen</button>
+            <button class="btn btn-info shadow-none fs-6 w-100 fw-bold" onclick="restoreImage()" type="button"
+              title="Restaurar imagen">
+              <span style="color:#fff"><i class="fa-solid fa-eraser"></i></span>
+            </button>
           </div>
         </div>
       </div>
@@ -101,18 +105,7 @@
     <div class="col-12">
       <span id="exercises_area"></span>
     </div>
-
-    <div class="col-12 col-md-8">
-      <select class="form-select" id="exercise_selected">
-        <option selected>- Selecciona un ejercicio -</option>
-        <option value="0">Repetir oración</option>
-        <option value="1">Revisar ortografía</option>
-      </select>
-    </div>
-
-    <div class="col-12 col-md-4 mb-3">
-      <button class="btn btn-primary shadow-none fw-bold w-100" type="button" onclick="addExercise()">Agregar</button>
-    </div>
+    {% include 'admin/create_page/select_exercise.html' %}
   </div>
 </div>
 <!-- End of exercises area -->

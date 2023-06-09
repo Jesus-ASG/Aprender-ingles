@@ -53,8 +53,8 @@ def cbrUpdateSettings(request):
 def updateCBRecommender(request):
     if request.method == 'POST':
         cbr = ContentBasedRecommender()
-        if cbr.train():
-            return JsonResponse({'message': 'success'})
+        cbr.train()
+        return JsonResponse({'message': 'success'})
 
 
 # User based recommender
@@ -84,5 +84,5 @@ def ubrUpdateSettings(request):
 def updateUBRecommender(request):
     if request.method == 'POST':
         ubr = UserBasedRecommender()
-        if ubr.train():
-            return JsonResponse({'message': 'success'})
+        ubr.train()
+        return JsonResponse({'message': 'success'})

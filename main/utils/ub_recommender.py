@@ -50,6 +50,8 @@ class UserBasedRecommender:
 
         # Get ratings
         ratings = LikedStory.objects.all().values('user_profile', 'story')
+        if ratings.count() == 0:
+            return False # There aren't ratings in the database
         ratings = pd.DataFrame(list(ratings))
         ratings.rename(columns={'user_profile': 'user_profile_id','story': 'story_id'}, inplace=True)
         ratings['rating'] = 1

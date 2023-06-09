@@ -305,9 +305,9 @@ class Spellcheck(models.Model):
 
 
 # Question
-class Question(models.Model):
+class MultipleChoiceQuestion(models.Model):
     class Meta:
-        db_table = prefix + 'question'
+        db_table = prefix + 'multiple_choice_question'
     # keys
     id = models.AutoField(primary_key=True)
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='questions')
@@ -319,12 +319,12 @@ class Question(models.Model):
     
 
 # Question Option
-class QuestionOption(models.Model):
+class QuestionChoice(models.Model):
     class Meta:
-        db_table = prefix + 'question_option'
+        db_table = prefix + 'question_choice'
     # keys
     id = models.AutoField(primary_key=True)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='options')
+    question = models.ForeignKey(MultipleChoiceQuestion, on_delete=models.CASCADE, related_name='choices')
     # fields
     option_number = models.IntegerField(default=0)
     text = models.CharField(max_length=255)
