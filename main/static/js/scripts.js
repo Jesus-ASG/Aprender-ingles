@@ -8,6 +8,25 @@ navLinks.forEach(link => {
 		link.classList.add('active');
 });
 
+/**
+ * @returns a String id of o random letters
+ * 'A' = 65
+ * 'Z'= 90
+ * 'a' = 97
+ * 'z' = 122
+ */
+function generateStringId() {
+	id = "";
+	for (let i = 0; i < 8; i++) {
+		num = Math.floor(Math.random() * 52);
+		if (num <= 25)
+			num += 65;
+		else
+			num += 71;
+		id += String.fromCharCode(num);
+	}
+	return id;
+}
 
 function getCookie(name) {
 	let cookieValue = null;

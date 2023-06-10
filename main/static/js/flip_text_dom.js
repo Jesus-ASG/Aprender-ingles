@@ -1,22 +1,3 @@
-/**
- * @returns a String id of o random letters
- * 'A' = 65
- * 'Z'= 90
- * 'a' = 97
- * 'z' = 122
- */
-function generateFlipTextId() {
-	id = "";
-	for (let i = 0; i < 8; i++) {
-		num = Math.floor(Math.random() * 52);
-		if (num <= 25)
-			num += 65;
-		else
-			num += 71;
-		id += String.fromCharCode(num);
-	}
-	return id;
-}
 /*
 	Example of use
 	<div id="flip_text">
@@ -51,7 +32,7 @@ HTMLElement.prototype.flipText = function (e) {
 	let flip_ids = [];
 	for (let i = 0; i < arr1.length; i++) {
 		// Id
-		paper_id = generateFlipTextId();
+		paper_id = generateStringId();
 
 		let words1 = arr1[i].replace(/ {2,}/g, ' ').trim(); // removes extra spaces
 		let words2 = arr2[i].replace(/ {2,}/g, ' ').trim(); // removes extra spaces

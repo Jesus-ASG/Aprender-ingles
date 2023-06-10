@@ -100,3 +100,67 @@
 .txta::-webkit-scrollbar {
 	width: 0px;
 }
+
+/* create choice */
+.question-choices {
+	list-style-type: none;
+	width: 100%;
+}
+
+.question-choices li {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.choice-container {
+	margin: 0.5rem;
+	padding: 0.5rem;
+	border: 1px solid #a2a2a2;
+	border-radius: 10px;
+	width: 100%;
+}
+
+.choice-container .radio-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+}
+
+.radio-container span {
+	border: 1px solid #ff5f13;
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.1s ease-in-out;
+}
+
+.radio-container .checked {
+	background-color: var(--f-orange);
+}
+
+.radio-container span:hover {
+	cursor: pointer;
+	background-color: var(--f-orange-active);
+}
+
+.radio-container i {
+	font-size: 1rem;
+	color: #fff;
+}
+
+.add-choice-button {
+	font-weight: 500;
+	font-size: 1rem;
+	color: #b0b0b0;
+	transition: all 0.1s ease-in-out;
+}
+
+.add-choice-button:hover {
+	cursor: pointer;
+	color: #606060;
+}
