@@ -3,7 +3,8 @@ let objects_deleted = {
     "texts": [],
     "dialogues": [],
     "repeatPhrases": [],
-    "spellchecks": []
+    "spellchecks": [],
+    "mc_questions": []
 };
 
 function deleteElement(id) {
@@ -26,6 +27,9 @@ function deleteElement(id) {
                 break;
             case "spellchecks":
                 objects_deleted.spellchecks.push(id_database);
+                break;
+            case "mc_questions":
+                objects_deleted.mc_questions.push(id_database);
                 break;
             default:
         }
@@ -148,6 +152,34 @@ function savePage() {
         jsonSpellchecks.push(jsonS);
     }
 
+    // Multiple choice questions
+    let mc_questions = document.getElementsByName('mc_questions');
+    let jsonMc_questions = [];
+    for (let q of mc_questions) {
+        // Object for questions
+        let qObj = {
+            "id": q.querySelector('[name = id]').value,
+            "element_number": q.querySelector('[name = element_number]').value,
+            "text": q.querySelector('[name = text]').value,
+            "t_text": q.querySelector('[name = t_text]').value,
+            "randomize_choices": q.querySelector('[name = randomize_choices]').checked,
+            "choices": []
+        }
+        // Object for choices
+        let choices = q.querySelectorAll('.choice');
+        for (let c of choices) {
+            let cObj = {
+                "id": c.querySelector('[name = id]').value,
+                "choice_number": c.querySelector('[name = choice_number]').value,
+                "text": c.querySelector('[name = text]').value,
+                "t_text": c.querySelector('[name = t_text]').value,
+                "correct": c.querySelector('[name = correct]').classList.contains('checked')
+            }
+            // Add choices to the question
+            qObj.choices.push(cObj);
+        }
+        jsonMc_questions.push(qObj);
+    }
 
     // Build Json to send
     let jsonData = {
@@ -160,6 +192,7 @@ function savePage() {
         "repeatPhrases": jsonRepeatPhrases,
         "spellchecks": jsonSpellchecks,
         "imageData": imageData,
+        "mc_questions": jsonMc_questions,
         "deleted": objects_deleted
     }
 

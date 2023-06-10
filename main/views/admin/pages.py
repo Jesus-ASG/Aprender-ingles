@@ -1,11 +1,12 @@
 import json
 
+from django.core.serializers import serialize
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 from django.forms.models import model_to_dict
 
-from main.models import Story, Page, Video, Image, Text, Dialogue, RepeatPhrase, Spellcheck
+from main.models import Story, Page, Video, Image, Text, Dialogue, RepeatPhrase, Spellcheck, MultipleChoiceQuestion, QuestionChoice
 from main.forms import DialogueForm, ImageForm, PageForm, RepeatPhraseForm
 
 
@@ -178,6 +179,55 @@ def create(request, route, page_type):
             spcObj.translated_right_text = s['translated_right_text']
             spellchecks_to_submit.append(spcObj)
 
+        
+        # Multiple Choice Questions
+        mc_to_submit = []
+        choices_to_submit = []
+        mcq = data['mc_questions']
+        for q in mcq:
+            if q['text'] == '' or q['t_text'] == '':
+                return JsonResponse({'message': 'The questions cannot be empty'})
+            
+            qObj = MultipleChoiceQuestion()
+            qObj.page = pgObj
+            if q['id'] != '':
+                qObj = MultipleChoiceQuestion.objects.get(id=int(q['id']))
+
+            qObj.element_number = q['element_number']
+            qObj.text = q['text']
+            qObj.t_text = q['t_text']
+            qObj.randomize_choices = q['randomize_choices']
+
+
+            choices = q['choices']
+            corrects = 0
+            for c in choices:
+                if c['text'] == '' or c['t_text'] == '':
+                    return JsonResponse({'message': 'The choices cannot be empty'})
+
+                cObj = QuestionChoice()
+                cObj.question = qObj
+                if c['id'] != '':
+                    cObj = QuestionChoice.objects.get(id=int(c['id']))
+
+                cObj.choice_number = c['choice_number']
+                cObj.text = c['text']
+                cObj.t_text = c['t_text']
+                
+                correct = c['correct']
+                cObj.correct = correct
+                if correct:
+                    corrects += 1
+
+                choices_to_submit.append(cObj)
+            if corrects == 0:
+                return JsonResponse({'message': 'You need to mark one option as correct'})
+            if corrects > 1:
+                return JsonResponse({'message': 'You can\'t mark more than one option as correct'})
+
+            mc_to_submit.append(qObj)
+
+        
 
         # Delete objects that were deleted
         deleted = data["deleted"]
@@ -195,6 +245,9 @@ def create(request, route, page_type):
 
         for d in deleted['spellchecks']:
             safe_delete(Spellcheck, d)
+
+        for d in deleted['mc_questions']:
+            safe_delete(MultipleChoiceQuestion, d)
         
 
         # Save all
@@ -223,6 +276,14 @@ def create(request, route, page_type):
         # Spellchecks
         for spc in spellchecks_to_submit:
             spc.save()
+
+        # Multiple choice questions
+        for q in mc_to_submit:
+            q.save()
+
+        # Question choices
+        for c in choices_to_submit:
+            c.save()
         
         return JsonResponse({'message': 'success'})
         
@@ -243,6 +304,7 @@ def update(request, route, page_type, page_id):
         dialogues = page.dialogues.all()
         repeat_phrases = page.repeat_phrases.all()
         spellchecks = page.spellchecks.all()
+        mc_questions = page.questions.all()
 
         # get values list from query set
         videos = list(videos.values())
@@ -276,7 +338,8 @@ def update(request, route, page_type, page_id):
             'texts': texts,
             'dialogues': dialogues, 
             'repeat_phrases': repeat_phrases,
-            'spellchecks': spellchecks
+            'spellchecks': spellchecks,
+            'mc_questions': mc_questions
         }
 
     except:

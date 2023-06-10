@@ -32,7 +32,8 @@
   const URL_SAVE_PAGE = `{% url 'add_page' route=story.route page_type=page_type %}`;
   const URL_VIEW_PAGES = `{% url 'view_pages' route=story.route %}`;
 
-  let page_id = '{{ page.id }}' || null;
+  let page_id = '{{ page.id }}';
+  console.log()
   let page_type = '{{ page_type }}' || -1;
 
   let default_cover = '{{ story.cover.url }}';
@@ -42,6 +43,7 @@
   let db_dialogues = [];
   let db_repeat_phrases = [];
   let db_spellchecks = [];
+  let db_mc_questions = [];
 
   try {
     db_videos = JSON.parse('{{ videos |safe }}');
@@ -60,6 +62,9 @@
   } catch (e) { }
   try {
     db_spellchecks = JSON.parse('{{ spellchecks |safe |escapejs  }}');
+  } catch (e) { }
+  try {
+    db_mc_questions = JSON.parse('{{ mc_questions |safe |escapejs  }}');
   } catch (e) { }
 
   /* Initialize max_elem */
@@ -105,9 +110,10 @@
 
 </script>
 <script>
-  if (page_id != null) {
+  if (page_id !== "") {
     sortCollections();
     loadPage();
+    console.log(db_mc_questions);
   }
   else {
     if (page_type == 2)

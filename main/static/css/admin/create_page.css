@@ -128,7 +128,7 @@
 	padding: 0;
 }
 
-.radio-container span {
+.radio-container .radio-btn {
 	border: 1px solid #ff5f13;
 	border-radius: 50%;
 	width: 30px;
@@ -139,11 +139,11 @@
 	transition: all 0.1s ease-in-out;
 }
 
-.radio-container .checked {
+.radio-container .selected {
 	background-color: var(--f-orange);
 }
 
-.radio-container span:hover {
+.radio-container .radio-btn:hover {
 	cursor: pointer;
 	background-color: var(--f-orange-active);
 }

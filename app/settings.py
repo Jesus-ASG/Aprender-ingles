@@ -68,7 +68,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'story_quest',
+        'NAME': 'sq_test',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',

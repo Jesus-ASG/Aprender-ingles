@@ -315,7 +315,7 @@ class MultipleChoiceQuestion(models.Model):
     element_number = models.IntegerField()
     text = models.CharField(max_length=255)
     t_text = models.CharField(max_length=255)
-    randomize_options = models.BooleanField(default=True)
+    randomize_choices = models.BooleanField(default=True)
     
 
 # Question Option
@@ -326,7 +326,7 @@ class QuestionChoice(models.Model):
     id = models.AutoField(primary_key=True)
     question = models.ForeignKey(MultipleChoiceQuestion, on_delete=models.CASCADE, related_name='choices')
     # fields
-    option_number = models.IntegerField(default=0)
+    choice_number = models.IntegerField(default=0)
     text = models.CharField(max_length=255)
     t_text = models.CharField(max_length=255)
     correct = models.BooleanField(default=False)

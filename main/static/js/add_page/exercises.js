@@ -159,10 +159,13 @@ function addSpellcheck() {
   max_elem++;
 }
 
-function html_modal_delete(max_elem, message) {
+function html_modal_delete(max_elem, message, cols) {
+  if (cols === undefined) {
+    cols = "col-2 col-md-1";//d-flex align-items-center
+  }
   let html =
     `
-  <div class="col-2 col-md-1 d-flex align-items-center">
+  <div class="${cols}" style="display:flex; align-items:center; justify-content:center;">
     <button class="btn btn-danger shadow-none" type="button" title="Eliminar elemento" data-bs-toggle="modal"
       data-bs-target="#modal_delete_${max_elem}">
       <i class="fa-solid fa-trash"></i>
@@ -195,12 +198,15 @@ function addMultipleChoiceQuestion() {
   document.getElementById("exercises_area").outerHTML =
     `
   <div class="row exercise-sep" id="element_${max_elem}" name="mc_questions">
+    <input name="id" hidden>
+    <input name="element_number" value="${max_elem}" hidden>
+    <input type="number" name="choices_number" value="0" hidden>
     <div class="row">
       <div class="col-12 d-flex">
         <div class="col-10 col-md-11">
           <h3 class="fs-4 text-center my-3 title">Pregunta de opción múltiple</h3>
         </div>
-        ${html_modal_delete(max_elem, '¿Desea eliminar este ejercicio?')}
+        ${html_modal_delete(max_elem, '¿Desea eliminar esta pregunta?')}
       </div>
     </div>
 
@@ -220,7 +226,7 @@ function addMultipleChoiceQuestion() {
 
     <div class="col-12 mb-2 text-center">
       <div class="form-check  d-inline-block">
-        <input type="checkbox" class="form-check-input" name="randomize_options" id="mcqr_${max_elem}" checked>
+        <input type="checkbox" class="form-check-input" name="randomize_choices" id="mcqr_${max_elem}" checked>
         <label class="form-label" for="mcqr_${max_elem}">Mostrar opciones aleatoriamente</label>
       </div>
     </div>
@@ -238,51 +244,70 @@ function addMultipleChoiceQuestion() {
       </div>
     </div>
 
-    <input value="${max_elem}" name="element_number" hidden>
-    <input name="id" hidden>
+    
   </div>
   <div id="exercises_area"></div>
   `;
 
   makeAdjustable(document.getElementById("mcqt_" + max_elem));
   makeAdjustable(document.getElementById("mcqtt_" + max_elem));
+  let choices_input = document.querySelector(`#element_${max_elem} input[name=choices_number]`);
   document.getElementById(add_choice_id).addEventListener('click', (e) => {
-    addQuestionChoice(choices_id);
-
+    let choice_number = choices_input.value;
+    addQuestionChoice(choices_id, choice_number);
+    choices_input.value = parseInt(choices_input.value) + 1;
   });
   max_elem++;
 }
 
-function addQuestionChoice(choices_id) {
+function addQuestionChoice(choices_id, choice_number) {
   let question_choice_id = "choice_" + generateStringId();
-  //let html_m_del = html_modal_delete(`"${question_choice_id}"`, '¿Estás seguro de eliminar esta opción?');
-  let html_m_del = html_modal_delete(question_choice_id, '¿Estás seguro de eliminar esta opción?');
   document.getElementById(choices_id).outerHTML =
     `
-  <li id="element_${question_choice_id}">
+  <li id="element_${question_choice_id}" class="choice">
     <input name="id" hidden>
-    <div class="row choice-container">
+    <input type="number" name="choice_number" value="${choice_number}" hidden>
+    
+    <div class="row choice-container" name="correct">
       <div class="col-12 col-sm-1 radio-container">
-        <span><i class="fa-solid fa-check"></i></span>
-      </div>
-      <div class="col-12 col-sm-5">
-        <div class="mb-3">
-          <label for="${question_choice_id}_text" class="form-label">Opción en español</label>
-          <input name="text" type="text" class="form-control" placeholder="Opción en español" 
-          id="${question_choice_id}_text" autocomplete="off" maxlength="255">
+        <div class="radio-btn choice_name_${choices_id}" id="radio_label_${question_choice_id}">
+          <i class="fa-solid fa-check"></i>
         </div>
       </div>
+      <div class="d-inline-block mb-3 d-sm-none"></div>
+
       <div class="col-12 col-sm-5">
         <div class="mb-3">
           <label for="${question_choice_id}_t_text" class="form-label">Opción en inglés</label>
-          <input name="t_text" type="text" class="form-control" placeholder="Opción en inglés"
+          <input name="text" type="text" class="form-control" placeholder="Opción en inglés"
           id="${question_choice_id}_t_text" autocomplete="off" maxlength="255">
         </div>
       </div>
-      ${html_m_del}
+
+      <div class="col-12 col-sm-5">
+        <div class="mb-3">
+          <label for="${question_choice_id}_text" class="form-label">Opción en español</label>
+          <input name="t_text" type="text" class="form-control" placeholder="Opción en español" 
+          id="${question_choice_id}_text" autocomplete="off" maxlength="255">
+        </div>
+      </div>
+
+      ${html_modal_delete(question_choice_id, '¿Estás seguro de eliminar esta opción?', 'col-12 col-sm-1')}
     </div>
   </li>
   <li id="${choices_id}"></li>
   `;
 
+  let current_radio = document.getElementById('radio_label_' + question_choice_id);
+  current_radio.addEventListener('click', (e) => {
+    let radios = document.getElementsByClassName('choice_name_' + choices_id);
+    for (let r of radios) {
+      r.classList.remove('selected');
+      // Main row
+      r.parentElement.parentElement.classList.remove('checked');
+    }
+    current_radio.classList.add('selected');
+    // Main row
+    current_radio.parentElement.parentElement.classList.add('checked');
+  });
 }
