@@ -58,13 +58,13 @@
     db_dialogues = JSON.parse('{{ dialogues |safe |escapejs }}');
   } catch (e) { }
   try {
-    db_repeat_phrases = JSON.parse('{{ repeat_phrases |safe |escapejs  }}');
+    db_repeat_phrases = JSON.parse('{{ repeat_phrases |safe |escapejs }}');
   } catch (e) { }
   try {
-    db_spellchecks = JSON.parse('{{ spellchecks |safe |escapejs  }}');
+    db_spellchecks = JSON.parse('{{ spellchecks |safe |escapejs }}');
   } catch (e) { }
   try {
-    db_mc_questions = JSON.parse('{{ mc_questions |safe |escapejs  }}');
+    db_mc_questions = JSON.parse('{{ mc_questions|escapejs }}');
   } catch (e) { }
 
   /* Initialize max_elem */
@@ -113,7 +113,6 @@
   if (page_id !== "") {
     sortCollections();
     loadPage();
-    console.log(db_mc_questions);
   }
   else {
     if (page_type == 2)
@@ -146,6 +145,9 @@
           break;
         case "spellcheck":
           loadSpellcheck(element);
+          break;
+        case "mc_question":
+          loadMCQuestion(element);
           break;
       }
     }
@@ -200,6 +202,40 @@
     html_spellcheck.querySelector('[name = wrong_text]').value = spellcheck.wrong_text;
     html_spellcheck.querySelector('[name = right_text]').value = spellcheck.right_text;
     html_spellcheck.querySelector('[name = translated_right_text]').value = spellcheck.translated_right_text;
+  }
+
+  function loadMCQuestion(question) {
+    let util = addMultipleChoiceQuestion();
+    let html_question = document.getElementById("element_" + (max_elem - 1));
+
+    html_question.querySelector('[name = id]').value = question.id;
+    html_question.querySelector('[name = text]').value = question.text;
+    html_question.querySelector('[name = t_text]').value = question.t_text;
+    html_question.querySelector('[name = randomize_choices]').checked = question.randomize_choices;
+
+    // For load choices
+    for (let c of question.choices) {
+      document.getElementById(util.add_choice_id).click();
+    }
+
+    // Sort choices by choice_number
+    question.choices.sort((a, b) => a.choice_number - b.choice_number);
+    // Choices dom object
+    let cd = document.querySelectorAll("#element_" + (max_elem - 1) + " .choice");
+
+    for (let i = 0; i < question.choices.length; i++) {
+      cd[i].querySelector('[name = id]').value = question.choices[i].id;
+      cd[i].querySelector('[name = text]').value = question.choices[i].text;
+      cd[i].querySelector('[name = t_text]').value = question.choices[i].t_text;
+
+      if (question.choices[i].correct) {
+        cd[i].querySelector('[name = correct]').classList.add('checked');
+        cd[i].querySelector('.radio-btn').classList.add('selected');
+      }
+
+    }
+
+
   }
 
 

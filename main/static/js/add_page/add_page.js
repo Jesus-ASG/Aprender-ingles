@@ -4,12 +4,13 @@ let objects_deleted = {
     "dialogues": [],
     "repeatPhrases": [],
     "spellchecks": [],
-    "mc_questions": []
+    "mc_questions": [],
+    "question_choices": []
 };
 
 function deleteElement(id) {
     let element_to_delete = document.getElementById("element_" + id);
-    let id_database = element_to_delete.querySelector('[name = id]').value
+    let id_database = element_to_delete.querySelector('[name = id]').value;
     if (id_database) {
         let name = element_to_delete.getAttribute("name");
         switch (name) {
@@ -30,6 +31,9 @@ function deleteElement(id) {
                 break;
             case "mc_questions":
                 objects_deleted.mc_questions.push(id_database);
+                break;
+            case "question_choices":
+                objects_deleted.question_choices.push(id_database);
                 break;
             default:
         }

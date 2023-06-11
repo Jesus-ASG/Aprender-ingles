@@ -253,18 +253,21 @@ function addMultipleChoiceQuestion() {
   makeAdjustable(document.getElementById("mcqtt_" + max_elem));
   let choices_input = document.querySelector(`#element_${max_elem} input[name=choices_number]`);
   document.getElementById(add_choice_id).addEventListener('click', (e) => {
-    let choice_number = choices_input.value;
-    addQuestionChoice(choices_id, choice_number);
+    addQuestionChoice(choices_id, choices_input.value);
     choices_input.value = parseInt(choices_input.value) + 1;
   });
   max_elem++;
+  let util = {
+    "add_choice_id": add_choice_id
+  }
+  return util;
 }
 
 function addQuestionChoice(choices_id, choice_number) {
   let question_choice_id = "choice_" + generateStringId();
   document.getElementById(choices_id).outerHTML =
     `
-  <li id="element_${question_choice_id}" class="choice">
+  <li id="element_${question_choice_id}" class="choice" name="question_choices">
     <input name="id" hidden>
     <input type="number" name="choice_number" value="${choice_number}" hidden>
     

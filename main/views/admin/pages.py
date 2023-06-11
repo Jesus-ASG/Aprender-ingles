@@ -8,6 +8,8 @@ from django.forms.models import model_to_dict
 
 from main.models import Story, Page, Video, Image, Text, Dialogue, RepeatPhrase, Spellcheck, MultipleChoiceQuestion, QuestionChoice
 from main.forms import DialogueForm, ImageForm, PageForm, RepeatPhraseForm
+from main.serializers import MultipleChoiceQuestionSerializer
+from rest_framework.renderers import JSONRenderer
 
 
 MAX_PAGE_TYPES = 2
@@ -248,6 +250,9 @@ def create(request, route, page_type):
 
         for d in deleted['mc_questions']:
             safe_delete(MultipleChoiceQuestion, d)
+
+        for d in deleted['question_choices']:
+            safe_delete(QuestionChoice, d)
         
 
         # Save all
@@ -305,6 +310,9 @@ def update(request, route, page_type, page_id):
         repeat_phrases = page.repeat_phrases.all()
         spellchecks = page.spellchecks.all()
         mc_questions = page.questions.all()
+
+        mc_questions_s = MultipleChoiceQuestionSerializer(mc_questions, many=True, read_only=True)
+        mc_questions = JSONRenderer().render(mc_questions_s.data).decode('utf-8')
 
         # get values list from query set
         videos = list(videos.values())

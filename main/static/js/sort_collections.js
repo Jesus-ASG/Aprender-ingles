@@ -37,11 +37,17 @@ function sortCollections() {
 		repeat_phrase.is_exercise = true;
 		collections_sorted.push(repeat_phrase);
 	}
-
+	// Spellchecks
 	for (let spellcheck of db_spellchecks) {
 		spellcheck.type = "spellcheck";
 		spellcheck.is_exercise = true;
 		collections_sorted.push(spellcheck);
+	}
+	// Multiple Choice Questions
+	for (let question of db_mc_questions) {
+		question.type = "mc_question";
+		question.is_exercise = true;
+		collections_sorted.push(question);
 	}
 
 	// Sort
