@@ -14,14 +14,21 @@
 
 	<div class="row mt-3">
 		<div class="col-2 back-btn-container">
-			<a id="back_page_btn">
+			<a id="back_page_btn" title="Regresar">
 				<span><i class="fa-solid fa-arrow-left"></i></span>
 			</a>
 		</div>
 		<div class="col-8 page-title-container">
 			<h1 class="fs-1" id="story_title">Profile</h1>
 		</div>
-		<div class="col-2"></div>
+		<div class="col-2" style="display: flex; align-items: center; justify-content: center;">
+			{% if request.user.is_staff or request.user.is_superuser %}
+			<a href="{% url 'admin_stories' %}?s={{ story.title1 }}&p=1" target="_blank"
+				style="text-decoration: none; color: #fc7932;" title="Administrar historia">
+				<span><i class="fa-solid fa-gear" style="font-size: 1.5rem;"></i></span>
+			</a>
+			{% endif %}
+		</div>
 	</div>
 
 	<div class="row mt-3">

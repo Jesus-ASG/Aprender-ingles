@@ -57,6 +57,47 @@
       height: 250px;
     }
   }
+
+  .control-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .exit-btn,
+  .save-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--f-orange);
+    width: 45px;
+    height: 45px;
+    color: #fff;
+    margin: 0.5rem 1rem;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .exit-btn span,
+  .save-btn span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .exit-btn i,
+  .save-btn i {
+    font-size: 1.1rem;
+    color: #fff;
+  }
+
+  .exit-btn:hover,
+  .save-btn:hover {
+    transform: scale(1.1);
+    color: #fff;
+  }
 </style>
 {% endblock %}
 
@@ -115,17 +156,38 @@
   </div>
 </div>
 
-<div class="row my-3">
-  <div class="col-12 mb-3 text-center">
-    <!-- 
-      <button type="button" class="btn btnr-f-orange fs-5" title="Regresar">
-        <span><i class="fa-solid fa-book"></i></span>
-      </button>
-    -->
-    <button id="btn_send_answers" type="button" class="btn btnr-f-orange fs-5" title="Enviar respuestas">
-      <span><i class="fa-solid fa-check"></i></span>
-    </button>
+<div class="control-buttons my-3">
+
+  <!-- Exit button -->
+  <div type="button" class="btn exit-btn" title="Salir" data-bs-toggle="modal" data-bs-target="#exit_modal">
+    <span><i class="fa-solid fa-xmark"></i></span>
   </div>
+
+  <div class="modal fade" id="exit_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title  col-11 text-center">¿Desea regresar a la información de la historia?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-center text-primary"><i class="fa-solid fa-circle-info"></i>
+            Sus respuestas se guardarán para continuar más tarde.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <a href="{% url 'story_info' story.route %}" class="btn btn-danger">
+            Salir</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End of exit button -->
+
+  <button id="btn_send_answers" type="button" class="btn save-btn" title="Enviar respuestas">
+    <span><i class="fa-solid fa-check"></i></span>
+  </button>
+
 </div>
 
 <!-- Statistics -->
