@@ -17,8 +17,6 @@ class QuestionChoiceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     
-
-
 class MultipleChoiceQuestionSerializer(serializers.ModelSerializer):
     choices = QuestionChoiceSerializer(many=True)
     class Meta:

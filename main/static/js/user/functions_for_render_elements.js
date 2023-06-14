@@ -187,7 +187,6 @@ function renderSpellcheck(spellcheck, total_translations) {
 	};
 
 	document.getElementById("exercises_area").outerHTML =
-
 		`
 	<div class="row mt-3 fs-5 exercise-sep" id="spellcheck_${spellcheck.id}">
 		<div class="col-12">
@@ -211,5 +210,108 @@ function renderSpellcheck(spellcheck, total_translations) {
 		let search = user_answers.find(e => e.id === spellcheck.id);
 		search.answer = e.target.value;
 	});
+}
+
+function renderMCQuestion(question) {
+	// Sort choices
+	if (question.randomize_choices)
+		question.choices.sort(() => Math.random() - 0.5);
+	else
+		question.choices.sort((a, b) => a.choice_number - b.choice_number);
+
+	let choices_html = '';
+	let translation_labels = [];
+	let radios_ids = [];
+
+	for (let c of question.choices) {
+		let translation_label = generateStringId();
+		let radio_id = generateStringId();
+		choices_html += `
+		<li class="choice_group_${question.id}" id="choice_${c.id}">
+			<div class="render-choice-container" name="correct">
+				<div class="radio-container">
+					<div class="radio-btn" id="${radio_id}">
+						<i class="fa-solid fa-check"></i>
+					</div>
+				</div>
+				<div class="translation-container translate_mcq_${question.id}" id="${translation_label}">
+					<p class="front styles-front px-1">${c.text}</p>
+					<p class="back styles-back px-1">${c.t_text}</p>
+				</div>
+			</div>
+		</li>
+		`;
+		translation_labels.push(translation_label);
+		radios_ids.push(radio_id);
+	}
+
+
+	document.getElementById("exercises_area").outerHTML =
+		`
+	<div class="row mt-3 fs-5 exercise-sep" id="mc_question_${question.id}">
+		<div class="col-12">
+			<h3 class="fs-4 text-center translate_mcq_${question.id}">
+				<p class="front styles-front px-1 fw-bold">Answer</p>
+				<p class="back styles-back px-1 fw-bold">Contesta</p>
+			</h3>
+		</div>
+		<div class="col-12">
+			<div class="row">
+				<div class="fst-italic text-dark text-start my-3 title translate_mcq_${question.id}">
+					<p class="front styles-front px-1 fw-bold">${question.text}</p>
+					<p class="back styles-back px-1 fw-bold">${question.t_text}</p>
+				</div>
+			</div>
+			<div class="row">
+				<ul class="render-choice">
+					${choices_html}
+				</ul>
+			</div>
+			
+			<div class="row">
+				<span class="fs-5 text-muted mb-2 d-none"> <strong>Your answer:</strong> </span>
+			</div>
+		</div>
+	</div>
+	<span id="exercises_area">
+	`;
+
+	let translate = document.getElementsByClassName('translate_mcq_' + question.id);
+	for (let t of translate)
+		t.flipText();
+
+	// Set functionality when click empty inside container
+	for (let id of translation_labels) {
+		document.getElementById(id).addEventListener('click', (e) => {
+			if (e.target == document.getElementById(e.target.id)) {
+				let choices_group = document.getElementsByClassName('choice_group_' + question.id);
+				for (let cg of choices_group) {
+					cg.querySelector('[name = correct]').classList.remove('checked');
+					cg.querySelector('.radio-btn').classList.remove('selected');
+				}
+				let choice = e.target.parentElement;
+				choice.classList.add('checked');
+				choice.querySelector('.radio-btn').classList.add('selected');
+			}
+		});
+	}
+
+	// Set functionality when click radio
+	for (let id of radios_ids) {
+		document.getElementById(id).addEventListener('click', (e) => {
+			let choices_group = document.getElementsByClassName('choice_group_' + question.id);
+			for (let cg of choices_group) {
+				cg.querySelector('[name = correct]').classList.remove('checked');
+				cg.querySelector('.radio-btn').classList.remove('selected');
+			}
+			let choice = e.target.parentElement.parentElement;
+			choice.classList.add('checked');
+			choice.querySelector('.radio-btn').classList.add('selected');
+		});
+	}
+
+
+	user_answers.push(new Exercise(question.type, question.id, ''));
+
 }
 

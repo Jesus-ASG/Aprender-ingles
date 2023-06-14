@@ -162,6 +162,7 @@
   let db_dialogues = [];
   let db_repeat_phrases = [];
   let db_spellchecks = [];
+  let db_mc_questions = [];
 
   let db_answers = {};
   let db_score = {};
@@ -192,6 +193,9 @@
   } catch (e) { }
   try {
     db_spellchecks = JSON.parse('{{ spellchecks |safe |escapejs  }}');
+  } catch (e) { }
+  try {
+    db_mc_questions = JSON.parse('{{ mc_questions|escapejs }}');
   } catch (e) { }
 
   try {
@@ -232,6 +236,9 @@
         break;
       case "spellcheck":
         renderSpellcheck(element, total_translations);
+        break;
+      case "mc_question":
+        renderMCQuestion(element);
         break;
     }
   }

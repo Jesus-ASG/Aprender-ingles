@@ -103,3 +103,66 @@
 	opacity: 0;
 	transition: all 0.3s ease-in-out;
 }
+
+/* Multiple choice questions */
+.render-choice {
+	list-style: none;
+}
+
+.render-choice-container {
+	width: 100%;
+	border: 1px solid #c5c5c5;
+	padding: 0.5rem;
+	margin: 0.5rem;
+	border-radius: 10px;
+	display: flex;
+	flex-direction: row;
+}
+.render-choice-container:hover {
+	cursor: pointer;
+	border: 1px solid #ff5f13;
+	background-color: rgba(255, 95, 19, 0.2);
+}
+
+.radio-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	width: 50px;
+}
+
+.translation-container {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.radio-container .radio-btn {
+	border: 1px solid #ff5f13;
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.1s ease-in-out;
+}
+
+.radio-container .selected {
+	background-color: var(--f-orange);
+}
+
+.radio-container .radio-btn:hover {
+	cursor: pointer;
+	background-color: var(--f-orange-active);
+}
+
+.render-choice-container:hover .radio-container .radio-btn {
+	background-color: var(--f-orange-active);
+}
+
+.radio-container i {
+	font-size: 1rem;
+	color: #fff;
+}

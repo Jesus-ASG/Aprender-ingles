@@ -7,8 +7,11 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 
+from rest_framework.renderers import JSONRenderer
+
 from main.models import Story, Score, RepeatPhrase, Spellcheck
 from main.forms import ScoreForm, UserAnswer
+from main.serializers import MultipleChoiceQuestionSerializer
 
 from main.utils.evaluate_story import rateSkills, evaluateAnswers, map_answers
 from main.utils.cb_recommender import ContentBasedRecommender
@@ -89,6 +92,10 @@ def storyContent(request, route, page_number):
     dialogues = current_page.dialogues.all()
     repeat_phrases = current_page.repeat_phrases.all()
     spellchecks = current_page.spellchecks.all()
+    mc_questions = current_page.questions.all()
+
+    mc_questions_s = MultipleChoiceQuestionSerializer(mc_questions, many=True)
+    mc_questions = JSONRenderer().render(mc_questions_s.data).decode('utf-8')
     
     db_answers = user_profile.answers.filter(page=current_page)
 
@@ -140,6 +147,7 @@ def storyContent(request, route, page_number):
             'dialogues': dialogues,
             'repeat_phrases': repeat_phrases,
             'spellchecks': spellchecks,
+            'mc_questions': mc_questions,
             'answers': answers,
             'score': score
             }        

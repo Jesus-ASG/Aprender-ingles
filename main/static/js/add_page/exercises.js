@@ -125,22 +125,22 @@ function addSpellcheck() {
       </div>
       <div class="row">
         <div class="col-12 col-sm-6 mb-2">
-          <label class="form-label" for="rspc_`+ max_elem + `">Texto original</label>
+          <label class="form-label" for="rspc_`+ max_elem + `">Texto en inglés</label>
           <textarea class="form-control mb-2 txta" type="text" name="right_text" id="rspc_`+ max_elem + `"
-            placeholder="Texto original"></textarea>
+            placeholder="Texto en inglés"></textarea>
         </div>
 
         <div class="col-12 col-sm-6 mb-2">
-          <label class="form-label" for="trspc_`+ max_elem + `">Texto original traducido</label>
+          <label class="form-label" for="trspc_`+ max_elem + `">Texto en español</label>
           <textarea class="form-control mb-2 txta" type="text" name="translated_right_text" id="trspc_`+ max_elem + `"
-            placeholder="Texto original traducido"></textarea>
+            placeholder="Texto en español"></textarea>
         </div>
       </div>
 
       <div class="col-12">
-        <label class="form-label" for="wspc_`+ max_elem + `">Texto que se debe arreglar</label>
+        <label class="form-label" for="wspc_`+ max_elem + `">Texto en inglés (con errores)</label>
 				<textarea class="form-control mb-2 txta" type="text" name="wrong_text" id="wspc_`+ max_elem + `"
-					placeholder="Texto que se debe arreglar"></textarea>
+					placeholder="Texto en inglés (con errores)"></textarea>
 			</div>
 
       <input value="`+ max_elem + `" name="element_number" hidden>
