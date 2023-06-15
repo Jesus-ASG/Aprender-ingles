@@ -9,7 +9,7 @@ from django.forms.models import model_to_dict
 
 from rest_framework.renderers import JSONRenderer
 
-from main.models import Story, Score, RepeatPhrase, Spellcheck
+from main.models import Story, Score, RepeatPhrase, Spellcheck, MultipleChoiceQuestion
 from main.forms import ScoreForm, UserAnswer
 from main.serializers import MultipleChoiceQuestionSerializer
 
@@ -95,12 +95,14 @@ def storyContent(request, route, page_number):
     mc_questions = current_page.questions.all()
 
     mc_questions_s = MultipleChoiceQuestionSerializer(mc_questions, many=True)
-    mc_questions = JSONRenderer().render(mc_questions_s.data).decode('utf-8')
+    
     
     db_answers = user_profile.answers.filter(page=current_page)
 
     rp_content_type = ContentType.objects.get_for_model(RepeatPhrase)
     spc_content_type = ContentType.objects.get_for_model(Spellcheck)
+    mcq_content_type = ContentType.objects.get_for_model(MultipleChoiceQuestion)
+
 
     if request.method == "GET":
         answers = []
@@ -125,6 +127,8 @@ def storyContent(request, route, page_number):
         dialogues = json.dumps(list(dialogues.values()))
         repeat_phrases = json.dumps(list(repeat_phrases.values()))
         spellchecks = json.dumps(list(spellchecks.values()))
+
+        mc_questions = JSONRenderer().render(mc_questions_s.data).decode('utf-8')
 
         images_json = []
         for image in images:
@@ -174,6 +178,7 @@ def storyContent(request, route, page_number):
         # Filter exercises
         rp_answered = db_answers.filter(exercise_type=rp_content_type)
         spc_answered = db_answers.filter(exercise_type=spc_content_type)
+        mcq_answered = db_answers.filter(exercise_type=mcq_content_type)
         
         # Save answers
         for exercise in answers:
@@ -222,9 +227,31 @@ def storyContent(request, route, page_number):
                             answer=exercise['answer'],
                             submited=submit,
                         )
+                case 'mc_question':
+                    q = mc_questions.get(pk=int(exercise['id']))
+                    
+                    if update:
+                        answer_update_obj = mcq_answered.filter(exercise_id=q.pk)
+                        if exercise['answer'] == '':
+                            answer_update_obj.update(submited=submit)
+                        else:
+                            answer_update_obj.update(
+                                answer=exercise['answer'],
+                                submited=submit,
+                            )
+                    else:
+                        answer_obj = UserAnswer.objects.create(
+                            user_profile=user_profile,
+                            story=story,
+                            page=current_page,
+                            exercise_type=ContentType.objects.get_for_model(q),
+                            exercise_id=q.pk,
+                            answer=exercise['answer'],
+                            submited=submit,
+                        )
 
 
-        # Get objects updated
+        # Get updated objects
         story_answers = UserAnswer.objects.filter(user_profile=user_profile, story=story)
         db_answers = story_answers.filter(page=current_page)
         feedback_answers = map_answers(db_answers)
@@ -245,12 +272,14 @@ def storyContent(request, route, page_number):
                 answers = map_answers(story_answers)
             
             results = evaluateAnswers(story, answers)
-
+            
             score_form = ScoreForm(request.POST or None)
             if not score_form.is_valid():
                 pass
 
             score_form_obj = score_form.save(commit=False)
+
+            #score_form_obj = Score()
 
             score_form_obj.user_profile = user_profile
             score_form_obj.story = story
@@ -279,5 +308,5 @@ def storyContent(request, route, page_number):
             story_answers.update(evaluated=True)
             story_answers.update(submited=True)
             response['results'] = results
-        
+            
         return JsonResponse(response)

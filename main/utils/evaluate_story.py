@@ -1,5 +1,7 @@
+import json
 import re
-from main.models import RepeatPhrase, Spellcheck
+
+from main.models import RepeatPhrase, Spellcheck, MultipleChoiceQuestion
 from django.contrib.contenttypes.models import ContentType
 
 
@@ -33,6 +35,21 @@ def map_answers(db_answers):
                 'feedback': i.exercise.right_text,
                 'submited': i.submited,
                 'type': 'spellcheck'
+            }
+            mapped_list.append(obj)
+
+        mcq_content_type = ContentType.objects.get_for_model(MultipleChoiceQuestion)
+        mcq_answered = db_answers.filter(exercise_type=mcq_content_type)
+        for i in mcq_answered:
+            choices = i.exercise.choices.all()
+            choices = list(choices.values('id', 'correct'))
+
+            obj = {
+                'exercise_id': i.exercise_id,
+                'answer': i.answer,
+                'feedback': choices,
+                'submited': i.submited,
+                'type': 'mc_question'
             }
             mapped_list.append(obj)
 
@@ -75,7 +92,6 @@ def evaluateRepeatPhrase(user_answer, correct_answer):
     if user_answer == "":
         results = {
             "score": 0,
-            "comprehension_percentage": 0, 
             "speaking_percentage": 0
         }
         return results
@@ -116,7 +132,6 @@ def evaluateRepeatPhrase(user_answer, correct_answer):
 
     results = {
         "score": round(score, 2),
-        "comprehension_percentage": speaking_percentage, 
         "speaking_percentage": speaking_percentage
     }
     return results
@@ -126,8 +141,7 @@ def evaluateSpellcheck(user_answer, correct_answer):
     if user_answer == "":
         results = {
             "score": 0, 
-            "writing_percentage": 0, 
-            "comprehension_percentage": 0
+            "writing_percentage": 0
         }
         return results
     
@@ -167,8 +181,31 @@ def evaluateSpellcheck(user_answer, correct_answer):
 
     results = {
         "score": round(score, 2), 
-        "writing_percentage": writing_percentage, 
-        "comprehension_percentage": writing_percentage
+        "writing_percentage": writing_percentage
+    }
+    return results
+
+
+def evaluateMultipleChoiceQuestion(user_answer, correct_answer):
+    if user_answer == '':
+        results = {
+            "score": 0, 
+            "comprehension_percentage": 0
+        }
+        return results
+    
+    selected_id = int(user_answer)
+    answer = False
+
+    for item in correct_answer:
+        if item['id'] == selected_id:
+            answer = item['correct']
+            break
+    score = points_per_correct_answer if answer else 0
+    comprehension_percentage = 1 if answer else 0
+    results = {
+        "score": score,
+        "comprehension_percentage": comprehension_percentage
     }
     return results
 
@@ -178,12 +215,14 @@ def evaluateAnswers(story, answers):
     exercises_number = 0
     rp_count = 0
     spc_count = 0
+    mcq_count = 0
     pages = story.pages.all()
     for p in pages:
         rp_count  += p.repeat_phrases.all().count()
         spc_count += p.spellchecks.all().count()
+        mcq_count += p.questions.all().count()
     
-    exercises_number = rp_count + spc_count
+    exercises_number = rp_count + spc_count + mcq_count
 
     results = {
         "score": 0, 
@@ -195,7 +234,6 @@ def evaluateAnswers(story, answers):
     if exercises_number <= 0:
         return results
 
-
     for a in answers:
         match a['type']:
             case 'repeat_phrase':
@@ -204,7 +242,6 @@ def evaluateAnswers(story, answers):
                 rp_results = evaluateRepeatPhrase(user_answer, correct_answer)
 
                 results["score"] += rp_results["score"]
-                results["comprehension_percentage"] += rp_results["comprehension_percentage"]
                 results["speaking_percentage"] += rp_results["speaking_percentage"]
 
             case 'spellcheck':
@@ -214,29 +251,34 @@ def evaluateAnswers(story, answers):
 
                 results["score"] += spc_results["score"]
                 results["writing_percentage"] += spc_results["writing_percentage"]
-                results["comprehension_percentage"] += spc_results["comprehension_percentage"]
+
+            case 'mc_question':
+                correct_answer = a['feedback']
+                user_answer = a['answer']
+                mcq_results = evaluateMultipleChoiceQuestion(user_answer, correct_answer)
+
+                results['score'] += mcq_results['score']
+                results['comprehension_percentage'] += mcq_results['comprehension_percentage']
                 
 
     # Execises count
-    writing_count = spc_count
-    speaking_count = rp_count
+    writing_count = spc_count # + others for improve writing
+    speaking_count = rp_count # + others for improve speaking
+    comprehension_count = mcq_count # + others for improve comprehension
 
     wp_t = (results["writing_percentage"] / writing_count) * 100 if writing_count > 0 else 100
     sp_t = (results["speaking_percentage"] / speaking_count) * 100 if speaking_count > 0 else 100
-
-    cp_t = (results["comprehension_percentage"] / exercises_number) * 100
-
-    results["score"] = int(results["score"])
-    results["score_limit"] = exercises_number * points_per_correct_answer
+    cp_t = (results["comprehension_percentage"] / comprehension_count) * 100 if comprehension_count > 0 else 100
 
     results["writing_percentage"] = round(wp_t, 2)
     results["comprehension_percentage"] = round(cp_t, 2)
     results["speaking_percentage"] = round(sp_t, 2)
 
-    #score_percentage = results["writing_percentage"] + results['comprehension_percentage'] + results['speaking_percentage']
-    #score_percentage = score_percentage / 3
-    score_percentage = results['comprehension_percentage']
-    results['score_percentage'] = round(score_percentage, 2)
+    results["score"] = int(results["score"])
+    results["score_limit"] = exercises_number * points_per_correct_answer
+
+    score_percentage = results["score"] / results['score_limit']
+    results['score_percentage'] = round(score_percentage, 2) * 100
     
     return results
     

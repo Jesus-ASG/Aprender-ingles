@@ -220,29 +220,27 @@ function renderMCQuestion(question) {
 		question.choices.sort((a, b) => a.choice_number - b.choice_number);
 
 	let choices_html = '';
-	let translation_labels = [];
+	let choice_ids = [];
 	let radios_ids = [];
 
 	for (let c of question.choices) {
-		let translation_label = generateStringId();
-		let radio_id = generateStringId();
 		choices_html += `
-		<li class="choice_group_${question.id}" id="choice_${c.id}">
-			<div class="render-choice-container" name="correct">
+		<li class="choice_group_${question.id}">
+			<div class="render-choice-container" name="correct" id="choice_${c.id}">
 				<div class="radio-container">
-					<div class="radio-btn" id="${radio_id}">
+					<div class="radio-btn" id="radio_${c.id}">
 						<i class="fa-solid fa-check"></i>
 					</div>
 				</div>
-				<div class="translation-container translate_mcq_${question.id}" id="${translation_label}">
+				<div class="translation-container translate_mcq_${question.id}">
 					<p class="front styles-front px-1">${c.text}</p>
 					<p class="back styles-back px-1">${c.t_text}</p>
 				</div>
 			</div>
 		</li>
 		`;
-		translation_labels.push(translation_label);
-		radios_ids.push(radio_id);
+		choice_ids.push('choice_' + c.id);
+		radios_ids.push('radio_' + c.id);
 	}
 
 
@@ -275,23 +273,29 @@ function renderMCQuestion(question) {
 	</div>
 	<span id="exercises_area">
 	`;
+	// Add exercise for answer
+	user_answers.push(new Exercise(question.type, question.id, ''));
 
 	let translate = document.getElementsByClassName('translate_mcq_' + question.id);
 	for (let t of translate)
 		t.flipText();
 
 	// Set functionality when click empty inside container
-	for (let id of translation_labels) {
+	for (let id of choice_ids) {
 		document.getElementById(id).addEventListener('click', (e) => {
-			if (e.target == document.getElementById(e.target.id)) {
+			if (e.target === document.getElementById(e.target.id)) {
 				let choices_group = document.getElementsByClassName('choice_group_' + question.id);
 				for (let cg of choices_group) {
 					cg.querySelector('[name = correct]').classList.remove('checked');
 					cg.querySelector('.radio-btn').classList.remove('selected');
 				}
-				let choice = e.target.parentElement;
+				let choice = e.target;
 				choice.classList.add('checked');
 				choice.querySelector('.radio-btn').classList.add('selected');
+
+				// Put value into the object
+				let search = user_answers.find(e => e.id === question.id);
+				search.answer = e.target.id.replace('choice_', '');
 			}
 		});
 	}
@@ -307,11 +311,15 @@ function renderMCQuestion(question) {
 			let choice = e.target.parentElement.parentElement;
 			choice.classList.add('checked');
 			choice.querySelector('.radio-btn').classList.add('selected');
+
+			// Put value into the object
+			let search = user_answers.find(e => e.id === question.id);
+			search.answer = e.target.parentElement.id.replace('radio_', '');
 		});
 	}
 
 
-	user_answers.push(new Exercise(question.type, question.id, ''));
+
 
 }
 
