@@ -186,6 +186,7 @@ function showUserAnswers(answers, show_feedback) {
 					feedback.innerHTML = `<strong>Right answer:</strong> "${answer.feedback}"`;
 				}
 				break;
+
 			case "spellcheck":
 				let spc = document.getElementById("spellcheck_" + answer.exercise_id);
 				if (show_feedback) {
@@ -196,6 +197,58 @@ function showUserAnswers(answers, show_feedback) {
 					`;
 				} else {
 					spc.querySelector('textarea').value = answer.answer;
+				}
+				break;
+
+			case "mc_question":
+				if (answer.answer !== "") {
+					let choice_selected = document.getElementById('choice_' + answer.answer);
+					choice_selected.querySelector('.radio-container').classList.add("checked");
+					choice_selected.querySelector('.radio-btn').classList.add("selected");
+				}
+
+				if (show_feedback) {
+					for (let choice of answer.feedback) {
+						let choice_dom = document.getElementById('choice_' + choice.id);
+						if (choice.correct) {
+							choice_dom.classList.add("choice-right");
+
+							// Add label
+							let correct_label = document.createElement('p');
+							let random_id = generateStringId();
+							correct_label.setAttribute("id", random_id);
+							choice_dom.parentElement.prepend(correct_label);
+
+							document.getElementById(random_id).outerHTML = `
+							<div class="text-success fst-italic" id="${random_id}" style="display:flex;">
+								<div class="front px-1 styles-front">Correct answer</div>
+								<div class="back px-1 styles-back">Respuesta correcta</div>
+							</div>
+							`;
+							document.getElementById(random_id).flipText();
+
+						}
+						else {
+							choice_dom.classList.add("choice-wrong");
+							choice_dom.querySelector('i').className = 'fa-solid fa-xmark';
+
+							// Add label
+							let wrong_label = document.createElement('p');
+							let random_id = generateStringId();
+							wrong_label.setAttribute("id", random_id);
+							choice_dom.parentElement.prepend(wrong_label);
+
+							document.getElementById(random_id).outerHTML = `
+							<div class="text-danger fst-italic" id="${random_id}" style="display:flex;">
+								<div class="front px-1 styles-front">Wrong answer</div>
+								<div class="back px-1 styles-back">Respuesta incorrecta</div>
+							</div>
+							`;
+							document.getElementById(random_id).flipText();
+						}
+					}
+
+					$("#choice_" + answer.answer).css("border", "1px solid var(--f-orange-active)");
 				}
 				break;
 		}

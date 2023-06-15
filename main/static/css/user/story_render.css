@@ -109,6 +109,10 @@
 	list-style: none;
 }
 
+.render-choice li {
+	margin-bottom: 1rem;
+}
+
 .render-choice-container {
 	width: 100%;
 	border: 1px solid #c5c5c5;
@@ -164,4 +168,29 @@
 .radio-container i {
 	font-size: 1rem;
 	color: #fff;
+}
+
+.choice-right:hover,
+.choice-wrong:hover {
+	background-color: #fff;
+	border: 1px solid #c5c5c5;
+}
+
+.choice-right .radio-btn {
+	background-color: #5bd971;
+	border: 1px solid #5bd971;
+}
+
+.choice-right:hover .radio-container .radio-btn {
+	background-color: #5bd971;
+	border: 1px solid #5bd971;
+}
+
+.choice-wrong .radio-btn {
+	background-color: #ff0000;
+	border: 1px solid #ff0000;
+}
+.choice-wrong:hover .radio-container .radio-btn {
+	background-color: #ff0000;
+	border: 1px solid #ff0000;
 }
