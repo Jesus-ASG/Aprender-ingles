@@ -6,7 +6,7 @@
 	flex-wrap: wrap;
 }
 
-.template-2 {
+.template {
 	display: inline-block;
 	margin: 1rem;
 	width: 150px;
@@ -14,9 +14,9 @@
 	text-decoration: none;
 	color: #000;
 }
-.template-2:hover {
+.template:hover {
 	cursor: pointer;
-	color: #f2864b;
+	color: #ff5f13;
 }
 .template-card {
 	width: 150px;
@@ -38,4 +38,15 @@
 	height: 6px;
 	background-color: #000;
 	margin-top: 8px;
+}
+
+.free-design-template {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.free-design-template img {
+	width: 80px;
+	height: 80px;
 }

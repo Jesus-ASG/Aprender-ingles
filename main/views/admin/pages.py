@@ -12,7 +12,7 @@ from main.serializers import MultipleChoiceQuestionSerializer
 from rest_framework.renderers import JSONRenderer
 
 
-MAX_PAGE_TYPES = 2
+MAX_PAGE_TYPES = 3
 
 
 def is_staff(user):
@@ -298,60 +298,58 @@ def create(request, route, page_type):
 def update(request, route, page_type, page_id):
     if not 0 < page_type <= MAX_PAGE_TYPES:
         return HttpResponseNotFound()
-    try:
-        # get content
-        story = Story.objects.get(route=route)
-        page = story.pages.get(id=page_id)
+    
+    # get content
+    story = Story.objects.get(route=route)
+    page = story.pages.get(id=page_id)
 
-        images = page.images.all()
-        videos = page.videos.all()
-        texts = page.texts.all()
-        dialogues = page.dialogues.all()
-        repeat_phrases = page.repeat_phrases.all()
-        spellchecks = page.spellchecks.all()
-        mc_questions = page.questions.all()
+    images = page.images.all()
+    videos = page.videos.all()
+    texts = page.texts.all()
+    dialogues = page.dialogues.all()
+    repeat_phrases = page.repeat_phrases.all()
+    spellchecks = page.spellchecks.all()
+    mc_questions = page.questions.all()
 
-        mc_questions_s = MultipleChoiceQuestionSerializer(mc_questions, many=True, read_only=True)
-        mc_questions = JSONRenderer().render(mc_questions_s.data).decode('utf-8')
+    mc_questions_s = MultipleChoiceQuestionSerializer(mc_questions, many=True, read_only=True)
+    mc_questions = JSONRenderer().render(mc_questions_s.data).decode('utf-8')
 
-        # get values list from query set
-        videos = list(videos.values())
-        texts = list(texts.values())
-        dialogues = list(dialogues.values())
-        repeat_phrases = list(repeat_phrases.values())
-        spellchecks = list(spellchecks.values())
-        
-        # cast list to json
-        videos = json.dumps(videos)
-        texts = json.dumps(texts)
-        dialogues = json.dumps(dialogues)
-        repeat_phrases = json.dumps(repeat_phrases)
-        spellchecks = json.dumps(spellchecks)
+    # get values list from query set
+    videos = list(videos.values())
+    texts = list(texts.values())
+    dialogues = list(dialogues.values())
+    repeat_phrases = list(repeat_phrases.values())
+    spellchecks = list(spellchecks.values())
+    
+    # cast list to json
+    videos = json.dumps(videos)
+    texts = json.dumps(texts)
+    dialogues = json.dumps(dialogues)
+    repeat_phrases = json.dumps(repeat_phrases)
+    spellchecks = json.dumps(spellchecks)
 
-        # image different to get url image instead image
-        images_json = []
-        for image in images:
-            x = model_to_dict(image)
-            x['image'] = x['image'].url
-            images_json.append(x)
-        images_json = json.dumps(images_json)
+    # image different to get url image instead image
+    images_json = []
+    for image in images:
+        x = model_to_dict(image)
+        x['image'] = x['image'].url
+        images_json.append(x)
+    images_json = json.dumps(images_json)
 
-        context = {
-            'story': story, 
-            'page': page, 
-            'page_type': page_type,
-            'videos': videos,
-            'images': images, 
-            'images_json': images_json,
-            'texts': texts,
-            'dialogues': dialogues, 
-            'repeat_phrases': repeat_phrases,
-            'spellchecks': spellchecks,
-            'mc_questions': mc_questions
-        }
+    context = {
+        'story': story, 
+        'page': page, 
+        'page_type': page_type,
+        'videos': videos,
+        'images': images, 
+        'images_json': images_json,
+        'texts': texts,
+        'dialogues': dialogues, 
+        'repeat_phrases': repeat_phrases,
+        'spellchecks': spellchecks,
+        'mc_questions': mc_questions
+    }
 
-    except:
-        return HttpResponseNotFound()
     
     if request.method == "GET":
         return render(request, 'admin/create_page.html', context)

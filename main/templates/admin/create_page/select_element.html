@@ -1,0 +1,60 @@
+<div class="col-12 col-md-8">
+  <select class="form-select" id="element_selected">
+    <option selected>- Selecciona un elemento -</option>
+    <!-- 
+      <option value="1">Audio</option>
+    -->
+    <option value="2">Diálogo</option>
+    <option value="3">Imagen</option>
+    <option value="4">Texto</option>
+    <option value="5">Video</option>
+    <option>-------------------------</option>
+
+    <option value="6">Pregunta de opción múltiple</option>
+    <option value="7">Repetir oración</option>
+    <option value="8">Revisar ortografía</option>
+  </select>
+</div>
+
+<div class="col-12 col-md-4 mb-3">
+  <button class="btn btn-primary shadow-none fw-bold w-100" type="button" onclick="addElement()">Agregar</button>
+</div>
+
+<script>
+  function addElement() {
+    let selected = document.getElementById('element_selected').value;
+    document.querySelector('.new_element').outerHTML =
+      `
+      <div class="new_element"></div>
+      <div class="new_element"></div>
+    `;
+
+    switch (parseInt(selected)) {
+      case 1:
+        //audio
+        break;
+      case 2:
+        addDialogue();
+        break;
+      case 3:
+        //imagen
+        addImage();
+        break;
+      case 4:
+        addText();
+        break;
+      case 5:
+        addVideo();
+        break;
+      case 6:
+        addMultipleChoiceQuestion();
+        break;
+      case 7:
+        repeatPhrase();
+        break;
+      case 8:
+        addSpellcheck();
+        break;
+    }
+  }
+</script>

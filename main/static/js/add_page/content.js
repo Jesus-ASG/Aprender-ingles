@@ -19,11 +19,35 @@ function addContent() {
 	}
 }
 
+// Image
+function addImage() {
+	document.querySelector(".new_element").outerHTML = ``;
+	max_elem++;
+}
+
 // Video
-function addVideo() {
+function addVideo(include_delete_button) {
+	let delete_row =
+		`
+		<div class="row">
+			<div class="col-12 d-flex">
+				<div class="col-10 col-md-11">
+					<h3 class="fs-4 text-center my-3">Video</h3>
+				</div>
+				${html_modal_delete(max_elem, '¿Desea eliminar este video?')}
+			</div>
+		</div>
+	`;
+	if (include_delete_button !== undefined) {
+		if (include_delete_button == false) {
+			delete_row = ''
+		}
+	}
+
 	document.querySelector(".new_element").outerHTML =
 		`
 		<div class="row exercise-sep" id="element_${max_elem}" name="videos">
+			${delete_row}
 			<div class="row mb-3">
 				<div class="col-12">
 					<label class="form-label fs-5" for="video_url_input_${max_elem}">Agrega un video de
@@ -63,36 +87,16 @@ function addText() {
           <div class="col-10 col-md-11">
             <h3 class="fs-4 text-center my-3">Texto</h3>
           </div>
-          <div class="col-2 col-md-1 d-flex align-items-center">
-            <button class="btn btn-danger shadow-none" type="button" title="Eliminar elemento" data-bs-toggle="modal"
-            data-bs-target="#modal_delete_`+ max_elem + `">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-            <div class="modal fade" id="modal_delete_`+ max_elem + `" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title  col-11 text-center">¿Desea eliminar este texto?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" onclick="deleteElement(`+ max_elem + `)" data-bs-dismiss="modal">
-                    Eliminar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+					${html_modal_delete(max_elem, '¿Desea eliminar este texto?')}
         </div>
       </div>
 
 			<div class="col-12">
-				<textarea class="form-control mb-2 txta" type="text" name="language1" id="text_content1_`+ max_elem + `"
+				<textarea class="form-control mb-2 txta" type="text" name="language1" id="text_content1_${max_elem}"
 					placeholder="Contenido en inglés"></textarea>
 			</div>
 			<div class="col-12">
-				<textarea class="form-control mb-2 txta" type="text" name="language2" id="text_content2_`+ max_elem + `"
+				<textarea class="form-control mb-2 txta" type="text" name="language2" id="text_content2_${max_elem}"
 					placeholder="Contenido en español"></textarea>
 			</div>
 
@@ -127,27 +131,7 @@ function addDialogue() {
 				<div class="col-10 col-md-11">
 					<h3 class="fs-4 text-center my-3">Diálogo</h3>
 				</div>
-				<div class="col-2 col-md-1 d-flex align-items-center">
-					<button class="btn btn-danger shadow-none" type="button" title="Eliminar elemento" data-bs-toggle="modal"
-					data-bs-target="#modal_delete_`+ max_elem + `">
-						<i class="fa-solid fa-trash"></i>
-					</button>
-					<div class="modal fade" id="modal_delete_`+ max_elem + `" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-						<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title  col-11 text-center">¿Desea eliminar este diálogo?</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-									<button type="button" class="btn btn-danger" onclick="deleteElement(`+ max_elem + `)" data-bs-dismiss="modal">
-									Eliminar</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+				${html_modal_delete(max_elem, '¿Desea eliminar este diálogo?')}
 			</div>
 		</div>
 

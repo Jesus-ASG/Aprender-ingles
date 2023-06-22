@@ -13,6 +13,8 @@
 {% include 'admin/create_page/template_1.html' %}
 {% elif page_type == 2 %}
 {% include 'admin/create_page/template_2.html' %}
+{% elif page_type == 3 %}
+{% include 'admin/create_page/template_3.html' %}
 {% endif %}
 
 <div class="container">
@@ -69,9 +71,40 @@
 
   /* Initialize max_elem */
   let max_elem = 0;
-
 </script>
 
+<script>
+  function html_modal_delete(max_elem, message, cols) {
+    if (cols === undefined) {
+      cols = "col-2 col-md-1";//d-flex align-items-center
+    }
+    let html =
+      `
+      <div class="${cols}" style="display:flex; align-items:center; justify-content:center;">
+        <button class="btn btn-danger shadow-none" type="button" title="Eliminar elemento" data-bs-toggle="modal"
+          data-bs-target="#modal_delete_${max_elem}">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+        <div class="modal fade" id="modal_delete_${max_elem}" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title  col-11 text-center">${message}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="deleteElement('${max_elem}')" data-bs-dismiss="modal">
+                  Eliminar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      `;
+    return html;
+  }
+</script>
 <script src="{% static 'js/add_page/content.js' %}"></script>
 <script src="{% static 'js/add_page/exercises.js' %}"></script>
 <script src="{% static 'js/add_page/add_page.js' %}"></script>
@@ -120,7 +153,7 @@
         <div class="new_element"></div>
         <div id="content_area"></div>
       `;
-      addVideo();
+      addVideo(false);
     }
   }
 
@@ -135,7 +168,13 @@
 
       // Check for template
       let exercise = element.is_exercise;
-      if (page_type == 1 || page_type == 2) {
+      if (page_type == 3) {
+        document.querySelector('.new_element').outerHTML = `
+          <div class="new_element"></div>
+          <div class="new_element"></div>
+        `;
+      }
+      else {
         if (exercise) {
           document.getElementById("exercises_area").outerHTML = `
             <div class="new_element"></div>
@@ -149,7 +188,6 @@
           `;
         }
       }
-
 
       switch (element.type) {
         case "image":
@@ -178,7 +216,10 @@
   }
 
   function loadVideo(video) {
-    addVideo();
+    if (page_type == 2)
+      addVideo(false);
+    else
+      addVideo();
     let html_video = document.getElementById("element_" + (max_elem - 1));
     html_video.querySelector('[name = id]').value = video.id;
     html_video.querySelector('[name = url]').value = video.url;
@@ -256,12 +297,8 @@
         cd[i].querySelector('[name = correct]').classList.add('checked');
         cd[i].querySelector('.radio-btn').classList.add('selected');
       }
-
     }
-
-
   }
-
 
 </script>
 

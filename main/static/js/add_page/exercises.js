@@ -32,27 +32,7 @@ function repeatPhrase() {
           <div class="col-10 col-md-11">
             <h3 class="fs-4 text-center my-3">Repetir oración</h3>
           </div>
-          <div class="col-2 col-md-1 d-flex align-items-center">
-            <button class="btn btn-danger shadow-none" type="button" title="Eliminar elemento" data-bs-toggle="modal"
-            data-bs-target="#modal_delete_`+ max_elem + `">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-            <div class="modal fade" id="modal_delete_`+ max_elem + `" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title  col-11 text-center">¿Desea eliminar este ejercicio?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" onclick="deleteElement(`+ max_elem + `)" data-bs-dismiss="modal">
-                    Eliminar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          ${html_modal_delete(max_elem, '¿Desea eliminar este ejercicio?')}
         </div>
       </div>
 
@@ -105,27 +85,7 @@ function addSpellcheck() {
           <div class="col-10 col-md-11">
             <h3 class="fs-4 text-center my-3">Revisar ortografía</h3>
           </div>
-          <div class="col-2 col-md-1 d-flex align-items-center">
-            <button class="btn btn-danger shadow-none" type="button" title="Eliminar elemento" data-bs-toggle="modal"
-            data-bs-target="#modal_delete_`+ max_elem + `">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-            <div class="modal fade" id="modal_delete_`+ max_elem + `" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title  col-11 text-center">¿Desea eliminar este ejercicio?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" onclick="deleteElement(`+ max_elem + `)" data-bs-dismiss="modal">
-                    Eliminar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          ${html_modal_delete(max_elem, '¿Desea eliminar este ejercicio?')}
         </div>
       </div>
       <div class="row">
@@ -143,9 +103,9 @@ function addSpellcheck() {
       </div>
 
       <div class="col-12">
-        <label class="form-label" for="wspc_`+ max_elem + `">Texto en inglés (con errores)</label>
+        <label class="form-label" for="wspc_`+ max_elem + `">Texto en inglés (con errores ortográficos)</label>
 				<textarea class="form-control mb-2 txta" type="text" name="wrong_text" id="wspc_`+ max_elem + `"
-					placeholder="Texto en inglés (con errores)"></textarea>
+					placeholder="Texto en inglés (con errores ortográficos)"></textarea>
 			</div>
 
       <input value="`+ max_elem + `" name="element_number" hidden>
@@ -161,37 +121,6 @@ function addSpellcheck() {
   makeAdjustable(adj3);
 
   max_elem++;
-}
-
-function html_modal_delete(max_elem, message, cols) {
-  if (cols === undefined) {
-    cols = "col-2 col-md-1";//d-flex align-items-center
-  }
-  let html =
-    `
-  <div class="${cols}" style="display:flex; align-items:center; justify-content:center;">
-    <button class="btn btn-danger shadow-none" type="button" title="Eliminar elemento" data-bs-toggle="modal"
-      data-bs-target="#modal_delete_${max_elem}">
-      <i class="fa-solid fa-trash"></i>
-    </button>
-    <div class="modal fade" id="modal_delete_${max_elem}" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title  col-11 text-center">${message}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-danger" onclick="deleteElement('${max_elem}')" data-bs-dismiss="modal">
-              Eliminar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  `;
-  return html;
 }
 
 function addMultipleChoiceQuestion() {

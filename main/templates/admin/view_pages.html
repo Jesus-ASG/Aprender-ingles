@@ -25,8 +25,9 @@
     <div class="row text-center">
       <div class="col col-12">
         <div class="select-template-section">
+
           <!-- General template -->
-          <a class="template-2" href="{% url 'add_page' story.route 1 %}">
+          <a class="template" href="{% url 'add_page' story.route 1 %}">
             <div class="template-card">
               <div style="width: 100%; height: 60px; display: flex; flex-direction: row;">
                 <span style="width: 60%;">
@@ -57,7 +58,7 @@
           <!-- End of general template -->
 
           <!-- Video and exercises template -->
-          <a class="template-2" href="{% url 'add_page' story.route 2 %}">
+          <a class="template" href="{% url 'add_page' story.route 2 %}">
             <div class="template-card">
               <div style="width: 100%; height: 110px; display: flex; justify-content: center; align-items: center;">
                 <span><i style="font-size: 3rem; color: gray;" class="fas fa-circle-play"></i></span>
@@ -71,6 +72,16 @@
             <p class="template-name">#2: Video y ejercicios</p>
           </a>
           <!-- End of video and exercises template -->
+
+          <!-- Free design template -->
+          <a class="template" href="{% url 'add_page' story.route 3 %}">
+            <div class="template-card free-design-template">
+              <img src="{% static 'img/sq_logos/sq_orange.png' %}">
+            </div>
+            <p class="template-name">#3: Diseño libre</p>
+          </a>
+          <!-- End of free design template -->
+
         </div>
       </div>
     </div>
