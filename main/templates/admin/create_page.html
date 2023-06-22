@@ -115,8 +115,13 @@
     loadPage();
   }
   else {
-    if (page_type == 2)
+    if (page_type == 2) {
+      document.getElementById("content_area").outerHTML = `
+        <div class="new_element"></div>
+        <div id="content_area"></div>
+      `;
       addVideo();
+    }
   }
 
   function loadPage() {
@@ -127,6 +132,25 @@
     // Render document
     for (let element of collections_sorted) {
       element.element_number = max_elem;
+
+      // Check for template
+      let exercise = element.is_exercise;
+      if (page_type == 1 || page_type == 2) {
+        if (exercise) {
+          document.getElementById("exercises_area").outerHTML = `
+            <div class="new_element"></div>
+            <div id="exercises_area"></div>
+          `;
+        }
+        else {
+          document.getElementById("content_area").outerHTML = `
+            <div class="new_element"></div>
+            <div id="content_area"></div>
+          `;
+        }
+      }
+
+
       switch (element.type) {
         case "image":
           max_elem++;

@@ -1,5 +1,6 @@
 {% extends 'main_template.html' %}
 {% load static %}
+{% load filters %}
 
 {% block title %} {{ story.title1 }} {% endblock %}
 
@@ -101,9 +102,9 @@
                 {% if pages %}
                 {% for p in pages %}
                 <tr id="rowp_{{ p.id }}">
-                  <td class="fs-6">#{{ forloop.counter }}</td>
+                  <td class="fs-6 counter">#{{ forloop.counter }}</td>
                   <td class="fs-6">{{ p.subtitle1 |default:'Página nueva' }}</td>
-                  <td class="fs-6">{{ p.page_type }}</td>
+                  <td class="fs-6">{{ p.page_type |page_type_to_str }}</td>
                   <td class="fs-6">
                     <!-- Link to edit -->
                     <div class="d-block d-sm-inline-block m-1">
@@ -174,7 +175,9 @@
         "csrfmiddlewaretoken": "{{csrf_token}}"
       },
       success: function (response) {
-        $("#rowp_" + id).remove();
+        let deleted_row = document.getElementById('rowp_' + id);
+        let deleted_counter = parseInt(deleted_row.querySelector('.counter').innerText.replace('#', ''));
+        deleted_row.remove();
         let html =
           `
         <div class="alert alert-success alert-dismissible fade show mb-2 mt-2" role="alert">
@@ -185,6 +188,13 @@
         </div>
         `;
         document.getElementById("alert_removed_success").innerHTML = html;
+
+        let counters_dom = document.querySelectorAll('.counter');
+        for (let cd of counters_dom) {
+          let current_counter = parseInt(cd.innerText.replace('#', ''));
+          if (current_counter > deleted_counter)
+            cd.innerText = '#' + (current_counter - 1);
+        }
       },
       error: function (response) {
         //console.log(response);

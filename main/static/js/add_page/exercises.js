@@ -1,5 +1,11 @@
 function addExercise() {
   let selected = document.getElementById("exercise_selected").value;
+  document.getElementById("exercises_area").outerHTML =
+    `
+    <span class="new_element"></span>
+    <span id="exercises_area"></span>
+  `;
+
   switch (parseInt(selected)) {
     case 0:
       repeatPhrase();
@@ -17,7 +23,7 @@ function addExercise() {
 }
 
 function repeatPhrase() {
-  let html =
+  document.querySelector(".new_element").outerHTML =
     `
     <div class="exercise-sep" id="element_`+ max_elem + `" name="repeatPhrases">
       
@@ -77,10 +83,9 @@ function repeatPhrase() {
       <input name="id" hidden>
       
     </div>
-    <span id="exercises_area"></span>
   `;
 
-  document.getElementById("exercises_area").outerHTML = html;
+
 
   let adj1 = document.getElementById("repP1_" + max_elem);
   let adj2 = document.getElementById("repP2_" + max_elem);
@@ -92,7 +97,7 @@ function repeatPhrase() {
 
 
 function addSpellcheck() {
-  document.getElementById("exercises_area").outerHTML =
+  document.querySelector(".new_element").outerHTML =
     `
     <div class="exercise-sep" id="element_`+ max_elem + `" name="spellchecks">
       <div class="row">
@@ -146,7 +151,6 @@ function addSpellcheck() {
       <input value="`+ max_elem + `" name="element_number" hidden>
       <input name="id" hidden>
     </div>
-    <span id="exercises_area"></span>
   `;
 
   let adj1 = document.getElementById("wspc_" + max_elem);
@@ -195,7 +199,7 @@ function addMultipleChoiceQuestion() {
   let choices_id = "choices_" + mcq_id;
   let add_choice_id = "add_choice_" + mcq_id;
 
-  document.getElementById("exercises_area").outerHTML =
+  document.querySelector(".new_element").outerHTML =
     `
   <div class="row exercise-sep" id="element_${max_elem}" name="mc_questions">
     <input name="id" hidden>
@@ -246,7 +250,6 @@ function addMultipleChoiceQuestion() {
 
     
   </div>
-  <div id="exercises_area"></div>
   `;
 
   makeAdjustable(document.getElementById("mcqt_" + max_elem));

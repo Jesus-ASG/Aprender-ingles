@@ -1,5 +1,11 @@
 function addContent() {
 	let selected = document.getElementById("content_selected").value;
+	document.getElementById("content_area").outerHTML =
+		`
+    <span class="new_element"></span>
+    <span id="content_area"></span>
+  `;
+
 	switch (parseInt(selected)) {
 		case 0:
 			addText();
@@ -15,7 +21,7 @@ function addContent() {
 
 // Video
 function addVideo() {
-	document.getElementById("content_area").outerHTML =
+	document.querySelector(".new_element").outerHTML =
 		`
 		<div class="row exercise-sep" id="element_${max_elem}" name="videos">
 			<div class="row mb-3">
@@ -42,14 +48,13 @@ function addVideo() {
 				</div>
 			</div>
     </div>
-		<div id="content_area"></div>
 	`;
 	max_elem++;
 }
 
 // Text
 function addText() {
-	document.getElementById("content_area").outerHTML =
+	document.querySelector(".new_element").outerHTML =
 		`
 		<div class="row exercise-sep" id="element_`+ max_elem + `" name="texts">
 			
@@ -94,7 +99,6 @@ function addText() {
 			<input value="`+ max_elem + `" name="element_number" hidden>
 			<input name="id" hidden>
 		</div>
-		<div id="content_area"></div>
 	`;
 	let adj1 = document.getElementById("text_content1_" + max_elem);
 	let adj2 = document.getElementById("text_content2_" + max_elem);
@@ -113,7 +117,7 @@ function setFunctions(id) {
 }
 
 function addDialogue() {
-	document.getElementById("content_area").outerHTML =
+	document.querySelector(".new_element").outerHTML =
 		`
 	
 	<div class="exercise-sep" id="element_`+ max_elem + `" name="dialogues">
@@ -172,8 +176,6 @@ function addDialogue() {
 		<input name="id" hidden>
 		
 	</div>
-	
-	<div id="content_area"></div>
   `;
 
 	let adj1 = document.getElementById("language1_" + max_elem);
