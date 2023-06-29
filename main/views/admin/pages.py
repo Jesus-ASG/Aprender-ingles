@@ -1,13 +1,15 @@
 import json
+import uuid
 
-from django.core.serializers import serialize
+from django.core.files import File
+
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
-from django.forms.models import model_to_dict
 
 from main.models import Story, Page, Video, Image, Text, Dialogue, RepeatPhrase, Spellcheck, MultipleChoiceQuestion, QuestionChoice
-from main.forms import DialogueForm, ImageForm, PageForm, RepeatPhraseForm
+from main.forms import DialogueForm, PageForm, RepeatPhraseForm
 from main.serializers import MultipleChoiceQuestionSerializer
 from rest_framework.renderers import JSONRenderer
 
@@ -50,12 +52,12 @@ def create(request, route, page_type):
         
         # create all forms
         pgForm = PageForm(request.POST or None)
-        imgForm = ImageForm(request.POST or None, request.FILES or None)
+        #imgForm = ImageForm(request.POST or None, request.FILES or None)
         diaForm = DialogueForm(request.POST or None)
         repPForm = RepeatPhraseForm(request.POST or None)
 
         # validation
-        if ((not pgForm.is_valid()) or (not imgForm.is_valid()) or (not diaForm.is_valid()) or 
+        if ((not pgForm.is_valid()) or (not diaForm.is_valid()) or 
                 (not repPForm.is_valid())):
             return JsonResponse({'message': 'error validating'})
 
@@ -77,16 +79,29 @@ def create(request, route, page_type):
         # Images
         images_to_submit = []
         imageFiles = request.FILES.getlist("imageFiles[]")
-        imageData = data["imageData"]
-        for imgF, imgD in zip (imageFiles, imageData):
-            imgObj = imgForm.save(commit=False)
-            if imgD["id"] != "":
-                imgObj = Image.objects.get(id=int(imgD["id"]))
+
+        print()
+        print(f'Image Files\n{imageFiles}')
+        print(f'trying name {imageFiles[0].name}')
+        print()
+        
+        images = data["images"]
+        for img_file, img in zip (imageFiles, images):
+            
+            imgObj = Image()
             imgObj.page = pgObj
-            imgObj.image = imgF
-            imgObj.element_number = imgD["element_number"]
+
+            if img["id"] != "":
+                imgObj = Image.objects.get(id=int(img["id"]))
+            
+            imgObj.element_number = img["element_number"]
+            
+            extension = img_file.name.split('.')[-1]
+            random_name = f'{uuid.uuid4()}.{extension}'
+
+            imgObj.image.save(random_name, File(img_file))
             images_to_submit.append(imgObj)
-            imgForm = ImageForm(request.POST or None, request.FILES or None)
+        
 
         # Videos
         videos_to_submit = []
@@ -254,7 +269,7 @@ def create(request, route, page_type):
         for d in deleted['question_choices']:
             safe_delete(QuestionChoice, d)
         
-
+        
         # Save all
         pgObj.save()
         
@@ -313,43 +328,28 @@ def update(request, route, page_type, page_id):
 
     mc_questions_s = MultipleChoiceQuestionSerializer(mc_questions, many=True, read_only=True)
     mc_questions = JSONRenderer().render(mc_questions_s.data).decode('utf-8')
-
-    # get values list from query set
-    videos = list(videos.values())
-    texts = list(texts.values())
-    dialogues = list(dialogues.values())
-    repeat_phrases = list(repeat_phrases.values())
-    spellchecks = list(spellchecks.values())
     
-    # cast list to json
-    videos = json.dumps(videos)
-    texts = json.dumps(texts)
-    dialogues = json.dumps(dialogues)
-    repeat_phrases = json.dumps(repeat_phrases)
-    spellchecks = json.dumps(spellchecks)
-
-    # image different to get url image instead image
-    images_json = []
-    for image in images:
-        x = model_to_dict(image)
-        x['image'] = x['image'].url
-        images_json.append(x)
-    images_json = json.dumps(images_json)
+    # cast to json
+    images = json.dumps(list(images.values()))
+    videos = json.dumps(list(videos.values()))
+    texts = json.dumps(list(texts.values()))
+    dialogues = json.dumps(list(dialogues.values()))
+    repeat_phrases = json.dumps(list(repeat_phrases.values()))
+    spellchecks = json.dumps(list(spellchecks.values()))
 
     context = {
         'story': story, 
         'page': page, 
         'page_type': page_type,
         'videos': videos,
-        'images': images, 
-        'images_json': images_json,
+        'media_url': settings.MEDIA_URL,
+        'images': images,
         'texts': texts,
         'dialogues': dialogues, 
         'repeat_phrases': repeat_phrases,
         'spellchecks': spellchecks,
         'mc_questions': mc_questions
     }
-
     
     if request.method == "GET":
         return render(request, 'admin/create_page.html', context)

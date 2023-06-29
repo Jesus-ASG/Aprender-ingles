@@ -1,10 +1,8 @@
 function addExercise() {
   let selected = document.getElementById("exercise_selected").value;
-  document.getElementById("exercises_area").outerHTML =
-    `
+  document.getElementById("exercises_area").outerHTML = `
     <span class="new_element"></span>
-    <span id="exercises_area"></span>
-  `;
+    <span id="exercises_area"></span>`;
 
   switch (parseInt(selected)) {
     case 0:
@@ -62,10 +60,7 @@ function repeatPhrase() {
       <input value="`+ max_elem + `" name="element_number" hidden>
       <input name="id" hidden>
       
-    </div>
-  `;
-
-
+    </div>`;
 
   let adj1 = document.getElementById("repP1_" + max_elem);
   let adj2 = document.getElementById("repP2_" + max_elem);

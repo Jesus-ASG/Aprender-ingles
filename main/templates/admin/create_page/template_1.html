@@ -26,32 +26,19 @@
     </div>
   </div>
 
-  {% for i in images %}
   <div name="images">
-    <input type="file" id="image" name="image" class="form-control" accept="image/*" onchange="changeImg(this)" hidden>
+    <input type="file" id="image" name="image_file" class="form-control" accept="image/*" onchange="changeImg(this)"
+      hidden>
     <input value="0" name="element_number" hidden>
-    <input value="{{ i.id |default:''}}" name="id" hidden>
+    <input name="id" hidden>
   </div>
-  {% empty %}
-  <div name="images">
-    <input type="file" id="image" name="image" class="form-control" accept="image/*" onchange="changeImg(this)" hidden>
-    <input value="0" name="element_number" hidden>
-    <input value="{{ i.id |default:''}}" name="id" hidden>
-  </div>
-  {% endfor %}
 
   <div class="mt-3" id="alert_removed_success"></div>
 
   <div class="row my-3">
     <div class="col-12">
-      <div class="img-t-1">
-        {% for i in images %}
-        <img class="box-shadow border-radius-10px" src="{{ i.image.url | default:story.cover.url }}"
-          alt="No se pudo cargar la imagen" id="img_showed">
-        {% empty %}
-        <img class="box-shadow border-radius-10px" src="{{ story.cover.url }}" alt="No se pudo cargar la imagen"
-          id="img_showed">
-        {% endfor %}
+      <div class="template-1-image">
+        <img class="box-shadow border-radius-10px p-1" src="" alt="No se pudo cargar la imagen" id="img_showed">
         <div class="row mt-1">
           <div class="col-12 col-md-6">
             <button class="btn btn-primary shadow-none fs-6 w-100 fw-bold" type="button"
@@ -103,7 +90,7 @@
 
   <div class="row mb-3">
     <div class="col-12">
-      <span id="exercises_area"></span>
+      <div id="exercises_area"></div>
     </div>
     {% include 'admin/create_page/select_exercise.html' %}
   </div>

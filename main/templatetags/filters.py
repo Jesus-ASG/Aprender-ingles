@@ -35,9 +35,9 @@ def cut_str(x, n):
 @register.filter
 def page_type_to_str(x):
     match x:
-        case 0:
-            return "Página en blanco"
         case 1:
             return "Plantilla general"
         case 2:
             return "Video y ejercicios"
+        case 3:
+            return "Diseño libre"

@@ -5,6 +5,41 @@
 
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/admin/create_page.css' %}">
+<style>
+  /* Styles for template 1 */
+  .template-1-image {
+    width: 45%;
+    height: auto;
+    align-items: center;
+    float: left;
+    margin: 0 1rem 1rem 1rem;
+  }
+
+  .template-1-image img {
+    width: 100%;
+    display: inline-block;
+    object-fit: contain;
+  }
+
+  @media only screen and (max-width: 400px) {
+    .template-1-image {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      margin-bottom: 0.5rem;
+      float: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .template-1-image img {
+      width: 90%;
+    }
+  }
+
+  /* End of styles for template 1 */
+</style>
 {% endblock %}
 
 {% block content %}
@@ -35,10 +70,11 @@
   const URL_VIEW_PAGES = `{% url 'view_pages' route=story.route %}`;
 
   let page_id = '{{ page.id }}';
-  console.log()
   let page_type = '{{ page_type }}' || -1;
 
   let default_cover = '{{ story.cover.url }}';
+  let media_url = '{{ media_url }}';
+
   let db_videos = [];
   let db_images = [];
   let db_texts = [];
@@ -51,7 +87,7 @@
     db_videos = JSON.parse('{{ videos |safe }}');
   } catch (e) { }
   try {
-    db_images = JSON.parse('{{ images_json |safe }}');
+    db_images = JSON.parse('{{ images |safe }}');
   } catch (e) { }
   try {
     db_texts = JSON.parse('{{ texts |safe |escapejs }}');
@@ -109,199 +145,6 @@
 <script src="{% static 'js/add_page/exercises.js' %}"></script>
 <script src="{% static 'js/add_page/add_page.js' %}"></script>
 <script src="{% static 'js/sort_collections.js' %}"></script>
-<script>
-  function verifyVideo(element_number) {
-    element = document.getElementById('element_' + element_number);
-
-    url = element.querySelector('[name = url]').value;
-    video_showed_container = element.querySelector('.video-showed');
-    video = video_showed_container.children[0];
-
-    valid_url = validateUrl(url);
-    if (valid_url !== "") {
-      video.src = valid_url;
-      video_showed_container.classList.remove("d-none");
-    }
-    else {
-      video_showed_container.classList.add("d-none");
-    }
-  }
-
-  function validateUrl(url) {
-    if (url.startsWith("https://www.youtube.com/embed/"))
-      return url;
-    if (url.startsWith("https://www.youtube.com/watch?v=")) {
-      code = url.split("https://www.youtube.com/watch?v=")[1];
-      return "https://www.youtube.com/embed/" + code;
-    }
-    if (url.startsWith("https://youtu.be/")) {
-      code = url.split("https://youtu.be/")[1];
-      return "https://www.youtube.com/embed/" + code;
-    }
-    return "";
-  }
-
-</script>
-<script>
-  if (page_id !== "") {
-    sortCollections();
-    loadPage();
-  }
-  else {
-    if (page_type == 2) {
-      document.getElementById("content_area").outerHTML = `
-        <div class="new_element"></div>
-        <div id="content_area"></div>
-      `;
-      addVideo(false);
-    }
-  }
-
-  function loadPage() {
-    if (page_type == 1) {
-      if (db_images.length > 0)
-        default_cover = db_images[0].image;
-    }
-    // Render document
-    for (let element of collections_sorted) {
-      element.element_number = max_elem;
-
-      // Check for template
-      let exercise = element.is_exercise;
-      if (page_type == 3) {
-        document.querySelector('.new_element').outerHTML = `
-          <div class="new_element"></div>
-          <div class="new_element"></div>
-        `;
-      }
-      else {
-        if (exercise) {
-          document.getElementById("exercises_area").outerHTML = `
-            <div class="new_element"></div>
-            <div id="exercises_area"></div>
-          `;
-        }
-        else {
-          document.getElementById("content_area").outerHTML = `
-            <div class="new_element"></div>
-            <div id="content_area"></div>
-          `;
-        }
-      }
-
-      switch (element.type) {
-        case "image":
-          max_elem++;
-          break;
-        case "video":
-          loadVideo(element);
-          break;
-        case "text":
-          loadText(element);
-          break;
-        case "dialogue":
-          loadDialogue(element);
-          break;
-        case "repeat_phrase":
-          loadRepeatPhrase(element);
-          break;
-        case "spellcheck":
-          loadSpellcheck(element);
-          break;
-        case "mc_question":
-          loadMCQuestion(element);
-          break;
-      }
-    }
-  }
-
-  function loadVideo(video) {
-    if (page_type == 2)
-      addVideo(false);
-    else
-      addVideo();
-    let html_video = document.getElementById("element_" + (max_elem - 1));
-    html_video.querySelector('[name = id]').value = video.id;
-    html_video.querySelector('[name = url]').value = video.url;
-    verifyVideo(max_elem - 1);
-  }
-
-  function loadText(text) {
-    addText();
-    let html_text = document.getElementById("element_" + (max_elem - 1));
-
-    html_text.querySelector('[name = id]').value = text.id;
-    html_text.querySelector('[name = language1]').value = text.language1;
-    html_text.querySelector('[name = language2]').value = text.language2;
-  }
-
-  function loadDialogue(dialogue) {
-    // add dialogue increases in 1 the id
-    addDialogue();
-    let html_dialogue = document.getElementById("element_" + (max_elem - 1));
-
-    html_dialogue.querySelector('[name = id]').value = dialogue.id;
-    html_dialogue.querySelector('[name = name]').value = dialogue.name;
-    html_dialogue.querySelector('[name = color]').value = dialogue.color;
-    html_dialogue.querySelector('[name = language1]').value = dialogue.content1;
-    html_dialogue.querySelector('[name = language2]').value = dialogue.content2;
-
-    $(".ch-color_" + (max_elem - 1)).css({ 'color': dialogue.color });
-  }
-
-  function loadRepeatPhrase(repeat_phrase) {
-    repeatPhrase();
-    let html_repeat_phrase = document.getElementById("element_" + (max_elem - 1));
-
-    html_repeat_phrase.querySelector('[name = id]').value = repeat_phrase.id;
-    html_repeat_phrase.querySelector('[name = language1]').value = repeat_phrase.content1;
-    html_repeat_phrase.querySelector('[name = language2]').value = repeat_phrase.content2;
-    html_repeat_phrase.querySelector('[name = show_text]').checked = repeat_phrase.show_text;
-  }
-
-  function loadSpellcheck(spellcheck) {
-    addSpellcheck();
-    let html_spellcheck = document.getElementById("element_" + (max_elem - 1));
-
-    html_spellcheck.querySelector('[name = id]').value = spellcheck.id;
-    html_spellcheck.querySelector('[name = wrong_text]').value = spellcheck.wrong_text;
-    html_spellcheck.querySelector('[name = right_text]').value = spellcheck.right_text;
-    html_spellcheck.querySelector('[name = translated_right_text]').value = spellcheck.translated_right_text;
-  }
-
-  function loadMCQuestion(question) {
-    let util = addMultipleChoiceQuestion();
-    let html_question = document.getElementById("element_" + (max_elem - 1));
-
-    html_question.querySelector('[name = id]').value = question.id;
-    html_question.querySelector('[name = text]').value = question.text;
-    html_question.querySelector('[name = t_text]').value = question.t_text;
-    html_question.querySelector('[name = randomize_choices]').checked = question.randomize_choices;
-
-    // For load choices
-    for (let c of question.choices) {
-      document.getElementById(util.add_choice_id).click();
-    }
-
-    // Sort choices by choice_number
-    question.choices.sort((a, b) => a.choice_number - b.choice_number);
-    // Choices dom object
-    let cd = document.querySelectorAll("#element_" + (max_elem - 1) + " .choice");
-
-    for (let i = 0; i < question.choices.length; i++) {
-      cd[i].querySelector('[name = id]').value = question.choices[i].id;
-      cd[i].querySelector('[name = text]').value = question.choices[i].text;
-      cd[i].querySelector('[name = t_text]').value = question.choices[i].t_text;
-
-      if (question.choices[i].correct) {
-        cd[i].querySelector('[name = correct]').classList.add('checked');
-        cd[i].querySelector('.radio-btn').classList.add('selected');
-      }
-    }
-  }
-
-</script>
-
-
+<script src="{% static 'js/load_create_page.js' %}"></script>
 
 {% endblock %}

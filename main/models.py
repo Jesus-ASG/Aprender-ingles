@@ -16,7 +16,7 @@ from django.contrib.auth.models import User
 
 
 prefix = ''
-path_default_cover_img = 'imagenes/portadas/book-default.png'
+default_cover_img_path = 'main/static/img/default-cover.png'
 
 
 def resizeImage(imageField, tupleSize):
@@ -61,7 +61,7 @@ class Story(models.Model):
     # fields
     title1 = models.CharField(max_length=255)
     title2 = models.CharField(max_length=255)
-    cover = models.ImageField(upload_to='imagenes/portadas/', default=path_default_cover_img, verbose_name='cover')
+    cover = models.ImageField(upload_to=settings.IMAGES_PATH, default=default_cover_img_path, verbose_name='cover')
     description1 = models.CharField(max_length=255, null=False, blank=True, default='')
     description2 = models.CharField(max_length=255, null=False, blank=True, default='')
     
@@ -78,7 +78,7 @@ class Story(models.Model):
         return self.cover.name
 
     def del_portada(self, to_delete):
-        if to_delete != path_default_cover_img:
+        if to_delete != default_cover_img_path:
             self.cover.storage.delete(to_delete)
 
     # Override methods
@@ -86,12 +86,13 @@ class Story(models.Model):
         if not self.likes_number:
             self.likes_number = random.randint(270, 300)
         self.route = slugify(self.title1)
-        if self.cover.name != path_default_cover_img:
+
+        if self.cover.name != default_cover_img_path:
             resizeImage(self.cover, (800, 800))
         super(Story, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        if self.cover.name != path_default_cover_img:
+        if self.cover.name != default_cover_img_path:
             self.cover.storage.delete(self.cover.name)
         
         # delete pages related
@@ -230,11 +231,17 @@ class Image(models.Model):
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='images')
     # fields
     element_number = models.IntegerField()
-    image = models.ImageField(upload_to='imagenes/img-pages/', null=True, blank=True)
+    image = models.ImageField(upload_to=settings.IMAGES_PATH, null=True, blank=True)
     
+
+    # Override methods
     def delete(self, *args, **kwargs):
         self.image.delete(save=False)
         super(Image, self).delete(*args, **kwargs)
+
+    #def save(self, *args, **kwargs):
+    #    setRandomImageName(self.image)
+    #    super(Image, self).save(*args, **kwargs)
 
 
 # Text

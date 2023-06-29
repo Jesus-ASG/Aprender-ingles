@@ -1,4 +1,5 @@
 let objects_deleted = {
+    "images": [],
     "videos": [],
     "texts": [],
     "dialogues": [],
@@ -14,6 +15,9 @@ function deleteElement(id) {
     if (id_database) {
         let name = element_to_delete.getAttribute("name");
         switch (name) {
+            case "images":
+                objects_deleted.images.push(id_database);
+                break;
             case "videos":
                 objects_deleted.videos.push(id_database);
                 break;
@@ -41,15 +45,13 @@ function deleteElement(id) {
 
     element_to_delete.remove();
 
-    let html =
-        `
+    let html = `
     <div class="alert alert-success alert-dismissible fade show mb-2 mt-2" role="alert">
         <div style="text-align: center;">
             <strong>Elemento eliminado correctamente</strong>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    `;
+    </div>`;
     document.getElementById("alert_removed_success").innerHTML = html;
 }
 
@@ -102,28 +104,28 @@ function savePage() {
     // Dialogues
     let dialogues = document.getElementsByName('dialogues');
     let jsonDialogues = [];
-    for (let i = 0; i < dialogues.length; i++) {
-        let d = {
-            "id": dialogues[i].querySelectorAll('[name = id]')[0].value,
-            "element_number": dialogues[i].querySelectorAll('[name = element_number]')[0].value,
-            "name": dialogues[i].querySelectorAll('[name = name]')[0].value,
-            "color": dialogues[i].querySelectorAll('[name = color]')[0].value,
-            "language1": dialogues[i].querySelectorAll('[name = language1]')[0].value,
-            "language2": dialogues[i].querySelectorAll('[name = language2]')[0].value
+    for (let d of dialogues) {
+        let jsonD = {
+            "id": d.querySelector('[name = id]').value,
+            "element_number": d.querySelector('[name = element_number]').value,
+            "name": d.querySelector('[name = name]').value,
+            "color": d.querySelector('[name = color]').value,
+            "language1": d.querySelector('[name = language1]').value,
+            "language2": d.querySelector('[name = language2]').value
         }
-        jsonDialogues.push(d);
+        jsonDialogues.push(jsonD);
     }
 
     // Images
     let images = document.getElementsByName("images");
-    let imageData = [];
-    for (let i = 0; i < images.length; i++) {
-        let img = {
-            "id": images[i].querySelectorAll('[name = id]')[0].value,
-            "element_number": images[i].querySelectorAll('[name = element_number]')[0].value
+    let jsonImages = [];
+    for (let i of images) {
+        let jsonI = {
+            "id": i.querySelector('[name = id]').value,
+            "element_number": i.querySelector('[name = element_number]').value
         }
-        imageData.push(img);
-        formData.append("imageFiles[]", images[i].querySelectorAll('[name = image]')[0].files[0]);
+        jsonImages.push(jsonI);
+        formData.append("imageFiles[]", i.querySelector('[name = image_file]').files[0]);
     }
 
 
@@ -131,15 +133,15 @@ function savePage() {
     // Repeat phrases
     let repeatPhrases = document.getElementsByName('repeatPhrases');
     let jsonRepeatPhrases = [];
-    for (let i = 0; i < repeatPhrases.length; i++) {
-        let rp = {
-            "id": repeatPhrases[i].querySelectorAll('[name = id]')[0].value,
-            "element_number": repeatPhrases[i].querySelectorAll('[name = element_number]')[0].value,
-            "language1": repeatPhrases[i].querySelectorAll('[name = language1]')[0].value,
-            "language2": repeatPhrases[i].querySelectorAll('[name = language2]')[0].value,
-            "show_text": repeatPhrases[i].querySelector('[name = show_text]').checked
+    for (let r of repeatPhrases) {
+        let jsonR = {
+            "id": r.querySelector('[name = id]').value,
+            "element_number": r.querySelector('[name = element_number]').value,
+            "language1": r.querySelector('[name = language1]').value,
+            "language2": r.querySelector('[name = language2]').value,
+            "show_text": r.querySelector('[name = show_text]').checked
         }
-        jsonRepeatPhrases.push(rp);
+        jsonRepeatPhrases.push(jsonR);
     }
 
     // Spellchecks
@@ -190,22 +192,17 @@ function savePage() {
         "page_id": page_id,
         "sub1": sub1 = document.getElementById('sub1').value,
         "sub2": sub2 = document.getElementById('sub2').value,
+        "images": jsonImages,
         "videos": jsonVideos,
         "texts": jsonTexts,
         "dialogues": jsonDialogues,
         "repeatPhrases": jsonRepeatPhrases,
         "spellchecks": jsonSpellchecks,
-        "imageData": imageData,
         "mc_questions": jsonMc_questions,
         "deleted": objects_deleted
     }
 
     formData.append("data", JSON.stringify(jsonData));
-    /* // For debug data values
-    formData.forEach((value, key) => {
-      console.log(key, value);
-    });
-    */
 
     const csrftoken = getCookie('csrftoken');
     $.ajax({
@@ -223,8 +220,7 @@ function savePage() {
             }
         },
         error: function (response) {
-            //console.log(response);
+            //console.error(response);
         }
     });
-
 }

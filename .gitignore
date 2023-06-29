@@ -1,5 +1,4 @@
 __pycache__/
-main/static/resources/
 env/
 envw/
 lenv/
@@ -7,4 +6,4 @@ wenv/
 venv/
 others/
 .idea/
-imagenes/
+uploads/
