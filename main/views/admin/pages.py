@@ -78,15 +78,9 @@ def create(request, route, page_type):
         
         # Images
         images_to_submit = []
-        imageFiles = request.FILES.getlist("imageFiles[]")
-
-        print()
-        print(f'Image Files\n{imageFiles}')
-        print(f'trying name {imageFiles[0].name}')
-        print()
-        
         images = data["images"]
-        for img_file, img in zip (imageFiles, images):
+        
+        for img in images:
             
             imgObj = Image()
             imgObj.page = pgObj
@@ -95,13 +89,21 @@ def create(request, route, page_type):
                 imgObj = Image.objects.get(id=int(img["id"]))
             
             imgObj.element_number = img["element_number"]
-            
-            extension = img_file.name.split('.')[-1]
-            random_name = f'{uuid.uuid4()}.{extension}'
 
-            imgObj.image.save(random_name, File(img_file))
+            file_key = img['file_key']
+            if file_key == '': # if user didn't send an image file
+                if not imgObj.image: # previous imgObj don't have an image
+                    return JsonResponse({'message': 'Must select an image file'})
+                
+            else: # user has sent an image file
+                img_file = request.FILES.get(file_key)
+
+                extension = img_file.name.split('.')[-1]
+                random_name = f'{uuid.uuid4()}.{extension}'
+
+                imgObj.image.save(random_name, File(img_file), save=False)
             images_to_submit.append(imgObj)
-        
+
 
         # Videos
         videos_to_submit = []
@@ -245,9 +247,11 @@ def create(request, route, page_type):
             mc_to_submit.append(qObj)
 
         
-
         # Delete objects that were deleted
         deleted = data["deleted"]
+        for d in deleted['images']:
+            safe_delete(Image, d)
+
         for d in deleted['videos']:
             safe_delete(Video, d)
 
@@ -269,7 +273,7 @@ def create(request, route, page_type):
         for d in deleted['question_choices']:
             safe_delete(QuestionChoice, d)
         
-        
+        #"""
         # Save all
         pgObj.save()
         
@@ -304,7 +308,7 @@ def create(request, route, page_type):
         # Question choices
         for c in choices_to_submit:
             c.save()
-        
+        #"""
         return JsonResponse({'message': 'success'})
         
 

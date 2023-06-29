@@ -55,27 +55,35 @@ function deleteElement(id) {
     document.getElementById("alert_removed_success").innerHTML = html;
 }
 
-function restoreImage() {
-    $("#img_showed").attr("src", default_cover);
-    $("#image").val("");
-}
-
-function changeImg(input) {
-    if (input.value == "")
-        restoreImage();
-    if (input.files && input.files[0]) {
-        let reader = new FileReader();
-        reader.onload = function (e) {
-            $("#img_showed").attr("src", e.target.result);
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
 
 function savePage() {
     let formData = new FormData();
     // Contents
+    // Images
+    let images = document.getElementsByName("images");
+    let jsonImages = [];
+    let image_counter = 0;
+    for (let i of images) {
+
+        let jsonI = {
+            "id": i.querySelector('[name = id]').value,
+            "element_number": i.querySelector('[name = element_number]').value,
+            "file_key": ''
+        }
+
+        let image_file = i.querySelector('[name = image_file]').files[0];
+        if (image_file != undefined) {
+            let file_key = 'image_file_' + image_counter.toString();
+
+            jsonI.file_key = file_key;
+            formData.append(file_key, image_file);
+        }
+        image_counter++;
+
+        jsonImages.push(jsonI);
+        //formData.append("imageFiles[]", image_file);
+    }
+
     // Videos
     let videos = document.getElementsByName('videos');
     let jsonVideos = [];
@@ -114,18 +122,6 @@ function savePage() {
             "language2": d.querySelector('[name = language2]').value
         }
         jsonDialogues.push(jsonD);
-    }
-
-    // Images
-    let images = document.getElementsByName("images");
-    let jsonImages = [];
-    for (let i of images) {
-        let jsonI = {
-            "id": i.querySelector('[name = id]').value,
-            "element_number": i.querySelector('[name = element_number]').value
-        }
-        jsonImages.push(jsonI);
-        formData.append("imageFiles[]", i.querySelector('[name = image_file]').files[0]);
     }
 
 

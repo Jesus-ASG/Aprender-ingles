@@ -1,6 +1,14 @@
 // Functions for load elements
 function loadImage(image) {
+  addImage();
+  let html_image = document.getElementById('element_' + (max_elem - 1));
+  let preview = html_image.querySelector('[name = preview]');
 
+  html_image.querySelector('[name = id]').value = image.id;
+  html_image.querySelector('[name = default_image]').value = media_url + image.image;
+
+  preview.setAttribute('src', media_url + image.image);
+  preview.classList.remove('d-none');
 }
 
 function loadVideo(video) {

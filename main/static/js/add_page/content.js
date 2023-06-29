@@ -18,7 +18,59 @@ function addContent() {
 
 // Image
 function addImage() {
-	document.querySelector(".new_element").outerHTML = ``;
+	let string_id = generateStringId();
+	document.querySelector(".new_element").outerHTML =
+		`
+		<div class="row exercise-sep" id="element_${max_elem}" name="images">
+			<div class="row">
+        <div class="col-12 d-flex">
+          <div class="col-10 col-md-11">
+            <h3 class="fs-4 text-center my-3">Imagen</h3>
+          </div>
+					${html_modal_delete(max_elem, '¿Desea eliminar esta imagen?')}
+        </div>
+      </div>
+
+			<div class="col-12">
+				<div style="display:flex; justify-content:center; width:100%; margin:1rem 0;">
+					<img class="box-shadow border-radius-10px d-none" alt="No se pudo cargar la imagen" name="preview" id="preview_${string_id}"
+					style="max-height:450px; max-width:100%;">
+				</div>
+			</div>
+			<div class="col-12">
+				<input type="file" id="file_${string_id}" name="image_file" class="form-control" accept="image/*">
+				<input type="text" name="default_image" readonly hidden>
+			</div>
+			<input value="${max_elem}" name="element_number" hidden>
+			<input name="id" hidden>
+		</div>
+	`;
+
+	document.getElementById('file_' + string_id).addEventListener('change', (e) => {
+		let preview_id = e.target.id.replace('file_', 'preview_');
+		let preview_image = document.getElementById(preview_id);
+
+		if (e.target.value == "") {
+			let default_image = e.target.parentElement.querySelector('[name = default_image]').value;
+
+			preview_image.setAttribute('src', default_image);
+
+			if (default_image == '')
+				preview_image.classList.add('d-none');
+			else
+				preview_image.classList.remove('d-none');
+		}
+
+		if (e.target.files && e.target.files[0]) {
+			let reader = new FileReader();
+			reader.onload = function (r) {
+				preview_image.setAttribute('src', r.target.result);
+				preview_image.classList.remove('d-none');
+			};
+			reader.readAsDataURL(e.target.files[0]);
+		}
+	});
+
 	max_elem++;
 }
 
@@ -160,6 +212,24 @@ function addDialogue() {
 
 
 /* More functions */
+// Image
+function restoreImage() {
+	$("#img_showed").attr("src", default_cover);
+	$("#image").val("");
+}
+
+function changeImg(input) {
+	if (input.value == "")
+		restoreImage();
+	if (input.files && input.files[0]) {
+		let reader = new FileReader();
+		reader.onload = function (e) {
+			$("#img_showed").attr("src", e.target.result);
+		};
+		reader.readAsDataURL(input.files[0]);
+	}
+}
+
 // Dialog
 function setFunctions(id) {
 	$(".ch-color_" + id).css({ 'color': $("#color_" + id).val() });
