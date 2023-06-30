@@ -8,42 +8,9 @@
 <link rel="stylesheet" href="{% static 'css/user/story_info.css' %}">
 <link rel="stylesheet" href="{% static 'css/utils/arrows.css' %}">
 <link rel="stylesheet" href="{% static 'css/user/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/editor-display_template_1.css' %}">
 
 <style>
-  /* Styles for template 1 */
-  .template-1-image {
-    width: 45%;
-    height: auto;
-    align-items: center;
-    float: left;
-    margin: 0 1rem 1rem 1rem;
-  }
-
-  .template-1-image img {
-    width: 100%;
-    display: inline-block;
-    object-fit: contain;
-  }
-
-  @media only screen and (max-width: 400px) {
-    .template-1-image {
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      margin-bottom: 0.5rem;
-      float: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .template-1-image img {
-      width: 90%;
-    }
-  }
-
-  /* End of styles for template 1 */
-
   /* Styles for template 2*/
   .video-frame {
     width: 100%;
@@ -137,11 +104,11 @@
 </div>
 
 {% if current_page.page_type == 1 %}
-{% include 'user/render_page/template_1.html' %}
+{% include 'page_display/page_display_template_1.html' %}
 {% elif current_page.page_type == 2 %}
-{% include 'user/render_page/template_2.html' %}
+{% include 'page_display/page_display_template_2.html' %}
 {% elif current_page.page_type == 3 %}
-{% include 'user/render_page/template_3.html' %}
+{% include 'page_display/page_display_template_3.html' %}
 {% endif %}
 
 
@@ -207,6 +174,7 @@
   let db_story_id = '{{ story.id }}';
   let db_page_id = '{{ current_page.id }}';
   let media_url = '{{ media_url }}';
+  let default_cover = '{{ story.cover.url }}';
 
   // Database elements
   let db_images = [];
@@ -307,6 +275,17 @@
 
 
   function loadTemplate1(total_translations) {
+    /* Only for template 1 */
+    if (db_images[0] != undefined) {
+      default_cover = media_url + db_images[0].image;
+    }
+    let img_showed = document.getElementById('img_showed');
+    if (img_showed != null) {
+      img_showed.setAttribute('src', default_cover);
+      img_showed.classList.remove('d-none');
+    }
+    /* ------------------------------ */
+
     document.getElementById("answer_questions_message").flipText();
     sortCollections();
 

@@ -23,8 +23,8 @@
 		</div>
 		<div class="col-2" style="display: flex; align-items: center; justify-content: center;">
 			{% if request.user.is_staff or request.user.is_superuser %}
-			<a href="{% url 'admin_stories' %}?s={{ story.title1 }}&p=1" target="_blank"
-				style="text-decoration: none; color: #fc7932;" title="Administrar historia">
+			<a href="{% url 'admin_stories' %}?s={{ story.title1 }}&p=1" style="text-decoration: none; color: #fc7932;"
+				title="Administrar historia">
 				<span><i class="fa-solid fa-gear" style="font-size: 1.5rem;"></i></span>
 			</a>
 			{% endif %}

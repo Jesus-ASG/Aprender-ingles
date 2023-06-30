@@ -1,17 +1,4 @@
 /* Template 1 */
-.img-t-1 {
-	width: 33%;
-	height: auto;
-	align-items: center;
-	margin: 2%;
-	float: left;
-}
-
-.img-t-1 img {
-	margin: auto;
-	width: 100%;
-	display: inline-block;
-}
 
 .text-wrap {
 	width: auto;

@@ -5,51 +5,17 @@
 
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/admin/create_page.css' %}">
-<style>
-  /* Styles for template 1 */
-  .template-1-image {
-    width: 45%;
-    height: auto;
-    align-items: center;
-    float: left;
-    margin: 0 1rem 1rem 1rem;
-  }
-
-  .template-1-image img {
-    width: 100%;
-    display: inline-block;
-    object-fit: contain;
-  }
-
-  @media only screen and (max-width: 400px) {
-    .template-1-image {
-      width: 100%;
-      margin: 0;
-      padding: 0;
-      margin-bottom: 0.5rem;
-      float: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .template-1-image img {
-      width: 90%;
-    }
-  }
-
-  /* End of styles for template 1 */
-</style>
+<link rel="stylesheet" href="{% static 'css/editor-display_template_1.css' %}">
 {% endblock %}
 
 {% block content %}
 
 {% if page_type == 1 %}
-{% include 'admin/create_page/template_1.html' %}
+{% include 'page_editor/page_editor_template_1.html' %}
 {% elif page_type == 2 %}
-{% include 'admin/create_page/template_2.html' %}
+{% include 'page_editor/page_editor_template_2.html' %}
 {% elif page_type == 3 %}
-{% include 'admin/create_page/template_3.html' %}
+{% include 'page_editor/page_editor_template_3.html' %}
 {% endif %}
 
 <div class="container">
@@ -145,6 +111,6 @@
 <script src="{% static 'js/add_page/exercises.js' %}"></script>
 <script src="{% static 'js/add_page/add_page.js' %}"></script>
 <script src="{% static 'js/sort_collections.js' %}"></script>
-<script src="{% static 'js/load_create_page.js' %}"></script>
+<script src="{% static 'js/load_page_editor.js' %}"></script>
 
 {% endblock %}

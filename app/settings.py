@@ -124,6 +124,7 @@ STATIC_URL = 'static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '')
 MEDIA_URL = '/media/'
 IMAGES_PATH = 'uploads/images/'
+AUDIOS_PATH = 'uploads/audios/'
 
 
 # Default primary key field type

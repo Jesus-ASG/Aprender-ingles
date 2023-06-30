@@ -1,7 +1,7 @@
 from django.urls import path
 from main.views.admin import pages, tags, stories, recommenders
 from main.views.admin import users_management as um
-from main.views.user import flashcard_collection, flashcards, story_render, user_apis, exercise_apis
+from main.views.user import flashcard_collection, flashcards, user_apis, exercise_apis
 from main.views import views, auth_views
 
 # para cargar imagenes
@@ -12,7 +12,7 @@ urlpatterns = [
     # General views
     path('', views.index, name='index'),
     path('profile/', views.profile, name='profile'),
-    path('stories/', views.storiesList, name="stories"),
+    path('stories/', views.storiesGallery, name="stories"),
     
     # Stories for admin
     path('myadmin/stories', stories.index, name = 'admin_stories'),
@@ -46,8 +46,8 @@ urlpatterns = [
     path('myadmin/users_management/edit/<int:user_id>/', um.update, name='management_edit_user'),
     
     # Show stories content
-    path('story/<slug:route>/', story_render.storyInfo, name = 'story_info'),
-    path('story/<slug:route>/<int:page_number>/', story_render.storyContent, name='story_content'),
+    path('story/<slug:route>/', views.storyInfo, name = 'story_info'),
+    path('story/<slug:route>/<int:page_number>/', views.pageDisplayer, name='story_content'),
 
     # Flashcards collections
     path('flashcards/', flashcard_collection.index, name='flashcards_collections'),
