@@ -33,7 +33,7 @@ function addImage() {
 
 			<div class="col-12">
 				<div style="display:flex; justify-content:center; width:100%; margin:1rem 0;">
-					<img class="box-shadow border-radius-10px d-none" alt="No se pudo cargar la imagen" name="preview" id="preview_${string_id}"
+					<img class="box-shadow d-none" alt="No se pudo cargar la imagen" name="preview" id="preview_${string_id}"
 					style="max-height:450px; max-width:100%;">
 				</div>
 			</div>

@@ -1,0 +1,25 @@
+<!-- Content area -->
+<div class="container main-content">
+  {% if current_page.subtitle1 != '' and current_page.subtitle2 != '' %}
+  <div class="row mt-3">
+    <div class="col-12 page-title-container">
+      <h1 class="fs-1 text-center">
+        <div id="subtitle">
+          <p class="front px-1 styles-back">{{ current_page.subtitle1 }}</p>
+          <p class="back px-1 styles-front">{{ current_page.subtitle2 }}</p>
+        </div>
+      </h1>
+    </div>
+  </div>
+  {% else %}
+  <div class="row mt-3"></div>
+  {% endif %}
+  <div class="row">
+    <div class="col-12">
+      <!---->
+      <div class="new_element"></div>
+      <!---->
+    </div>
+  </div>
+</div>
+<!-- Ends of content area -->

@@ -135,35 +135,15 @@
     </div>
   </div>
 </div>
-<!-- Content area -->
-<div class="container main-content">
-  <div class="row mt-3">
-    <div class="col-12 page-title-container">
-      <h1 class="fs-1 text-center">
-        <div id="subtitle"></div>
-      </h1>
-    </div>
-  </div>
-  <div class="row my-3">
-    <div class="col-12">
-      {% if current_page.page_type == 1 %}
-      {% include 'user/render_page/template_1.html' %}
-      {% elif current_page.page_type == 2 %}
-      {% include 'user/render_page/template_2.html' %}
-      {% endif %}
-    </div>
-  </div>
-</div>
-<!-- Ends of content area -->
-<div class="container main-content">
-  <div class="row mt-3">
-    <div class="col-12">
-      <h2 class="fs-3 text-center mt-3" id="answer_questions_message"></h2>
-      <hr style="color: var(--f-orange); height: 5px;">
-    </div>
-    <div class="col-12"><span id="exercises_area"></span></div>
-  </div>
-</div>
+
+{% if current_page.page_type == 1 %}
+{% include 'user/render_page/template_1.html' %}
+{% elif current_page.page_type == 2 %}
+{% include 'user/render_page/template_2.html' %}
+{% elif current_page.page_type == 3 %}
+{% include 'user/render_page/template_3.html' %}
+{% endif %}
+
 
 <div class="control-buttons my-3">
 
@@ -217,16 +197,18 @@
   const URL_ANSWER_PAGE = '{% url "story_content" route=story.route page_number=page_number %}';
   const URL_NEXT_PAGE = document.getElementById("next_page_input").value;
   const URL_REQUEST_EXERCISE_ANSWER = '{% url "request_exercise_answer" %}';
+
   let db_page_number = parseInt('{{ page_number }}');
   let db_total_pages = parseInt('{{ total_pages }}');
+  let page_type = '{{ current_page.page_type }}';
 
   const LAST_PAGE = (db_page_number == db_total_pages) ? true : false;
 
   let db_story_id = '{{ story.id }}';
   let db_page_id = '{{ current_page.id }}';
+  let media_url = '{{ media_url }}';
 
   // Database elements
-  let db_subtitle = {};
   let db_images = [];
   let db_videos = [];
   let db_texts = [];
@@ -242,13 +224,7 @@
   let user_answers = [];
 
   try {
-    db_subtitle.subtitle1 = '{{ current_page.subtitle1 }}';
-  } catch (e) { }
-  try {
-    db_subtitle.subtitle2 = '{{ current_page.subtitle2 }}';
-  } catch (e) { }
-  try {
-    db_images = JSON.parse('{{ images_json |safe }}');
+    db_images = JSON.parse('{{ images |safe }}');
   } catch (e) { }
   try {
     db_videos = JSON.parse('{{ videos |safe }}');
@@ -283,15 +259,16 @@
 <script>
   let total_translations = { "start": 0, "end": 0 };
 
-  setSubtitle(total_translations);
+  // Set subtitle to page
+  let page_subtitle = document.getElementById("subtitle");
+  if (page_subtitle != null)
+    page_subtitle.flipText();
 
-  setAnswerQuestionsMessage(total_translations);
-  // Sort collections
-  sortCollections();
-  // Render elements
-  for (let element of collections_sorted) {
+  // Switch for load element
+  function loadElement(element, total_translations) {
     switch (element.type) {
       case "image":
+        renderImage(element);
         break;
       case "video":
         renderVideo(element);
@@ -313,26 +290,66 @@
         break;
     }
   }
+  // End of switch for load element
 
-  setFunctionality(total_translations);
 
-  function setSubtitle(total_translations) {
+  switch (parseInt(page_type)) {
+    case 1:
+      loadTemplate1(total_translations);
+      break;
+    case 2:
+      loadTemplate1(total_translations);
+      break;
+    case 3:
+      loadTemplate3(total_translations);
+      break;
+  }
 
-    let sub1 = db_subtitle.subtitle1;
-    let sub2 = db_subtitle.subtitle2;
-    if (db_subtitle.subtitle1 == '' || db_subtitle.subtitle2 == '') {
-      sub1 = "Page " + db_page_number;
-      sub2 = "Página " + db_page_number;
+
+  function loadTemplate1(total_translations) {
+    document.getElementById("answer_questions_message").flipText();
+    sortCollections();
+
+    let contents = [];
+    let exercises = [];
+    for (let element of collections_sorted) {
+      if (element.is_exercise)
+        exercises.push(element);
+      else
+        contents.push(element);
     }
-    let html_subtitle = createFlipHTML(sub1, sub2, total_translations);
-    document.getElementById("subtitle").outerHTML = html_subtitle;
+
+    for (let c of contents) {
+      if (c.type == "image")
+        continue;
+      document.getElementById("content_area").outerHTML = `
+        <div class="new_element"></div>
+        <div id="content_area"></div>`;
+      loadElement(c, total_translations);
+    }
+
+    for (let e of exercises) {
+      document.getElementById("exercises_area").outerHTML = `
+        <div class="new_element"></div>
+        <div id="exercises_area"></div>`;
+      loadElement(e, total_translations);
+    }
+
+    setFunctionality(total_translations);
   }
 
-  function setAnswerQuestionsMessage(total_translations) {
-    let text1 = "Make your best effort to answer!";
-    let text2 = "¡Has tu mejor esfuerzo para contestar!";
-    document.getElementById("answer_questions_message").innerHTML = createFlipHTML(text1, text2, total_translations);
+  function loadTemplate3(total_translations) {
+    sortCollections();
+    for (let e of collections_sorted) {
+      document.querySelector('.new_element').outerHTML = `
+      <div class="new_element"></div>
+      <div class="new_element"></div>`;
+      loadElement(e, total_translations);
+    }
+    setFunctionality(total_translations);
   }
+
+
 </script>
 <script src="{% static 'js/user/answer_exercises.js' %}"></script>
 <script>

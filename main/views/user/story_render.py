@@ -1,11 +1,11 @@
 import json
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.forms.models import model_to_dict
 
 from rest_framework.renderers import JSONRenderer
 
@@ -122,6 +122,7 @@ def storyContent(request, route, page_number):
 
         answers = json.dumps(answers)
 
+        images = json.dumps(list(images.values()))
         videos = json.dumps(list(videos.values()))
         texts = json.dumps(list(texts.values()))
         dialogues = json.dumps(list(dialogues.values()))
@@ -129,13 +130,6 @@ def storyContent(request, route, page_number):
         spellchecks = json.dumps(list(spellchecks.values()))
 
         mc_questions = JSONRenderer().render(mc_questions_s.data).decode('utf-8')
-
-        images_json = []
-        for image in images:
-            x = model_to_dict(image)
-            x['image'] = x['image'].url
-            images_json.append(x)
-        images_json = json.dumps(images_json)
         
         context = {
             'story': story,
@@ -144,8 +138,8 @@ def storyContent(request, route, page_number):
             'prev_page': prev_page,
             'next_page': next_page,
             'current_page': current_page,
+            'media_url': settings.MEDIA_URL,
             'images': images,
-            'images_json': images_json,
             'videos': videos,
             'texts': texts,
             'dialogues': dialogues,

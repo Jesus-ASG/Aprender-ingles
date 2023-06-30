@@ -239,9 +239,6 @@ class Image(models.Model):
         self.image.delete(save=False)
         super(Image, self).delete(*args, **kwargs)
 
-    #def save(self, *args, **kwargs):
-    #    setRandomImageName(self.image)
-    #    super(Image, self).save(*args, **kwargs)
 
 
 # Text

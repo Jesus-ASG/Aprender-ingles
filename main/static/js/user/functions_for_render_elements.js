@@ -17,6 +17,21 @@ let titleClasses = {
 }
 
 // Contents
+// Image
+function renderImage(image) {
+	let src = media_url + image.image;
+	document.querySelector(".new_element").outerHTML =
+		`
+		<div class="row exercise-sep">
+			<div class="col-12">
+				<div style="display:flex; justify-content:center; width:100%; margin:1rem 0;">
+					<img class="box-shadow" src="${src}" alt="No se pudo cargar la imagen"
+					style="max-height:450px; max-width:100%;">
+				</div>
+			</div>
+		</div>
+	`;
+}
 // Video
 function renderVideo(video) {
 
@@ -32,15 +47,14 @@ function renderVideo(video) {
 		validated_url = "https://www.youtube.com/embed/" + code;
 	}
 
-	document.getElementById("content_area").outerHTML =
+	document.querySelector(".new_element").outerHTML =
 		`
 		<div class="video-showed">
 			<iframe src="${validated_url}" class="video-frame" title="YouTube video player" frameborder="0"
 				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 				allowfullscreen></iframe>
 		</div>
-		<div id="content_area"></div>
-	`;
+		`;
 }
 
 // Text
@@ -53,11 +67,8 @@ function renderText(text, total_translations) {
 		"back": "px-1"
 	};
 
-	document.getElementById("content_area").outerHTML =
-		createFlipHTML(text1, text2, total_translations, flipClasses) +
-		`
-	<div id="content_area"></div>
-	`;
+	document.querySelector(".new_element").outerHTML =
+		createFlipHTML(text1, text2, total_translations, flipClasses);
 }
 
 // Dialogue
@@ -70,14 +81,14 @@ function renderDialogue(dialogue, total_translations) {
 		"front": "px-1",
 		"back": "px-1"
 	};
-	document.getElementById("content_area").outerHTML =
+	document.querySelector(".new_element").outerHTML =
 		`
-	<div class="row" style="color:rgba(0,0,0,0)"><br></div>
-	<div class="fw-bold fs-5 dialogue-name" style="color:${dialogue.color};">
-		<p>${dialogue.name}:</p>
-	</div>
-	`+ createFlipHTML(text1, text2, total_translations, flipClasses) + `
-	<div id="content_area"></div>`;
+		<div class="row" style="color:rgba(0,0,0,0)"><br></div>
+		<div class="fw-bold fs-5 dialogue-name" style="color:${dialogue.color};">
+			<p>${dialogue.name}:</p>
+		</div>
+		`+ createFlipHTML(text1, text2, total_translations, flipClasses) + `
+		`;
 }
 
 // Exercises
@@ -95,7 +106,7 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 	else
 		text_to_repeat = createFlipHTML('Press the button to listen the answer', 'Pulsa el botón para escuchar la respuesta', total_translations, flipClasses);
 
-	document.getElementById("exercises_area").outerHTML =
+	document.querySelector(".new_element").outerHTML =
 		`
 	<div class="row mt-3 fs-5 exercise-sep" id="repeat_phrase_${repeat_phrase.id}" >
 	<div class="col-12">
@@ -153,7 +164,7 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 				<div class="row">
 						<div class="col-12 text-center">
 						<button class="btn shadow-none tool-icon mic-icon" 
-						onclick="readVoice('repeat_phrase_`+ repeat_phrase.id + `')"
+						onclick="readVoice('repeat_phrase_${repeat_phrase.id}')"
 						name="mic_btn" title="Start to talk">
 								<i class='fa-solid fa-microphone-slash'></i>
 						</button>
@@ -163,8 +174,8 @@ function renderRepeatPhrase(repeat_phrase, total_translations) {
 		</div>
 		</div>
 		
-		<input name="database_id" value="`+ repeat_phrase.id + `" hidden>
-	</div><span id="exercises_area">`;
+		<input name="database_id" value="${repeat_phrase.id}" hidden>
+	</div>`;
 
 	let btn_rp = document.getElementById("volume_container_" + repeat_phrase.id);
 	btn_rp.addEventListener('mouseenter', (e) => {
@@ -186,22 +197,22 @@ function renderSpellcheck(spellcheck, total_translations) {
 		"back": "px-1"
 	};
 
-	document.getElementById("exercises_area").outerHTML =
+	document.querySelector(".new_element").outerHTML =
 		`
-	<div class="row mt-3 fs-5 exercise-sep" id="spellcheck_${spellcheck.id}">
-		<div class="col-12">
-			<h3 class="fs-4 text-center">`+ createFlipHTML('Spellcheck', 'Revisar ortografía', total_translations, titleClasses) + `</h3>
+		<div class="row mt-3 fs-5 exercise-sep" id="spellcheck_${spellcheck.id}">
+			<div class="col-12">
+				<h3 class="fs-4 text-center">`+ createFlipHTML('Spellcheck', 'Revisar ortografía', total_translations, titleClasses) + `</h3>
+			</div>
+			<div class="col-12">
+				
+				<p> ${createFlipHTML('Write and fix: "' + spellcheck.wrong_text + '"', 'Traducción: "' + spellcheck.translated_right_text + '"', total_translations, scriptClasses)} </p>
+				
+				<span class="fs-5 text-muted mb-2"> <strong>Your answer:</strong> </span>
+				<textarea class="form-control mb-2 txta fs-5" type="text" placeholder="Write the fixed text"></textarea>
+				
+			</div>
 		</div>
-		<div class="col-12">
-			
-			<p> ${createFlipHTML('Write and fix: "' + spellcheck.wrong_text + '"', 'Traducción: "' + spellcheck.translated_right_text + '"', total_translations, scriptClasses)} </p>
-			
-			<span class="fs-5 text-muted mb-2"> <strong>Your answer:</strong> </span>
-			<textarea class="form-control mb-2 txta fs-5" type="text" placeholder="Write the fixed text"></textarea>
-			
-		</div>
-	</div><span id="exercises_area">
-	`;
+		`;
 	let txta = document.querySelector('#spellcheck_' + spellcheck.id + ' textarea');
 	makeAdjustable(txta);
 
@@ -223,6 +234,7 @@ function renderMCQuestion(question) {
 	let choice_ids = [];
 	let radios_ids = [];
 
+	// Choices
 	for (let c of question.choices) {
 		choices_html += `
 		<li class="choice_group_${question.id}">
@@ -243,36 +255,35 @@ function renderMCQuestion(question) {
 		radios_ids.push('radio_' + c.id);
 	}
 
-
-	document.getElementById("exercises_area").outerHTML =
+	// Question
+	document.querySelector(".new_element").outerHTML =
 		`
-	<div class="row mt-3 fs-5 exercise-sep" id="mc_question_${question.id}">
-		<div class="col-12">
-			<h3 class="fs-4 text-center translate_mcq_${question.id}">
-				<p class="front styles-front px-1 fw-bold">Answer</p>
-				<p class="back styles-back px-1 fw-bold">Contesta</p>
-			</h3>
-		</div>
-		<div class="col-12">
-			<div class="row">
-				<div class="fst-italic text-dark text-start my-3 title translate_mcq_${question.id}">
-					<p class="front styles-front px-1 fw-bold">${question.text}</p>
-					<p class="back styles-back px-1 fw-bold">${question.t_text}</p>
+		<div class="row mt-3 fs-5 exercise-sep" id="mc_question_${question.id}">
+			<div class="col-12">
+				<h3 class="fs-4 text-center translate_mcq_${question.id}">
+					<p class="front styles-front px-1 fw-bold">Answer</p>
+					<p class="back styles-back px-1 fw-bold">Contesta</p>
+				</h3>
+			</div>
+			<div class="col-12">
+				<div class="row">
+					<div class="fst-italic text-dark text-start my-3 title translate_mcq_${question.id}">
+						<p class="front styles-front px-1 fw-bold">${question.text}</p>
+						<p class="back styles-back px-1 fw-bold">${question.t_text}</p>
+					</div>
+				</div>
+				<div class="row">
+					<ul class="render-choice">
+						${choices_html}
+					</ul>
+				</div>
+				
+				<div class="row">
+					<span class="fs-5 text-muted mb-2 d-none"> <strong>Your answer:</strong> </span>
 				</div>
 			</div>
-			<div class="row">
-				<ul class="render-choice">
-					${choices_html}
-				</ul>
-			</div>
-			
-			<div class="row">
-				<span class="fs-5 text-muted mb-2 d-none"> <strong>Your answer:</strong> </span>
-			</div>
 		</div>
-	</div>
-	<span id="exercises_area">
-	`;
+		`;
 	// Add exercise for answer
 	user_answers.push(new Exercise(question.type, question.id, ''));
 
@@ -317,9 +328,6 @@ function renderMCQuestion(question) {
 			search.answer = e.target.parentElement.id.replace('radio_', '');
 		});
 	}
-
-
-
 
 }
 
