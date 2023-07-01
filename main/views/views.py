@@ -202,6 +202,7 @@ def pageDisplayer(request, route, page_number):
 
     images = current_page.images.all()
     videos = current_page.videos.all()
+    audios = current_page.audios.all()
     texts = current_page.texts.all()
     dialogues = current_page.dialogues.all()
     repeat_phrases = current_page.repeat_phrases.all()
@@ -238,6 +239,7 @@ def pageDisplayer(request, route, page_number):
 
         images = json.dumps(list(images.values()))
         videos = json.dumps(list(videos.values()))
+        audios = json.dumps(list(audios.values()))
         texts = json.dumps(list(texts.values()))
         dialogues = json.dumps(list(dialogues.values()))
         repeat_phrases = json.dumps(list(repeat_phrases.values()))
@@ -255,6 +257,7 @@ def pageDisplayer(request, route, page_number):
             'media_url': settings.MEDIA_URL,
             'images': images,
             'videos': videos,
+            'audios': audios,
             'texts': texts,
             'dialogues': dialogues,
             'repeat_phrases': repeat_phrases,
@@ -381,13 +384,13 @@ def pageDisplayer(request, route, page_number):
             
             results = evaluateAnswers(story, answers)
             
-            score_form = ScoreForm(request.POST or None)
-            if not score_form.is_valid():
-                pass
+            #score_form = ScoreForm(request.POST or None)
+            #if not score_form.is_valid():
+            #    pass
 
-            score_form_obj = score_form.save(commit=False)
+            #score_form_obj = score_form.save(commit=False)
 
-            #score_form_obj = Score()
+            score_form_obj = Score()
 
             score_form_obj.user_profile = user_profile
             score_form_obj.story = story

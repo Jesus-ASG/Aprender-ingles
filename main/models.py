@@ -209,7 +209,7 @@ class Page(models.Model):
         super(Page, self).delete(*args, **kwargs)
 # -------- -------- -------- --------
 
-"""
+
 # Audio
 class Audio(models.Model):
     class Meta:
@@ -218,18 +218,12 @@ class Audio(models.Model):
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='audios')
     # fields
     element_number = models.IntegerField()
-    url = models.FileField(upload_to=settings.AUDIOS_PATH+'%Y/%m/%d/', null=True, blank=True)
+    audio_file = models.FileField(upload_to=settings.AUDIOS_PATH, null=True, blank=True)
+    label_name = models.CharField(max_length=255, blank=True)
+    show_description = models.BooleanField(default=False)
+    description = models.CharField(max_length=600, blank=True)
+    t_description = models.CharField(max_length=600, blank=True)
 
-    def getFormat(self):
-        extension = self.url.split('.')[-1]
-        match extension:
-            case 'mp3':
-                return 'audio/mpeg'
-            case 'ogg':
-                return 'audio/ogg'
-            case 'wav':
-                return 'audio/wav'
-"""
 
 # Video
 class Video(models.Model):

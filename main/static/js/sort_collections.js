@@ -2,6 +2,13 @@
 let collections_sorted = [];
 function sortCollections() {
 	/* Contents */
+	// Audios
+	for (let audio of db_audios) {
+		audio.type = "audio";
+		audio.is_exercise = false;
+		collections_sorted.push(audio);
+	}
+
 	// Videos
 	for (let video of db_videos) {
 		video.type = "video";

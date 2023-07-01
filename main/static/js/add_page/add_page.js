@@ -1,6 +1,7 @@
 let objects_deleted = {
     "images": [],
     "videos": [],
+    "audios": [],
     "texts": [],
     "dialogues": [],
     "repeatPhrases": [],
@@ -13,36 +14,9 @@ function deleteElement(id) {
     let element_to_delete = document.getElementById("element_" + id);
     let id_database = element_to_delete.querySelector('[name = id]').value;
     if (id_database) {
-        let name = element_to_delete.getAttribute("name");
-        switch (name) {
-            case "images":
-                objects_deleted.images.push(id_database);
-                break;
-            case "videos":
-                objects_deleted.videos.push(id_database);
-                break;
-            case "texts":
-                objects_deleted.texts.push(id_database);
-                break;
-            case "dialogues":
-                objects_deleted.dialogues.push(id_database);
-                break;
-            case "repeatPhrases":
-                objects_deleted.repeatPhrases.push(id_database);
-                break;
-            case "spellchecks":
-                objects_deleted.spellchecks.push(id_database);
-                break;
-            case "mc_questions":
-                objects_deleted.mc_questions.push(id_database);
-                break;
-            case "question_choices":
-                objects_deleted.question_choices.push(id_database);
-                break;
-            default:
-        }
+        let name = element_to_delete.getAttribute("name"); // IMPORTANT: NAME MUST BE EQUAL TO INSIDE OF objects_deleted
+        objects_deleted[name].push(id_database);
     }
-
     element_to_delete.remove();
 
     let html = `
@@ -64,7 +38,6 @@ function savePage() {
     let jsonImages = [];
     let image_counter = 0;
     for (let i of images) {
-
         let jsonI = {
             "id": i.querySelector('[name = id]').value,
             "element_number": i.querySelector('[name = element_number]').value,
@@ -77,11 +50,10 @@ function savePage() {
 
             jsonI.file_key = file_key;
             formData.append(file_key, image_file);
+            image_counter++;
         }
-        image_counter++;
 
         jsonImages.push(jsonI);
-        //formData.append("imageFiles[]", image_file);
     }
 
     // Videos
@@ -94,6 +66,33 @@ function savePage() {
             "url": video.querySelector('[name = url]').value
         }
         jsonVideos.push(jsonVideo);
+    }
+
+    // Audios 
+    let audios = document.getElementsByName("audios");
+    let jsonAudios = [];
+    let audios_counter = 0;
+    for (let a of audios) {
+        let jsonA = {
+            "id": a.querySelector('[name = id]').value,
+            "element_number": a.querySelector('[name = element_number]').value,
+
+            "label_name": a.querySelector('[name = label_name]').value,
+            "show_description": a.querySelector('[name = show_description]').checked,
+            "description": a.querySelector('[name = description]').value,
+            "t_description": a.querySelector('[name = t_description]').value,
+            "file_key": ''
+        }
+
+        let audio_file = a.querySelector('[name = audio_file]').files[0];
+        if (audio_file != undefined) {
+            let file_key = 'audio_file_' + image_counter.toString();
+
+            jsonA.file_key = file_key;
+            formData.append(file_key, audio_file);
+            audios_counter++;
+        }
+        jsonAudios.push(jsonA);
     }
 
     // Texts
@@ -190,6 +189,7 @@ function savePage() {
         "sub2": sub2 = document.getElementById('sub2').value,
         "images": jsonImages,
         "videos": jsonVideos,
+        "audios": jsonAudios,
         "texts": jsonTexts,
         "dialogues": jsonDialogues,
         "repeatPhrases": jsonRepeatPhrases,

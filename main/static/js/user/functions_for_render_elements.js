@@ -57,6 +57,47 @@ function renderVideo(video) {
 		`;
 }
 
+function renderAudio(audio) {
+	let desc = '';
+	if (audio.show_description) {
+		desc = `
+		<div class="text-center" style="margin-top:1rem;" id="audio_flip_description_${audio.id}">
+			<div class="front px-1 styles-front">${audio.description}</div>
+			<div class="back px-1 styles-back">${audio.t_description}</div>
+		</div>
+		`;
+	}
+
+	document.querySelector(".new_element").outerHTML =
+		`
+		<div class="row exercise-sep">
+			<div class="col-12">
+				${desc}
+				<div style="display:flex; justify-content:center; width:100%; margin:1rem 0;">
+					<audio controls id="audio_player_${audio.id}" controlsList="nodownload">
+						<source src="" type="audio/mpeg">
+					</audio>
+				</div>
+			</div>
+		</div>
+	`;
+	let audio_player = document.getElementById('audio_player_' + audio.id);
+
+	if (desc != '')
+		document.getElementById('audio_flip_description_' + audio.id).flipText();
+
+	// get the audio as blob
+	fetch(media_url + audio.audio_file)
+		.then(response => response.blob())
+		.then(blob => {
+			audio_player.volume = 0.5;
+			audio_player.src = URL.createObjectURL(blob);
+		})
+		.catch(error => {
+			console.error('Error fetching the audio file:', error);
+		});
+}
+
 // Text
 function renderText(text, total_translations) {
 	let text1 = text.language1.replace(/\n/g, '<span></span>|');

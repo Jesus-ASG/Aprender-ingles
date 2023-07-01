@@ -43,6 +43,7 @@
 
   let db_images = [];
   let db_videos = [];
+  let db_audios = [];
   let db_texts = [];
   let db_dialogues = [];
   let db_repeat_phrases = [];
@@ -50,10 +51,13 @@
   let db_mc_questions = [];
 
   try {
+    db_images = JSON.parse('{{ images |safe }}');
+  } catch (e) { }
+  try {
     db_videos = JSON.parse('{{ videos |safe }}');
   } catch (e) { }
   try {
-    db_images = JSON.parse('{{ images |safe }}');
+    db_audios = JSON.parse('{{ audios |safe }}');
   } catch (e) { }
   try {
     db_texts = JSON.parse('{{ texts |safe |escapejs }}');

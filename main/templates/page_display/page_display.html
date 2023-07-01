@@ -179,6 +179,7 @@
   // Database elements
   let db_images = [];
   let db_videos = [];
+  let db_audios = [];
   let db_texts = [];
   let db_dialogues = [];
   let db_repeat_phrases = [];
@@ -196,6 +197,9 @@
   } catch (e) { }
   try {
     db_videos = JSON.parse('{{ videos |safe }}');
+  } catch (e) { }
+  try {
+    db_audios = JSON.parse('{{ audios |safe }}');
   } catch (e) { }
   try {
     db_texts = JSON.parse('{{ texts |safe |escapejs }}');
@@ -240,6 +244,9 @@
         break;
       case "video":
         renderVideo(element);
+        break;
+      case "audio":
+        renderAudio(element);
         break;
       case "text":
         renderText(element, total_translations);

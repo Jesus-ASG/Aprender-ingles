@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 
-from main.models import Story, Page, Video, Image, Text, Dialogue, RepeatPhrase, Spellcheck, MultipleChoiceQuestion, QuestionChoice
+from main.models import Story, Page, Audio, Video, Image, Text, Dialogue, RepeatPhrase, Spellcheck, MultipleChoiceQuestion, QuestionChoice
 from main.forms import DialogueForm, PageForm, RepeatPhraseForm
 from main.serializers import MultipleChoiceQuestionSerializer
 from rest_framework.renderers import JSONRenderer
@@ -97,7 +97,10 @@ def create(request, route, page_type):
             file_key = img['file_key']
             if file_key == '': # if user didn't send an image file
                 if not imgObj.image: # previous imgObj don't have an image
-                    return JsonResponse({'message': 'Must select an image file'})
+                    if pgObj.page_type == 1: # doesn't matter if imgObj don't have image because it can
+                        continue
+                    else: # Any other template with image input empty will be returned as an error
+                        return JsonResponse({'message': 'Must select an image file'})
                 
             else: # user has sent an image file
                 img_file = request.FILES.get(file_key)
@@ -125,6 +128,44 @@ def create(request, route, page_type):
             video_obj.url = v['url']
 
             videos_to_submit.append(video_obj)
+
+
+        # Audios
+        audios_to_submit = []
+        audios = data["audios"]
+        
+        for a in audios:
+            # Validate fields
+            if a['show_description']:
+                if a['description'] == '' or a['t_description'] == '':
+                    return JsonResponse({'message': 'Both description must have content'})
+            
+            audio_obj = Audio()
+            audio_obj.page = pgObj
+
+            if a["id"] != "":
+                audio_obj = Audio.objects.get(id=int(a["id"]))
+            
+            audio_obj.element_number = a["element_number"]
+            audio_obj.label_name = a["label_name"]
+            audio_obj.show_description = a["show_description"]
+            audio_obj.description = a["description"]
+            audio_obj.t_description = a["t_description"]
+
+
+            file_key = a['file_key']
+            if file_key == '': # if user didn't send an audio file
+                if not audio_obj.audio_file: # previous audio_obj don't have an audio file
+                    return JsonResponse({'message': 'Must select an audio file'})
+                
+            else: # user has sent an audio file
+                audio_file = request.FILES.get(file_key)
+
+                extension = audio_file.name.split('.')[-1]
+                random_name = f'{uuid.uuid4()}.{extension}'
+
+                audio_obj.audio_file.save(random_name, File(audio_file), save=False)
+            audios_to_submit.append(audio_obj)
 
 
         # Texts
@@ -259,6 +300,9 @@ def create(request, route, page_type):
         for d in deleted['videos']:
             safe_delete(Video, d)
 
+        for d in deleted['audios']:
+            safe_delete(Audio, d)
+
         for d in deleted['texts']:
             safe_delete(Text, d)
 
@@ -285,6 +329,10 @@ def create(request, route, page_type):
         # Videos
         for video in videos_to_submit:
             video.save()
+
+        # Audios
+        for audio in audios_to_submit:
+            audio.save()
 
         # Images
         for image in images_to_submit:
@@ -328,6 +376,7 @@ def update(request, route, page_type, page_id):
 
     images = page.images.all()
     videos = page.videos.all()
+    audios = page.audios.all()
     texts = page.texts.all()
     dialogues = page.dialogues.all()
     repeat_phrases = page.repeat_phrases.all()
@@ -340,6 +389,7 @@ def update(request, route, page_type, page_id):
     # cast to json
     images = json.dumps(list(images.values()))
     videos = json.dumps(list(videos.values()))
+    audios = json.dumps(list(audios.values()))
     texts = json.dumps(list(texts.values()))
     dialogues = json.dumps(list(dialogues.values()))
     repeat_phrases = json.dumps(list(repeat_phrases.values()))
@@ -352,6 +402,7 @@ def update(request, route, page_type, page_id):
         'media_url': settings.MEDIA_URL,
         'images': images,
         'videos': videos,
+        'audios': audios,
         'texts': texts,
         'dialogues': dialogues, 
         'repeat_phrases': repeat_phrases,

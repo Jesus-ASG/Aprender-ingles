@@ -13,6 +13,8 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('profile/', views.profile, name='profile'),
     path('stories/', views.storiesGallery, name="stories"),
+    path('story/<slug:route>/', views.storyInfo, name = 'story_info'),
+    path('story/<slug:route>/<int:page_number>/', views.pageDisplayer, name='story_content'),
     
     # Stories for admin
     path('myadmin/stories', stories.index, name = 'admin_stories'),
@@ -44,10 +46,6 @@ urlpatterns = [
     path('myadmin/users_management/', um.index, name='management_users'),
     path('myadmin/users_management/del/<int:user_id>/', um.delete, name='management_del_user'),
     path('myadmin/users_management/edit/<int:user_id>/', um.update, name='management_edit_user'),
-    
-    # Show stories content
-    path('story/<slug:route>/', views.storyInfo, name = 'story_info'),
-    path('story/<slug:route>/<int:page_number>/', views.pageDisplayer, name='story_content'),
 
     # Flashcards collections
     path('flashcards/', flashcard_collection.index, name='flashcards_collections'),

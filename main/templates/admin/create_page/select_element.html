@@ -1,9 +1,7 @@
 <div class="col-12 col-md-8">
   <select class="form-select" id="element_selected">
     <option selected>- Selecciona un elemento -</option>
-    <!-- 
-      <option value="1">Audio</option>
-    -->
+    <option value="1">Audio</option>
     <option value="2">Diálogo</option>
     <option value="3">Imagen</option>
     <option value="4">Texto</option>
@@ -31,13 +29,12 @@
 
     switch (parseInt(selected)) {
       case 1:
-        //audio
+        addAudio();
         break;
       case 2:
         addDialogue();
         break;
       case 3:
-        //imagen
         addImage();
         break;
       case 4:

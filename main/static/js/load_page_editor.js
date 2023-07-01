@@ -22,6 +22,34 @@ function loadVideo(video) {
   verifyVideo(max_elem - 1);
 }
 
+function loadAudio(audio) {
+  addAudio();
+  let html_audio = document.getElementById('element_' + (max_elem - 1));
+  let audio_player = html_audio.querySelector('[name = audio_player]');
+
+  html_audio.querySelector('[name = id]').value = audio.id;
+  html_audio.querySelector('[name = default_audio]').value = media_url + audio.audio_file;
+  html_audio.querySelector('[name = label_name]').value = audio.label_name;
+  html_audio.querySelector('[name = show_description]').checked = audio.show_description;
+  html_audio.querySelector('[name = description]').value = audio.description;
+  html_audio.querySelector('[name = t_description]').value = audio.t_description;
+
+  if (audio.show_description)
+    html_audio.querySelector('[name = description_container]').classList.remove('d-none')
+
+  // get the audio as blob
+  fetch(media_url + audio.audio_file)
+    .then(response => response.blob())
+    .then(blob => {
+      audio_player.volume = 0.5;
+      audio_player.src = URL.createObjectURL(blob);
+    })
+    .catch(error => {
+      console.error('Error fetching the audio file:', error);
+    });
+
+}
+
 function loadText(text) {
   addText();
   let html_text = document.getElementById("element_" + (max_elem - 1));
@@ -105,6 +133,9 @@ function loadElement(element) {
       break;
     case "video":
       loadVideo(element);
+      break;
+    case "audio":
+      loadAudio(element);
       break;
     case "text":
       loadText(element);
