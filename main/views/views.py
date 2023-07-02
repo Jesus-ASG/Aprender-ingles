@@ -200,8 +200,22 @@ def pageDisplayer(request, route, page_number):
     if page_index < len(pages) - 1:
         next_page = page_number + 1
 
-    json_page = PageSerializer(current_page)
-    json_page = JSONRenderer().render(json_page.data).decode('utf-8')
+    s_page = PageSerializer(current_page)
+    # Quit answers
+    # Questions
+    for q in s_page.data['questions']:
+        for c in q['choices']:
+            c['correct'] = True
+    # Spellchecks
+    for s in s_page.data['spellchecks']:
+        s['right_text'] = 'Hola, señor tramposo'
+    # Repeat phrases
+    for rp in s_page.data['repeat_phrases']:
+        if not rp['show_text']:
+            rp['content1'] = 'Hola, señor tramposo'
+            rp['content2'] = 'Hola, señor tramposo'
+    
+    json_page = JSONRenderer().render(s_page.data).decode('utf-8')
     
     db_answers = user_profile.answers.filter(page=current_page)
 
