@@ -21,7 +21,7 @@ from main.utils.evaluate_story import rateSkills, evaluateAnswers, map_answers
 
 from main.utils.paginate_and_filter import paginate_stories
 
-from main.serializers import MultipleChoiceQuestionSerializer
+from main.serializers import MultipleChoiceQuestionSerializer, PageSerializer
 
 
 def not_found_page(request, exception):
@@ -200,17 +200,8 @@ def pageDisplayer(request, route, page_number):
     if page_index < len(pages) - 1:
         next_page = page_number + 1
 
-    images = current_page.images.all()
-    videos = current_page.videos.all()
-    audios = current_page.audios.all()
-    texts = current_page.texts.all()
-    dialogues = current_page.dialogues.all()
-    repeat_phrases = current_page.repeat_phrases.all()
-    spellchecks = current_page.spellchecks.all()
-    mc_questions = current_page.questions.all()
-
-    mc_questions_s = MultipleChoiceQuestionSerializer(mc_questions, many=True)
-    
+    json_page = PageSerializer(current_page)
+    json_page = JSONRenderer().render(json_page.data).decode('utf-8')
     
     db_answers = user_profile.answers.filter(page=current_page)
 
@@ -236,33 +227,15 @@ def pageDisplayer(request, route, page_number):
                 score = json.dumps(score, indent=4, sort_keys=True, default=str)
 
         answers = json.dumps(answers)
-
-        images = json.dumps(list(images.values()))
-        videos = json.dumps(list(videos.values()))
-        audios = json.dumps(list(audios.values()))
-        texts = json.dumps(list(texts.values()))
-        dialogues = json.dumps(list(dialogues.values()))
-        repeat_phrases = json.dumps(list(repeat_phrases.values()))
-        spellchecks = json.dumps(list(spellchecks.values()))
-
-        mc_questions = JSONRenderer().render(mc_questions_s.data).decode('utf-8')
         
         context = {
             'story': story,
+            'json_page': json_page,
             'page_number': page_number,
             'total_pages': total_pages,
             'prev_page': prev_page,
             'next_page': next_page,
             'current_page': current_page,
-            'media_url': settings.MEDIA_URL,
-            'images': images,
-            'videos': videos,
-            'audios': audios,
-            'texts': texts,
-            'dialogues': dialogues,
-            'repeat_phrases': repeat_phrases,
-            'spellchecks': spellchecks,
-            'mc_questions': mc_questions,
             'answers': answers,
             'score': score
             }
@@ -295,7 +268,7 @@ def pageDisplayer(request, route, page_number):
         for exercise in answers:
             match exercise['type']:
                 case 'repeat_phrase':
-                    rp = repeat_phrases.get(pk=int(exercise['id']))
+                    rp = RepeatPhrase.objects.get(pk=int(exercise['id']))
                     
                     if update:
                         answer_update_obj = rp_answered.filter(exercise_id=rp.pk)
@@ -317,7 +290,7 @@ def pageDisplayer(request, route, page_number):
                             submited=submit,
                         )
                 case 'spellcheck':
-                    spc = spellchecks.get(pk=int(exercise['id']))
+                    spc = Spellcheck.objects.get(pk=int(exercise['id']))
                     
                     if update:
                         answer_update_obj = spc_answered.filter(exercise_id=spc.pk)
@@ -339,7 +312,7 @@ def pageDisplayer(request, route, page_number):
                             submited=submit,
                         )
                 case 'mc_question':
-                    q = mc_questions.get(pk=int(exercise['id']))
+                    q = MultipleChoiceQuestion.objects.get(pk=int(exercise['id']))
                     
                     if update:
                         answer_update_obj = mcq_answered.filter(exercise_id=q.pk)

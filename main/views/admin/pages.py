@@ -10,7 +10,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFou
 
 from main.models import Story, Page, Audio, Video, Image, Text, Dialogue, RepeatPhrase, Spellcheck, MultipleChoiceQuestion, QuestionChoice
 from main.forms import DialogueForm, PageForm, RepeatPhraseForm
-from main.serializers import MultipleChoiceQuestionSerializer
+from main.serializers import MultipleChoiceQuestionSerializer, PageSerializer
 from rest_framework.renderers import JSONRenderer
 
 
@@ -374,40 +374,13 @@ def update(request, route, page_type, page_id):
     story = Story.objects.get(route=route)
     page = story.pages.get(id=page_id)
 
-    images = page.images.all()
-    videos = page.videos.all()
-    audios = page.audios.all()
-    texts = page.texts.all()
-    dialogues = page.dialogues.all()
-    repeat_phrases = page.repeat_phrases.all()
-    spellchecks = page.spellchecks.all()
-    mc_questions = page.questions.all()
-
-    mc_questions_s = MultipleChoiceQuestionSerializer(mc_questions, many=True, read_only=True)
-    mc_questions = JSONRenderer().render(mc_questions_s.data).decode('utf-8')
-    
-    # cast to json
-    images = json.dumps(list(images.values()))
-    videos = json.dumps(list(videos.values()))
-    audios = json.dumps(list(audios.values()))
-    texts = json.dumps(list(texts.values()))
-    dialogues = json.dumps(list(dialogues.values()))
-    repeat_phrases = json.dumps(list(repeat_phrases.values()))
-    spellchecks = json.dumps(list(spellchecks.values()))
+    json_page = PageSerializer(page)
+    json_page = JSONRenderer().render(json_page.data).decode('utf-8')
 
     context = {
         'story': story, 
-        'page': page, 
         'page_type': page_type,
-        'media_url': settings.MEDIA_URL,
-        'images': images,
-        'videos': videos,
-        'audios': audios,
-        'texts': texts,
-        'dialogues': dialogues, 
-        'repeat_phrases': repeat_phrases,
-        'spellchecks': spellchecks,
-        'mc_questions': mc_questions
+        'json_page': json_page
     }
     
     if request.method == "GET":

@@ -19,7 +19,7 @@ let titleClasses = {
 // Contents
 // Image
 function renderImage(image) {
-	let src = media_url + image.image;
+	let src = image.image;
 	document.querySelector(".new_element").outerHTML =
 		`
 		<div class="row exercise-sep">
@@ -87,7 +87,7 @@ function renderAudio(audio) {
 		document.getElementById('audio_flip_description_' + audio.id).flipText();
 
 	// get the audio as blob
-	fetch(media_url + audio.audio_file)
+	fetch(audio.audio_file)
 		.then(response => response.blob())
 		.then(blob => {
 			audio_player.volume = 0.5;
@@ -99,17 +99,18 @@ function renderAudio(audio) {
 }
 
 // Text
-function renderText(text, total_translations) {
+function renderText(text) {
 	let text1 = text.language1.replace(/\n/g, '<span></span>|');
 	let text2 = text.language2.replace(/\n/g, '<span></span>|');
-	let flipClasses = {
-		"paper": "fs-5 mx-1",
-		"front": "px-1",
-		"back": "px-1"
-	};
 
 	document.querySelector(".new_element").outerHTML =
-		createFlipHTML(text1, text2, total_translations, flipClasses);
+		`
+		<div class="fs-5 mx-1" id="text_${text.id}">
+			<div class="front px-1 styles-front">${text1}</div>
+			<div class="back px-1 styles-back">${text2}</div>
+		</div>
+		`;
+	document.getElementById('text_' + text.id).flipText();
 }
 
 // Dialogue
@@ -371,4 +372,3 @@ function renderMCQuestion(question) {
 	}
 
 }
-

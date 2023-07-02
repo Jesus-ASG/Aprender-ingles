@@ -6,7 +6,10 @@
 	</div>
 	document.getElementById('flip_text').flipText();
 */
-HTMLElement.prototype.flipText = function (e) {
+HTMLElement.prototype.flipText = function (render) {
+	if (this.getAttribute('fliptext') != null)
+		return;
+
 	front = this.querySelector('.front');
 	back = this.querySelector('.back');
 
@@ -89,7 +92,12 @@ HTMLElement.prototype.flipText = function (e) {
 		flip_ids.push(paper_id);
 	}
 
-	this.innerHTML = html;
+	if (render == 'outter')
+		this.outerHTML = html;
+	else
+		this.innerHTML = html;
+
+	this.setAttribute('fliptext', true);
 	for (let id of flip_ids)
 		flipPapers(id);
 }

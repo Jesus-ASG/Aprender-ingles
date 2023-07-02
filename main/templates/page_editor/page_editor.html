@@ -35,45 +35,35 @@
   const URL_SAVE_PAGE = `{% url 'add_page' route=story.route page_type=page_type %}`;
   const URL_VIEW_PAGES = `{% url 'view_pages' route=story.route %}`;
 
-  let page_id = '{{ page.id }}';
+
   let page_type = '{{ page_type }}' || -1;
 
   let default_cover = '{{ story.cover.url }}';
-  let media_url = '{{ media_url }}';
 
-  let db_images = [];
-  let db_videos = [];
-  let db_audios = [];
-  let db_texts = [];
-  let db_dialogues = [];
-  let db_repeat_phrases = [];
-  let db_spellchecks = [];
-  let db_mc_questions = [];
-
+  let page = {
+    "id": 0,
+    "audios": [],
+    "videos": [],
+    "images": [],
+    "texts": [],
+    "dialogues": [],
+    "spellchecks": [],
+    "questions": [],
+    "repeat_phrases": [],
+    "subtitle1": "",
+    "subtitle2": "",
+    "page_type": 0,
+    "date_created": "",
+    "time_created": "",
+    "story": 0
+  };
+  let page_id = 0;
   try {
-    db_images = JSON.parse('{{ images |safe }}');
-  } catch (e) { }
-  try {
-    db_videos = JSON.parse('{{ videos |safe }}');
-  } catch (e) { }
-  try {
-    db_audios = JSON.parse('{{ audios |safe }}');
-  } catch (e) { }
-  try {
-    db_texts = JSON.parse('{{ texts |safe |escapejs }}');
-  } catch (e) { }
-  try {
-    db_dialogues = JSON.parse('{{ dialogues |safe |escapejs }}');
-  } catch (e) { }
-  try {
-    db_repeat_phrases = JSON.parse('{{ repeat_phrases |safe |escapejs }}');
-  } catch (e) { }
-  try {
-    db_spellchecks = JSON.parse('{{ spellchecks |safe |escapejs }}');
-  } catch (e) { }
-  try {
-    db_mc_questions = JSON.parse('{{ mc_questions|escapejs }}');
-  } catch (e) { }
+    page = JSON.parse('{{ json_page|escapejs }}');
+  }
+  catch (e) { }
+  if (page.id != 0)
+    page_id = page.id;
 
   /* Initialize max_elem */
   let max_elem = 0;

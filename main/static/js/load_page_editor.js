@@ -1,13 +1,13 @@
-// Functions for load elements
+// Functions for load editor elements
 function loadImage(image) {
   addImage();
   let html_image = document.getElementById('element_' + (max_elem - 1));
   let preview = html_image.querySelector('[name = preview]');
 
   html_image.querySelector('[name = id]').value = image.id;
-  html_image.querySelector('[name = default_image]').value = media_url + image.image;
+  html_image.querySelector('[name = default_image]').value = image.image;
 
-  preview.setAttribute('src', media_url + image.image);
+  preview.setAttribute('src', image.image);
   preview.classList.remove('d-none');
 }
 
@@ -28,7 +28,7 @@ function loadAudio(audio) {
   let audio_player = html_audio.querySelector('[name = audio_player]');
 
   html_audio.querySelector('[name = id]').value = audio.id;
-  html_audio.querySelector('[name = default_audio]').value = media_url + audio.audio_file;
+  html_audio.querySelector('[name = default_audio]').value = audio.audio_file;
   html_audio.querySelector('[name = label_name]').value = audio.label_name;
   html_audio.querySelector('[name = show_description]').checked = audio.show_description;
   html_audio.querySelector('[name = description]').value = audio.description;
@@ -38,7 +38,7 @@ function loadAudio(audio) {
     html_audio.querySelector('[name = description_container]').classList.remove('d-none')
 
   // get the audio as blob
-  fetch(media_url + audio.audio_file)
+  fetch(audio.audio_file)
     .then(response => response.blob())
     .then(blob => {
       audio_player.volume = 0.5;
@@ -60,7 +60,6 @@ function loadText(text) {
 }
 
 function loadDialogue(dialogue) {
-  // add dialogue increases in 1 the id
   addDialogue();
   let html_dialogue = document.getElementById("element_" + (max_elem - 1));
 
@@ -157,15 +156,15 @@ function loadElement(element) {
 // End of switch for load element
 
 function loadNewTemplate1() {
-  if (db_images[0] != undefined)
-    default_cover = media_url + db_images[0].image;
+  if (page.images[0] != undefined)
+    default_cover = page.images[0].image;
   document.getElementById('img_showed').setAttribute('src', default_cover);
 }
 
 function loadTemplate1() {
-  if (db_images[0] != undefined) {
-    default_cover = media_url + db_images[0].image;
-    document.querySelector('[name = images]').querySelector('[name = id]').value = db_images[0].id;
+  if (page.images[0] != undefined) {
+    default_cover = page.images[0].image;
+    document.querySelector('[name = images]').querySelector('[name = id]').value = page.images[0].id;
   }
   document.getElementById('img_showed').setAttribute('src', default_cover);
 
@@ -257,7 +256,7 @@ function loadPage() {
 
 
 /* Load page */
-if (page_id !== "") { // page id is provided
+if (page_id != 0) { // page id is provided
   sortCollections();
   loadPage();
 }

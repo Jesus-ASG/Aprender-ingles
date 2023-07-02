@@ -173,49 +173,39 @@
 
   let db_story_id = '{{ story.id }}';
   let db_page_id = '{{ current_page.id }}';
-  let media_url = '{{ media_url }}';
   let default_cover = '{{ story.cover.url }}';
 
   // Database elements
-  let db_images = [];
-  let db_videos = [];
-  let db_audios = [];
-  let db_texts = [];
-  let db_dialogues = [];
-  let db_repeat_phrases = [];
-  let db_spellchecks = [];
-  let db_mc_questions = [];
-
   let db_answers = {};
   let db_score = {};
 
   // Save answers to send and evaluate it
   let user_answers = [];
+  let page = {
+    "id": 0,
+    "audios": [],
+    "videos": [],
+    "images": [],
+    "texts": [],
+    "dialogues": [],
+    "spellchecks": [],
+    "questions": [],
+    "repeat_phrases": [],
+    "subtitle1": "",
+    "subtitle2": "",
+    "page_type": 0,
+    "date_created": "",
+    "time_created": "",
+    "story": 0
+  };
+  let page_id = 0;
+  try {
+    page = JSON.parse('{{ json_page|escapejs }}');
+  }
+  catch (e) { }
+  if (page.id != 0)
+    page_id = page.id;
 
-  try {
-    db_images = JSON.parse('{{ images |safe }}');
-  } catch (e) { }
-  try {
-    db_videos = JSON.parse('{{ videos |safe }}');
-  } catch (e) { }
-  try {
-    db_audios = JSON.parse('{{ audios |safe }}');
-  } catch (e) { }
-  try {
-    db_texts = JSON.parse('{{ texts |safe |escapejs }}');
-  } catch (e) { }
-  try {
-    db_dialogues = JSON.parse('{{ dialogues |safe |escapejs }}');
-  } catch (e) { }
-  try {
-    db_repeat_phrases = JSON.parse('{{ repeat_phrases |safe |escapejs }}');
-  } catch (e) { }
-  try {
-    db_spellchecks = JSON.parse('{{ spellchecks |safe |escapejs  }}');
-  } catch (e) { }
-  try {
-    db_mc_questions = JSON.parse('{{ mc_questions|escapejs }}');
-  } catch (e) { }
 
   try {
     db_answers = JSON.parse('{{ answers |safe |escapejs }}');
@@ -224,119 +214,15 @@
   try {
     db_score = JSON.parse('{{ score |safe |escapejs }}');
   } catch (e) { }
+
+  let total_translations = { "start": 0, "end": 0 };
 </script>
 
 <script src="{% static 'js/sort_collections.js' %}"></script>
-<script src="{% static 'js/user/functions_for_render_elements.js' %}"></script>
-<script>
-  let total_translations = { "start": 0, "end": 0 };
-
-  // Set subtitle to page
-  let page_subtitle = document.getElementById("subtitle");
-  if (page_subtitle != null)
-    page_subtitle.flipText();
-
-  // Switch for load element
-  function loadElement(element, total_translations) {
-    switch (element.type) {
-      case "image":
-        renderImage(element);
-        break;
-      case "video":
-        renderVideo(element);
-        break;
-      case "audio":
-        renderAudio(element);
-        break;
-      case "text":
-        renderText(element, total_translations);
-        break;
-      case "dialogue":
-        renderDialogue(element, total_translations);
-        break;
-      case "repeat_phrase":
-        renderRepeatPhrase(element, total_translations);
-        break;
-      case "spellcheck":
-        renderSpellcheck(element, total_translations);
-        break;
-      case "mc_question":
-        renderMCQuestion(element);
-        break;
-    }
-  }
-  // End of switch for load element
-
-
-  switch (parseInt(page_type)) {
-    case 1:
-      loadTemplate1(total_translations);
-      break;
-    case 2:
-      loadTemplate1(total_translations);
-      break;
-    case 3:
-      loadTemplate3(total_translations);
-      break;
-  }
-
-
-  function loadTemplate1(total_translations) {
-    /* Only for template 1 */
-    if (db_images[0] != undefined) {
-      default_cover = media_url + db_images[0].image;
-    }
-    let img_showed = document.getElementById('img_showed');
-    if (img_showed != null) {
-      img_showed.setAttribute('src', default_cover);
-      img_showed.classList.remove('d-none');
-    }
-    /* ------------------------------ */
-
-    document.getElementById("answer_questions_message").flipText();
-    sortCollections();
-
-    let contents = [];
-    let exercises = [];
-    for (let element of collections_sorted) {
-      if (element.is_exercise)
-        exercises.push(element);
-      else
-        contents.push(element);
-    }
-
-    for (let c of contents) {
-      if (c.type == "image")
-        continue;
-      document.getElementById("content_area").outerHTML = `
-        <div class="new_element"></div>
-        <div id="content_area"></div>`;
-      loadElement(c, total_translations);
-    }
-
-    for (let e of exercises) {
-      document.getElementById("exercises_area").outerHTML = `
-        <div class="new_element"></div>
-        <div id="exercises_area"></div>`;
-      loadElement(e, total_translations);
-    }
-
-    setFunctionality(total_translations);
-  }
-
-  function loadTemplate3(total_translations) {
-    sortCollections();
-    for (let e of collections_sorted) {
-      document.querySelector('.new_element').outerHTML = `
-      <div class="new_element"></div>
-      <div class="new_element"></div>`;
-      loadElement(e, total_translations);
-    }
-    setFunctionality(total_translations);
-  }
-
-
-</script>
+<script src="{% static 'js/functions_for_display_elements.js' %}"></script>
+<!-- Load page content -->
+<script src="{% static 'js/load_page_display.js' %}"></script>
+<!---->
 <script src="{% static 'js/user/answer_exercises.js' %}"></script>
 <script>
   // Buttons for save answers

@@ -3,35 +3,35 @@ let collections_sorted = [];
 function sortCollections() {
 	/* Contents */
 	// Audios
-	for (let audio of db_audios) {
+	for (let audio of page.audios) {
 		audio.type = "audio";
 		audio.is_exercise = false;
 		collections_sorted.push(audio);
 	}
 
 	// Videos
-	for (let video of db_videos) {
+	for (let video of page.videos) {
 		video.type = "video";
 		video.is_exercise = false;
 		collections_sorted.push(video);
 	}
 
 	// Images
-	for (let image of db_images) {
+	for (let image of page.images) {
 		image.type = "image";
 		image.is_exercise = false;
 		collections_sorted.push(image);
 	}
 
 	// Texts
-	for (let text of db_texts) {
+	for (let text of page.texts) {
 		text.type = "text";
 		text.is_exercise = false;
 		collections_sorted.push(text);
 	}
 
 	// Dialogues
-	for (let dialogue of db_dialogues) {
+	for (let dialogue of page.dialogues) {
 		dialogue.type = "dialogue";
 		dialogue.is_exercise = false;
 		collections_sorted.push(dialogue);
@@ -39,19 +39,19 @@ function sortCollections() {
 
 	/* Exercises */
 	// Repeat phrases
-	for (let repeat_phrase of db_repeat_phrases) {
+	for (let repeat_phrase of page.repeat_phrases) {
 		repeat_phrase.type = "repeat_phrase";
 		repeat_phrase.is_exercise = true;
 		collections_sorted.push(repeat_phrase);
 	}
 	// Spellchecks
-	for (let spellcheck of db_spellchecks) {
+	for (let spellcheck of page.spellchecks) {
 		spellcheck.type = "spellcheck";
 		spellcheck.is_exercise = true;
 		collections_sorted.push(spellcheck);
 	}
 	// Multiple Choice Questions
-	for (let question of db_mc_questions) {
+	for (let question of page.questions) {
 		question.type = "mc_question";
 		question.is_exercise = true;
 		collections_sorted.push(question);
