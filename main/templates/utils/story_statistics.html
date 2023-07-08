@@ -1,0 +1,131 @@
+{% load static %}
+
+{% block page-styles %}
+<style>
+  .statistics-progress-bar-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .statistics-progress-bar-container .statistic {
+    width: 100%;
+    display: block;
+    align-items: center;
+    text-align: center;
+  }
+
+  .progress-bar:hover {
+    background-position: left;
+  }
+
+  .linear-progress-container {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    background-color: var(--light-blue);
+    border-radius: 20px;
+    width: 80%;
+    height: 20px;
+  }
+
+  .linear-progress-value {
+    position: absolute;
+    z-index: 2;
+    background-color: var(--light-blue-active);
+    height: 20px;
+    border-radius: 20px;
+    width: 50%;
+    background: linear-gradient(to left,
+        var(--light-blue) 50%,
+        var(--light-blue-active) 50%) right;
+    background-size: 200%;
+    animation: anim 2s ease-out forwards;
+  }
+
+  @keyframes anim {
+    from {
+      background-position: right;
+    }
+
+    to {
+      background-position: left;
+    }
+  }
+</style>
+{% endblock %}
+<div class="row my-3">
+  <div class="col-12 page-title-container">
+    <h3 class="fs-2" name="title_score"></h3>
+  </div>
+
+  <!-- Letter grade -->
+  <div class="col-12 col-md-6 text-center mb-3">
+    <div class="statistics-container">
+      <div class="statistic-circle-progress" id="score_circle_progress">
+        <div class="basic-progress-level">
+          <div class="label">
+            <h3>{{ high_score.letter_grade|default:'?' }}</h3>
+          </div>
+        </div>
+        <p class="statistic-title">{{ high_score.score_percentage |default:' - ' }} / 100</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6">
+    <div class="statistics-progress-bar-container">
+      <!-- Writing -->
+      <div class="statistic my-3" name="writing">
+        <h3 class="fs-6 text-center" name="title"></h3>
+        <div class="linear-progress-container" title="{{ high_score.writing_percentage |default:0 }}%">
+          <div class="linear-progress-value" style="width: {{ high_score.writing_percentage |default:0 }}%;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Comprehension -->
+      <div class="statistic my-3" name="comprehension">
+        <h3 class="fs-6 text-center" name="title"></h3>
+        <div class="linear-progress-container" title="{{ high_score.comprehension_percentage |default:0 }}%">
+          <div class="linear-progress-value" style="width: {{ high_score.comprehension_percentage |default:0 }}%;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Speaking -->
+      <div class="statistic my-3" name="speaking">
+        <h3 class="fs-6 text-center" name="title"></h3>
+        <div class="linear-progress-container" title="{{ high_score.speaking_percentage |default:0 }}%">
+          <div class="linear-progress-value" style="width: {{ high_score.speaking_percentage |default:0 }}%;">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% block page-scripts %}
+<script>
+  function progressAnimation(progress, end_value, fill_to) {
+    let deg = 3.6;
+    if (fill_to)
+      deg = fill_to / 100
+    let progress_value = 0;
+    let speed = 20;
+    //conic-gradient(#23fbb7 ${progress_value * deg}deg, #bbfff3 ${progress_value * deg}deg)
+
+    let progress_interval = setInterval(() => {
+      progress.style.background = `
+			conic-gradient( var(--bg-xp-strong) ${progress_value * deg}deg, var(--bg-xp-light) ${progress_value * deg}deg)
+			`;
+      if (progress_value == end_value)
+        clearInterval(progress_interval);
+      progress_value++;
+    }, speed);
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'main_template.html' %}
+{% load static %}
+{% load filters %}
+
+{% block title %} Story Quest {% endblock %}
+
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/user/index_user.css' %}">
+<style>
+	.show {
+		display: block;
+	}
+
+	.hide {
+		display: none;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container main-content">
+
+	<div class="row mt-3">
+		<div class="col-12 page-title-container">
+			<h1 class="fs-1">{{ page_title }}</h1>
+		</div>
+	</div>
+
+	<div>
+		{% include 'utils/filter_form.html' %}
+	</div>
+
+	<hr>
+	<div class="row my-3 w-100" id="query_results" style="justify-content: center; margin: 0;">
+		{% for story in stories %}
+		<div class="col-12 col-sm-4 col-md-3 p-3" name="story_slot" id="story_{{ story.id }}">
+			<div class="col-12 new-card-container text-center">
+				<a href="{% url 'story_info' story.route %}" class="">
+					<img src="{{ story.cover.url }}" class="p-1" alt="{{ story.cover }}">
+					<strong class="fs-6">{{ story.title1 }} </strong>
+				</a>
+			</div>
+		</div>
+		{% empty %}
+		<div class="col-12 text-center mb-3">
+			<h2 class="fs-3" style="font-weight: 500;">{{ message_if_empty }}</h2>
+		</div>
+		{% endfor %}
+	</div>
+	{% include 'utils/page_enumerator_bar.html' %}
+
+</div>
+
+<br><br>
+{% endblock %}
+
+{% block page-scripts %}
+<script>
+	document.querySelector('.stories_gallery_link').classList.add('active');
+</script>
+{% endblock %}

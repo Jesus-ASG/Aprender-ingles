@@ -1,0 +1,110 @@
+{% extends 'main_template.html' %}
+{% load static %}
+
+{% block title %} {{ story.title }} {% endblock %}
+
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/admin/create_page.css' %}">
+<link rel="stylesheet" href="{% static 'css/editor-display_template_1.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% if page_type == 1 %}
+{% include 'page_editor/page_editor_template_1.html' %}
+{% elif page_type == 2 %}
+{% include 'page_editor/page_editor_template_2.html' %}
+{% elif page_type == 3 %}
+{% include 'page_editor/page_editor_template_3.html' %}
+{% endif %}
+
+<div class="container">
+  <div class="cancel-save-container">
+    <a href="{% url 'view_pages' story.route %}" class="btn btn-danger shadow-none fw-bold w-100" type="button">
+      Cancelar</a>
+    <button class="btn btn-primary shadow-none fw-bold w-100" onclick="savePage()">Guardar</button>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block page-scripts %}
+
+<script>
+  const URL_SAVE_PAGE = `{% url 'add_page' route=story.route page_type=page_type %}`;
+  const URL_VIEW_PAGES = `{% url 'view_pages' route=story.route %}`;
+
+
+  let page_type = '{{ page_type }}' || -1;
+
+  let default_cover = '{{ story.cover.url }}';
+
+  let page = {
+    "id": 0,
+    "audios": [],
+    "videos": [],
+    "images": [],
+    "texts": [],
+    "dialogues": [],
+    "spellchecks": [],
+    "questions": [],
+    "repeat_phrases": [],
+    "subtitle1": "",
+    "subtitle2": "",
+    "page_type": 0,
+    "date_created": "",
+    "time_created": "",
+    "story": 0
+  };
+  let page_id = 0;
+  try {
+    page = JSON.parse('{{ json_page|escapejs }}');
+  }
+  catch (e) { }
+  if (page.id != 0)
+    page_id = page.id;
+
+  /* Initialize max_elem */
+  let max_elem = 0;
+</script>
+
+<script>
+  function html_modal_delete(max_elem, message, cols) {
+    if (cols === undefined) {
+      cols = "col-2 col-md-1";//d-flex align-items-center
+    }
+    let html =
+      `
+      <div class="${cols}" style="display:flex; align-items:center; justify-content:center;">
+        <button class="btn btn-danger shadow-none" type="button" title="Eliminar elemento" data-bs-toggle="modal"
+          data-bs-target="#modal_delete_${max_elem}">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+        <div class="modal fade" id="modal_delete_${max_elem}" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title  col-11 text-center">${message}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="deleteElement('${max_elem}')" data-bs-dismiss="modal">
+                  Eliminar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      `;
+    return html;
+  }
+</script>
+<script src="{% static 'js/add_page/content.js' %}"></script>
+<script src="{% static 'js/add_page/exercises.js' %}"></script>
+<script src="{% static 'js/add_page/add_page.js' %}"></script>
+<script src="{% static 'js/sort_collections.js' %}"></script>
+<script src="{% static 'js/load_page_editor.js' %}"></script>
+
+{% endblock %}

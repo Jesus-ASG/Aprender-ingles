@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Tag, Story, Page, Dialogue, Image, RepeatPhrase, Score
+from .models import Tag, Story, Page, Dialogue, Image, RepeatPhrase, Score, UserProfile, UserAnswer
 
 
 class NewUserForm(UserCreationForm):
@@ -17,6 +17,12 @@ class NewUserForm(UserCreationForm):
 		if commit:
 			user.save()
 		return user
+
+
+class SelectDefaultImageForm(forms.ModelForm):
+	class Meta:
+		model = UserProfile
+		fields = ['default_profile_image']
 
 
 class CategoriaForm(forms.ModelForm):
@@ -49,8 +55,8 @@ class HistoriaForm(forms.ModelForm):
 			'title1': forms.TextInput(attrs={'class': input_classes}),
 			'title2': forms.TextInput(attrs={'class': input_classes}),
 			'cover': forms.FileInput(attrs={'class': input_classes}),
-			'description1': forms.TextInput(attrs={'class': input_classes}),
-			'description2': forms.TextInput(attrs={'class': input_classes}),
+			'description1': forms.Textarea(attrs={'class': 'form-control fs-6 txta'}),
+			'description2': forms.Textarea(attrs={'class': 'form-control fs-6 txta'}),
 			'xp_required': forms.NumberInput(attrs={'class': input_classes}),
 		}
 
@@ -63,19 +69,29 @@ class HistoriaForm(forms.ModelForm):
 			'xp_required': 'XP necesaria para desbloquear esta historia',
 		}
 
-	tag = forms.ModelMultipleChoiceField(
+	tags = forms.ModelMultipleChoiceField(
 		queryset=Tag.objects.all(),
 		widget=forms.CheckboxSelectMultiple(),
 		required=False,
 		label = 'Categorías',
 	)
 
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+
+		# Sort tags by name
+		self.fields['tags'].widget.choices = sorted(
+			self.fields['tags'].widget.choices,
+			key=lambda choice: choice[1].lower()
+    )
+
 
 class ScoreForm(forms.ModelForm):
 	class Meta:
 		model = Score
 		fields = '__all__'
-		exclude = ['user_profile', 'story', 'date', 'score', 'score_limit', 'writing_percentage', 'comprehension_percentage', 'speaking_percentage']
+		exclude = ['user_profile', 'story', 'date', 'score', 'score_limit', 
+	     'score_percentage','writing_percentage', 'comprehension_percentage', 'speaking_percentage']
 
 
 class PageForm(forms.ModelForm):
@@ -105,5 +121,10 @@ class RepeatPhraseForm(forms.ModelForm):
 	class Meta:
 		model = RepeatPhrase
 		fields = '__all__'
-		exclude = ['page', 'content1', 'content2', 'element_number']
+		exclude = ['page', 'content1', 'content2', 'element_number', 'show_text']
 
+
+class UserAnswerForm(forms.ModelForm):
+	class Meta:
+		model = UserAnswer
+		exclude = '__all__'

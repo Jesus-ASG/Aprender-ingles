@@ -1,0 +1,196 @@
+.dialogue-name {
+	position: relative;
+	vertical-align: middle;
+	display: inline-block;
+	top: -0.55em;
+}
+
+.sound_icon {
+	color: #77b9fc;
+	border: 1px solid #77b9fc;
+}
+.sound_icon:hover,
+.mic-icon:hover {
+	color: #5bd971;
+}
+
+.mic-icon {
+	color: #db8f70;
+	border: 1px solid #db8f70;
+}
+
+.highlighted-icon {
+	color: #fff !important;
+	background-color: #5bd971;
+}
+
+.volume-controls {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: var(--orange);
+}
+
+.adjust-volume-icon,
+.adjust-volume-bar {
+	display: inline-block;
+	background-color: red;
+	margin: auto;
+}
+
+.custom-range::-webkit-slider-thumb {
+	background-color: #77b9fc;
+}
+
+.custom-range::-moz-range-thumb {
+	background: #77b9fc;
+}
+
+.custom-range::-ms-thumb {
+	background: #77b9fc;
+}
+
+-webkit-slider-thumb:active {
+	background-color: red;
+}
+-webkit-slider-thumb,
+.custom-range:focus::-webkit-slider-thumb,
+.custom-range:focus::-moz-range-thumb,
+.custom-range:focus::-ms-thumb {
+	box-shadow: red;
+}
+
+/* Audio buttons */
+.play-audio-container button {
+	width: 50px;
+	height: 50px;
+	border-radius: 100%;
+	padding: 10px;
+	border: 1px solid #77b9fc;
+	background-color: #fff;
+	transition: all 0.2s ease-in-out;
+}
+.play-audio-container button i {
+	display: flex;
+}
+.play-audio-container button svg {
+	margin: auto;
+	width: 32px;
+	height: 32px;
+}
+
+.play-audio-container button svg path {
+	fill: #77b9fc;
+}
+
+.play-audio-container button:hover svg path {
+	fill: #5bd971;
+}
+
+.play-audio-container .icon-active {
+	background-color: #5bd971;
+}
+
+.play-audio-container .icon-active path {
+	fill: #fff !important;
+}
+
+.icon-volume-range {
+	color: #77b9fc;
+}
+
+.volume-input {
+	opacity: 0;
+	transition: all 0.3s ease-in-out;
+}
+
+/* Multiple choice questions */
+.render-choice {
+	list-style: none;
+}
+
+.render-choice li {
+	margin-bottom: 1rem;
+}
+
+.render-choice-container {
+	width: 100%;
+	border: 1px solid #c5c5c5;
+	padding: 0.5rem;
+	margin: 0.5rem;
+	border-radius: 10px;
+	display: flex;
+	flex-direction: row;
+}
+.render-choice-container:hover {
+	cursor: pointer;
+	border: 1px solid #ff5f13;
+	background-color: rgba(255, 95, 19, 0.2);
+}
+
+.radio-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	width: 50px;
+}
+
+.translation-container {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.radio-container .radio-btn {
+	border: 1px solid #ff5f13;
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.1s ease-in-out;
+}
+
+.radio-container .selected {
+	background-color: var(--f-orange);
+}
+
+.radio-container .radio-btn:hover {
+	cursor: pointer;
+	background-color: var(--f-orange-active);
+}
+
+.render-choice-container:hover .radio-container .radio-btn {
+	background-color: var(--f-orange-active);
+}
+
+.radio-container i {
+	font-size: 1rem;
+	color: #fff;
+}
+
+.choice-right:hover,
+.choice-wrong:hover {
+	background-color: #fff;
+	border: 1px solid #c5c5c5;
+}
+
+.choice-right .radio-btn {
+	background-color: #5bd971;
+	border: 1px solid #5bd971;
+}
+
+.choice-right:hover .radio-container .radio-btn {
+	background-color: #5bd971;
+	border: 1px solid #5bd971;
+}
+
+.choice-wrong .radio-btn {
+	background-color: #ff0000;
+	border: 1px solid #ff0000;
+}
+.choice-wrong:hover .radio-container .radio-btn {
+	background-color: #ff0000;
+	border: 1px solid #ff0000;
+}

@@ -1,0 +1,48 @@
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-weight: normal;
+	font-style: normal;
+}
+div,
+span,
+p {
+	margin: 0;
+	padding: 0;
+	font-weight: 400;
+}
+
+ul,
+li {
+	margin: 0;
+	padding: 0;
+}
+
+.fs-1,
+.fs-2,
+.fs-3,
+.fs-4,
+.fs-5,
+.fs-6 {
+	font-weight: 400;
+}
+
+.fw-bold {
+	font-weight: 500 !important;
+}

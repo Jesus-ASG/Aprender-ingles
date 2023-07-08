@@ -1,0 +1,274 @@
+.circle-progress,
+.statistic-circle-progress {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 1rem;
+}
+
+.circle-progress {
+	width: 100%;
+}
+
+.progress-level,
+.basic-progress-level {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+}
+
+.statistics-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.progress-level {
+	width: 300px;
+	height: 300px;
+	/* 320 is the maximum */
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+	transform: rotate(200deg);
+}
+.basic-progress-level {
+	position: relative;
+	width: 200px;
+	height: 200px;
+	margin: 0 1rem 0 1rem;
+	background: conic-gradient(
+		var(--bg-xp-strong) 60deg,
+		var(--bg-xp-light) 60deg
+	);
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.basic-progress-level .label {
+	position: absolute;
+	width: 90%;
+	height: 90%;
+	border-radius: 50%;
+	background-color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.label h3 {
+	font-size: 3rem;
+}
+
+.statistic-title {
+	margin-top: 0.5rem;
+	font-size: 1.2rem;
+}
+
+.profile-picture {
+	display: inline-block;
+	transform: rotate(-200deg);
+	width: 250px;
+	height: 250px;
+}
+
+.profile-picture img {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.level {
+	position: relative;
+}
+
+.level h3 {
+	position: absolute;
+	z-index: 300;
+	top: -2rem;
+	left: 50%;
+	transform: translateX(-50%);
+	border-radius: 10px;
+	font-size: 2rem;
+	color: #fff;
+	width: 110px;
+	background: #c85;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.profile-info-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}
+
+.link-btn-container {
+	padding-left: 30px;
+	padding-right: 30px;
+	margin: 10px 0 10px 0;
+}
+
+.link-btn {
+	color: #000;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--bg-xp-light);
+	border-radius: 20px;
+}
+
+.link-btn p {
+	padding: 0.5rem;
+}
+
+.link-btn:hover {
+	color: #000;
+	font-weight: 500;
+}
+
+#change_profile_picture {
+	position: absolute;
+	z-index: inherit;
+	display: flex;
+	opacity: 0;
+	align-items: center;
+	justify-content: center;
+	width: 250px;
+	height: 250px;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.8);
+	transition: all 0.3s ease-in-out;
+}
+
+#change_profile_picture:hover {
+	cursor: pointer;
+}
+
+#change_profile_picture i {
+	color: #a9a0a0;
+	font-size: 4rem;
+}
+
+.circle-progress:hover > #change_profile_picture i {
+	color: #fff;
+}
+
+/* Modal profile pics */
+.square-box {
+	position: relative;
+	display: inline-block;
+	width: 90%;
+	margin: 5px;
+	overflow: hidden;
+	background: rgba(0, 0, 0, 0.1);
+	border-radius: 50%;
+	transition: outline 0.1s ease-in-out;
+}
+
+/*outline: 10px solid rgba(35, 251, 183, 0.8);*/
+.square-box.selected {
+	outline: 10px solid var(--bg-xp-strong);
+}
+
+.square-box:before {
+	content: "";
+	display: block;
+	padding-top: 100%;
+}
+.square-content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	text-align: center;
+	width: 100%;
+}
+
+.square-content img {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	object-fit: cover;
+	border-radius: 50%;
+}
+
+.square-content img:hover {
+	cursor: pointer;
+}
+
+input[type="radio"] {
+	opacity: 0;
+	display: none;
+}
+/* End modal profile pics */
+
+/*High scores table*/
+.story_link {
+	font-size: 1rem;
+}
+.story_link a {
+	display: inline-block;
+	text-decoration: none;
+	font-weight: 500;
+	transition: all 0.3s ease-in-out;
+}
+
+.story_link a:hover {
+	transform: scale(1.1);
+}
+
+.story_link span {
+	background-color: var(--bg-xp-light);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	outline: 2px solid var(--bg-xp-strong);
+}
+.story_link i {
+	color: #000;
+	font-size: 0.7rem;
+}
+
+@media only screen and (max-width: 400px) {
+	.progress-level {
+		width: 250px;
+		height: 250px;
+	}
+
+	.profile-picture {
+		width: 208px;
+		height: 208px;
+	}
+
+	.level h3 {
+		width: 90px;
+		font-size: 1.9rem;
+	}
+
+	.link-btn-container {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+
+	#change_profile_picture {
+		width: 208px;
+		height: 208px;
+	}
+
+	.modal-open {
+		padding: 0 !important;
+	}
+}

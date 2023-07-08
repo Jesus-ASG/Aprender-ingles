@@ -1,0 +1,96 @@
+.pagination {
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.page-item {
+	margin: 0.2rem;
+	padding: 0;
+	height: 2rem !important;
+	min-width: 2.5rem !important;
+	background-color: #fff;
+}
+
+.page-link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
+	border-radius: 20px !important;
+	border: 1px solid #e4e4e4;
+	transition: background-color 0.3s ease-in-out;
+}
+
+.page-link span,
+.page-link p {
+	color: #151515;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.page-link span {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.page-link p {
+	height: 100%;
+	margin: auto;
+	text-align: center;
+}
+
+.page-item.active .page-link {
+	background-color: var(--bg-primary);
+	border: 1px solid var(--bg-primary-active);
+}
+
+.page-item.active .page-link p {
+	color: var(--c-primary);
+}
+
+.page-item:hover .page-link {
+	background-color: var(--bg-primary);
+}
+
+.page-item:hover .page-link p,
+.page-item:hover .page-link span {
+	color: var(--c-primary);
+}
+
+.page-item.disabled span {
+	color: var(--c-disabled);
+}
+
+.page-item.disabled:hover .page-link {
+	background-color: #fff;
+}
+
+.page-item.disabled:hover .page-link span {
+	color: var(--c-disabled);
+}
+
+.page-item:hover .page-link.no-link {
+	background-color: #e4e4e4;
+}
+
+.page-item:hover .page-link.no-link p {
+	color: #151515;
+}
+
+.cursor-not-allowed {
+	cursor: not-allowed;
+}
+
+.page-link:focus:not(.no-link),
+.page-link:active:not(.no-link) {
+	border: 2px solid #e4e4e4;
+	outline: none;
+	box-shadow: none;
+}
+
+.page-link:focus,
+.page-link:active {
+	background-color: #fff;
+}

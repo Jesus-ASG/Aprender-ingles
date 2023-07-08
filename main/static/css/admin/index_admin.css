@@ -1,0 +1,101 @@
+.img-admin-container {
+	min-width: 100px;
+}
+
+.w-33 {
+	width: 33.3%;
+}
+
+.img-admin-img {
+	width: 100%;
+	height: 200px;
+	border-radius: 10px;
+	object-fit: cover;
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+		rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.action-btn {
+	width: 40px !important;
+	height: 40px !important;
+	border-radius: 10px;
+	display: flex;
+	align-items: center;
+	text-align: center;
+}
+
+.action-btn span {
+	margin: 0 auto;
+	vertical-align: middle;
+	align-items: center;
+	text-align: center;
+}
+
+.action-btn span i {
+	align-items: center;
+	text-align: center;
+}
+
+.tab-titles a {
+	color: #000;
+}
+
+.tab-titles .active {
+	font-weight: bold;
+}
+
+.table tr {
+	vertical-align: middle;
+}
+
+.alert-fixed {
+	position: fixed;
+	right: 1rem;
+	top: 10%;
+	z-index: 100;
+}
+
+@media only screen and (max-width: 700px) {
+	.alert-fixed {
+		transform: translateX(50%);
+		right: 50%;
+		width: 90%;
+	}
+}
+
+.select-rows {
+	display: flex;
+	width: 100%;
+
+	flex-direction: row;
+	align-items: center;
+	flex-wrap: wrap;
+}
+.select-rows .select {
+	display: inline-block;
+	max-width: 250px;
+	min-width: 150px;
+	margin: 0.5rem 1rem 0.5rem 1rem;
+}
+
+.select-rows .select option:hover {
+	background-color: red !important;
+}
+
+.custom-rows-number {
+	max-width: 250px;
+	height: 100%;
+	margin: 0.5rem 1rem 0.5rem 1rem;
+	display: none;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+.custom-rows-number input {
+	border: none;
+	outline: none;
+	max-width: 100px;
+	text-align: center;
+	border-bottom: 1px solid var(--bg-primary);
+	margin-left: 1rem;
+}

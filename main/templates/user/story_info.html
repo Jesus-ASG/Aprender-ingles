@@ -5,20 +5,29 @@
 
 {% block page-styles %}
 <link rel="stylesheet" href="{% static 'css/user/story_info.css' %}" type="text/css">
+<link rel="stylesheet" href="{% static 'css/user/index_user.css' %}">
+<link rel="stylesheet" href="{% static 'css/user/profile.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="container main-content">
 
 	<div class="row mt-3">
-		<div class="col-2 text-start fs-1">
-			<a href="{% url 'index' %}" class="btn-back-next"><i class='fa fa-arrow-circle-left'></i></a>
+		<div class="col-2 back-btn-container">
+			<a id="back_page_btn" title="Regresar">
+				<span><i class="fa-solid fa-arrow-left"></i></span>
+			</a>
 		</div>
-	</div>
-
-	<div class="row mt-3">
-		<div class="col-12 text-center">
-			<h1 class="fs-2 fw-bold" id="story_title"></h1>
+		<div class="col-8 page-title-container">
+			<h1 class="fs-1" id="story_title">Profile</h1>
+		</div>
+		<div class="col-2" style="display: flex; align-items: center; justify-content: center;">
+			{% if request.user.is_staff or request.user.is_superuser %}
+			<a href="{% url 'admin_stories' %}?s={{ story.title1 }}&p=1" style="text-decoration: none; color: #fc7932;"
+				title="Administrar historia">
+				<span><i class="fa-solid fa-gear" style="font-size: 1.5rem;"></i></span>
+			</a>
+			{% endif %}
 		</div>
 	</div>
 
@@ -42,32 +51,35 @@
 		</div>
 
 		<div class="col-12 col-md-6 mt-3">
-			{% if story.tag.all %}
+
 			<div class="row mt-3">
 				<div class="col-12 text-center">
 					<strong class="fs-5">Tags</strong> <br>
 					<div class="text-center">
-						{% for cat in story.tag.all %}
-						<div class="tag px-3 py-1 fw-bold">
-							{{ cat.name1 }}
+						{% for t in story.tags.all %}
+						<div class="rounded-pill tag">
+							{{ t.name1 }}
 						</div>
 						{% empty %}
-						<div class="tag px-3 py-1 fw-bold">
-							Without category
+						<div class="rounded-pill tag">
+							Others
 						</div>
 						{% endfor %}
 					</div>
 				</div>
 			</div>
-			{% endif %}
-			{% if story.description1 %}
+
 			<div class="row mt-3">
 				<strong class="fs-5 text-center">Description</strong> <br>
 				<div class="col-12 text-center">
-					<p class="fs-6"> {{ story.description1 | default:"No hay una descripción disponible" }}</p>
+					{% if not story.description1 %}
+					<p class="fs-6 fst-italic"> This story don't have a description.</p>
+					{% else %}
+					<p class="fs-6 fst-italic"> {{ story.description1 | default:"" }}</p>
+					{% endif %}
 				</div>
 			</div>
-			{% endif %}
+
 		</div>
 	</div>
 
@@ -75,74 +87,22 @@
 	<div class="row my-3">
 		<div class="col-12 text-center">
 			{% if total_pages > 0 %}
-			<a onclick="cleanStorage()" href="{% url 'story_content' route=story.route page_number=page_number %}"
-				class="btn btnr-f-orange fs-5 fw-bold">Start / Iniciar</a>
+			<a href="{% url 'story_content' route=story.route page_number=page_number %}"
+				class="btn btnr-f-orange fs-5 fw-bold m-2" id="start_answer_story" style="background-color: #fc7932;">
+				Continue
+			</a>
+			<button onclick="deleteAnswers()" class="btn btnr-f-orange fs-5 fw-bold m-2">Start</button>
 			{% else %}
 			<button class="btn btnr-f-orange fs-5 fw-bold" disabled>Soon / Próximamente</button>
 			{% endif %}
 		</div>
 	</div>
 	<hr>
-	<div class="row my-3" id="results">
-		<div class="col-12 mb-3 text-center">
-			<h3 class="fs-2" name="title_score"></h3>
-		</div>
-		<div class="col-12 col-md-6 text-center mb-3">
-			<div class="d-inline-block">
-				<div class="container-letter p-1 box-shadow">
-					<div class="letter-grade">
-						<h3 name="letter_grade">{{ high_score.letter_grade |default:'?' }}</h3>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-12 col-md-6">
 
-			<div class="row my-3" name="comprehension">
-				<div class="col-12">
-					<h3 class="fs-6 text-center" name="title"></h3>
-				</div>
-				<div class="col-12">
-					<div class="progress w-75 progress-styles">
-						<div class="progress-bar" role="progressbar" name="progress"
-							style="width: {{ high_score.comprehension_percentage |default:0 }}%;"
-							aria-valuenow=" {{ high_score.comprehension_percentage |default:0 }} " aria-valuemin="0"
-							aria-valuemax="100"></div>
-					</div>
-				</div>
-			</div>
-
-			<div class="row my-3" name="speaking">
-				<div class="col-12">
-					<h3 class="fs-6 text-center" name="title"></h3>
-				</div>
-				<div class="col-12">
-					<div class="progress w-75 progress-styles">
-						<div class="progress-bar" role="progressbar" name="progress"
-							style="width: {{ high_score.speaking_percentage |default:0 }}%;"
-							aria-valuenow=" {{ high_score.speaking_percentage |default:0 }} " aria-valuemin="0"
-							aria-valuemax="100">
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="row my-3" name="writing">
-				<div class="col-12">
-					<h3 class="fs-6 text-center" name="title"></h3>
-				</div>
-				<div class="col-12">
-					<div class="progress w-75 progress-styles">
-						<div class="progress-bar" role="progressbar" name="progress"
-							style="width: {{ high_score.writing_percentage |default:0 }}%;"
-							aria-valuenow=" {{ high_score.writing_percentage |default:0 }} " aria-valuemin="0"
-							aria-valuemax="100">
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+	<div id="results">
+		{% include 'utils/story_statistics.html' %}
 	</div>
+
 	<hr>
 	<div class="row my-3" id="scores_table">
 		<div class="col-12 mt-3 text-center">
@@ -165,7 +125,7 @@
 						{% for score in scores %}
 						<tr>
 							<th scope="row" class="fs-6"># {{ forloop.counter }}</th>
-							<td class="fs-6">{{ score.score }}</td>
+							<td class="fs-6">{{ score.score_percentage }}</td>
 							<td class="fs-6">{{ score.date|date:"j/n/Y" }} {{ score.date|time:"g:i a" }}</td>
 						</tr>
 						{% endfor %}
@@ -179,8 +139,31 @@
 	<div class="row my-3"></div>
 </div>
 
-<br><br><br><br><br>
 
+{% if not recommendations_list|length == 0 %}
+<!-- Content based recommender -->
+<div class="container main-content">
+	<div class="row mt-3">
+		<div class="col-12 page-title-container">
+			<h1 class="fs-1" id="related_title">Related</h1>
+		</div>
+	</div>
+
+	<div class="row my-3 w-100" style="justify-content: center; margin: 0;">
+		{% for sr in recommendations_list %}
+		<div class="col-6 col-sm-4 col-md-3 p-3">
+			<div class="col-12 new-card-container text-center">
+				<a href="{% url 'story_info' sr.route %}" class="">
+					<img src="{{ sr.cover.url }}" class="p-1" alt="{{ sr.cover }}">
+					<strong class="fs-6">{{ sr.title1 }} </strong>
+				</a>
+			</div>
+		</div>
+		{% empty %}
+		{% endfor %}
+	</div>
+</div>
+{% endif %}
 
 {% endblock %}
 
@@ -188,13 +171,14 @@
 <script>
 	const URL_LIKE_STORY = '{% url "like_story" story.id %}';
 	const URL_SAVE_STORY = '{% url "save_story" story.id %}';
+	const URL_DELETE_ANSWERS = '{% url "delete_answers" story.id %}';
 
 	let db_title = {};
 	let db_story_id = '{{ story.id }}';
 	let db_story_liked = JSON.parse('{{ story_liked }}');
 	let db_story_saved = JSON.parse('{{ story_saved }}');
 	let db_story_likes_number = '{{ story.likes_number }}';
-	let db_high_score = '{{ high_score.score |default:0 }}';
+	let db_best_score = parseInt('{{ high_score.score_percentage }}') || 0;
 
 	try {
 		db_title.title1 = '{{ story.title1 }}';
@@ -202,6 +186,23 @@
 	try {
 		db_title.title2 = '{{ story.title2 }}';
 	} catch (e) { }
+
+</script>
+<script>
+	let back_page_btn = document.getElementById('back_page_btn');
+	if (window.history.length > 1) {
+		back_page_btn.addEventListener('mouseenter', (e) => {
+			back_page_btn.style.cursor = 'pointer';
+		});
+		back_page_btn.addEventListener('click', (e) => {
+			window.history.back();
+		});
+	}
+	else {
+		back_page_btn.addEventListener('mouseenter', (e) => {
+			back_page_btn.style.cursor = 'not-allowed';
+		});
+	}
 </script>
 <script src="{% static 'js/user/story_info.js' %}"></script>
 <script>
@@ -213,6 +214,7 @@
 
 	setStatisticsLabels(f_counter);
 	setScoresLabels(f_counter);
+	setRelatedTitle(f_counter);
 
 	setFunctionality(f_counter);
 
@@ -221,6 +223,9 @@
 
 	const save_btn = document.getElementById("save_story_btn");
 	save_btn.addEventListener('click', e => saveFunction(e));
+
+	let score_bar_dom = document.querySelector('#score_circle_progress .basic-progress-level');
+	progressAnimation(score_bar_dom, db_best_score);
 
 </script>
 

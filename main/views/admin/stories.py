@@ -1,36 +1,48 @@
 # Historias
 import re
-from django import forms
 from django.utils.text import slugify
 
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseBadRequest, HttpResponseNotFound
 from django.shortcuts import redirect, render
 
-from main.forms import HistoriaForm, PageForm
-from main.models import Story, Tag
+from main.forms import HistoriaForm
+from main.models import Story, CBRSettings
+
+from main.utils.cb_recommender import ContentBasedRecommender
+from main.utils.paginate_and_filter import paginate_stories
 
 
-def is_superuser(user):
-    return user.is_superuser
+def is_staff(user):
+    return user.is_staff
 
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def index(request):
-    stories = Story.objects.all()
-    tags = Tag.objects.all()
-    context = {
-        'stories': stories,
-        'tags': tags,
-    }
-    return render(request, 'admin/index_admin.html', context)
+    q_items = request.GET.get('items_number')
+    items_per_page = 5
+    if q_items:
+        try:
+            q_items = int(q_items)
+            if q_items > 0:
+                items_per_page = q_items
+        except:
+            pass
+    context = paginate_stories(request, items_per_page=items_per_page)
+    context['filter_form']['items_number'] = items_per_page
+
+    users = User.objects.exclude(id=request.user.id).values('id', 'username', 'email', 'is_staff', 'is_superuser')
+    context['users'] = [request.user] + list(users)
+
+    return render(request, 'admin/stories.html', context)
 
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def create(request):
-    action_type = 'Make a new story'
+    action_type = 'Agregar historia'
     storyF = HistoriaForm()
     context = {
         'action_type': action_type,
@@ -42,6 +54,7 @@ def create(request):
     
     if request.method == 'POST':
         storyF = HistoriaForm(request.POST or None, request.FILES or None)
+        context['story_form'] = storyF
         if not storyF.is_valid():
             return render(request, 'admin/story_form.html', context)
         
@@ -54,18 +67,26 @@ def create(request):
             context["error"] = "Ya existe una historia con ese título"
             return render(request, 'admin/story_form.html', context)
         storyF.save()
+
+        # Check recommender configuration
+        cbr_settings = CBRSettings.objects.first()
+        if cbr_settings:            
+            if cbr_settings.update_on_alter_stories:
+                recommender = ContentBasedRecommender()
+                recommender.train()
+
         return redirect('view_pages', route=story_obj.route)
 
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def update(request, story_id):
     try:
         story = Story.objects.get(id=story_id)
     except:
         return HttpResponseNotFound()
     
-    action_type = 'Edit story'
+    action_type = 'Editar historia'
     storyF = HistoriaForm(instance=story)
     context = {
         'action_type': action_type,
@@ -89,15 +110,31 @@ def update(request, story_id):
             context["error"] = "Ya existe una historia con ese título"
             return render(request, 'admin/story_form.html', context)
         storyF.save()
-        return redirect('index_admin')
+
+        # Check recommender configuration
+        cbr_settings = CBRSettings.objects.first()
+        if cbr_settings:            
+            if cbr_settings.update_on_alter_stories:
+                recommender = ContentBasedRecommender()
+                recommender.train()
+
+        return redirect('admin_stories')
         
 
 @login_required(login_url='/login/')
-@user_passes_test(is_superuser, login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def delete(request, story_id):
     try:
         historia = Story.objects.get(id=story_id)
         historia.delete()
-        return redirect('index_admin')
+        
+        # Check recommender configuration
+        cbr_settings = CBRSettings.objects.first()
+        if cbr_settings:            
+            if cbr_settings.update_on_alter_stories:
+                recommender = ContentBasedRecommender()
+                recommender.train()
+
+        return redirect('admin_stories')
     except:
         return HttpResponseBadRequest('')

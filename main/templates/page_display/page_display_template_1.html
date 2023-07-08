@@ -1,0 +1,45 @@
+<!-- Content area -->
+<div class="container main-content">
+  {% if current_page.subtitle1 != '' and current_page.subtitle2 != '' %}
+  <div class="row mt-3">
+    <div class="col-12 page-title-container">
+      <h1 class="fs-1 text-center">
+        <div id="subtitle">
+          <p class="front px-1 styles-back">{{ current_page.subtitle1 }}</p>
+          <p class="back px-1 styles-front">{{ current_page.subtitle2 }}</p>
+        </div>
+      </h1>
+    </div>
+  </div>
+  {% else %}
+  <div class="row mt-3"></div>
+  {% endif %}
+  <div class="row my-3">
+    <div class="col-12">
+      <!---->
+      <div class="template-1-image">
+        <img class="box-shadow d-none" alt="No se pudo cargar la imagen" id="img_showed">
+      </div>
+      <div id="content_area"></div>
+      <!---->
+    </div>
+  </div>
+</div>
+<!-- Ends of content area -->
+
+<!-- Exercises area -->
+<div class="container main-content">
+  <div class="row mt-3">
+    <div class="col-12">
+      <h2 class="fs-3 text-center mt-3" id="answer_questions_message">
+        <div>
+          <p class="front px-1 styles-back">Make your best effort to answer!</p>
+          <p class="back px-1 styles-front">¡Has tu mejor esfuerzo para contestar!</p>
+        </div>
+      </h2>
+      <hr style="color: var(--f-orange); height: 5px;">
+    </div>
+    <div class="col-12"><span id="exercises_area"></span></div>
+  </div>
+</div>
+<!-- Ends of exercises area -->

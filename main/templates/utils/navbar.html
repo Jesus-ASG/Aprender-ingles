@@ -1,0 +1,182 @@
+{% load static %}
+{% load filters %}
+
+<!-- Navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-custom-properties">
+	<div class="container-fluid">
+		<a href="#"></a>
+		<ul class="navbar-nav flex-row d-md-flex">
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'index' %}">
+					<img src="{% static 'img/sq_logos/sq_white.png' %}" width="30px" alt="sq_logo.png" class="logo-nav-bar">
+				</a>
+			</li>
+		</ul>
+
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarCollapse">
+			<ul class="navbar-nav mb-2 me-auto mb-lg-0 fs-5 text-center">
+				<li class="nav-item">
+					<a class="nav-link" aria-current="page" href="{% url 'index' %}">
+						Story Quest
+					</a>
+				</li>
+				{% if request.user.is_authenticated %}
+				<li class="nav-item">
+					<a class="nav-link stories_gallery_link" aria-current="page" href="{% url 'stories' %}">Gallery</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link flashcards_collections_link" aria-current="page"
+						href="{% url 'flashcards_collections' %}">Flashcards</a>
+				</li>
+				{% endif %}
+			</ul>
+
+			{% if request.user.is_authenticated %}
+
+			<ul class="navbar-nav text-center">
+				<!-- Dropdown admin options -->
+				{% if request.user.is_staff or request.user.is_superuser%}
+				<li class="nav-item dropdown fs-5 text-center me-2 center-by-flex">
+					<!-- dropdown toggler -->
+					<a class="nav-link admin_link dropdown-toggle" href="#" id="admin_dropdown" role="button"
+						data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Admin
+					</a>
+					<!-- end of dropdown toggler -->
+					<!-- dropdown menu -->
+					<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="admin_dropdown">
+						{% if request.user.is_staff %}
+						<li class="nav-item">
+							<a class="dropdown-item" href="{% url 'admin_stories' %}">
+								<span class="me-1"><i class="fa-solid fa-book"></i></span>
+								<p class="d-inline-block">Historias</p>
+							</a>
+						</li>
+						{% endif %}
+						{% if request.user.is_staff %}
+						<li class="nav-item">
+							<a class="dropdown-item" href="{% url 'tags' %}">
+								<span class="me-1"><i class="fa-solid fa-tags"></i></span>
+								<p class="d-inline-block">Etiquetas</p>
+							</a>
+						</li>
+						{% endif %}
+						{% if request.user.is_superuser %}
+						<li class="nav-item">
+							<a class="dropdown-item" href="{% url 'management_users' %}">
+								<span class="me-1"><i class="fa-solid fa-users-gear"></i></span>
+								<p class="d-inline-block">Usuarios</p>
+							</a>
+						</li>
+						{% endif %}
+						{% if request.user.is_superuser %}
+						<li class="nav-item">
+							<a class="dropdown-item" href="{% url 'recommenders' %}">
+								<span class="me-1"><i class="fa-solid fa-comments"></i></span>
+								<p class="d-inline-block">Recomendadores</p>
+							</a>
+						</li>
+						{% endif %}
+					</ul>
+					<!-- end of dropdown menu -->
+				</li>
+				{% endif %}
+				<!-- End Dropdown admin options -->
+
+				<!-- Dropdown profile options -->
+				<li class="nav-item dropdown me-2 center-by-flex">
+					<a class="nav-link dropdown-toggle" href="#" id="profile_dropdown" role="button" data-bs-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false">
+						<div class="navbar-circle-progress">
+							<div class="navbar-progress-level">
+								<div class="navbar-profile-picture">
+									{% if request.user.profile.default_profile_image %}
+									<img src="{{ request.user.profile.default_profile_image }}" alt="Not found">
+									{% else %}
+									<img src="{% static 'img/profile_pictures/pp3.jpg' %}" alt="Not found">
+									{% endif %}
+								</div>
+							</div>
+							<div class="navbar-level">
+								<h3>{{ request.user.profile.level|to_int }}</h3>
+							</div>
+						</div>
+					</a>
+					<ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end" aria-labelledby="profile_dropdown">
+						<li>
+							<a class="dropdown-item" href="{% url 'profile' %}">
+								<!-- <span class="me-1"><i class="fa fa-user fa-lg"></i></span> -->
+								<div class="navbar-circle-progress">
+									<div class="navbar-progress-level">
+										<div class="navbar-profile-picture">
+											{% if request.user.profile.default_profile_image %}
+											<img src="{{ request.user.profile.default_profile_image }}" alt="Not found">
+											{% else %}
+											<img src="{% static 'img/profile_pictures/pp3.jpg' %}" alt="Not found">
+											{% endif %}
+										</div>
+									</div>
+									<div class="navbar-level">
+										<h3>{{ request.user.profile.level|to_int }}</h3>
+									</div>
+								</div>
+								<p class="d-inline-block text-center w-100 mt-1">{{ request.user.username|title }}</p>
+							</a>
+						</li>
+
+						<li>
+							<hr class="dropdown-divider">
+						</li>
+						<li>
+							<a class="dropdown-item" href="{% url 'stories' %}?collection=liked&p=1">
+								<span class="me-1"><i class="fas fa-heart fa-lg"></i></span>
+								<p class="d-inline-block">Favorites</p>
+							</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{% url 'stories' %}?collection=saved&p=1">
+								<span class="me-1"><i class="fas fa-bookmark fa-lg"></i></span>
+								<p class="d-inline-block">Saved</p>
+							</a>
+						</li>
+						<!--
+							<li>
+								<a class="dropdown-item" href="#/">
+									<span class="me-1"><i class="fa-solid fa-book-open fa-lg"></i></span>
+									<p class="d-inline-block">Diary</p>
+								</a>
+							</li>
+						-->
+						<li>
+							<hr class="dropdown-divider">
+						</li>
+						<li>
+							<a class="dropdown-item" href="{% url 'logout' %}">
+								<span class="me-1"><i class="fa fa-sign-out fa-lg" aria-hidden="true"></i></span>
+								<p class="d-inline-block">Logout</p>
+							</a>
+						</li>
+
+					</ul>
+				</li>
+				<!-- End Dropdown profile options -->
+			</ul>
+			{% else %}
+			<ul class="navbar-nav text-center">
+				<li class="d-inline-block m-1">
+					<a href="{% url 'login' %}" class="btn hover-scale fw-bold hover-orange" style="border-radius: 20px;
+					background-color: #fafa14;">Iniciar sesión</a>
+				</li>
+
+				<li class="d-inline-block m-1">
+					<a href="{% url 'register' %}" class="btn hover-scale fw-bold hover-orange" style="border-radius: 20px;
+					background-color: #fdfda4;">Registrarse</a>
+				</li>
+			</ul>
+			{% endif %}
+		</div>
+	</div>
+</nav>

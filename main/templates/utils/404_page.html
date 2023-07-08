@@ -1,0 +1,28 @@
+{% extends 'main_template.html' %}
+{% load static %}
+
+{% block title %} 404 not found {% endblock %}
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/utils/404_page.css' %}">
+{% endblock %}
+{% block content %}
+<div class="full-container">
+  <div class="container-404">
+    <div class="message">
+      <div class="title-404">
+        <h1>404</h1>
+      </div>
+      <div class="description-404">
+        <h2>Lo sentimos, buscamos en lo más profundo de nuestro corazón pero parece que el programador olvidó
+          agregar esta página.</h2>
+      </div>
+    </div>
+    <div class="buttons">
+      <a href="{% url 'index' %}" class="btn hover-scale fw-bold hover-orange" style="border-radius: 20px;
+					background-color: var(--yellow);">Regresar</a>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

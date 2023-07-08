@@ -1,0 +1,52 @@
+.select-template-section {
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.template {
+	display: inline-block;
+	margin: 1rem;
+	width: 150px;
+	transition: all 0.2s ease-in-out;
+	text-decoration: none;
+	color: #000;
+}
+.template:hover {
+	cursor: pointer;
+	color: #ff5f13;
+}
+.template-card {
+	width: 150px;
+	height: 200px;
+	border: 1px solid #c0c0c0;
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+		rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.template-name {
+	font-weight: 600;
+	text-align: center;
+	margin-top: 0.5rem;
+}
+
+.brand-t-1 {
+	display: inline-block;
+	width: 90%;
+	height: 6px;
+	background-color: #000;
+	margin-top: 8px;
+}
+
+.free-design-template {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.free-design-template img {
+	width: 80px;
+	height: 80px;
+}

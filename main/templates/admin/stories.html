@@ -1,0 +1,206 @@
+{% extends 'main_template.html' %}
+{% load static %}
+{% load filters %}
+
+{% block title %} Historias {% endblock %}
+
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/admin/index_admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="alert alert-success alert-dismissible fade alert-fixed" role="alert">
+	<div style="text-align: center;">
+		<strong></strong>
+	</div>
+	<button type="button" class="btn-close" onclick="closeAlert()"></button>
+</div>
+
+<div class="container main-content">
+	<div class="row mt-3">
+		<div class="col-12 page-title-container">
+			<h1 class="fs-2">Historias</h1>
+		</div>
+	</div>
+
+	<div class="row my-3">
+		<div class="col-12 text-center">
+			<a class="btn fw-bold hover-scale m-1" style="color: #fff; background-color: #ff5f13; border-radius: 10px;"
+				href="{% url 'add_story' %}" role="button">
+				+ Add new story</a>
+		</div>
+	</div>
+	<div>
+		<hr>
+		{% include 'utils/filter_form.html' %}
+		<hr>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="select-rows">
+				<select class="form-select select" aria-label="Select rows number" id="select_items_number">
+
+					<option value="5" '{% if filter_form.items_number == 5 %}' selected '{% endif %}'>5 rows</option>
+					<option value="10" '{% if filter_form.items_number == 10 %}' selected '{% endif %}'>10 rows</option>
+					<option value="15" '{% if filter_form.items_number == 15 %}' selected '{% endif %}'>15 rows</option>
+
+					{% with '5 10 15' as values %}
+					<option '{% if not filter_form.items_number|to_str in values.split %}' selected '{% endif %}'
+						value="{{ filter_form.items_number }}" id="option_other_items_number">Other</option>
+					{% endwith %}
+
+				</select>
+				<div class="custom-rows-number">
+					<label for="input_items_number">Rows:</label>
+					<input type="number" id="input_items_number">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-12 text-center">
+		<div class="card-body table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th class="fs-5 fw-bold">Cover</th>
+						<th class="fs-5 fw-bold">Info</th>
+						<th class="fs-5 fw-bold">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for story in stories %}
+					<tr>
+						<td class="text-center w-33">
+							<div class="img-admin-container w-75 d-inline-block">
+								<img class="img-admin-img p-1" src="{{ story.cover.url }}" alt="{{ story.cover }}">
+							</div>
+						</td>
+						<td class="text-center w-33">
+							<div class="text-start d-inline-block">
+								<p><span class="fw-bold" style="color: #77b9fc;">Title:</span>
+									{{ story.title1 }}
+								</p>
+								<p><span class="fw-bold" style="color: #77b9fc;">Description:</span>
+									{{ story.description1 |default:'Not provided' }}</p>
+								<p><span class="fw-bold" style="color: #77b9fc;">Likes:</span>
+									{{ story.likes_number }}</p>
+								<p><span class="fw-bold" style="color: #77b9fc;">Pages:</span>
+									{{ story.pages.all.count }}
+								</p>
+								<p>
+									<span class="fw-bold" style="color: #77b9fc;">Tags:</span>
+
+									<span class="d-inline-block">
+										<ul>
+											{% for t in story.tags.all %}
+											<li>{{ t.name1 }}</li>
+											{% empty %}
+											<li>No tags provided</li>
+											{% endfor %}
+										</ul>
+									</span>
+								</p>
+							</div>
+						</td>
+						<td class="w-33">
+							<div class="d-inline-block">
+								<a class="btn fs-5 p-2 action-btn m-2 hover-scale" href="{% url 'edit_story' story.id %}"
+									style="background-color: #77b9fc;" role="button" title="Edit story">
+									<span style="color: #fff;"><i class="fas fa-pen"></i></span>
+								</a>
+
+								<a class="btn fs-5 p-2 action-btn m-2 hover-scale" href="{% url 'view_pages' story.route %}"
+									role="button" title="Edit pages" style="background-color: #3343f8;">
+									<span style="color: #fff"><i class="fas fa-file-pen"></i></span>
+								</a>
+
+								<a class="btn fs-5 p-2 action-btn m-2 hover-scale" href="#" data-bs-toggle="modal"
+									data-bs-target="#modal_delete_story_{{ story.id }}" role="button" title="Delete story"
+									style="background-color: #f53126;">
+									<span style="color: #fff"><i class="fas fa-trash"></i></span>
+								</a>
+
+							</div>
+
+						</td>
+					</tr>
+					<!-- Modal Delete Story -->
+					<div class="modal fade" id="modal_delete_story_{{story.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title col-11 text-center">¿Está seguro de eliminar esta historia?
+										"{{ story.title1 |title }}"</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+								</div>
+								<div class="modal-body">
+									<p class="text-center text-danger"><i class="fa-solid fa-triangle-exclamation"></i>
+										Esta acción no se puede deshacer.</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+									<a type="button" class="btn btn-danger" href="{% url 'delete_story' story.id %}">
+										Eliminar</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- End of Modal Delete Story -->
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div>
+		{% include 'utils/page_enumerator_bar.html' %}
+	</div>
+</div>
+{% endblock %}
+
+{% block page-scripts %}
+<script>
+	document.querySelector('.admin_link').classList.add('active');
+</script>
+<script>
+
+	let select_items_number = document.getElementById('select_items_number');
+	let input_items_number = document.getElementById('input_items_number');
+	let option_other_items_number = document.getElementById('option_other_items_number');
+	let form_items_number = document.getElementById('form_items_number');
+
+	// Initialize - put to input the selected option
+	input_items_number.value = select_items_number.value;
+	// Display input if any of three above options was selected
+	if (option_other_items_number.selected)
+		input_items_number.parentElement.classList.add('d-inline-block');
+
+	// On change <select> value when value changes
+	select_items_number.addEventListener('change', (e) => {
+		form_items_number.value = select_items_number.value;
+		if (option_other_items_number.selected)
+			input_items_number.parentElement.classList.add('d-inline-block');
+		else
+			input_items_number.parentElement.classList.remove('d-inline-block');
+	});
+
+
+	$("#form_items_number").val(select_items_number.value);
+
+	$("#input_items_number").on('input propertychange', (e) => {
+		form_items_number.value = e.target.value;
+	});
+
+	input_items_number.addEventListener('keydown', (e) => {
+		let key = e.keyCode || e.which;
+		if (key == 13) // Code for enter
+			document.getElementById('submit_filter_form_btn').click();
+	});
+
+	function closeAlert() {
+		let alert_success = document.querySelector('.alert-success');
+		alert_success.classList.remove('show');
+	}
+</script>
+{% endblock %}

@@ -1,0 +1,217 @@
+{% extends 'main_template.html' %}
+{% load static %}
+{% load filters %}
+
+{% block title %} Flashcards collections {% endblock %}
+
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/user/flashcards.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container main-content">
+	<div class="row mt-3">
+		<div class="col-12 page-title-container">
+			<h1 class="fs-1 text-center">Colecciones de flashcards</h1>
+		</div>
+	</div>
+
+	<hr>
+	<div class="row">
+		<div class="col-12 text-center mb-3">
+			<button class="btn mt-3" type="button" title="Crear una nueva colección" data-bs-toggle="modal"
+				data-bs-target="#add_new_collection">
+				<span class="text-success fs-3"><i class="fa-solid fa-plus"></i></span>
+				<p>Agregar nueva colección</p>
+			</button>
+		</div>
+		<div class="flashcards">
+			{% for fcc in flashcards_collections %}
+			<div class="flashcard-container" style="background-color: {{ fcc.color }};" id="flashcards_collection_{{fcc.id}}">
+				<a href="{% url 'flashcards' fcc.id %}">
+					<div class="flash-title">
+						<h3>{{ fcc.collection_name }}</h3>
+					</div>
+					<hr>
+					{% if fcc.description %}
+					<p>{{ fcc.description }}</p>
+					{% else %}
+					<p>{{ fcc.collection_name }}</p>
+					{% endif %}
+				</a>
+				<div class="flashcard-menu-container">
+					<div class="dropdown">
+						<button class="btn btn-secondary dropdown-toggle flashcard-menu-button" type="button"
+							id="flashcards_collections_dropdown_{{ fcc.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="fa-solid fa-ellipsis-vertical"></i>
+						</button>
+						<!-- Dropdown menu -->
+						<ul class="dropdown-menu" aria-labelledby="flashcards_collections_dropdown_{{ fcc.id }}">
+							<ul class="flashcard-menu">
+								<li>
+									<button class="btn shadow-none" type="button" title="Editar colección" data-bs-toggle="modal"
+										data-bs-target="#modal_edit_{{fcc.id}}">
+										<span class="text-info">
+											<i class="fa-solid fa-pen"></i>
+										</span>
+										<p>Editar</p>
+									</button>
+								</li>
+								<li>
+									<button class="btn shadow-none" type="button" title="Eliminar colección" data-bs-toggle="modal"
+										data-bs-target="#modal_delete_{{fcc.id}}">
+										<span class="text-danger">
+											<i class="fa-solid fa-trash"></i>
+										</span>
+										<p>Eliminar</p>
+									</button>
+								</li>
+							</ul>
+						</ul>
+						<!-- End of dropdown menu -->
+					</div>
+				</div>
+
+				<!-- Modal Edit collection -->
+				<div class="modal fade" id="modal_edit_{{fcc.id}}" tabindex="-1" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title c-primary col-11 text-center fw-bold">Editar colección de flashcards</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+							</div>
+							<div class="modal-body">
+								<form action="{% url 'edit_flashcards_collection' fcc.id %}" autocomplete="off" method="post"
+									id="nc_form_{{ fcc.id }}" class="form-label-bold">
+									{% csrf_token %}
+
+									<div class="mb-2">
+										<label for="nc_name_{{ fcc.id }}" class="form-label c-primary">Nombre de la colección</label>
+										<input type="text" class="form-control" name="collection_name" id="nc_name_{{ fcc.id }}"
+											placeholder="Nombre de la colección" maxlength="100" value="{{ fcc.collection_name }}" required>
+									</div>
+
+									<div class="mb-2">
+										<label for="nc_description_{{ fcc.id }}" class="form-label c-primary">Descripción</label>
+										<input type="text" class="form-control" name="description" id="nc_description_{{ fcc.id }}"
+											placeholder="Agrega una pequeña descripción" maxlength="255" value="{{ fcc.description }}">
+									</div>
+
+									<div class="mb-2">
+										<label for="nc_color_{{ fcc.id }}" class="form-label fw-bold">Color</label>
+										<input class="form-control form-control-color text-center shadow-none" type="color" name="color"
+											id="nc_color_{{ fcc.id }}" value="{{ fcc.color }}">
+									</div>
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+								<button type="sumbit" class="btn btn-primary" form="nc_form_{{ fcc.id }}">Guardar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- End of Modal Edit collection -->
+				<!-- Modal Delete collection -->
+				<div class="modal fade" id="modal_delete_{{fcc.id}}" tabindex="-1" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title  col-11 text-center">¿Desea eliminar esta colección y todas sus flashcards?</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+							</div>
+							<div class="modal-body">
+								<p class="text-center text-primary"><i class="fa-solid fa-circle-info"></i>
+									Eliminar: "{{ fcc.collection_name|cut_str:30 }}"</p>
+								<p class="text-center text-danger"><i class="fa-solid fa-triangle-exclamation"></i>
+									Esta acción no se puede deshacer.</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+								<button type="button" class="btn btn-danger" onclick="deleteCollection('{{fcc.id}}')"
+									data-bs-dismiss="modal">
+									Eliminar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- End of Modal Delete collection -->
+
+			</div>
+			{% empty %}
+			<div class="col-12 text-center mb-3">
+				<h2 class="fs-4 text-muted" style="font-weight: 400; font-style: italic;">No tienes colecciones de flashcards
+					aún</h2>
+			</div>
+			{% endfor %}
+		</div>
+
+
+	</div>
+
+</div>
+<!-- Modals -->
+<!-- Add new collection -->
+<div class="modal fade" id="add_new_collection" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title c-primary col-11 text-center fw-bold">Crear una nueva colección de flashcards</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+			</div>
+			<div class="modal-body">
+				<form action="{% url 'add_flashcards_collection' %}" autocomplete="off" method="post" id="nc_form"
+					class="form-label-bold">
+					{% csrf_token %}
+					<div class="mb-2">
+						<label for="nc_name" class="form-label c-primary">Nombre de la colección</label>
+						<input type="text" class="form-control" name="collection_name" id="nc_name"
+							placeholder="Nombre de la colección" maxlength="100" required>
+					</div>
+					<div class="mb-2">
+						<label for="nc_description" class="form-label c-primary">Descripción</label>
+						<input type="text" class="form-control" name="description" id="nc_description"
+							placeholder="Agrega una pequeña descripción" maxlength="255">
+					</div>
+					<div class="mb-2">
+						<label for="nc_color" class="form-label fw-bold">Color</label>
+						<input class="form-control form-control-color text-center shadow-none" type="color" name="color"
+							id="nc_color" value="#fdfda4">
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+				<button type="sumbit" class="btn btn-primary" form="nc_form">Agregar</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End of add new collection -->
+
+<br><br>
+{% endblock %}
+
+{% block page-scripts %}
+<script>
+	function deleteCollection(collection_id) {
+
+		let url_delete_collection = "{% url 'del_flashcards_collection' 0 %}".replace('0', collection_id);
+		const csrftoken = getCookie('csrftoken');
+		$.ajax({
+			type: "POST",
+			url: url_delete_collection,
+			headers: { "X-CSRFToken": csrftoken },
+			success: function (response) {
+				//console.log(response);
+				if (response.message == 'success') {
+					document.getElementById('flashcards_collection_' + collection_id).remove();
+				}
+			},
+			error: function (response) {
+				//console.log(response);
+			}
+		});
+	}
+</script>
+{% endblock %}

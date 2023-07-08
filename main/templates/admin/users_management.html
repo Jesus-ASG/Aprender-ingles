@@ -1,0 +1,179 @@
+{% extends 'main_template.html' %}
+{% load static %}
+{% load filters %}
+
+{% block title %} Users management {% endblock %}
+
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/admin/index_admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="alert alert-success alert-dismissible fade alert-fixed" role="alert">
+	<div style="text-align: center;">
+		<strong></strong>
+	</div>
+	<button type="button" class="btn-close" onclick="closeAlert()"></button>
+</div>
+
+<div class="container main-content">
+	<div class="row mt-3">
+		<div class="col-12 page-title-container">
+			<h1 class="fs-2">Usuarios</h1>
+		</div>
+	</div>
+
+	<div class="col-12 text-center">
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th class="fs-5 fw-bold">Username</th>
+						<th class="fs-5 fw-bold">Email</th>
+						<th class="fs-5 fw-bold">Role</th>
+						<th class="fs-5 fw-bold">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for user in users %}
+					<tr id="user_{{ user.id }}">
+						<td>{{ user.username |title }}</td>
+						<td>{{ user.email }}</td>
+						<td>
+							{% if not user.is_superuser and not user.is_staff %}
+							USER
+							{% endif %}
+							{% if user.is_superuser %}
+							SUPERUSER
+							{% endif %}
+							{% if user.is_staff %}
+							STAFF
+							{% endif %}
+						</td>
+
+						<td>
+							<a class="btn" type="button" role="button" title="Edit user" data-bs-toggle="modal"
+								data-bs-target="#modal_edit_user_{{ user.id }}">
+								<span style="color: #77b9fc; font-size: 0.9rem;"><i class="fas fa-pen"></i></span>
+							</a>
+							<a class="btn" type="button" role="button" title="Delete user" data-bs-toggle="modal"
+								data-bs-target="#modal_delete_user_{{ user.id }}">
+								<span style="color: #f53126; font-size: 0.9rem;"><i class="fas fa-trash"></i></span>
+							</a>
+						</td>
+					</tr>
+
+					<!-- Modal Edit User -->
+					<div class="modal fade" id="modal_edit_user_{{ user.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title c-primary col-11 text-center fw-bold">Editar usuario</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+								</div>
+								<div class="modal-body text-start">
+									<form action="{% url 'management_edit_user' user.id %}" autocomplete="off" method="post"
+										id="edit_user_form_{{ user.id }}" class="form-label-bold">
+										{% csrf_token %}
+										<div class="mb-2">
+											<label for="email_user_{{ user.id }}" class="form-label c-primary">Email</label>
+											<input type="email" class="form-control" name="email" id="email_user_{{ user.id }}"
+												placeholder="email" value="{{ user.email }}" required>
+										</div>
+
+										<div class="mb-2">
+											<div class="form-check d-inline-block">
+												<input {% if user.is_superuser %}checked{% endif %} class="form-check-input" type="checkbox"
+													name="is_superuser" id="superuser_user_{{ user.id }}">
+												<label class="form-check-label" for="superuser_user_{{ user.id }}">
+													SUPERUSER
+												</label>
+											</div>
+										</div>
+
+										<div class="mb-2">
+											<div class="form-check d-inline-block">
+												<input {% if user.is_staff %}checked{% endif %} class="form-check-input" type="checkbox"
+													name="is_staff" id="staff_user_{{ user.id }}">
+												<label class="form-check-label" for="staff_user_{{ user.id }}">
+													STAFF
+												</label>
+											</div>
+										</div>
+
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+									<button type="sumbit" class="btn btn-primary" form="edit_user_form_{{ user.id }}">Guardar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- End of Modal Edit User -->
+
+					<!-- Modal Delete User -->
+					<div class="modal fade" id="modal_delete_user_{{user.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title col-11 text-center">¿Está seguro de eliminar al usuario
+										{{ user.username |title }}?</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+								</div>
+								<div class="modal-body">
+									<p class="text-center text-danger"><i class="fa-solid fa-triangle-exclamation"></i> Esta acción no se
+										puede deshacer.</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+									<button type="button" class="btn btn-danger" onclick="deleteUser('{{ user.id }}')"
+										data-bs-dismiss="modal">
+										Eliminar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- End of Modal Delete User -->
+
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+{% endblock %}
+
+{% block page-scripts %}
+<script>
+	document.querySelector('.admin_link').classList.add('active');
+</script>
+<script>
+	function deleteUser(user_id) {
+		let url_delete_user = "{% url 'management_del_user' 0 %}".replace('0', user_id);
+		const csrftoken = getCookie('csrftoken');
+		$.ajax({
+			type: "POST",
+			url: url_delete_user,
+			headers: { "X-CSRFToken": csrftoken },
+			success: function (response) {
+				//console.log(response);
+				if (response.message == 'success') {
+					document.getElementById('user_' + user_id).remove();
+				}
+			},
+			error: function (response) {
+				//console.log(response);
+			}
+		});
+	}
+
+	function closeAlert() {
+		let alert_success = document.querySelector('.alert-success');
+		alert_success.classList.remove('show');
+	}
+</script>
+{% endblock %}

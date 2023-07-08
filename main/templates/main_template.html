@@ -3,12 +3,12 @@
 <html lang="es">
 
 <head>
-	<title>{% block title %} {% endblock %}</title>
-	<link rel="shortcut icon" href="{% static 'img/logo.png' %}" />
-
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<title>{% block title %} {% endblock %}</title>
+	<link rel="shortcut icon" href="{% static 'img/sq_logos/sq_orange.png' %}" />
 
 	<!--Bootstrap-->
 	<link rel="stylesheet" href="{% static 'resources/bootstrap-5.0.2-dist/css/bootstrap.css' %}">
@@ -24,9 +24,12 @@
 		href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
 		rel="stylesheet">
 	<!--Estilos propios-->
+
+	<link rel="stylesheet" href="{% static 'css/utils/reset_stylesheet.css' %}" type="text/css">
 	<link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css">
 	<link rel="stylesheet" href="{% static 'css/flip_text.css' %}" type="text/css">
-	<link rel="stylesheet" href="{% static 'css/not_found.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'css/utils/nabvar.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'css/utils/arrows.css' %}">
 
 	<!-- Page styles-->
 	{% block page-styles %} {% endblock %}
@@ -35,47 +38,96 @@
 
 <body>
 
-	{% include 'navbar.html' %}
+	<div style="min-height: 100vh; position: relative; padding-bottom: 2rem;">
+		{% include 'utils/navbar.html' %}
 
-	{% block content %} {% endblock %}
+		{% block content %} {% endblock %}
+	</div>
 
 	<!-- FOOTER -->
-	<footer class="bg-dark text-center text-white"
-		style="position: absolute; left: 0; bottom: 0px; margin-top: 100px; width: 100%;">
-		<div class="container p-2">
-			<p class="fs-5">¡Puedes visitar los siguientes enlaces!</p>
-			<div>
-				<a class="footer-icon m-3 fs-5" href="https://github.com/Jesus-ASG" target="_blank" role="button">
-					<span><i class="fa-brands fa-github fa-lg"></i></span>
-				</a>
-				<a class="footer-icon m-3 fs-5" href="#/" role="button">
-					<span><i class="fa-brands fa-instagram fa-lg"></i></span>
-				</a>
-				<a class="footer-icon m-3 fs-5" href="#/" role="button">
-					<span><i class="fa-brands fa-facebook fa-lg"></i></span>
-				</a>
-				<a class="footer-icon m-3 fs-5" href="#/" role="button">
-					<span><i class="fa-brands fa-twitter fa-lg"></i></span>
-				</a>
+	<div class="footer-container">
+		<footer class="bg-dark text-center text-white footer-custom-properties">
+			<div class="container">
+				<h2 class="">Contact</h2>
+				<div class="contact-links">
+					<a class="footer-icon me-3 fs-5" href="https://github.com/Jesus-ASG" target="_blank" role="button">
+						<span><i class="fa-brands fa-github fa-lg"></i></span>
+					</a>
+					<a class="footer-icon me-3 fs-5" href="#/" role="button">
+						<span><i class="fa-brands fa-instagram fa-lg"></i></span>
+					</a>
+					<a class="footer-icon me-3 fs-5" href="#/" role="button">
+						<span><i class="fa-brands fa-facebook fa-lg"></i></span>
+					</a>
+					<a class="footer-icon me-3 fs-5" href="#/" role="button">
+						<span><i class="fa-brands fa-twitter fa-lg"></i></span>
+					</a>
+				</div>
 			</div>
-		</div>
-		<!-- Grid container -->
-		<div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.2);">
-			© Jesús A. Serrano Graciano 2023
-		</div>
-	</footer>
+			<!-- Grid container -->
+			<div class="author">
+				© Jesús A. Serrano Graciano 2023
+			</div>
+		</footer>
+	</div>
 
-	<!-- Bootstrap -->
-	<script src="{% static 'resources/bootstrap-5.0.2-dist/js/bootstrap.js' %}"></script>
-	<!--jquery-->
+	<script src="{% static 'resources/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js' %}"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-	<!--Propios-->
 	<script src="{% static 'js/scripts.js' %}"></script>
 	<script src="{% static 'js/flip_text.js' %}"></script>
+	<script src="{% static 'js/flip_text_dom.js' %}"></script>
+	<script>
+
+		let db_user_xp = "{{ request.user.profile.xp }}";
+		let db_progress_xp = "{{ request.user.profile.level }}";
+		db_progress_xp = db_progress_xp - parseInt(db_progress_xp); // keep only decimals
+		let db_progress_xp_percentage = parseInt(db_progress_xp * 100);
+
+		$(".navbar-progress-level").css({
+			'background': `conic-gradient( var(--bg-xp-strong) ${db_progress_xp_percentage * 3.2}deg,
+			var(--bg-xp-light) ${db_progress_xp_percentage * 3.2}deg)`
+		});
+
+
+	</script>
 
 	<!-- Page scripts-->
 	{% block page-scripts %} {% endblock %}
+
+	<script>
+		const rabbit_icon_path = "{% static 'icons/rabbit.svg' %}";
+		const turtle_icon_path = "{% static 'icons/turtle.svg' %}";
+
+		let svgi_icons_list = [
+			{
+				'name': 'svgi-rabbit',
+				'path': rabbit_icon_path
+			},
+			{
+				'name': 'svgi-turtle',
+				'path': turtle_icon_path
+			}
+		];
+
+		for (let l of svgi_icons_list) {
+			let sgvi_dom_elements = document.getElementsByClassName(l.name);
+			for (let di of sgvi_dom_elements) {
+				placeSVGI(l.path, di);
+			}
+		}
+
+		function placeSVGI(path, sgvi_dom_element) {
+			fetch(path)
+				.then(response => response.text())
+				.then(data => {
+					sgvi_dom_element.innerHTML = data;
+				});
+		}
+		$('.dropdown-menu').click(function (e) {
+			e.stopPropagation();
+		});
+	</script>
 
 </body>
 

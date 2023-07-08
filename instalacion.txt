@@ -1,6 +1,5 @@
 * Tener python 3.10 o superior
-* Tener un gestor de bd como xampp o wamp
-* Importar la base de datos "AprendeIngles.sql"
+* Tener un gestor de bd de mysql, también puede ser con xampp, wamp o lampp
 * Crear un entorno virtual:
   * python -m venv env
 * Activar el entorno virtual:
@@ -21,11 +20,13 @@ jesus@mail.com
 
 pip libraries
 django, django rest framework, pymysql, pillow, django-cleanup, pymemcache
+pandas numpy scikit-learn
 start memcached:
 -m: memory in megabytes
 -p: port
 -l: ip
 $ memcached -d -m 64 -p 11211 -l 127.0.0.1
+clean cache: telnet 127.0.0.1 11211 -> flush_all -> quit
 stop memcached:
   search process
     $ ps aux | grep memcached

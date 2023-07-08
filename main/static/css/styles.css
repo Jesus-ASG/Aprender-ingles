@@ -1,8 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
 :root {
 	--orange: #f2864b;
 	--light-green: #49eb4b;
 	--light-green-active: #3dd33f;
-	--light-blue: #77b9fc;
+
+	--light-blue: #cbe5ff;
+	--light-blue-active: #77b9fc;
 	--light-red: #bd2b24;
 
 	--f-orange: #ff5f13;
@@ -11,51 +15,84 @@
 
 	--f-light-green: #49eb4b;
 	--f-light-green-active: #3dd33f;
+
+	--turquoise: #bbfff3;
+	--turquoise-active: #23fbb7;
+
+	--yellow: #fdfda4;
+	--yellow-active: #fafa14;
+
+	--bg-primary: var(--f-orange);
+	--bg-primary-active: var(--f-orange-active);
+	--c-primary: #fff;
+	--c-disabled: #acacac;
+
+	--test-color: #fcffcb;
+	--test-color-active: #e1e16b;
+
+	--bg-xp-light: var(--light-blue);
+	--bg-xp-strong: var(--light-blue-active);
 }
 
 ::selection {
-	background: var(--light-green);
+	background: var(--turquoise);
 	color: #000;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5 {
-	font-weight: bold;
-	margin: 0;
-	padding: 0;
+*::-webkit-scrollbar {
+	width: 8px;
+}
+*::-webkit-scrollbar-track {
+	background: #fff;
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: #dbd7d7;
+	border-radius: 20px;
 }
 
 body {
-	margin: 0;
-	padding: 0;
-	font-weight: normal;
-	font-style: normal;
-}
-div,
-span {
-	margin: 0;
-	padding: 0;
-}
-
-p {
-	margin: 0;
-	padding: 0;
-}
-
-body {
-	font-family: "Mulish", "Roboto", sans-serif;
+	font-family: "Poppins", "Roboto", sans-serif;
 	position: relative;
 	min-height: 100vh;
-	padding-bottom: 200px;
 	background-color: #fafafa;
 }
 
 .main-content {
 	max-width: 900px;
 	background-color: #fff;
+	box-shadow: rgb(50 50 93 / 25%) 0px 6px 12px -2px,
+		rgb(0 0 0 / 30%) 0px 3px 7px -3px;
+}
+
+.footer-container {
+	position: relative;
+	width: 100%;
+	min-height: 110px;
+}
+
+.footer-custom-properties {
+	position: absolute;
+	left: 0;
+	bottom: 0px;
+	width: 100%;
+	min-height: 110px;
+}
+
+.footer-custom-properties h2 {
+	font-size: 1.3rem;
+	font-weight: 500;
+	margin: 0.5rem 0 0.5rem 0;
+}
+
+.footer-custom-properties .contact-links {
+	margin: 0.5rem 0 0.5rem 0;
+}
+
+.footer-custom-properties .author {
+	font-size: 0.9rem;
+	margin: 0.3em 0 0.3em 0;
+	background-color: rgba(0, 0, 0, 0.2);
 }
 
 .footer-icon {
@@ -69,46 +106,24 @@ body {
 	transform: scale(1.2);
 }
 
-/*Login*/
-.main-form-container {
-	display: block;
-	width: 400px;
-	text-align: left;
-	margin: auto;
-	margin-top: 30px;
-	background-color: #fff;
-	border-radius: 10px;
-}
-
-.main-form-container a {
-	text-decoration: none;
-}
-
-.pass input {
-	outline: none;
-	border: none;
-	width: 90%;
-}
-.pass span {
-	background-color: #fff;
-	border: none;
-	text-align: right;
-	display: inline-block;
-}
-.pass span:hover {
-	cursor: pointer;
-}
-
-.error-pass {
-	font-weight: bold;
-	color: red;
-}
-/*End login*/
-
 /* Other general styles */
 .box-shadow {
 	box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
 		rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.navbar.bg-dark .dropdown-menu li > *:active {
+	background-color: #6c757d;
+}
+
+/*Quit bootstrap default dropdown icon */
+.dropdown-toggle::after {
+	display: none !important;
+}
+
+.styles-front,
+.styles-back {
+	border-radius: 10px;
 }
 /* Buttons */
 /* Use bootstrap btn class together this classes */
@@ -149,19 +164,6 @@ body {
 	box-shadow: 0 0 0 0.2rem var(--f-orange-shadow);
 }
 
-.btn-back-next {
-	transition: all 0.2s ease-in-out;
-	display: inline-block;
-}
-
-.btn-back-next:hover {
-	transform: scale(1.1);
-}
-
-.btn-back-next i {
-	color: var(--light-red);
-}
-
 .hover-scale {
 	transition: all 0.2s ease-in-out;
 	display: inline-block;
@@ -170,4 +172,34 @@ body {
 .hover-scale:hover {
 	cursor: pointer;
 	transform: scale(1.1);
+}
+
+.page-title-container h1,
+.page-title-container h2,
+.page-title-container h3,
+.page-title-container h4,
+.page-title-container h5,
+.page-title-container h6 {
+	margin: 1rem 0 1rem 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+/* Center with flex */
+.flex-center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.exercise-sep {
+	box-shadow: rgba(245, 159, 61, 0.5) 0px 10px 10px -8px;
+	margin-bottom: 1.5rem;
+	padding-bottom: 0.5rem;
+}
+
+.title {
+	font-weight: 500;
 }

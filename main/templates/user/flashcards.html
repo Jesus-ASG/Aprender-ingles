@@ -1,0 +1,251 @@
+{% extends 'main_template.html' %}
+{% load static %}
+{% load filters %}
+
+{% block title %} {{ fc_collection.collection_name }} {% endblock %}
+
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/user/flashcards.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container main-content">
+
+	<div class="row mt-3">
+		<div class="col-2 back-btn-container">
+			<a href="{% url 'flashcards_collections' %}" id="back_page_btn">
+				<span><i class="fa-solid fa-arrow-left"></i></span>
+			</a>
+		</div>
+		<div class="col-8 page-title-container">
+			<h1 class="fs-1 text-center">{{ fc_collection.collection_name }}</h1>
+		</div>
+		<div class="col-2 next-btn-container">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<p class="text-center">{{ fc_collection.description }}</p>
+		</div>
+	</div>
+
+	<hr>
+	<div class="row">
+		<div class="col-12 text-center mb-3">
+			<button class="btn mt-3" href="#" type="button" title="Crear una flashcard" data-bs-toggle="modal"
+				data-bs-target="#add_new_flashcard">
+				<span class="text-success fs-3"><i class="fa-solid fa-plus"></i></span>
+				<p>Agregar nueva flashcard</p>
+			</button>
+		</div>
+
+		<div class="flashcards">
+			{% for fc in flashcards %}
+			<div class="flashcard-container" style="background-color: {{ fc.color }};" id="flashcard_{{fc.id}}">
+				<div class="flashcard-text">
+					<p name="front">{{ fc.front }}</p>
+					<p name="back" class="d-none">{{ fc.back }}</p>
+				</div>
+
+				<div class="flashcard-menu-container">
+					<div class="dropdown">
+						<button class="btn btn-secondary dropdown-toggle flashcard-menu-button" type="button"
+							id="flashcards_collections_dropdown_{{ fc.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="fa-solid fa-ellipsis-vertical"></i>
+						</button>
+						<!-- Dropdown menu -->
+						<ul class="dropdown-menu" aria-labelledby="flashcards_collections_dropdown_{{ fc.id }}">
+							<ul class="flashcard-menu">
+								<li>
+									<button class="btn shadow-none" type="button" title="Editar colección" data-bs-toggle="modal"
+										data-bs-target="#modal_edit_{{fc.id}}">
+										<span class="text-info">
+											<i class="fa-solid fa-pen"></i>
+										</span>
+										<p>Editar</p>
+									</button>
+								</li>
+								<li>
+									<button class="btn shadow-none" type="button" title="Eliminar colección" data-bs-toggle="modal"
+										data-bs-target="#modal_delete_{{fc.id}}">
+										<span class="text-danger">
+											<i class="fa-solid fa-trash"></i>
+										</span>
+										<p>Eliminar</p>
+									</button>
+								</li>
+							</ul>
+						</ul>
+						<!-- End of dropdown menu -->
+					</div>
+				</div>
+
+				<!-- Modal Edit collection -->
+				<div class="modal fade" id="modal_edit_{{fc.id}}" tabindex="-1" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title c-primary col-11 text-center fw-bold">Editar flashcard</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+							</div>
+							<div class="modal-body">
+								<form action="{% url 'edit_flashcard' fc.id %}" autocomplete="off" method="post"
+									id="nc_form_{{ fc.id }}" class="form-label-bold">
+									{% csrf_token %}
+									<div class="mb-2">
+										<label for="fc_front" class="form-label c-primary">Frente</label>
+										<input type="text" class="form-control" name="front" id="fc_front" placeholder="Texto principal"
+											maxlength="100" value="{{ fc.front }}" required>
+									</div>
+
+									<div class="mb-2">
+										<label for="fc_reverse" class="form-label c-primary">Reverso</label>
+										<input type="text" class="form-control" name="back" id="fc_reverse" placeholder="Texto al reverso"
+											maxlength="255" value="{{ fc.back }}">
+									</div>
+
+									<div class="mb-2">
+										<label for="nc_color_{{ fc.id }}" class="form-label fw-bold">Color</label>
+										<input class="form-control form-control-color text-center shadow-none" type="color" name="color"
+											id="nc_color_{{ fc.id }}" value="{{ fc.color }}">
+									</div>
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+								<button type="sumbit" class="btn btn-primary" form="nc_form_{{ fc.id }}">Guardar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- End of Modal Edit collection -->
+				<!-- Modal Delete collection -->
+				<div class="modal fade" id="modal_delete_{{fc.id}}" tabindex="-1" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title col-11 text-center">¿Desea eliminar esta flashcard?</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+							</div>
+							<div class="modal-body">
+								<p class="text-center text-primary"><i class="fa-solid fa-circle-info"></i>
+									Eliminar: "{{ fc.front|cut_str:30 }}"</p>
+								<p class="text-center text-danger"><i class="fa-solid fa-triangle-exclamation"></i>
+									Esta acción no se puede deshacer.</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+								<button type="button" class="btn btn-danger" onclick="deleteFlashcard('{{fc.id}}')"
+									data-bs-dismiss="modal">
+									Eliminar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- End of Modal Delete collection -->
+
+			</div>
+			{% empty %}
+			<div class="col-12 text-center mb-3">
+				<h2 class="fs-4 text-muted" style="font-weight: 400; font-style: italic;">Aún no tienes flashcards en esta
+					colección</h2>
+			</div>
+			{% endfor %}
+		</div>
+
+	</div>
+
+</div>
+<!-- Modals -->
+<!-- Add new collection -->
+<div class="modal fade" id="add_new_flashcard" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title c-primary col-11 text-center fw-bold">Crear una nueva flashcard</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+			</div>
+			<div class="modal-body">
+				<form action="{% url 'add_flashcard' fc_collection.id %}" autocomplete="off" method="post" id="nfc_form"
+					class="form-label-bold">
+					{% csrf_token %}
+					<div class="mb-2">
+						<label for="fc_front" class="form-label c-primary">Frente</label>
+						<input type="text" class="form-control" name="front" id="fc_front" placeholder="Texto principal"
+							maxlength="100" required>
+					</div>
+
+					<div class="mb-2">
+						<label for="fc_reverse" class="form-label c-primary">Reverso</label>
+						<input type="text" class="form-control" name="back" id="fc_reverse" placeholder="Texto al reverso"
+							maxlength="255">
+					</div>
+
+					<div class="mb-2">
+						<label for="nc_color" class="form-label fw-bold">Color</label>
+						<input class="form-control form-control-color text-center shadow-none" type="color" name="color"
+							id="nc_color" value="#fdfda4">
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+				<button type="sumbit" class="btn btn-primary" form="nfc_form">Agregar</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End of add new collection -->
+
+<br><br>
+{% endblock %}
+
+{% block page-scripts %}
+<script>
+	document.querySelector('.flashcards_collections_link').classList.add('active');
+</script>
+<script>
+	let flashcards = document.querySelectorAll('.flashcard-text');
+	flashcards.forEach(fc => {
+		fc.addEventListener('click', (e) => {
+			let front = fc.querySelector('[name=front]');
+			let back = fc.querySelector('[name=back]');
+
+			if (front.classList.contains('d-none')) {
+				front.classList.remove('d-none');
+				front.classList.add('d-block');
+
+				back.classList.add('d-none');
+				back.classList.remove('d-block');
+			}
+
+			else {
+				back.classList.remove('d-none');
+				back.classList.add('d-block');
+
+				front.classList.add('d-none');
+				front.classList.remove('d-block');
+			}
+		});
+	});
+
+	function deleteFlashcard(flashcard_id) {
+		let url_delete_collection = "{% url 'del_flashcard' 0 %}".replace('0', flashcard_id);
+		const csrftoken = getCookie('csrftoken');
+		$.ajax({
+			type: "POST",
+			url: url_delete_collection,
+			headers: { "X-CSRFToken": csrftoken },
+			success: function (response) {
+				//console.log(response);
+				if (response.message == 'success') {
+					document.getElementById('flashcard_' + flashcard_id).remove();
+				}
+			},
+			error: function (response) {
+				//console.log(response);
+			}
+		});
+	}
+</script>
+{% endblock %}

@@ -1,0 +1,197 @@
+{% extends 'main_template.html' %}
+{% load static %}
+{% load filters %}
+
+{% block title %} Tags {% endblock %}
+
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/admin/index_admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="alert alert-success alert-dismissible fade alert-fixed" role="alert">
+	<div style="text-align: center;">
+		<strong></strong>
+	</div>
+	<button type="button" class="btn-close" onclick="closeAlert()"></button>
+</div>
+
+<div class="container main-content">
+	<div class="row mt-3">
+		<div class="col-8 page-title-container">
+			<h1 class="fs-2">Etiquetas</h1>
+		</div>
+		<div class="col-4 text-center">
+			<button class="btn mt-3" type="button" title="Crear una nueva etiqueta" data-bs-toggle="modal"
+				data-bs-target="#add_new_tag">
+				<span class="text-success fs-3"><i class="fa-solid fa-plus"></i></span>
+				<p>Agregar nueva etiqueta</p>
+			</button>
+		</div>
+	</div>
+
+	<div class="col-12 text-center">
+		<div class="card-body table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th class="fs-5 fw-bold">#</th>
+						<th class="fs-5 fw-bold">English name</th>
+						<th class="fs-5 fw-bold">Spanish name</th>
+						<th class="fs-5 fw-bold">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for tag in tags %}
+					<tr id="tag_{{ tag.id }}">
+						<td class="counter">{{ forloop.counter }}</td>
+						<td>{{ tag.name1 }}</td>
+						<td>{{ tag.name2 }}</td>
+						<td>
+							<a class="btn" type="button" role="button" title="Edit tag" data-bs-toggle="modal"
+								data-bs-target="#modal_edit_tag_{{ tag.id }}">
+								<span style="color: #77b9fc; font-size: 0.9rem;"><i class="fas fa-pen"></i></span>
+							</a>
+							<a class="btn" type="button" role="button" title="Delete tag" data-bs-toggle="modal"
+								data-bs-target="#modal_delete_tag_{{ tag.id }}">
+								<span style="color: #f53126; font-size: 0.9rem;"><i class="fas fa-trash"></i></span>
+							</a>
+						</td>
+					</tr>
+					<!-- Modal Edit Tag -->
+					<div class="modal fade" id="modal_edit_tag_{{ tag.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title c-primary col-11 text-center fw-bold">Editar etiqueta</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+								</div>
+								<div class="modal-body text-start">
+									<form action="{% url 'edit_tag' tag.id %}" autocomplete="off" method="post"
+										id="edit_tag_form_{{ tag.id }}" class="form-label-bold">
+										{% csrf_token %}
+										<div class="mb-2">
+											<label for="name1_{{ tag.id }}" class="form-label c-primary">Nombre en inglés</label>
+											<input type="text" class="form-control" name="name1" id="name1_{{ tag.id }}"
+												placeholder="Nombre en inglés" value="{{ tag.name1 }}" maxlength="100" required>
+										</div>
+										<div class="mb-2">
+											<label for="name2_{{ tag.id }}" class="form-label c-primary">Nombre en español</label>
+											<input type="text" class="form-control" name="name2" id="name2_{{ tag.id }}"
+												placeholder="Nombre en español" value="{{ tag.name2 }}" maxlength="100" required>
+										</div>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+									<button type="sumbit" class="btn btn-primary" form="edit_tag_form_{{ tag.id }}">Guardar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- End of Modal Edit Tag -->
+
+					<!-- Modal Delete Tag -->
+					<div class="modal fade" id="modal_delete_tag_{{tag.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title col-11 text-center">¿Está seguro de eliminar esta etiqueta?
+										"{{ tag.name1 |title }}"</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+								</div>
+								<div class="modal-body">
+									<p class="text-center text-danger"><i class="fa-solid fa-triangle-exclamation"></i> Esta acción no se
+										puede deshacer.</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+									<button type="button" class="btn btn-danger" onclick="deleteTag('{{ tag.id }}')"
+										data-bs-dismiss="modal">
+										Eliminar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- End of Modal Delete Tag -->
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<!-- Modals -->
+<!-- Add new tag -->
+<div class="modal fade" id="add_new_tag" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title c-primary col-11 text-center fw-bold">Crear una nueva etiqueta</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+			</div>
+			<div class="modal-body">
+				<form action="{% url 'add_tag' %}" autocomplete="off" method="post" id="add_tag_form" class="form-label-bold">
+					{% csrf_token %}
+					<div class="mb-2">
+						<label for="name1_{{ tag.id }}" class="form-label c-primary">Nombre en inglés</label>
+						<input type="text" class="form-control" name="name1" id="name1_{{ tag.id }}" placeholder="Nombre en inglés"
+							maxlength="100" required>
+					</div>
+					<div class="mb-2">
+						<label for="name2_{{ tag.id }}" class="form-label c-primary">Nombre en español</label>
+						<input type="text" class="form-control" name="name2" id="name2_{{ tag.id }}" placeholder="Nombre en español"
+							maxlength="100" required>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+				<button type="sumbit" class="btn btn-primary" form="add_tag_form">Agregar</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End of add new tag -->
+{% endblock %}
+
+{% block page-scripts %}
+<script>
+	document.querySelector('.admin_link').classList.add('active');
+</script>
+<script>
+	function deleteTag(tag_id) {
+		let url_delete_tag = "{% url 'del_tag' 0 %}".replace('0', tag_id);
+		const csrftoken = getCookie('csrftoken');
+		$.ajax({
+			type: "POST",
+			url: url_delete_tag,
+			headers: { "X-CSRFToken": csrftoken },
+			success: function (response) {
+				//console.log(response);
+				if (response.message == 'success') {
+					row_deleted = document.getElementById('tag_' + tag_id);
+					index_deleted = row_deleted.querySelector('.counter').textContent;
+					row_deleted.remove();
+
+					indexes_affected = document.querySelectorAll('.counter');
+					indexes_affected.forEach(element => {
+						number = parseInt(element.textContent);
+						if (number > index_deleted) {
+							element.innerText = number - 1;
+						}
+					});
+				}
+			},
+			error: function (response) {
+				//console.log(response);
+			}
+		});
+	}
+	function closeAlert() {
+		let alert_success = document.querySelector('.alert-success');
+		alert_success.classList.remove('show');
+	}
+</script>
+{% endblock %}

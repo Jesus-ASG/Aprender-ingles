@@ -24,17 +24,31 @@
 		box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
 			rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 	}
+
+	.txta {
+		background-color: #fff;
+		outline: none;
+		padding-bottom: 10px;
+		resize: none;
+		max-height: 150px;
+	}
+
+	.txta::-webkit-scrollbar {
+		width: 0px;
+	}
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container main-content">
 	<div class="row mt-3">
-		<div class="col-2 text-start fs-1">
-			<a href="{% url 'index_admin' %}" class="btn-back-next"><i class='fa fa-arrow-circle-left'></i></a>
+		<div class="col-2 back-btn-container">
+			<a href="{% url 'admin_stories' %}">
+				<span><i class="fa-solid fa-arrow-left"></i></span>
+			</a>
 		</div>
-		<div class="col-8">
-			<h2 class="fs-2 fw-bold text-center">{{ action_type }}</h2>
+		<div class="col-8 page-title-container">
+			<h2 class="fs-1">{{ action_type }}</h2>
 		</div>
 	</div>
 
@@ -51,7 +65,7 @@
 		</div>
 		<div class="col-12">
 			<div class="form p-3 mb-3">
-				<form method="post" enctype="multipart/form-data" autocomplete="off">
+				<form method="post" enctype="multipart/form-data" autocomplete="off" id="story_form">
 					{% csrf_token %}
 					{% for field in story_form %}
 					<div class="mb-3 text-center">
@@ -82,13 +96,12 @@
 					<hr>
 					<div class="row">
 						<div class="col-12 text-center">
-							<a class="btn hover-scale fs-5 fw-bold m-1" href="{% url 'index_admin' %}" role="button"
+							<a class="btn hover-scale fs-5 fw-bold m-1" href="{% url 'admin_stories' %}" role="button"
 								style="background-color: var(--light-red); border-radius: 10px; color: #fff;">
 								Cancelar
 							</a>
 							<input class="btn hover-scale fs-5 fw-bold m-1" type="submit"
-								style="background-color: var(--light-blue); border-radius: 10px; color: #fff;"
-								value="Guardar">
+								style="background-color: var(--light-blue-active); border-radius: 10px; color: #fff;" value="Guardar">
 						</div>
 					</div>
 
@@ -106,17 +119,22 @@
 <script>
 	// change styles for showing categories
 	document.addEventListener("DOMContentLoaded", function () {
-		let cambiar = document.querySelector("#id_tag").childNodes;
+		let cambiar = document.querySelector("#id_tags").childNodes;
 		for (let i = 0; i < cambiar.length; i++)
 			cambiar[i].className = "form-check form-check-inline fs-6";
 
-		let checks = document.getElementsByName("tag");
+		let checks = document.getElementsByName("tags");
 		for (let i = 0; i < checks.length; i++)
 			checks[i].className = "form-check-input";
 
 		let input_cover = document.getElementById("id_cover");
 
 		input_cover.setAttribute('onchange', "changeImg(this)");
+
+		let txtas = document.getElementsByClassName('txta');
+		for (let t of txtas) {
+			makeAdjustable(t);
+		}
 	});
 
 	function restoreImage() {
@@ -138,5 +156,6 @@
 	}
 
 </script>
+
 
 {% endblock %}

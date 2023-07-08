@@ -1,0 +1,77 @@
+.navbar-custom-properties {
+	position: sticky;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 500;
+	max-height: 62px;
+}
+
+@media only screen and (max-width: 991px) {
+	.navbar-custom-properties {
+		max-height: none;
+	}
+}
+
+.center-by-flex {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+}
+
+.navbar-circle-progress {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.navbar-progress-level {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	/* 320 is the maximum */
+
+	box-shadow: rgba(224, 224, 233, 0.2) 0px 7px 29px 0px;
+	transform: rotate(200deg);
+}
+
+.navbar-profile-picture {
+	display: inline-block;
+	transform: rotate(-200deg);
+	width: 35px;
+	height: 35px;
+}
+
+.navbar-profile-picture img {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.navbar-level {
+	position: relative;
+}
+
+.navbar-level h3 {
+	position: absolute;
+	z-index: 1100;
+	top: -0.5rem;
+	left: 50%;
+	transform: translateX(-50%);
+	border-radius: 10px;
+	font-size: 0.6rem;
+	color: #fff;
+	width: 20px;
+	background: #c85;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
