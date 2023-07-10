@@ -5,104 +5,67 @@
 {% block title %} Iniciar sesión {% endblock %}
 
 {% block page-styles %}
-<style>
-    .main-form-container {
-        display: block;
-        width: 400px;
-        text-align: left;
-        margin: auto;
-        margin-top: 30px;
-        background-color: #fff;
-        border-radius: 10px;
-    }
-
-    .main-form-container a {
-        text-decoration: none;
-    }
-
-    .pass input {
-        outline: none;
-        border: none;
-        width: 90%;
-    }
-
-    .pass span {
-        background-color: #fff;
-        border: none;
-        text-align: right;
-        display: inline-block;
-    }
-
-    .pass span:hover {
-        cursor: pointer;
-    }
-
-    .error-pass {
-        font-weight: bold;
-        color: red;
-    }
-</style>
-
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
 {% endblock %}
 
 {% block content %}
-<!-- INDEX LOGIN -->
+<div class="auth-background">
+	<div class="auth-form-container">
 
-<div class="row main-form-container">
-    <div class="mt-4 mb-2 center">
-        <h2>Iniciar sesión</h2>
-    </div>
-    <div class="px-5">
-        <form id="form_login" autocomplete="off" method="post">
-            {% csrf_token %}
-            <div>
-                <div class="mb-2 mt-2">
-                    <label for="username">Nombre de usuario</label>
-                    <input name="username" class="form-control" type="text" placeholder="Nombre de usuario" required>
-                </div>
-                <div class="mb-2">
-                    <label for="password" class="mb-1">Contraseña</label>
-                    <div class="form-control pass">
-                        <input name="password" class="" type="password" placeholder="Contraseña" id="password" required>
-                        <span id="btn_eye1">
-                            <i class="fa fa-eye-slash" id="eye_1"></i>
-                            <!--<i class="fa-solid fa-eye"></i>-->
-                        </span>
-                    </div>
-                </div>
-                <div class="mb-2">
-                    <div id="form_message">
+		<form class="form-body" autocomplete="off" method="post">
+			{% csrf_token %}
 
-                    </div>
-                </div>
-                <hr>
-            </div>
-            <button type="submit" class="btn btn-primary">Entrar</button>
-        </form>
-        <hr>
-        <p>¿Aún no estás registrado? <a href="{% url 'register' %}" class="text-primary">Regístrate</a></p>
-        <br>
-    </div>
+			<h1 class="form-title">Iniciar sesión</h1>
+
+			<div class="form-element">
+				<label for="username">Nombre de usuario</label>
+				<input id="username" name="username" type="text" class="form-control input-text" style=""
+					placeholder="Nombre de usuario" required>
+			</div>
+
+			<div class="form-element">
+				<label for="password" class="mb-1">Contraseña</label>
+				<div class="form-control password-input">
+					<input id="password" name="password" type="password" placeholder="Contraseña" required>
+					<span id="toggle_password_visibility" title="Mostrar contraseña"><i class="fa fa-eye"></i></span>
+				</div>
+			</div>
+
+			<div class="form-element">
+				<button type="submit" class="form-submit-btn">Entrar</button>
+			</div>
+
+			<div class="form-element">
+				<p class="text-footer">¿Eres nuevo? <a href="{% url 'register' %}">Regístrate</a></p>
+			</div>
+
+		</form>
+	</div>
 </div>
-
 {% endblock %}
 
 {% block page-scripts %}
 
 <script>
-    btn_eye1 = document.getElementById("btn_eye1");
+	let pass_toggler = document.getElementById("toggle_password_visibility")
+	pass_toggler.addEventListener("click", (e) => {
+		let eye_icon = document.querySelector('#toggle_password_visibility i');
+		let pass_input = document.getElementById('password');
 
-    btn_eye1.addEventListener("click", e => {
-        eye_1 = document.getElementById("eye_1");
-        if (eye_1.classList.contains("fa-eye-slash")) {
-            eye_1.className = "fa-solid fa-eye";
-            document.getElementById("password").type = "text";
-        }
-        else {
-            eye_1.className = "fa fa-eye-slash";
-            document.getElementById("password").type = "password";
-        }
-    });
+		if (eye_icon.classList.contains('fa-eye')) {
+			eye_icon.classList.remove('fa-eye');
+			eye_icon.classList.add('fa-eye-slash');
+
+			pass_input.type = 'text';
+			eye_icon.parentElement.setAttribute('title', 'Ocultar contraseña');
+		}
+		else {
+			eye_icon.classList.add('fa-eye');
+			eye_icon.classList.remove('fa-eye-slash');
+			pass_input.type = 'password';
+			eye_icon.parentElement.setAttribute('title', 'Mostrar contraseña');
+		}
+	});
 </script>
 
 {% endblock %}

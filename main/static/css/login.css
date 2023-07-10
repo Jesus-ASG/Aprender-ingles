@@ -1,0 +1,102 @@
+/* Prevent eye from Edge*/
+input::-ms-reveal,
+input::-ms-clear {
+	display: none;
+}
+
+.auth-background {
+	width: 100%;
+	height: 100vh;
+	justify-content: center;
+	text-align: center;
+}
+
+.auth-form-container {
+	max-width: 500px;
+	background-color: #fff;
+	margin: auto;
+	margin-top: 2rem;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 20px;
+}
+
+.form-title {
+	font-size: 2rem;
+	text-align: center;
+	width: 100%;
+	font-weight: 400;
+	margin: 2rem 0;
+}
+
+.form-body {
+	margin: 0 2rem;
+	text-align: start;
+}
+
+.form-element {
+	margin: 1rem 0;
+}
+.form-element label {
+	margin-left: 0.9rem;
+	font-size: 0.9rem;
+}
+
+.form-element .input-text,
+.password-input {
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-radius: 20px;
+	box-shadow: unset;
+}
+.form-element .input-text:focus,
+.password-input:has(input:focus) {
+	border: 1px solid var(--f-orange);
+}
+
+/* Password input */
+.password-input {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.password-input input {
+	outline: none;
+	border: none;
+	width: 100%;
+}
+
+/* Submit button */
+.form-submit-btn {
+	width: 100%;
+	outline: none;
+	border: none;
+	background-color: var(--f-orange);
+	color: #fff;
+	border-radius: 20px;
+	padding: 0.5rem;
+	font-size: 1rem;
+	font-weight: 500;
+	transition: all 0.2s ease-in-out;
+}
+.form-submit-btn:hover {
+	background-color: var(--f-orange-active);
+}
+
+#toggle_password_visibility:hover {
+	cursor: pointer;
+}
+
+.text-footer {
+	margin-top: 2rem;
+	text-align: center;
+	font-size: 0.9rem;
+	color: rgba(0, 0, 0, 0.8);
+}
+
+.text-footer a {
+	text-decoration: underline;
+	color: var(--f-orange);
+	font-weight: 500;
+}
+.text-footer a:hover {
+	color: var(--f-orange-active);
+}
