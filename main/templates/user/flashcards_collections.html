@@ -194,6 +194,7 @@
 
 {% block page-scripts %}
 <script>
+	document.querySelector('.flashcards_link').classList.add('active');
 	function deleteCollection(collection_id) {
 
 		let url_delete_collection = "{% url 'del_flashcards_collection' 0 %}".replace('0', collection_id);

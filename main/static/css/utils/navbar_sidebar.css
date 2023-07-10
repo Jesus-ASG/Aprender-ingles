@@ -261,6 +261,14 @@
 	width: 100%;
 }
 
+.sidebar-item.active {
+	background-color: var(--bg-dark-nav-accent);
+}
+.sidebar-item.active .sidebar-link {
+	filter: grayscale(0%) opacity(1);
+	color: #fff;
+}
+
 .sidebar-link {
 	width: 100%;
 	display: flex;
@@ -302,6 +310,10 @@
 }
 .sidebar.open .sidebar-logo img {
 	opacity: 1;
+}
+
+.width0 {
+	width: 0;
 }
 
 @media only screen and (max-width: 500px) {

@@ -1,7 +1,7 @@
 {% load static %}
 {% load filters %}
 
-<div class="sidebar" {% if not request.user.is_authenticated %} style="display: none;" {% endif %} id="sidebar">
+<div {% if request.user.is_authenticated %} class="sidebar" {% else %} class="sidebar width0" {% endif %} id="sidebar">
   <ul class="sidebar-nav">
     <li class="sidebar-logo">
       <div class="sidebar-link">
@@ -11,20 +11,20 @@
         <span id="collapse_sidebar_button"><i class="fa-solid fa-angles-right"></i></span>
       </div>
     </li>
-
-    <li class="sidebar-item">
+    <li class="sidebar-item index_link">
       <a class="sidebar-link" href="{% url 'index' %}">
         <span class="sidebar-icon"><i class="fa-solid fa-house"></i></span>
         <span class="sidebar-link-text">Inicio</span>
       </a>
     </li>
-    <li class="sidebar-item">
+    {% if request.user.is_authenticated %}
+    <li class="sidebar-item stories_gallery_link">
       <a class="sidebar-link" href="{% url 'stories' %}">
         <span class="sidebar-icon"><i class="fa-solid fa-book-open"></i></span>
         <span class="sidebar-link-text">Galería</span>
       </a>
     </li>
-    <li class="sidebar-item">
+    <li class="sidebar-item flashcards_link">
       <a class="sidebar-link" href="{% url 'flashcards_collections' %}">
         <span class="sidebar-icon"><i class="fas fa-note-sticky"></i></span>
         <span class="sidebar-link-text">Flashcards</span>
@@ -34,13 +34,13 @@
     <li class="sidebar-separator"></li>
     <li class="sidebar-header"><span>Admin</span></li>
     {% if request.user.is_staff %}
-    <li class="sidebar-item">
+    <li class="sidebar-item admin_stories_link">
       <a class="sidebar-link" href="{% url 'admin_stories' %}">
         <span class="sidebar-icon"><i class="fa-solid fa-book"></i></span>
         <span class="sidebar-link-text">Historias</span>
       </a>
     </li>
-    <li class="sidebar-item">
+    <li class="sidebar-item admin_tags_link">
       <a class="sidebar-link" href="{% url 'tags' %}">
         <span class="sidebar-icon"><i class="fa-solid fa-tags"></i></span>
         <span class="sidebar-link-text">Etiquetas</span>
@@ -48,19 +48,30 @@
     </li>
     {% endif %}
     {% if request.user.is_superuser %}
-    <li class="sidebar-item">
+    <li class="sidebar-item admin_users_link">
       <a class="sidebar-link" href="{% url 'management_users' %}">
         <span class="sidebar-icon"><i class="fa-solid fa-users-gear"></i></span>
         <span class="sidebar-link-text">Usuarios</span>
       </a>
     </li>
-    <li class="sidebar-item">
+    <li class="sidebar-item admin_recommenders_link">
       <a class="sidebar-link" href="{% url 'recommenders' %}">
         <span class="sidebar-icon"><i class="fa-solid fa-comments"></i></span>
         <span class="sidebar-link-text">Recomendadores</span>
       </a>
     </li>
     {% endif %}
+    {% endif %}
+    {% else %} <!-- if user is not authenticated -->
+    <li class="sidebar-item">
+      <a href="{% url 'login' %}" class="btn hover-scale fw-bold hover-orange" style="border-radius: 20px;
+        background-color: #fafa14; margin:1rem 0; width:100%">Iniciar sesión</a>
+    </li>
+
+    <li class="sidebar-item">
+      <a href="{% url 'register' %}" class="btn hover-scale fw-bold hover-orange" style="border-radius: 20px;
+      background-color: #fdfda4; margin:1rem 0; width:100%">Registrarse</a>
+    </li>
     {% endif %}
   </ul>
 

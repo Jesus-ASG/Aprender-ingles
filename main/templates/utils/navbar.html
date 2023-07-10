@@ -1,21 +1,22 @@
 {% load static %}
 {% load filters %}
 
+{% if request.user.is_authenticated %}
 <nav class="top-navbar">
 	<ul class="top-navbar-nav">
+		<!-- Toggler -->
 		<li class="top-nav-item nav-menu" id="navbar_toggle_button">
 			<span class="top-nav-icon"><i class="fa-solid fa-bars"></i></span>
 		</li>
 		<!-- LOGO -->
 		<li class="top-nav-logo">
-			<a class="index_link" href="{% url 'index' %}">
+			<a class="" href="{% url 'index' %}">
 				<img src="{% static 'img/sq_logos/sq_full_white.png' %}" alt="sq_logo.png">
 			</a>
 		</li>
 		<!-- END OF LOGO-->
 
 		<!-- LINKS -->
-		{% if request.user.is_authenticated %}
 		<!-- RIGHT -->
 		<li class="top-nav-item" style="margin-right: auto;"></li>
 		<li class="">
@@ -100,20 +101,48 @@
 
 			</ul>
 		</li>
-		{% else %}
-		<ul class="right-buttons">
-			<li class="top-nav-item">
-				<a href="{% url 'login' %}" class="btn hover-scale fw-bold hover-orange" style="border-radius: 20px;
-					background-color: #fafa14;">Iniciar sesión</a>
-			</li>
-
-			<li class="top-nav-item">
-				<a href="{% url 'register' %}" class="btn hover-scale fw-bold hover-orange" style="border-radius: 20px;
-				background-color: #fdfda4;">Registrarse</a>
-			</li>
-
-		</ul>
-		{% endif %}
 
 	</ul>
 </nav>
+{% else %}
+<div id="navbar_toggle_button" class="d-none"></div>
+<!-- Navbar-->
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark" style="position: sticky; top:0; z-index: 9999;">
+	<div class="container-fluid">
+		<button class="btn navbar-toggler" type="button"
+			style="box-shadow: none; outline:none; border:none; margin:0; padding: 0;" data-bs-toggle="collapse"
+			data-bs-target="#navbarCollapse" aria-controls="navbarTogglerDemo01">
+			<!-- Toggler -->
+			<li class="top-nav-item nav-menu">
+				<span class="top-nav-icon"><i class="fa-solid fa-bars"></i></span>
+			</li>
+		</button>
+
+		<ul class="navbar-nav flex-row d-md-flex" style="margin-left: 1rem; margin-right: auto;">
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'index' %}">
+					<img src="{% static 'img/sq_logos/sq_full_white.png' %}" width="150px" alt="sq_logo.png" class="logo-nav-bar">
+				</a>
+			</li>
+		</ul>
+
+
+		<div class="collapse navbar-collapse" id="navbarCollapse">
+			<ul class="navbar-nav mb-2 me-auto mb-lg-0 fs-5 text-center"></ul>
+
+			<ul class="navbar-nav text-center">
+				<li class="d-inline-block m-1">
+					<a href="{% url 'login' %}" class="btn hover-scale fw-bold hover-orange" style="border-radius: 20px;
+					background-color: #fafa14;">Iniciar sesión</a>
+				</li>
+
+				<li class="d-inline-block m-1">
+					<a href="{% url 'register' %}" class="btn hover-scale fw-bold hover-orange" style="border-radius: 20px;
+					background-color: #fdfda4;">Registrarse</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+{% endif %}
