@@ -32,6 +32,9 @@
 
 	--bg-xp-light: var(--light-blue);
 	--bg-xp-strong: var(--light-blue-active);
+
+	--bg-dark-nav: #23232e;
+	--bg-dark-nav-accent: #1c1c1c;
 }
 
 ::selection {

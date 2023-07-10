@@ -28,7 +28,7 @@
 	<link rel="stylesheet" href="{% static 'css/utils/reset_stylesheet.css' %}" type="text/css">
 	<link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css">
 	<link rel="stylesheet" href="{% static 'css/flip_text.css' %}" type="text/css">
-	<link rel="stylesheet" href="{% static 'css/utils/nabvar.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'css/utils/navbar_sidebar.css' %}" type="text/css">
 	<link rel="stylesheet" href="{% static 'css/utils/arrows.css' %}">
 
 	<!-- Page styles-->
@@ -37,39 +37,41 @@
 </head>
 
 <body>
+	{% include 'utils/sidebar.html' %}
+	<main {% if request.user.is_authenticated %} style="margin-left: 5rem;" {% endif %}>
+		<div style="min-height: 100vh; position: relative; padding-bottom: 2rem;">
+			{% include 'utils/navbar.html' %}
 
-	<div style="min-height: 100vh; position: relative; padding-bottom: 2rem;">
-		{% include 'utils/navbar.html' %}
+			{% block content %} {% endblock %}
+		</div>
 
-		{% block content %} {% endblock %}
-	</div>
-
-	<!-- FOOTER -->
-	<div class="footer-container">
-		<footer class="bg-dark text-center text-white footer-custom-properties">
-			<div class="container">
-				<h2 class="">Contact</h2>
-				<div class="contact-links">
-					<a class="footer-icon me-3 fs-5" href="https://github.com/Jesus-ASG" target="_blank" role="button">
-						<span><i class="fa-brands fa-github fa-lg"></i></span>
-					</a>
-					<a class="footer-icon me-3 fs-5" href="#/" role="button">
-						<span><i class="fa-brands fa-instagram fa-lg"></i></span>
-					</a>
-					<a class="footer-icon me-3 fs-5" href="#/" role="button">
-						<span><i class="fa-brands fa-facebook fa-lg"></i></span>
-					</a>
-					<a class="footer-icon me-3 fs-5" href="#/" role="button">
-						<span><i class="fa-brands fa-twitter fa-lg"></i></span>
-					</a>
+		<!-- FOOTER -->
+		<div class="footer-container">
+			<footer class="bg-dark text-center text-white footer-custom-properties">
+				<div class="container">
+					<h2 class="">Contact</h2>
+					<div class="contact-links">
+						<a class="footer-icon me-3 fs-5" href="https://github.com/Jesus-ASG" target="_blank" role="button">
+							<span><i class="fa-brands fa-github fa-lg"></i></span>
+						</a>
+						<a class="footer-icon me-3 fs-5" href="#/" role="button">
+							<span><i class="fa-brands fa-instagram fa-lg"></i></span>
+						</a>
+						<a class="footer-icon me-3 fs-5" href="#/" role="button">
+							<span><i class="fa-brands fa-facebook fa-lg"></i></span>
+						</a>
+						<a class="footer-icon me-3 fs-5" href="#/" role="button">
+							<span><i class="fa-brands fa-twitter fa-lg"></i></span>
+						</a>
+					</div>
 				</div>
-			</div>
-			<!-- Grid container -->
-			<div class="author">
-				© Jesús A. Serrano Graciano 2023
-			</div>
-		</footer>
-	</div>
+				<!-- Grid container -->
+				<div class="author">
+					© Jesús A. Serrano Graciano 2023
+				</div>
+			</footer>
+		</div>
+	</main>
 
 	<script src="{% static 'resources/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js' %}"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -78,6 +80,28 @@
 	<script src="{% static 'js/flip_text.js' %}"></script>
 	<script src="{% static 'js/flip_text_dom.js' %}"></script>
 	<script>
+		let nav_toggler = document.getElementById('navbar_toggle_button');
+		nav_toggler.addEventListener('click', (e) => {
+			let sidebar = document.getElementById('sidebar');
+			sidebar.classList.add('open');
+		});
+		let sidebar = document.getElementById('sidebar');
+		sidebar.addEventListener('mouseenter', (e) => {
+			e.target.classList.add('open');
+		});
+		sidebar.addEventListener('mouseleave', (e) => {
+			e.target.classList.remove('open');
+		});
+
+		let sidebar_logo = document.querySelector('.sidebar-logo');
+		sidebar_logo.addEventListener('click', (e) => {
+			let sidebar = document.getElementById('sidebar');
+			if (sidebar.classList.contains('open'))
+				sidebar.classList.remove('open');
+			else
+				sidebar.classList.add('open');
+		});
+
 
 		let db_user_xp = "{{ request.user.profile.xp }}";
 		let db_progress_xp = "{{ request.user.profile.level }}";
