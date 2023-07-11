@@ -5,129 +5,94 @@
 {% block title %} Crea una cuenta {% endblock %}
 
 {% block page-styles %}
-<style>
-    .main-form-container {
-        display: block;
-        width: 400px;
-        text-align: left;
-        margin: auto;
-        margin-top: 30px;
-        background-color: #fff;
-        border-radius: 10px;
-    }
-
-    .main-form-container a {
-        text-decoration: none;
-    }
-
-    .pass input {
-        outline: none;
-        border: none;
-        width: 90%;
-    }
-
-    .pass span {
-        background-color: #fff;
-        border: none;
-        text-align: right;
-        display: inline-block;
-    }
-
-    .pass span:hover {
-        cursor: pointer;
-    }
-
-    .error-pass {
-        font-weight: bold;
-        color: red;
-    }
-</style>
-
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
 {% endblock %}
 
 {% block content %}
-<!-- REGISTER FORM -->
+<div class="auth-background">
+	<div class="auth-form-container">
 
-<div class="row main-form-container">
-    <div class="mt-4 mb-2 center">
-        <h2>Crea una cuenta</h2>
-    </div>
+		<form class="form-body" autocomplete="off" method="post">
+			{% csrf_token %}
 
-    <div class="px-5">
-        <form id="form_login" autocomplete="off" method="POST">
-            {% csrf_token %}
+			<h1 class="form-title">Registrarse</h1>
 
-            <div>
-                <div class="mb-2 mt-2">
-                    <label for="username" class="mb-1">Nombre de usuario</label>
-                    <input name="username" class="form-control" type="text" placeholder="Nombre de usuario" required>
-                </div>
-                <div class="mb-2 mt-2">
-                    <label for="email" class="mb-1">Correo electrónico</label>
-                    <input name="email" class="form-control" type="email" placeholder="correo@mail.com" required>
-                </div>
-                <div class="mb-2">
-                    <label for="password1" class="mb-1">Contraseña</label>
-                    <div class="form-control pass">
-                        <input name="password1" class="" type="password" placeholder="Contraseña" id="password1"
-                            required>
-                        <span id="btn_eye1">
-                            <i class="fa fa-eye-slash" id="eye_1"></i>
-                            <!--<i class="fa-solid fa-eye"></i>-->
-                        </span>
-                    </div>
-                </div>
+			<div class="form-element">
+				<label for="username">Nombre de usuario</label>
+				<input id="username" name="username" type="text" class="form-control input-text" style=""
+					placeholder="Nombre de usuario" required>
+			</div>
 
-                <div class="mb-2">
-                    <label for="password2" class="mb-1">Confirmar contraseña</label>
-                    <div class="form-control pass">
-                        <input name="password2" class="" type="password" placeholder="Confirmar contraseña"
-                            id="password2" required>
-                        <span id="btn_eye2">
-                            <i class="fa fa-eye-slash" id="eye_2"></i>
-                            <!--<i class="fa-solid fa-eye"></i>-->
-                        </span>
-                    </div>
-                </div>
+			<div class="form-element">
+				<label for="email">Correo electrónico</label>
+				<input id="email" name="email" type="email" class="form-control input-text" style=""
+					placeholder="correo@email.com" required>
+			</div>
 
-                <div class="mb-2" id="mensajes_pass" hidden>
-                    <div id="form_message">
-                        <div class="alert alert-warning">
-                            <ul>
-                                <li id="match">Las contraseñas no coinciden</li>
-                                <li id="num_y_letra">La contraseña debe incluir al menos un número y una letra</li>
-                                <li id="longitud">La contraseña debe tener al menos 8 carácteres</li>
-                                <li id="no12345678">La contraseña no debe ser 12345678</li>
-                            </ul>
+			<div class="form-element">
+				<label for="password1" class="mb-1">Contraseña</label>
+				<div class="form-control password-input">
+					<input id="password1" name="password1" class="password" type="password" placeholder="Contraseña" required>
+					<span id="toggle_password_visibility" class="toggle_password_visibility" title="Mostrar contraseña"><i
+							class="fa fa-eye"></i></span>
+				</div>
+			</div>
 
+			<div class="form-element">
+				<label for="password2" class="mb-1">Repetir contraseña</label>
+				<div class="form-control password-input">
+					<input id="password2" name="password2" class="password" type="password" placeholder="Repetir contraseña"
+						required>
+					<span id="toggle_password_visibility" class="toggle_password_visibility" title="Mostrar contraseña"><i
+							class="fa fa-eye"></i></span>
+				</div>
+			</div>
 
-                        </div>
-                    </div>
-                </div>
+			<div class="form-element">
+				<button type="submit" class="form-submit-btn">Registrarse</button>
+			</div>
 
-                <div class="mb-2">
-                    <div id="form_message">
-                        {% if state == '1' %}
-                        <div class="alert alert-success">
-                            Registro exitoso
-                        </div>
-                        {% else %}
-                        {% endif %}
-                    </div>
-                </div>
-                <hr>
-            </div>
-            <div class="center">
-                <button type="submit" class="btn btn-primary" id="btn_registrarse" disabled>Registrarse</button>
-            </div>
-        </form>
-        <hr>
-        <p>¿Ya tiene una cuenta? <a href="{% url 'login' %}" id="sign_in" class="text-primary">Iniciar sesión</a></p>
-        <br>
-    </div>
+			<div class="form-element">
+				<p class="text-footer">¿Ya tienes una? <a href="{% url 'login' %}">Iniciar sesión</a></p>
+			</div>
+
+		</form>
+	</div>
 </div>
+{% endblock %}
+{% block page-scripts %}
+<script>
+	// Show or hide passwords
+	let pass_togglers = document.querySelectorAll('.toggle_password_visibility');
 
+	pass_togglers.forEach(pass_toggler => {
+		pass_toggler.addEventListener("click", (e) => {
+			let eye_icons = document.querySelectorAll('.toggle_password_visibility i');
+			let pass_inputs = document.querySelectorAll('.password');
 
-<script src="{% static 'js/register.js' %}"></script>
+			eye_icons.forEach(eye_icon => {
+				if (eye_icon.classList.contains('fa-eye')) {
+					eye_icon.classList.remove('fa-eye');
+					eye_icon.classList.add('fa-eye-slash');
 
+					eye_icon.parentElement.setAttribute('title', 'Ocultar contraseña');
+
+					pass_inputs.forEach(pass_input => {
+						pass_input.type = 'text';
+					});
+				}
+				else {
+					eye_icon.classList.add('fa-eye');
+					eye_icon.classList.remove('fa-eye-slash');
+					eye_icon.parentElement.setAttribute('title', 'Mostrar contraseña');
+					pass_inputs.forEach(pass_input => {
+						pass_input.type = 'password';
+					});
+				}
+
+			});
+
+		});
+	});
+</script>
 {% endblock %}
