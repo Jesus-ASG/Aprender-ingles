@@ -46,6 +46,13 @@
         <span class="sidebar-link-text">Etiquetas</span>
       </a>
     </li>
+
+    <li class="sidebar-item admin_reports_link">
+      <a class="sidebar-link" href="{% url 'reports' %}">
+        <span class="sidebar-icon"><i class="fa-solid fa-flag"></i></span>
+        <span class="sidebar-link-text">Reportes</span>
+      </a>
+    </li>
     {% endif %}
     {% if request.user.is_superuser %}
     <li class="sidebar-item admin_users_link">
@@ -56,7 +63,7 @@
     </li>
     <li class="sidebar-item admin_recommenders_link">
       <a class="sidebar-link" href="{% url 'recommenders' %}">
-        <span class="sidebar-icon"><i class="fa-solid fa-comments"></i></span>
+        <span class="sidebar-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
         <span class="sidebar-link-text">Recomendadores</span>
       </a>
     </li>

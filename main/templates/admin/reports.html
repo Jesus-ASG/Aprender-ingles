@@ -1,0 +1,55 @@
+{% extends 'main_template.html' %}
+{% load static %}
+{% load filters %}
+
+{% block title %} Reports {% endblock %}
+
+{% block page-styles %}
+<link rel="stylesheet" href="{% static 'css/admin/index_admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="alert alert-success alert-dismissible fade alert-fixed" role="alert">
+	<div style="text-align: center;">
+		<strong></strong>
+	</div>
+	<button type="button" class="btn-close" onclick="this.parentElement.classList.remove('show');"></button>
+</div>
+
+<div class="m-auto main-content-large">
+	<div class="row mt-3">
+		<div class="col-12 page-title-container">
+			<h1 class="fs-2">Reportes</h1>
+		</div>
+	</div>
+	<div class="col-12 text-center">
+		<div class="card-body table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th class="fs-5 fw-bold">Estado</th>
+						<th class="fs-5 fw-bold">Historia</th>
+						<th class="fs-5 fw-bold">Descripción</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					{% for r in reports %}
+					<tr>
+						<td>{{ r.status|upper }}</td>
+						<td>{{ r.story.title1 }}</td>
+						<td>{{ r.description }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block page-scripts %}
+<script>
+	document.querySelector('.admin_reports_link').classList.add('active');
+</script>
+{% endblock %}

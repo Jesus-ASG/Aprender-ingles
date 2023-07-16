@@ -15,15 +15,15 @@ def is_staff(user):
 def send_report(request):
     if request.method == 'POST':
         key = f'user_request_reports_{request.user.id}'
-        rate_limit = 1 ##############################################
+        rate_limit = 1000 ##############################################
         rate_limit_time = 30
 
         num_requests = cache.get(key, 0)
-        if num_requests > rate_limit:
+        if num_requests >= rate_limit:
             response = {
                 'success': True, 
-                'message': 'Rate limit exceeded.',
-                'message_t': 'Debe esperar antes de enviar otro reporte.'
+                'message': 'Please, wait before send another report.',
+                'message_t': 'Por favor, espere antes de enviar otro reporte.'
             }
             return JsonResponse(response)
         cache.set(key, num_requests + 1, rate_limit_time)

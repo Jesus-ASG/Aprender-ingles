@@ -5,12 +5,12 @@ from rest_framework.renderers import JSONRenderer
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q, Subquery, OuterRef, Max
 from django.http import HttpResponseNotFound, JsonResponse
 
-from main.models import Story, Tag, UserProfile, Score
+from main.models import Story, StoryReport, Tag, UserProfile, Score
 from main.models import RepeatPhrase, Spellcheck, MultipleChoiceQuestion
 from main.forms import SelectDefaultImageForm, ScoreForm, UserAnswer
 
@@ -22,6 +22,10 @@ from main.utils.evaluate_story import rateSkills, evaluateAnswers, map_answers
 from main.utils.paginate_and_filter import paginate_stories
 
 from main.serializers import MultipleChoiceQuestionSerializer, PageSerializer
+
+
+def is_staff(user):
+    return user.is_staff
 
 
 def not_found_page(request, exception):
@@ -408,3 +412,16 @@ def pageDisplayer(request, route, page_number):
             response['results'] = results
             
         return JsonResponse(response)
+
+
+@login_required(login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
+def reports(request):
+    if request.method == 'GET':
+        reports = StoryReport.objects.all()
+
+        context = {
+            'reports': reports
+        }
+
+        return render(request, 'admin/reports.html', context)

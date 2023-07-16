@@ -13,6 +13,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('profile/', views.profile, name='profile'),
     path('stories/', views.storiesGallery, name="stories"),
+    path('reports/', views.reports, name="reports"),
     path('story/<slug:route>/', views.storyInfo, name = 'story_info'),
     path('story/<slug:route>/<int:page_number>/', views.pageDisplayer, name='story_content'),
     
@@ -68,6 +69,7 @@ urlpatterns = [
     path('api/exercise/request_answer/', exercise_apis.request_answer, name="request_exercise_answer"),
 
     path('api/report_story/', report_api.send_report, name="send_story_report"),
+
 
     path('register', auth_views.register, name='register'),
 
