@@ -435,3 +435,27 @@ class UBRSettings(models.Model):
     def __str__(self) -> str:
         return 'Timeout: {}'.format(self.timeout)
 
+
+
+# Reports
+class StoryReport(models.Model):
+    class Meta:
+        db_table = prefix + 'story_report'
+
+    story = models.ForeignKey(Story, on_delete=models.CASCADE, related_name='reports')
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='reports', null=True)
+
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    description = models.CharField(max_length=2550, blank=True, default='')
+
+    STATUS_CHOICES = (
+        ('unread', 'Unread'),
+        ('read', 'Read'),
+        ('in_progress', 'In Progress'),
+        ('fixed', 'Fixed'),
+    )
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='unread')
+
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    fixed_at = models.DateTimeField(null=True)
+

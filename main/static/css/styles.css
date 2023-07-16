@@ -35,6 +35,8 @@
 
 	--bg-dark-nav: #23232e;
 	--bg-dark-nav-accent: #1c1c1c;
+
+	--transition-fast-time: 0.2s;
 }
 
 ::selection {

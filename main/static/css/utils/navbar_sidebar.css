@@ -174,7 +174,7 @@
 	width: 5rem;
 	height: 100vh;
 	background-color: var(--bg-dark-nav);
-	z-index: 9999;
+	z-index: 999;
 	transition: width 600ms ease;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -316,6 +316,15 @@
 	width: 0;
 }
 
+/* Others elements */
+.alert-fixed {
+	position: fixed;
+	right: 1rem;
+	top: 10%;
+	z-index: 100;
+	margin-left: 6rem;
+}
+
 @media only screen and (max-width: 500px) {
 	#navbar_toggle_button {
 		display: inline-block;
@@ -328,6 +337,11 @@
 	}
 	main {
 		margin-left: 0 !important;
+	}
+
+	/* Others elements */
+	.alert-fixed {
+		margin-left: 1rem;
 	}
 }
 

@@ -2,7 +2,7 @@ from django.urls import path
 from main.views.admin import pages, tags, stories, recommenders
 from main.views.admin import users_management as um
 from main.views.user import flashcard_collection, flashcards, user_apis, exercise_apis
-from main.views import views, auth_views
+from main.views import views, auth_views, report_api
 
 # para cargar imagenes
 from django.conf import settings
@@ -66,6 +66,8 @@ urlpatterns = [
 
     
     path('api/exercise/request_answer/', exercise_apis.request_answer, name="request_exercise_answer"),
+
+    path('api/report_story/', report_api.send_report, name="send_story_report"),
 
     path('register', auth_views.register, name='register'),
 

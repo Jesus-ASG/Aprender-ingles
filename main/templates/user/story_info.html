@@ -10,6 +10,14 @@
 {% endblock %}
 
 {% block content %}
+<div class="alert alert-success alert-dismissible fade alert-fixed" role="alert">
+	<div style="text-align: center;">
+		<strong></strong>
+	</div>
+	<button type="button" class="btn-close" onclick="this.parentElement.classList.remove('show');"></button>
+</div>
+
+
 <div class="container main-content">
 
 	<div class="row mt-3">
@@ -33,19 +41,24 @@
 
 	<div class="row mt-3">
 		<div class="col-12 col-md-6 text-center mt-3">
-			<img class="info-img p-1" src="{{ story.cover.url }}" alt="{{ story.cover }}">
+			<img class="info-img" src="{{ story.cover.url }}" alt="{{ story.cover }}">
 			<div class="row my-1">
-				<div class="col-12 text-center">
-					<span class="fs-4 fw-bold hover-scale" style="color: #ff2126" id="like_counter_btn">
-						<i class="fa-heart"></i>
-					</span>
-					<p class="fs-5 d-inline-block" id="like_counter_lbl">1200</p>
-				</div>
-				<div class="col-12 text-center">
-					<span class="fs-4 fw-bold hover-scale" style="color:#5cffab;" id="save_story_btn">
-						<i class="fa-bookmark"></i>
-					</span>
-					<p class="fs-5 d-inline-block" id="save_story_lbl"></p>
+				<div class="col-12 story-buttons">
+
+					<div class="story-button">
+						<span class="fs-4 fw-bold hover-scale" style="color: #ff2126" id="like_counter_btn">
+							<i class="fa-heart"></i>
+						</span>
+						<p class="fs-5 d-inline-block" id="like_counter_lbl">1200</p>
+					</div>
+
+					<div class="story-button">
+						<span class="fs-4 fw-bold hover-scale" style="color:#5cffab;" id="save_story_btn">
+							<i class="fa-bookmark"></i>
+						</span>
+						<p class="fs-5 d-inline-block" id="save_story_lbl"></p>
+					</div>
+
 				</div>
 			</div>
 		</div>
@@ -139,6 +152,49 @@
 	<div class="row my-3"></div>
 </div>
 
+<div class="container main-content">
+	<div class="row">
+		<div class="col-12 text-center">
+
+			<!-- Exit button -->
+			<div type="button" class="btn report-button hover-scale" title="Reportar" data-bs-toggle="modal"
+				data-bs-target="#report_modal">
+				Reportar historia <span class="" style=""><i class="fa-solid fa-flag"></i></span>
+			</div>
+
+			<div class="modal fade" id="report_modal" tabindex="-1" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title  col-11 text-center">¿Cómo podemos ayudarlo?</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+						</div>
+						<div class="modal-body">
+							<form id="report_form">
+								<div class="">
+									<label for="report_description" class="form-label">Por favor especifique el problema</label>
+									<textarea id="report_description" class="form-control" rows="5" name="description"
+										placeholder="Imágenes no se visualizan, no se reproducen audios, videos, fallas de traducción"></textarea>
+								</div>
+							</form>
+
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Cancelar</button>
+							<p type="button" class="btn fw-bold" style="background-color: var(--f-orange); color: #fff;"
+								onclick="sendReport()" data-bs-dismiss="modal">
+								Enviar</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End of exit button -->
+
+
+		</div>
+	</div>
+</div>
+
 
 {% if not recommendations_list|length == 0 %}
 <!-- Content based recommender -->
@@ -226,6 +282,44 @@
 
 	let score_bar_dom = document.querySelector('#score_circle_progress .basic-progress-level');
 	progressAnimation(score_bar_dom, db_best_score);
+
+</script>
+
+<script>
+	// For send reports
+	const REPORT_URL = '{% url "send_story_report" %}';
+	let report_sent = false;
+
+	function sendReport() {
+
+		let report_form = document.forms['report_form'];
+		let reportData = {
+			'story_id': db_story_id,
+			'description': report_form['description'].value
+		}
+
+		const csrftoken = getCookie('csrftoken');
+		$.ajax({
+			type: "POST",
+			url: REPORT_URL,
+			data: reportData,
+			headers: { "X-CSRFToken": csrftoken },
+			success: function (response) {
+				if (response.success) {
+					let alert_success = document.querySelector('.alert-success');
+					alert_success.querySelector('strong').innerText = response.message_t;
+					alert_success.classList.add('show');
+				}
+
+			},
+			error: function (response) {
+				//console.error(response);
+			}
+		});
+
+	}
+
+
 
 </script>
 

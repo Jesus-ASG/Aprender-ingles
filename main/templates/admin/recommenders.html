@@ -13,7 +13,7 @@
 	<div style="text-align: center;">
 		<strong></strong>
 	</div>
-	<button type="button" class="btn-close" onclick="closeAlert()"></button>
+	<button type="button" class="btn-close" onclick="this.parentElement.classList.remove('show');"></button>
 </div>
 
 <div class="container main-content">
@@ -200,11 +200,6 @@
 				//console.log(response);
 			}
 		});
-	}
-
-	function closeAlert() {
-		let alert_success = document.querySelector('.alert-success');
-		alert_success.classList.remove('show');
 	}
 </script>
 {% endblock %}
