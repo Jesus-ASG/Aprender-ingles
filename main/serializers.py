@@ -80,3 +80,12 @@ class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = model.Page
         fields = '__all__'
+
+
+
+# Report
+class StoryReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = model.StoryReport
+        fields = '__all__'
+

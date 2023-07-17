@@ -73,3 +73,22 @@ function hasContent(object) {
 		return (Object.keys(object).length > 0)
 	} catch (e) { return false; }
 }
+
+
+/* Handle notifications */
+reportNotificationsSocket = new WebSocket(`ws://${window.location.host}/ws/report-notifications/`);
+
+reportNotificationsSocket.onmessage = function (e) {
+	let reports_number_html = document.querySelector('#sidebar_report_icon_container .notification-pill-container p');
+
+	let reports_number = reports_number_html.innerText || 0;
+	if (!reports_number.includes('+')) {
+		if (reports_number == 0) {
+			reports_number_html.parentElement.classList.remove('d-none');
+		}
+		if (reports_number == 99)
+			reports_number_html.innerHTML = reports_number + '+';
+		else
+			reports_number_html.innerHTML = parseInt(reports_number) + 1;
+	}
+}

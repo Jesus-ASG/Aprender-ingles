@@ -41,3 +41,13 @@ def page_type_to_str(x):
             return "Video y ejercicios"
         case 3:
             return "Diseño libre"
+        
+
+@register.filter
+def count_max(x, max_number = 100):
+    x = int(x)
+    max_number = int(max_number)
+    if x >= max_number:
+        max_number = max_number - 1
+        x = f'{max_number}+'
+    return x

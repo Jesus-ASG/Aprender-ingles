@@ -49,7 +49,12 @@
 
     <li class="sidebar-item admin_reports_link">
       <a class="sidebar-link" href="{% url 'reports' %}">
-        <span class="sidebar-icon"><i class="fa-solid fa-flag"></i></span>
+        <span class="sidebar-icon" id="sidebar_report_icon_container">
+          <i class="fa-solid fa-flag"></i>
+          <div class="notification-pill-container {% if reports_unread_number == 0 %} d-none {% endif %}">
+            <p>{{ reports_unread_number |count_max }}</p>
+          </div>
+        </span>
         <span class="sidebar-link-text">Reportes</span>
       </a>
     </li>

@@ -24,7 +24,7 @@
 	</div>
 	<div class="col-12 text-center">
 		<div class="card-body table-responsive">
-			<table class="table">
+			<table class="table" id="reports_table">
 				<thead>
 					<tr>
 						<th class="fs-5 fw-bold">Estado</th>
@@ -52,4 +52,5 @@
 <script>
 	document.querySelector('.admin_reports_link').classList.add('active');
 </script>
+<script src="{% static 'js/reports.js' %}"></script>
 {% endblock %}

@@ -20,7 +20,8 @@ jesus@mail.com
 
 pip libraries
 django, django rest framework, pymysql, pillow, django-cleanup, pymemcache
-pandas numpy scikit-learn
+Recommenders: pandas numpy scikit-learn
+Real time: channels_redis #python3 -m pip install channels_redis
 start memcached:
 -m: memory in megabytes
 -p: port
@@ -32,6 +33,10 @@ stop memcached:
     $ ps aux | grep memcached
   kill process
     $ kill number
+
+
+Redis for real time
+docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest
 
 resources/
   bootstrap 5
