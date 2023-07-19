@@ -1,6 +1,9 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
+from django.template import loader
+
+from main.models import StoryReport
 
 
 class ReportNotificationsConsumer(WebsocketConsumer):
@@ -20,9 +23,15 @@ class ReportNotificationsConsumer(WebsocketConsumer):
 	
 	def report_created(self, event):
 		username = self.scope["user"]
-
+		
 		if username.is_staff or username.is_superuser:
-			self.send(text_data=event['content'])
+			template = loader.get_template('parts/reports_table.html').render(
+				context={
+					'reports': StoryReport.objects.filter(pk=int(event['content'])),
+	     			'new_report': True
+				}
+			)
+			self.send(text_data=template)
 
     # def receive(self, text_data):
     #     text_data_json = json.loads(text_data)

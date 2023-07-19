@@ -1,0 +1,51 @@
+.flashcard-menu-button {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0);
+	border: none;
+}
+.flashcard-menu-button i {
+	font-size: 1rem;
+	color: rgb(98, 98, 98);
+}
+
+.flashcard-menu-button:hover {
+	background-color: rgba(0, 0, 0, 0.25);
+}
+.flashcard-menu-button:hover i {
+	color: #fff;
+}
+.flashcard-menu-button:focus {
+	box-shadow: none;
+	outline: none;
+	background-color: rgba(0, 0, 0, 0.25);
+}
+.flashcard-menu-button:focus i {
+	color: #fff;
+}
+
+.flashcard-menu {
+	list-style: none;
+}
+
+.flashcard-menu li button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+.flashcard-menu li button:hover {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.flashcard-menu li button span {
+	font-size: 0.9rem;
+	margin-right: 8px;
+}
+.flashcard-menu li button p {
+	font-size: 0.9rem;
+}

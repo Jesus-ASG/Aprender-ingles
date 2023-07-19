@@ -82,9 +82,15 @@ class PageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class StorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = model.Story
+        fields = '__all__'
+
 
 # Report
 class StoryReportSerializer(serializers.ModelSerializer):
+    story = StorySerializer(many=False)
     class Meta:
         model = model.StoryReport
         fields = '__all__'

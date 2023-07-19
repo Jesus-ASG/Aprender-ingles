@@ -1,0 +1,159 @@
+/* Styles for tools to the right */
+.update-button {
+	position: absolute;
+	left: 1rem;
+	top: 50%;
+	transform: translateY(-50%);
+
+	font-size: 1rem;
+	color: var(--f-orange);
+}
+.update-button:hover {
+	color: var(--f-orange-active);
+	cursor: pointer;
+}
+
+/* Styles for tools to the right */
+.dropdown-right-position {
+	position: absolute;
+	right: 1rem;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+/* Grid for place nav tabs to left and table right */
+.reports-grid {
+	display: grid;
+	grid-template-columns: 150px 1fr;
+	grid-gap: 10px;
+	background-color: #fff;
+	color: #444;
+	margin: 0 1rem;
+}
+
+@media only screen and (max-width: 620px) {
+	.reports-grid {
+		display: inline;
+	}
+
+	.report-tab-nav {
+		flex-direction: row !important;
+		width: 100%;
+		justify-content: center;
+	}
+	.report-tab-nav .tab-item {
+		border-radius: 50% !important;
+		width: 3rem;
+		height: 3rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.report-tab-nav .text {
+		display: none;
+	}
+}
+
+/**/
+/* Styles for tabs*/
+.report-tab-nav {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
+}
+
+.report-tab-nav .icon {
+	color: var(--f-orange);
+	margin: 0 0.5rem;
+}
+
+.report-tab-nav .tab-item {
+	font-weight: 500;
+	padding: 0.5rem 0.5rem;
+	margin: 0;
+	margin-bottom: 0.5rem;
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
+}
+.tab-item:hover {
+	cursor: pointer;
+}
+
+.tab-item.active,
+.tab-item:hover {
+	background: var(--f-orange);
+	color: #fff;
+	transition: background-color 0.2s linear;
+}
+.tab-item.active .icon,
+.tab-item:hover .icon {
+	color: #fff;
+}
+/**/
+
+/* Styles for table  */
+.report-table {
+	border: 1px solid red;
+	border-radius: 20px;
+}
+
+.report-table .cell-header {
+	position: relative;
+	font-weight: 400;
+	font-size: 1.5rem;
+	text-align: center;
+}
+
+.report-table #reports_table_body td {
+	font-size: 1rem;
+}
+
+.report-story-title-sm {
+	display: none;
+}
+
+@media only screen and (max-width: 620px) {
+	.report-table .cell-header {
+		font-size: 1.4rem;
+	}
+	.report-story-title-lg {
+		width: 0;
+		display: none;
+	}
+	.report-story-title-sm {
+		display: block;
+	}
+}
+
+.report-row:hover {
+	cursor: pointer;
+	box-shadow: rgba(33, 35, 38, 0.3) 0px 10px 10px -10px;
+}
+.report-row .check-icon {
+	width: 1rem;
+	height: 1rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid var(--f-orange);
+	font-size: 0.7rem;
+	color: rgba(255, 255, 255, 0);
+
+	border-radius: 2px;
+	transition: all 0.2s ease-in-out;
+}
+
+.check-icon:hover,
+.report-row.active .check-icon {
+	color: #fff;
+	background-color: var(--f-orange-active);
+	border: 1px solid var(--f-orange-active);
+}
+
+.report-unread {
+	font-weight: 500;
+}
+.report-read {
+	color: rgba(0, 0, 0, 0.7);
+}

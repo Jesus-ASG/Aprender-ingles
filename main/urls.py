@@ -14,6 +14,7 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('stories/', views.storiesGallery, name="stories"),
     path('reports/', views.reports, name="reports"),
+    path('api/reports/', report_api.get_reports, name="get_reports"),
     path('story/<slug:route>/', views.storyInfo, name = 'story_info'),
     path('story/<slug:route>/<int:page_number>/', views.pageDisplayer, name='story_content'),
     

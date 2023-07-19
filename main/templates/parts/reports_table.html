@@ -1,0 +1,18 @@
+{% load filters %}
+<tbody id="reports_table_body" {% if new_report %} hx-swap-oob="afterbegin" {% endif %}>
+  {% for r in reports %}
+  <tr class="report-{{ r.status }} report-row" id="report_{{ r.id }}" report_id="{{ r.id }}">
+    <td>
+      <span class="check-icon" title="Seleccionar" onclick="selectReport('{{ r.id }}')">
+        <i class="fa-solid fa-check"></i>
+      </span>
+    </td>
+    <td class="report-story-title-lg">{{ r.story.title1 }}</td>
+    <td>
+      <span class="report-story-title-sm report-{{ r.status }}">{{ r.story.title1 }}</span>
+      {{ r.description|cut_str:20 }}
+    </td>
+    <td>{{ r.created_at|date:"d M" }}</td>
+  </tr>
+  {% endfor %}
+</tbody>

@@ -19,14 +19,14 @@ def update_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=StoryReport)
 def send_notification_on_report_create(sender, instance, created, **kwargs):
 	if created:
-		json_report = StoryReportSerializer(instance)
-		json_report = JSONRenderer().render(json_report.data).decode('utf-8')
+		# json_report = StoryReportSerializer(instance)
+		# json_report = JSONRenderer().render(json_report.data).decode('utf-8')
 
 		channel_layer = get_channel_layer()
 		group_name = 'report-notifications'
 		event = {
 			'type': 'report_created',
-			'content': json_report
+			'content': instance.id
 		}
 
 		async_to_sync(channel_layer.group_send)(group_name, event)
