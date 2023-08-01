@@ -18,7 +18,7 @@
 	<button type="button" class="btn-close" onclick="this.parentElement.classList.remove('show');"></button>
 </div>
 
-<div class="m-auto main-content" hx-ext="ws" ws-connect="/ws/report-notifications/">
+<div id="ws_report_notifications_div" class="m-auto main-content" hx-ext="ws" ws-connect="/ws/report-notifications/">
 
 	<div class="reports-grid mt-3 pt-3">
 
@@ -26,28 +26,28 @@
 		<div class="report-tabs">
 			<div class="report-tab-nav">
 				<div class="tab-item" hx-get="{% url 'get_reports' %}" hx-swap="outerHTML" hx-target="#reports_table_body"
-					title="Todos los reportes" id="get_all_btn">
+					title="Todos los reportes" id="get_all_btn" show="all">
 					<span class="icon"><i class="fa-solid fa-flag"></i></span>
 					<span class="text">Todos</span>
 				</div>
 				<div class="tab-item" hx-get="{% url 'get_reports' %}?status=unread" hx-swap="outerHTML"
-					hx-target="#reports_table_body" title="Reportes no leídos">
+					hx-target="#reports_table_body" title="Reportes no leídos" show="unread">
 					<span class="icon"><i class="fa-solid fa-envelope"></i></span>
 					<span class="text">No leídos</span>
 				</div>
 				<div class="tab-item" hx-get="{% url 'get_reports' %}?status=read" hx-swap="outerHTML"
-					hx-target="#reports_table_body" title="Reportes leídos">
+					hx-target="#reports_table_body" title="Reportes leídos" show="read">
 					<span class="icon"><i class="fa-solid fa-envelope-open"></i></span>
 					<span class="text">Leídos</span>
 				</div>
 
 				<div class="tab-item" hx-get="{% url 'get_reports' %}?status=in_progress" hx-swap="outerHTML"
-					hx-target="#reports_table_body" title="Reportes en revisión">
+					hx-target="#reports_table_body" title="Reportes en revisión" show="in_progress">
 					<span class="icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>
 					<span class="text">En revisión</span>
 				</div>
 				<div class="tab-item" hx-get="{% url 'get_reports' %}?status=fixed" hx-swap="outerHTML"
-					hx-target="#reports_table_body" title="Reportes arreglados">
+					hx-target="#reports_table_body" title="Reportes arreglados" show="fixed">
 					<span class="icon"><i class="fa-solid fa-check"></i></span>
 					<span class="text">Arreglados</span>
 				</div>
@@ -166,12 +166,12 @@
 	</div>
 	<!-- End of modal for delete reports -->
 
-</div>
-{% endblock %}
+	</divid>
+	{% endblock %}
 
-{% block page-scripts %}
-<script>
-	document.querySelector('.admin_reports_link').classList.add('active');
-</script>
-<script src="{% static 'js/reports.js' %}"></script>
-{% endblock %}
+	{% block page-scripts %}
+	<script>
+		document.querySelector('.admin_reports_link').classList.add('active');
+	</script>
+	<script src="{% static 'js/reports.js' %}"></script>
+	{% endblock %}

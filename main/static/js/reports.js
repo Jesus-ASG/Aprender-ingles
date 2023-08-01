@@ -1,4 +1,24 @@
 // htmx
+// handle notifications from messages
+let ws_report_notifications_div = document.getElementById('ws_report_notifications_div');
+ws_report_notifications_div.addEventListener('htmx:wsBeforeMessage', (e) => {
+
+  // First case: Auto update is false
+  let autoUpdate = true;
+
+  if (!autoUpdate)
+    e.preventDefault();
+
+  // Second case: check if is inside of unread or all messages to see changes.
+  else {
+    let tabSelected = document.querySelector('.tab-item.active');
+    let tabSelectedShowing = tabSelected.getAttribute('show');
+    if (tabSelectedShowing != 'all' && tabSelectedShowing != 'unread')
+      e.preventDefault();
+  }
+});
+
+
 let tab_items = document.querySelectorAll('.report-tab-nav .tab-item');
 
 tab_items.forEach(tab_item => {
