@@ -158,7 +158,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="deleteReportsButton()">
 						Eliminar</button>
 				</div>
 			</div>
@@ -166,12 +166,15 @@
 	</div>
 	<!-- End of modal for delete reports -->
 
-	</divid>
-	{% endblock %}
+</div>
+{% endblock %}
 
-	{% block page-scripts %}
-	<script>
-		document.querySelector('.admin_reports_link').classList.add('active');
-	</script>
-	<script src="{% static 'js/reports.js' %}"></script>
-	{% endblock %}
+{% block page-scripts %}
+<script>
+	document.querySelector('.admin_reports_link').classList.add('active');
+</script>
+<script>
+	const URL_DELETE_REPORTS = "{% url 'delete_reports' %}";
+</script>
+<script src="{% static 'js/reports.js' %}"></script>
+{% endblock %}

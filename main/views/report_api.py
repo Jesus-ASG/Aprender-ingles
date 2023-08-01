@@ -1,3 +1,5 @@
+import json
+
 from django.core.cache import cache
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse
@@ -12,31 +14,6 @@ from main.serializers import StoryReportSerializer
 
 def is_staff(user):
     return user.is_staff
-
-
-@login_required(login_url='/login/')
-@user_passes_test(is_staff, login_url='/login/')
-def get_reports(request):
-    if request.method == 'GET':
-        reports = StoryReport.objects.all()
-
-        status = request.GET.get('status')
-
-        if status:
-            reports = reports.filter(status=status)
-        
-        # Sort reports
-        reports = reports.order_by('-created_at')
-        template = loader.get_template('parts/reports_table.html').render(
-            context={'reports': reports}
-        )
-
-        return HttpResponse(template)
-    
-
-def update_report_status(request, report_id):
-    
-    pass
 
 
 @login_required(login_url='/login/')
@@ -83,4 +60,48 @@ def send_report(request):
         }
 
         cache.set(key, num_requests + 1, rate_limit_time)
+        return JsonResponse(response)
+    
+
+@login_required(login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
+def get_reports(request):
+    if request.method == 'GET':
+        reports = StoryReport.objects.all()
+
+        status = request.GET.get('status')
+
+        if status:
+            reports = reports.filter(status=status)
+        
+        # Sort reports
+        reports = reports.order_by('-created_at')
+        template = loader.get_template('parts/reports_table.html').render(
+            context={'reports': reports}
+        )
+
+        return HttpResponse(template)
+
+
+@login_required(login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
+def delete_reports(request):
+    """ Delete many reports by their id
+    :param: 'delete' - list of ids from reports to delete
+    :return: A json response
+    """
+    if request.method == 'DELETE':
+        to_delete = json.loads(request.body)
+        to_delete = to_delete.get('delete')
+        
+        for d in to_delete:
+            try:
+                StoryReport.objects.get(pk=int(d)).delete()
+            except:
+                pass
+        response = {
+            'success': True,
+            'message': 'Reports deleted correctly.',
+            'message_t': 'Reportes eliminados correctamente.'
+        }
         return JsonResponse(response)

@@ -54,3 +54,32 @@ function openDeleteModal() {
   document.getElementById('delete_text_info').innerText = 'Se eliminarán ' + reports_selected.length + ' reporte(s)';
   document.getElementById('open_delete_modal_button').click();
 }
+
+
+function deleteReportsButton() {
+  let reports_selected = document.querySelectorAll('#reports_table_body .active');
+  if (reports_selected.length == 0)
+    return;
+
+  let data = [];
+  for (let r of reports_selected)
+    data.push(r.getAttribute('report_id'));
+
+
+  const csrftoken = getCookie('csrftoken');
+  $.ajax({
+    type: "DELETE",
+    url: URL_DELETE_REPORTS,
+    data: JSON.stringify({ 'delete': data }),
+    headers: { "X-CSRFToken": csrftoken },
+    success: function (response) {
+      if (response.success) {
+        for (let r of reports_selected)
+          r.remove();
+      }
+    },
+    error: function (response) {
+      //console.log(response);
+    }
+  });
+}

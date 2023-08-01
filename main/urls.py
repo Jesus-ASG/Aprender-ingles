@@ -61,6 +61,9 @@ urlpatterns = [
     path('flashcards/del/<int:flashcard_id>/', flashcards.delete, name='del_flashcard'),
     path('flashcards/edit/<int:flashcard_id>/', flashcards.update, name='edit_flashcard'),
 
+    # Reports
+    path('api/reports/delete/many/', report_api.delete_reports, name='delete_reports'),
+
     # Another functions
     path('api/user/like-story/<int:story_id>', user_apis.likeStory, name = 'like_story'),
     path('api/user/save-story/<int:story_id>', user_apis.saveStory, name = 'save_story'),
