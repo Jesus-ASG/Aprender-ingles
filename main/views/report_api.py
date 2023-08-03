@@ -105,3 +105,41 @@ def delete_reports(request):
             'message_t': 'Reportes eliminados correctamente.'
         }
         return JsonResponse(response)
+    
+
+@login_required(login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
+def modify_reports_status(request):
+    """ Change the report status
+    :query param: status
+    :body: 'reports_ids' - list of ids of reports to modify
+    :return: A json response
+    """
+
+    if request.method == 'PUT':
+        q_status = request.GET.get('status')
+        if not q_status:
+            return JsonResponse(
+                {'success': False, 'message': 'Query param for \'status\' is required.', 'message_t': 'Se necesita el parámetro \'status\'.'}
+            )
+        q_status = q_status.lower()
+        if not q_status in ['unread', 'read', 'in_progress', 'fixed']:
+            return JsonResponse(
+                {'success': False, 'message': 'Status not valid.', 'message_t': 'Estado no válido.'}
+            )
+        reports_ids = json.loads(request.body)
+        reports_ids = reports_ids.get('reports_ids')
+
+        for ri in reports_ids:
+            try:
+                r = StoryReport.objects.get(pk=int(ri))
+                r.status = q_status
+                r.save()
+            except:
+                pass
+        response = {
+            'success': True,
+            'message': 'Reports status changed correctly.',
+            'message_t': 'Estado de los reportes cambiados correctamente.'
+        }
+        return JsonResponse(response)

@@ -77,26 +77,26 @@
 												<ul class="dropdown-menu" aria-labelledby="report_menu">
 													<ul class="flashcard-menu">
 														<li>
-															<button class="btn shadow-none" type="button">
+															<button class="btn shadow-none" type="button" onclick="changeStatusButton('unread')">
 																<span style="color: var(--f-orange);"><i class="fa-solid fa-envelope"></i></span>
 																<p>Marcar como no leído</p>
 															</button>
 														</li>
 														<li>
-															<button class="btn shadow-none" type="button">
+															<button class="btn shadow-none" type="button" onclick="changeStatusButton('read')">
 																<span style="color: var(--f-orange);"><i class="fa-solid fa-envelope-open"></i></span>
 																<p>Marcar como leído</p>
 															</button>
 														</li>
 														<li>
-															<button class="btn shadow-none" type="button">
+															<button class="btn shadow-none" type="button" onclick="changeStatusButton('in_progress')">
 																<span style="color: var(--f-orange);">
 																	<i class="fa-solid fa-screwdriver-wrench"></i></span>
 																<p>Marcar en revisión</p>
 															</button>
 														</li>
 														<li>
-															<button class="btn shadow-none" type="button">
+															<button class="btn shadow-none" type="button" onclick="changeStatusButton('fixed')">
 																<span style="color: var(--f-orange);">
 																	<i class="fa-solid fa-check"></i></span>
 																<p>Marcar como arreglado</p>
@@ -175,6 +175,7 @@
 </script>
 <script>
 	const URL_DELETE_REPORTS = "{% url 'delete_reports' %}";
+	const URL_MODIFY_REPORTS_STATUS = "{% url 'modify_reports_status' %}";
 </script>
 <script src="{% static 'js/reports.js' %}"></script>
 {% endblock %}

@@ -83,3 +83,35 @@ function deleteReportsButton() {
     }
   });
 }
+
+function changeStatusButton(type) {
+  let reports_selected = document.querySelectorAll('#reports_table_body .active');
+  if (reports_selected.length == 0)
+    return;
+
+  let data = [];
+  for (let r of reports_selected)
+    data.push(r.getAttribute('report_id'));
+
+
+  const csrftoken = getCookie('csrftoken');
+  $.ajax({
+    type: "PUT",
+    url: URL_MODIFY_REPORTS_STATUS + '?status=' + type,
+    data: JSON.stringify({ 'reports_ids': data }),
+    headers: { "X-CSRFToken": csrftoken },
+    success: function (response) {
+      if (response.success) {
+
+        let tabSelected = document.querySelector('.tab-item.active');
+        let tabSelectedShowing = tabSelected.getAttribute('show');
+        if (tabSelectedShowing != 'all' && tabSelectedShowing != type)
+          for (let r of reports_selected)
+            r.remove();
+      }
+    },
+    error: function (response) {
+      //console.log(response);
+    }
+  });
+}
