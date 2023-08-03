@@ -71,7 +71,7 @@ def create(request, route, page_type):
         
         # creating page
         pgObj = pgForm.save(commit=False)
-        if data["page_id"] != "":
+        if data["page_id"] != 0:
             pgObj = Page.objects.get(id=int(data["page_id"]))
         
         pgObj.story = story

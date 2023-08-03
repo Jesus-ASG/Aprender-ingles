@@ -40,7 +40,8 @@ let tab_items = document.querySelectorAll('.report-tab-nav .tab-item');
 
 tab_items.forEach(tab_item => {
   tab_item.addEventListener('click', (e) => {
-    //let tool_items = document.querySelectorAll('.report-tab-nav .tab-item');
+    // Ensure reports body container is visible
+    document.getElementById('reports_table_body').parentElement.classList.remove('d-none');
     tab_items.forEach(item => {
       item.classList.remove('active');
     });
