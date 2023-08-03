@@ -9,8 +9,8 @@
 	--light-blue-active: #77b9fc;
 	--light-red: #bd2b24;
 
-	--f-orange: #ff5f13;
-	--f-orange-active: #ff5100;
+	--f-orange: rgb(255, 95, 19);
+	--f-orange-active: rgb(255, 81, 0);
 	--f-orange-shadow: rgba(255, 81, 0, 0.25);
 
 	--f-light-green: #49eb4b;

@@ -1,13 +1,30 @@
+// Check auto update
+let auto_update_local = localStorage.getItem('auto_update_reports');
+let auto_update = document.getElementById('auto_update');
+
+if (auto_update_local) {  // If auto update exists on local storage
+  auto_update.checked = JSON.parse(auto_update_local);
+}
+else {
+  auto_update.checked = true;
+  localStorage.setItem('auto_update_reports', true);
+}
+
+auto_update.addEventListener('change', (e) => {
+  // Change local storage variable
+  localStorage.setItem('auto_update_reports', auto_update.checked);
+});
+
 // htmx
 // handle notifications from messages
 let ws_report_notifications_div = document.getElementById('ws_report_notifications_div');
 ws_report_notifications_div.addEventListener('htmx:wsBeforeMessage', (e) => {
 
-  // First case: Auto update is false
-  let autoUpdate = true;
-
-  if (!autoUpdate)
+  // First case: Auto update is turned off
+  if (!document.getElementById('auto_update').checked) {
     e.preventDefault();
+    return;
+  }
 
   // Second case: check if is inside of unread or all messages to see changes.
   else {

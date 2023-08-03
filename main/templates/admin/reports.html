@@ -20,8 +20,16 @@
 
 <div id="ws_report_notifications_div" class="m-auto main-content" hx-ext="ws" ws-connect="/ws/report-notifications/">
 
-	<div class="reports-grid mt-3 pt-3">
-
+	<div class="auto-update-container">
+		<div class="">
+			<div class="form-check form-switch">
+				<input class="form-check-input shadow-none check-input-custom" type="checkbox" id="auto_update">
+				<label class="form-check-label" for="auto_update" style="word-wrap: break-word; padding-right: 1rem;">Actualizar
+					automáticamente</label>
+			</div>
+		</div>
+	</div>
+	<div class="reports-grid">
 		<!-- Tabs -->
 		<div class="report-tabs">
 			<div class="report-tab-nav">
