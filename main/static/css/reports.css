@@ -171,7 +171,6 @@
 	transition: all 0.2s ease-in-out;
 }
 
-.check-icon:hover,
 .report-row.active .check-icon {
 	color: #fff;
 	background-color: var(--f-orange-active);
@@ -181,6 +180,8 @@
 .report-unread {
 	font-weight: 500;
 }
-.report-read {
-	color: rgba(0, 0, 0, 0.7);
+.report-read,
+.report-in_progress,
+.report-fixed {
+	color: rgba(0, 0, 0, 0.6);
 }

@@ -62,6 +62,7 @@ urlpatterns = [
     path('flashcards/edit/<int:flashcard_id>/', flashcards.update, name='edit_flashcard'),
 
     # Reports
+    path('http-response/report/open/<int:report_id>', report_api.open_report, name='open_report'),
     path('api/reports/many/delete/', report_api.delete_reports, name='delete_reports'),
     path('api/reports/many/modify_status/', report_api.modify_reports_status, name='modify_reports_status'),
 

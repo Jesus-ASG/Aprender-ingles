@@ -1,9 +1,10 @@
 {% load filters %}
 <tbody id="reports_table_body" {% if new_report %} hx-swap-oob="afterbegin" {% endif %}>
   {% for r in reports %}
-  <tr class="report-{{ r.status }} report-row" id="report_{{ r.id }}" report_id="{{ r.id }}">
-    <td>
-      <span class="check-icon" title="Seleccionar" onclick="selectReport('{{ r.id }}')">
+  <tr class="report-{{ r.status }} report-row" id="report_{{ r.id }}" report_id="{{ r.id }}"
+    hx-get="{% url 'open_report' r.id %}" hx-target="#report_content" hx-swap="innerHTML" onclick="openReport()">
+    <td onclick="selectReport(event, '{{ r.id }}')">
+      <span class="check-icon" title="Seleccionar">
         <i class="fa-solid fa-check"></i>
       </span>
     </td>

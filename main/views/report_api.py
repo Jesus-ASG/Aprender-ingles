@@ -85,6 +85,19 @@ def get_reports(request):
 
 @login_required(login_url='/login/')
 @user_passes_test(is_staff, login_url='/login/')
+def open_report(request, report_id):
+    if request.method == 'GET':
+        report = StoryReport.objects.get(pk=report_id)
+        if report.status == 'unread':
+            report.status = 'read'
+            report.save()
+
+        template = loader.get_template('parts/report_content.html').render(context={'report':report})
+        return HttpResponse(template)
+
+
+@login_required(login_url='/login/')
+@user_passes_test(is_staff, login_url='/login/')
 def delete_reports(request):
     """ Delete many reports by their id
     :param: 'delete' - list of ids from reports to delete

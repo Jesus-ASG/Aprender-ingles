@@ -41,7 +41,10 @@ let tab_items = document.querySelectorAll('.report-tab-nav .tab-item');
 tab_items.forEach(tab_item => {
   tab_item.addEventListener('click', (e) => {
     // Ensure reports body container is visible
-    document.getElementById('reports_table_body').parentElement.classList.remove('d-none');
+    document.getElementById('reports_table_body_container').classList.remove('d-none');
+    // Hide report content container
+    document.getElementById('report_content').classList.add('d-none');
+
     tab_items.forEach(item => {
       item.classList.remove('active');
     });
@@ -55,7 +58,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // On report selected
-function selectReport(id) {
+function selectReport(event, id) {
+  event.stopPropagation();
   let row = document.getElementById('report_' + id);
   if (row.classList.contains('active')) {
     row.classList.remove('active')
@@ -132,4 +136,9 @@ function changeStatusButton(type) {
       //console.log(response);
     }
   });
+}
+
+function openReport() {
+  document.getElementById('reports_table_body_container').classList.add('d-none');
+  document.getElementById('report_content').classList.remove('d-none');
 }
