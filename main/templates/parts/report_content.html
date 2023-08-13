@@ -1,8 +1,28 @@
-<div>
-  This is my report
-  {{ report.story }}
-  {{ report.page }}
-  {{ report.description }}
-  {{ report.status }}
-  {{ report.created_at }}
+<div class="showed-report-container" current-report="{{ report.id }}">
+  <div class="report-navbar">
+    <span>
+      <h2>
+        {{ report.story }}
+      </h2>
+    </span>
+    <span>
+      {{ report.status }}
+    </span>
+    <span>
+      Recibido:
+      {{ report.created_at }}
+    </span>
+    <span>
+      Modificado:
+      {{ report.updated_at }}
+    </span>
+  </div>
+  {% if page %}
+  Page: {{ report.page }}
+  {% endif %}
+
+  <div class="report-description">
+    {{ report.description }}
+  </div>
+
 </div>

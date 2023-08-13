@@ -2,6 +2,9 @@
 let auto_update_local = localStorage.getItem('auto_update_reports');
 let auto_update = document.getElementById('auto_update');
 
+// Flag for see if a report is open currently
+let report_open = false;
+
 if (auto_update_local) {  // If auto update exists on local storage
   auto_update.checked = JSON.parse(auto_update_local);
 }
@@ -44,6 +47,8 @@ tab_items.forEach(tab_item => {
     document.getElementById('reports_table_body_container').classList.remove('d-none');
     // Hide report content container
     document.getElementById('report_content').classList.add('d-none');
+    // Update variable for indicate a report is closed
+    report_open = false;
 
     tab_items.forEach(item => {
       item.classList.remove('active');
@@ -139,6 +144,27 @@ function changeStatusButton(type) {
 }
 
 function openReport() {
+  // Show and hide boxes for reports
   document.getElementById('reports_table_body_container').classList.add('d-none');
   document.getElementById('report_content').classList.remove('d-none');
+  // Update variable for indicate a report is open
+  report_open = true;
 }
+
+
+// Handle update manual
+
+let update_btn = document.querySelector('.update-button');
+
+update_btn.addEventListener('click', () => {
+  if (report_open) { // Update content for the report open
+    let current_report_id = document.querySelector('.showed-report-container').getAttribute('current-report');
+    let current_row_report = document.getElementById('report_' + current_report_id);
+    current_row_report.click();
+  }
+  else { // Update content for report's table
+    document.querySelector('.tab-item.active').click();
+  }
+
+
+});

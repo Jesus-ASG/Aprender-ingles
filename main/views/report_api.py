@@ -75,7 +75,8 @@ def get_reports(request):
             reports = reports.filter(status=status)
         
         # Sort reports
-        reports = reports.order_by('-created_at')
+        
+        reports = reports.order_by('-updated_at')
         template = loader.get_template('parts/reports_table.html').render(
             context={'reports': reports}
         )

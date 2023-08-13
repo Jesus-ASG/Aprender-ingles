@@ -457,5 +457,6 @@ class StoryReport(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='unread')
 
     created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
     fixed_at = models.DateTimeField(null=True)
 
