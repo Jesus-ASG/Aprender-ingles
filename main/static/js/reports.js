@@ -158,7 +158,7 @@ let update_btn = document.querySelector('.update-button');
 
 update_btn.addEventListener('click', () => {
   if (report_open) { // Update content for the report open
-    let current_report_id = document.querySelector('.showed-report-container').getAttribute('current-report');
+    let current_report_id = document.querySelector('.report-open-container').getAttribute('current-report');
     let current_row_report = document.getElementById('report_' + current_report_id);
     current_row_report.click();
   }

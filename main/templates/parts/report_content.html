@@ -1,28 +1,85 @@
-<div class="showed-report-container" current-report="{{ report.id }}">
-  <div class="report-navbar">
-    <span>
-      <h2>
-        {{ report.story }}
-      </h2>
-    </span>
-    <span>
-      {{ report.status }}
-    </span>
-    <span>
-      Recibido:
-      {{ report.created_at }}
-    </span>
-    <span>
-      Modificado:
-      {{ report.updated_at }}
-    </span>
+{% load filters %}
+
+<div class="report-open-container" current-report="{{ report.id }}">
+  <div class="row" style="--bs-gutter-x:unset; margin: 2rem 0;">
+
+    <div class="col-12 col-md-4 text-center d-md-none d-block mb-3">
+      <span class="report-open-status {{ report.status }}">
+        {% if report.status == 'read' %}
+        <span><i class="fa-solid fa-envelope-open"></i></span>
+        {% elif report.status == 'in_progress' %}
+        <span class="icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+        {% elif report.status == 'fixed' %}
+        <span class="icon"><i class="fa-solid fa-check"></i></span>
+        {% endif %}
+        {{ report.status|translate_report_status }}
+      </span>
+    </div>
+    <div class="col-12 col-md-8 mb-1">
+      <div class="report-open-title">
+        <h2>Historia: {{ report.story.title1 }}</h2>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4 text-center d-none d-md-block">
+      <span class="report-open-status {{ report.status }}">
+        {% if report.status == 'read' %}
+        <span><i class="fa-solid fa-envelope-open"></i></span>
+        {% elif report.status == 'in_progress' %}
+        <span class="icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+        {% elif report.status == 'fixed' %}
+        <span class="icon"><i class="fa-solid fa-check"></i></span>
+        {% endif %}
+        {{ report.status|translate_report_status }}
+      </span>
+    </div>
+
   </div>
-  {% if page %}
-  Page: {{ report.page }}
-  {% endif %}
+
+
+  <div class="report-open-navbar">
+    <div class="row my-3" style="--bs-gutter-x:unset;">
+      <span class="col-12">
+        <span class="report-open-label">Emitido: </span>
+        <span class="report-open-value">{{ report.created_at }}</span>
+      </span>
+
+      <span class="col-12">
+        <span class="report-open-label">Modificado: </span>
+        <span class="report-open-value">{{ report.updated_at }}</span>
+      </span>
+
+      <hr>
+    </div>
+
+  </div>
+
 
   <div class="report-description">
-    {{ report.description }}
+    <div class="row" style="--bs-gutter-x:unset;">
+      <span class="col-12">
+        <span class="" style="font-weight: 500;">Página: </span>
+        {% if page %}
+        <span class="">{{ report.page }}</span>
+        {% else %}
+        <span class="text-muted fst-italic">No especificada</span>
+        {% endif %}
+      </span>
+    </div>
+
+    <div class="col-12">
+      <div class="row" style="--bs-gutter-x:unset;">
+
+
+        <div class="col-12">
+          <span style="font-weight: 500;">Descripción:</span> <br>
+          {{ report.description }}
+        </div>
+      </div>
+
+    </div>
+
+
   </div>
 
 </div>

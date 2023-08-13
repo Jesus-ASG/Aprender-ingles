@@ -1,0 +1,24 @@
+.report-open-title {
+	width: 100%;
+}
+.report-open-title h2 {
+	font-weight: 500;
+	font-size: 1.4rem;
+	text-align: center;
+}
+
+.report-open-label,
+.report-open-value {
+	font-size: 0.8rem;
+}
+.report-open-label {
+	font-weight: 500;
+}
+.report-open-value {
+	font-style: italic;
+}
+
+.report-open-status {
+	font-weight: 500;
+	color: var(--f-orange);
+}

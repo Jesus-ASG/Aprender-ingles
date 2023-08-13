@@ -51,3 +51,17 @@ def count_max(x, max_number = 100):
         max_number = max_number - 1
         x = f'{max_number}+'
     return x
+
+@register.filter
+def translate_report_status(s):
+    match s:
+        case 'unread':
+            return 'No leído'
+        case 'read':
+            return 'Leído'
+        case 'in_progress':
+            return 'En revisión'
+        case 'fixed':
+            return 'Arreglado'
+        case _:
+            return 'Desconocido'
