@@ -180,7 +180,7 @@
 
 	<!-- Hidden functions -->
 	<div class="d-none">
-		<div id="hidden_div"></div>
+		<div id="hidden_element"></div>
 	</div>
 
 </div>
@@ -191,6 +191,7 @@
 	document.querySelector('.admin_reports_link').classList.add('active');
 </script>
 <script>
+	const URL_GET_REPORT = "{% url 'get_report' 0 %}";
 	const URL_DELETE_REPORTS = "{% url 'delete_reports' %}";
 	const URL_MODIFY_REPORTS_STATUS = "{% url 'modify_reports_status' %}";
 </script>

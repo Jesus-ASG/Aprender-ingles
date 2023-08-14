@@ -23,7 +23,9 @@
 
     <div class="col-12 col-md-4 text-center d-none d-md-block">
       <span class="report-open-status {{ report.status }}">
-        {% if report.status == 'read' %}
+        {% if report.status == 'unread' %}
+        <span><i class="fa-solid fa-envelope"></i></span>
+        {% elif report.status == 'read' %}
         <span><i class="fa-solid fa-envelope-open"></i></span>
         {% elif report.status == 'in_progress' %}
         <span class="icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>
@@ -48,7 +50,6 @@
         <span class="report-open-label">Modificado: </span>
         <span class="report-open-value">{{ report.updated_at }}</span>
       </span>
-
       <hr>
     </div>
 
