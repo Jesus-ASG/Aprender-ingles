@@ -85,11 +85,8 @@ let paramReportId = urlParams.get('report');
 if (paramReportId) {
   let s = URL_GET_REPORT.replace('0', paramReportId);
   document.getElementById('hidden_element').outerHTML = `
-      <div id="hidden_element" hx-get="${s}" hx-target="#report_content" hx-swap="innerHTML" hx-trigger="wait-for-function"
-      onclick="openReport('${paramReportId}')"></div>
-      `;
-  let p = document.getElementById('hidden_element');
-  p.click();
+    <div id="hidden_element" hx-get="${s}" hx-target="#report_content" hx-swap="innerHTML" hx-trigger="wait-for-function"></div>
+  `;
 
   // Mark first tab as active just for aesthetic
   document.querySelector('.tab-item').classList.add('active');
@@ -99,18 +96,18 @@ document.addEventListener('DOMContentLoaded', function () {
   // Initialize all reports if there are not query params
   let urlParams = new URLSearchParams(window.location.search);
   let paramReportId = urlParams.get('report');
-  if (!paramReportId) {
-    document.getElementById('get_all_btn').click();
+  if (paramReportId) {
+    document.getElementById('hidden_element').dispatchEvent(new Event('wait-for-function'));
+
+    document.getElementById('reports_table_body_container').classList.add('d-none');
+    document.getElementById('report_content').classList.remove('d-none');
+    // Update variable for indicate a report is open
+    report_open = true;
   }
+  else
+    document.getElementById('get_all_btn').click();
 
 });
-
-
-
-// const c = new Event('click');
-// let newUrl = URL_GET_REPORT.replace('0', paramReportId);
-
-// document.querySelector(`[hx-get="${newUrl}"]`).dispatchEvent(wff);
 
 
 
@@ -222,29 +219,39 @@ function openReport(report_id) {
   // Update variable for indicate a report is open
   report_open = true;
 
-  const csrftoken = getCookie('csrftoken');
-  $.ajax({
-    type: "PUT",
-    url: URL_MODIFY_REPORTS_STATUS + '?status=' + 'read',
-    data: JSON.stringify({ 'reports_ids': [report_id] }),
-    headers: { "X-CSRFToken": csrftoken },
-    success: function (response) {
-      if (response.success) {
-        const wff = new Event('wait-for-function');
-        let newUrl = URL_GET_REPORT.replace('0', report_id);
+  let rr = document.getElementById('report_' + report_id);
+  if (rr.classList.contains('report-unread')) {
 
-        document.querySelector(`[hx-get="${newUrl}"]`).dispatchEvent(wff);
+    const csrftoken = getCookie('csrftoken');
+    $.ajax({
+      type: "PUT",
+      url: URL_MODIFY_REPORTS_STATUS + '?status=' + 'read',
+      data: JSON.stringify({ 'reports_ids': [report_id] }),
+      headers: { "X-CSRFToken": csrftoken },
+      success: function (response) {
+        if (response.success) {
+          const wff = new Event('wait-for-function');
+          let newUrl = URL_GET_REPORT.replace('0', report_id);
 
-        // Update query params
-        let urlWithParams = window.location.pathname + "?report=" + report_id;
-        window.history.pushState({}, "", urlWithParams);
+          document.querySelector(`[hx-get="${newUrl}"]`).dispatchEvent(wff);
 
+          // Update query params
+          let urlWithParams = window.location.pathname + "?report=" + report_id;
+          window.history.pushState({}, "", urlWithParams);
+
+        }
+      },
+      error: function (response) {
+        //console.log(response);
       }
-    },
-    error: function (response) {
-      //console.log(response);
-    }
-  });
+    });
+  }
+  else {
+    rr.dispatchEvent(new Event('wait-for-function'));
+    // Update query params
+    let urlWithParams = window.location.pathname + "?report=" + report_id;
+    window.history.pushState({}, "", urlWithParams);
+  }
 
 }
 
