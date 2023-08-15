@@ -7,16 +7,31 @@ let report_open = false;
 
 if (auto_update_local) {  // If auto update exists on local storage
   auto_update.checked = JSON.parse(auto_update_local);
+
+  let auto_update_label = document.getElementById('auto_update_label');
+  if (auto_update.checked)
+    auto_update_label.classList.add('active');
+  else
+    auto_update_label.classList.remove('active');
 }
 else {
   auto_update.checked = true;
   localStorage.setItem('auto_update_reports', true);
+  document.getElementById('auto_update_label').classList.add('active');
 }
 
 auto_update.addEventListener('change', (e) => {
   // Change local storage variable
   localStorage.setItem('auto_update_reports', auto_update.checked);
+
+  let auto_update_label = document.getElementById('auto_update_label');
+  if (auto_update.checked)
+    auto_update_label.classList.add('active');
+  else
+    auto_update_label.classList.remove('active');
 });
+
+
 
 // htmx
 // handle notifications from messages
@@ -54,13 +69,50 @@ tab_items.forEach(tab_item => {
       item.classList.remove('active');
     });
     tab_item.classList.add('active');
+
+    // Clean query params
+    window.history.pushState({}, "", window.location.pathname);
+
+    // Trigger the htmx event for load content
+    tab_item.dispatchEvent(new Event('load-tab'));
   });
 });
 
 
+// Load query params if they exist
+let urlParams = new URLSearchParams(window.location.search);
+let paramReportId = urlParams.get('report');
+if (paramReportId) {
+  let s = URL_GET_REPORT.replace('0', paramReportId);
+  document.getElementById('hidden_element').outerHTML = `
+      <div id="hidden_element" hx-get="${s}" hx-target="#report_content" hx-swap="innerHTML" hx-trigger="wait-for-function"
+      onclick="openReport('${paramReportId}')"></div>
+      `;
+  let p = document.getElementById('hidden_element');
+  p.click();
+
+  // Mark first tab as active just for aesthetic
+  document.querySelector('.tab-item').classList.add('active');
+}
+
 document.addEventListener('DOMContentLoaded', function () {
-  document.getElementById('get_all_btn').click();
+  // Initialize all reports if there are not query params
+  let urlParams = new URLSearchParams(window.location.search);
+  let paramReportId = urlParams.get('report');
+  if (!paramReportId) {
+    document.getElementById('get_all_btn').click();
+  }
+
 });
+
+
+
+// const c = new Event('click');
+// let newUrl = URL_GET_REPORT.replace('0', paramReportId);
+
+// document.querySelector(`[hx-get="${newUrl}"]`).dispatchEvent(wff);
+
+
 
 // On report selected
 function selectReport(event, id) {
@@ -182,6 +234,11 @@ function openReport(report_id) {
         let newUrl = URL_GET_REPORT.replace('0', report_id);
 
         document.querySelector(`[hx-get="${newUrl}"]`).dispatchEvent(wff);
+
+        // Update query params
+        let urlWithParams = window.location.pathname + "?report=" + report_id;
+        window.history.pushState({}, "", urlWithParams);
+
       }
     },
     error: function (response) {
@@ -193,23 +250,22 @@ function openReport(report_id) {
 
 
 // Handle update manual
-
 let update_btn = document.querySelector('.update-button');
-
 update_btn.addEventListener('click', () => {
   if (report_open) { // Update content for the report open
     let current_report_id = document.querySelector('.report-open-container').getAttribute('current-report');
-    let current_row_report = document.getElementById('report_' + current_report_id);
-
     const wff = new Event('wait-for-function');
     let newUrl = URL_GET_REPORT.replace('0', current_report_id);
-
     document.querySelector(`[hx-get="${newUrl}"]`).dispatchEvent(wff);
-
   }
   else { // Update content for report's table
     document.querySelector('.tab-item.active').click();
   }
+});
 
 
+// Handle back button
+let back_btn = document.querySelector('.back-button');
+back_btn.addEventListener('click', () => {
+  document.querySelector('.tab-item.active').click();
 });

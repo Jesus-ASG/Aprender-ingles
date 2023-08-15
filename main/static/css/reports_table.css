@@ -9,14 +9,28 @@
 	background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='rgba(255, 255, 255, 1)'/></svg>") !important;
 }
 
-.auto-update-container {
+.update-buttons-container {
 	margin-top: 1rem;
 	margin-left: 1rem;
 	padding-top: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: start;
+}
+
+.update-button {
+	margin-left: 1rem;
+}
+.update-button i {
+	color: var(--f-orange);
+}
+.update-button:hover {
+	cursor: pointer;
+	color: var(--f-orange-active);
 }
 
 /* Styles for tools to the right */
-.update-button {
+.back-button {
 	position: absolute;
 	left: 1rem;
 	top: 50%;
@@ -25,7 +39,7 @@
 	font-size: 1rem;
 	color: var(--f-orange);
 }
-.update-button:hover {
+.back-button:hover {
 	color: var(--f-orange-active);
 	cursor: pointer;
 }
@@ -50,8 +64,9 @@
 }
 
 @media only screen and (max-width: 620px) {
-	.auto-update-container {
+	.update-buttons-container {
 		margin-top: 0;
+		margin-bottom: 0.5rem;
 	}
 	.reports-grid {
 		display: inline;
@@ -121,7 +136,7 @@
 
 /* Styles for table  */
 .report-table {
-	border: 1px solid red;
+	border: 1px solid var(--f-orange);
 	border-radius: 20px;
 }
 
@@ -184,4 +199,19 @@
 .report-in_progress,
 .report-fixed {
 	color: rgba(0, 0, 0, 0.6);
+}
+
+.auto-update-label i {
+	color: var(--c-disabled);
+	padding: 0.5rem;
+	border-radius: 50%;
+	transition: background-color 0.2s linear;
+}
+.auto-update-label:hover {
+	cursor: pointer;
+}
+
+.auto-update-label.active i {
+	color: #fff;
+	background-color: var(--f-orange);
 }

@@ -21,42 +21,44 @@
 
 <div id="ws_report_notifications_div" class="m-auto main-content" hx-ext="ws" ws-connect="/ws/report-notifications/">
 
-	<div class="auto-update-container">
+	<div class="update-buttons-container">
 		<div class="">
-			<div class="form-check form-switch">
+			<label for="auto_update" title="Actualizar automáticamente">
+				<span class="auto-update-label" id="auto_update_label"><i class="fa-solid fa-arrows-rotate"></i></span>
+			</label>
+			<div class="form-check form-switch d-none">
 				<input class="form-check-input shadow-none check-input-custom" type="checkbox" id="auto_update">
-				<label class="form-check-label" for="auto_update" style="word-wrap: break-word; padding-right: 1rem;">Actualizar
-					automáticamente</label>
 			</div>
 		</div>
+		<span class="update-button" title="Actualizar contenido"><i class="fa-solid fa-rotate-right"></i></span>
 	</div>
 	<div class="reports-grid">
 		<!-- Tabs -->
 		<div class="report-tabs">
 			<div class="report-tab-nav">
 				<div class="tab-item" hx-get="{% url 'get_reports' %}" hx-swap="outerHTML" hx-target="#reports_table_body"
-					title="Todos los reportes" id="get_all_btn" show="all">
+					hx-trigger="load-tab" title="Todos los reportes" id="get_all_btn" show="all">
 					<span class="icon"><i class="fa-solid fa-flag"></i></span>
 					<span class="text">Todos</span>
 				</div>
 				<div class="tab-item" hx-get="{% url 'get_reports' %}?status=unread" hx-swap="outerHTML"
-					hx-target="#reports_table_body" title="Reportes no leídos" show="unread">
+					hx-target="#reports_table_body" hx-trigger="load-tab" title="Reportes no leídos" show="unread">
 					<span class="icon"><i class="fa-solid fa-envelope"></i></span>
 					<span class="text">No leídos</span>
 				</div>
 				<div class="tab-item" hx-get="{% url 'get_reports' %}?status=read" hx-swap="outerHTML"
-					hx-target="#reports_table_body" title="Reportes leídos" show="read">
+					hx-target="#reports_table_body" hx-trigger="load-tab" title="Reportes leídos" show="read">
 					<span class="icon"><i class="fa-solid fa-envelope-open"></i></span>
 					<span class="text">Leídos</span>
 				</div>
 
 				<div class="tab-item" hx-get="{% url 'get_reports' %}?status=in_progress" hx-swap="outerHTML"
-					hx-target="#reports_table_body" title="Reportes en revisión" show="in_progress">
+					hx-target="#reports_table_body" hx-trigger="load-tab" title="Reportes en revisión" show="in_progress">
 					<span class="icon"><i class="fa-solid fa-screwdriver-wrench"></i></span>
 					<span class="text">En revisión</span>
 				</div>
 				<div class="tab-item" hx-get="{% url 'get_reports' %}?status=fixed" hx-swap="outerHTML"
-					hx-target="#reports_table_body" title="Reportes arreglados" show="fixed">
+					hx-target="#reports_table_body" hx-trigger="load-tab" title="Reportes arreglados" show="fixed">
 					<span class="icon"><i class="fa-solid fa-check"></i></span>
 					<span class="text">Arreglados</span>
 				</div>
@@ -73,7 +75,7 @@
 							<table class="table" style="margin-bottom: 0;">
 								<tr>
 									<th colspan="4" class="cell-header">
-										<span class="update-button"><i class="fa-solid fa-rotate-right"></i></span>
+										<span class="back-button"><i class="fa-solid fa-arrow-left"></i></span>
 										Reportes
 										<span class="dropdown-right-position">
 											<!-- <div style="width: 5px; height: 5px; background-color: red;"></div> -->

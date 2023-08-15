@@ -88,7 +88,13 @@ def get_reports(request):
 @user_passes_test(is_staff, login_url='/login/')
 def get_report(request, report_id):
     if request.method == 'GET':
-        report = StoryReport.objects.get(pk=report_id)
+        report = None
+        try:
+            report = StoryReport.objects.get(pk=report_id)
+        except:
+            template = loader.get_template('parts/report_not_found.html').render()
+            return HttpResponse(template)
+        
         template = loader.get_template('parts/report_content.html').render(context={'report':report})
         return HttpResponse(template)
 
