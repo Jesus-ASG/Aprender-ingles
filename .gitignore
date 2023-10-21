@@ -7,3 +7,4 @@ venv/
 others/
 .idea/
 uploads/
+static/

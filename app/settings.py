@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-e0e+1u8g7v-wga7@89@y#fv=(v9@4otn6db1x(n^!shz(w7#bx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1']
 
@@ -46,10 +46,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'app.urls'
 
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
+)
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates', 'static'],
+        'DIRS': ['static'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,10 +135,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/home/ubuntu/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
 #STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, '')
-MEDIA_URL = '/media/'
+MEDIA_URL = '/home/ubuntu/media/'
 IMAGES_PATH = 'uploads/images/'
 AUDIOS_PATH = 'uploads/audios/%Y/%m/%d/'
 
