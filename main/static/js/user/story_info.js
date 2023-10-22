@@ -1,5 +1,7 @@
 function setTitle(f_counter) {
-    document.getElementById("story_title").innerHTML = createFlipHTML(db_title.title1, db_title.title2, f_counter);
+    let domTitle = document.getElementById("story_title");
+    if (domTitle != null && domTitle!= undefined)
+        domTitle.innerHTML = createFlipHTML(db_title.title1, db_title.title2, f_counter);
 }
 
 
@@ -123,7 +125,8 @@ function setScoresLabels(f_counter) {
 
 function setRelatedTitle(f_counter) {
     let related_title = document.getElementById("related_title");
-    related_title.innerHTML = createFlipHTML("Related", "Relacionado", f_counter);
+    if (related_title!=null && related_title!=undefined)
+        related_title.innerHTML = createFlipHTML("Related", "Relacionado", f_counter);
 }
 
 function deleteAnswers() {

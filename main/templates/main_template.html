@@ -8,13 +8,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<title>{% block title %} {% endblock %}</title>
-	<link rel="shortcut icon" href="{% static 'img/sq_logos/sq_orange.png' %}" />
+	<link rel="shortcut icon" href="{% static 'img/sq_logos/sq_orange.png' %}" type="text/css" />
 
 	<!--Bootstrap-->
-	<link rel="stylesheet" href="{% static 'resources/bootstrap-5.0.2-dist/css/bootstrap.css' %}">
+	<link rel="stylesheet" href="{% static 'resources/bootstrap-5.0.2-dist/css/bootstrap.css' %}" type="text/css">
 
 	<!--Íconos-->
-	<link rel="stylesheet" href="{% static 'resources/fontawesome-free-6.2.1-web/css/all.css' %}">
+	<link rel="stylesheet" href="{% static 'resources/fontawesome-free-6.2.1-web/css/all.css' %}" type="text/css">
 
 	<!-- Fonts-->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,7 +22,7 @@
 
 	<link
 		href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-		rel="stylesheet">
+		rel="stylesheet" type="text/css">
 	<!--Estilos propios-->
 
 	<link rel="stylesheet" href="{% static 'css/utils/reset_stylesheet.css' %}" type="text/css">
@@ -73,12 +73,13 @@
 		</div>
 	</main>
 
-	<script src="{% static 'resources/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js' %}"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="{% static 'resources/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js' %}"
+		type="text/javascript"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" type="text/javascript"></script>
 
-	<script src="{% static 'js/scripts.js' %}"></script>
-	<script src="{% static 'js/flip_text.js' %}"></script>
-	<script src="{% static 'js/flip_text_dom.js' %}"></script>
+	<script src="{% static 'js/scripts.js' %}" type="text/javascript"></script>
+	<script src="{% static 'js/flip_text.js' %}" type="text/javascript"></script>
+	<script src="{% static 'js/flip_text_dom.js' %}" type="text/javascript"></script>
 	<script>
 		let nav_toggler = document.getElementById('navbar_toggle_button');
 		nav_toggler.addEventListener('click', (e) => {
@@ -121,9 +122,9 @@
 		integrity="sha384-lVb3Rd/Ca0AxaoZg5sACe8FJKF0tnUgR2Kd7ehUOG5GCcROv5uBIZsOqovBAcWua"
 		crossorigin="anonymous"></script> -->
 	<script src="https://unpkg.com/htmx.org@1.8.5"
-		integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w"
-		crossorigin="anonymous"></script>
-	<script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+		integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"
+		type="text/javascript"></script>
+	<script src="https://unpkg.com/htmx.org/dist/ext/ws.js" type="text/javascript"></script>
 
 	<!-- End of Page scripts-->
 	{% block page-scripts %} {% endblock %}

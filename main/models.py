@@ -121,14 +121,14 @@ class UserProfile(models.Model):
     level = models.FloatField(default=1)
 
     DEFAULT_PROFILE_IMAGE_CHOICES = [
-        ('/static/img/profile_pictures/pp1.jpg', 'Friendly bear'),
-        ('/static/img/profile_pictures/pp2.jpg', 'Thoughtful cat'),
-        ('/static/img/profile_pictures/pp3.jpg', 'Hungry panda'),
-        ('/static/img/profile_pictures/pp4.jpg', 'Cute Hamster'),
-        ('/static/img/profile_pictures/pp5.jpg', 'Tall giraffe'),
-        ('/static/img/profile_pictures/pp6.jpg', 'Chilly bird'),
+        ('img/profile_pictures/pp1.jpg', 'Friendly bear'),
+        ('img/profile_pictures/pp2.jpg', 'Thoughtful cat'),
+        ('img/profile_pictures/pp3.jpg', 'Hungry panda'),
+        ('img/profile_pictures/pp4.jpg', 'Cute Hamster'),
+        ('img/profile_pictures/pp5.jpg', 'Tall giraffe'),
+        ('img/profile_pictures/pp6.jpg', 'Chilly bird'),
     ]
-    default_profile_image = models.CharField(max_length=50, choices=DEFAULT_PROFILE_IMAGE_CHOICES, blank=True, null=True)
+    default_profile_image = models.CharField(max_length=255, choices=DEFAULT_PROFILE_IMAGE_CHOICES, blank=True, null=True)
 
     def __str__(self) -> str:
         return f'username: {self.user.username}'

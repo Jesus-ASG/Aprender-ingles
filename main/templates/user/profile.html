@@ -22,7 +22,7 @@
         <div class="progress-level" id="progress_level">
           <div class="profile-picture my-3">
             {% if profile.default_profile_image %}
-            <img src="{{ profile.default_profile_image }}" alt="Not found">
+            <img src="{% static profile.default_profile_image %}" alt="Not found">
             {% else %}
             <img src="{% static 'img/profile_pictures/pp3.jpg' %}" alt="Not found">
             {% endif %}
@@ -68,7 +68,7 @@
                               id="{{ default_image_form.default_profile_image.id_for_label }}_{{ value }}">
                             {% endif %}
                             <label for="{{ default_image_form.default_profile_image.id_for_label }}_{{ value }}">
-                              <img src="{{ value }}" alt="{{ label }}">
+                              <img src="{% static value %}" alt="{{ label }}">
                             </label>
                           </div>
 

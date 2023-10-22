@@ -19,9 +19,11 @@ jesus@mail.com
 123
 
 pip libraries
-django, django rest framework, pymysql, pillow, django-cleanup, pymemcache
+django, djangorestframework, gunicorn, wheel
+pymysql, pillow, django-cleanup, pymemcache
 Recommenders: pandas numpy scikit-learn
-Real time: channels_redis #python3 -m pip install channels_redis
+Real time: channels_redis #python3 -m pip install channels_redis, daphne
+
 start memcached:
 -m: memory in megabytes
 -p: port

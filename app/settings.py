@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
 
+#import mimetypes
+#mimetypes.add_type("text/css", ".css", True)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -12,7 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-e0e+1u8g7v-wga7@89@y#fv=(v9@4otn6db1x(n^!shz(w7#bx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1']
 
@@ -84,7 +87,7 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sq_db',
+        'NAME': 'sq_test',
         'USER': 'root',
         'PASSWORD': 'SQDBP4ssword.',
         'HOST': '127.0.0.1',
@@ -134,13 +137,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = '/home/ubuntu/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
-#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles/")
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static/'),
+]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, '')
-MEDIA_URL = '/home/ubuntu/media/'
+MEDIA_URL = '/media/'
 IMAGES_PATH = 'uploads/images/'
 AUDIOS_PATH = 'uploads/audios/%Y/%m/%d/'
 
