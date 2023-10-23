@@ -15,9 +15,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-e0e+1u8g7v-wga7@89@y#fv=(v9@4otn6db1x(n^!shz(w7#bx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['3.130.185.169', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -49,14 +49,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'app.urls'
 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
-)
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['static'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,7 +83,7 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sq_test',
+        'NAME': 'story_quest_db',
         'USER': 'root',
         'PASSWORD': 'SQDBP4ssword.',
         'HOST': '127.0.0.1',
@@ -140,11 +136,8 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles/")
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static/'),
-]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, '')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 IMAGES_PATH = 'uploads/images/'
 AUDIOS_PATH = 'uploads/audios/%Y/%m/%d/'
