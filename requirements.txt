@@ -11,3 +11,4 @@ numpy
 scikit-learn
 channels_redis
 daphne
+python-dotenv

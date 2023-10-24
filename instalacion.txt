@@ -44,3 +44,6 @@ resources/
   bootstrap 5
   font awesome 6
   jquery
+
+generar secret key con el comando
+python3 manage.py shell -c 'from django.core.management import utils; print(utils.get_random_secret_key())'
