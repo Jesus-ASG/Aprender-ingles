@@ -100,3 +100,7 @@ input::-ms-clear {
 .text-footer a:hover {
 	color: var(--f-orange-active);
 }
+
+.invalid-feedback ul {
+	list-style: none;
+}

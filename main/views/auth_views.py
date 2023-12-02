@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.urls import reverse_lazy
 
@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic.edit import FormView
+from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponseRedirect, HttpResponseNotFound
@@ -39,6 +40,11 @@ class Login(FormView):
             return super(Login, self).form_valid(form)
 
 
+    def form_invalid(self, form):
+        messages.error(self.request, 'Nombre de usuario o contraseña incorrectos.')
+        return super(Login, self).form_invalid(form)
+
+
 class Logout(APIView):
     def get(self, request, format=None):
         # if a token auth exists, leave session and delete token
@@ -53,9 +59,14 @@ class Logout(APIView):
 
 
 def register(request):
+    if request.method == 'GET':
+        form = NewUserForm()
+        return render(request, 'no-logged/register.html', {'register_form': form})
+
     if request.method == 'POST':
         form = NewUserForm(request.POST)
         if form.is_valid():
+            print('Form for register is valid')
             user = form.save()
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
@@ -63,18 +74,20 @@ def register(request):
             token, _ = Token.objects.get_or_create(user=user_auth)
             if token:
                 login(request, user)
-
-                # auth = authenticate(form.cleaned_data['username'], form.cleaned_data['password'])
-                # token, _ = Token.objects.get_or_create(user=auth)
-                # if token:
-                #    login(request, user)
-
-                # return redirect("index")
-                # 1 = state
-                # render(request, 'urls/register.html', {'state': '1'})
                 return HttpResponseRedirect(reverse_lazy('index'))
 
-    form = NewUserForm()
-    return render(request, 'no-logged/register.html', {'register_form': form})
+        else:
+            errors = {}
+
+            if 'username' in form.errors:
+                # Username already exists
+                errors['username'] = 'El nombre de usuario ya está registrado. Por favor, elige otro.'
+            if 'password2' in form.errors:
+                # Password does not meet requirements
+                errors['password'] = form.errors['password2']
+
+
+        #form = NewUserForm()
+        return render(request, 'no-logged/register.html', {'register_form': form, 'errors': errors})
 
     

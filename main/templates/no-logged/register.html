@@ -19,23 +19,35 @@
 
 			<div class="form-element">
 				<label for="username">Nombre de usuario</label>
-				<input id="username" name="username" type="text" class="form-control input-text" style=""
-					placeholder="Nombre de usuario" required>
+				<input id="username" name="username" type="text"
+					class="form-control input-text {% if errors and errors.username %} is-invalid {% endif %}" style=""
+					value="{{ register_form.username.value |default:'' }}" placeholder="Nombre de usuario" required>
+				{% if errors and errors.username %}
+				<div class="px-3 invalid-feedback">
+					{{ errors.username }}
+				</div>
+				{% endif %}
 			</div>
 
 			<div class="form-element">
 				<label for="email">Correo electrónico</label>
 				<input id="email" name="email" type="email" class="form-control input-text" style=""
-					placeholder="correo@email.com" required>
+					value="{{ register_form.email.value |default:'' }}" placeholder="correo@email.com" required>
 			</div>
 
 			<div class="form-element">
 				<label for="password1" class="mb-1">Contraseña</label>
-				<div class="form-control password-input">
-					<input id="password1" name="password1" class="password" type="password" placeholder="Contraseña" required>
+				<div class="form-control password-input {% if errors.password %} is-invalid {% endif %}">
+					<input id="password1" name="password1" class="password" type="password" placeholder="Contraseña"
+						value="{{ register_form.password1.value |default:'' }}" required>
 					<span id="toggle_password_visibility" class="toggle_password_visibility" title="Mostrar contraseña"><i
 							class="fa fa-eye"></i></span>
 				</div>
+				{% if errors and errors.password %}
+				<div class="px-3 invalid-feedback">
+					{{ errors.password }}
+				</div>
+				{% endif %}
 			</div>
 
 			<div class="form-element">
@@ -46,6 +58,14 @@
 					<span id="toggle_password_visibility" class="toggle_password_visibility" title="Mostrar contraseña"><i
 							class="fa fa-eye"></i></span>
 				</div>
+			</div>
+
+			<div class="form-element">
+				{% for message in messages %}
+				<div class="alert alert-danger">
+					{{ message }}
+				</div>
+				{% endfor %}
 			</div>
 
 			<div class="form-element">

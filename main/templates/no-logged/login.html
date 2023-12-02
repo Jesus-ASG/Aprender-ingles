@@ -20,7 +20,7 @@
 			<div class="form-element">
 				<label for="username">Nombre de usuario</label>
 				<input id="username" name="username" type="text" class="form-control input-text" style=""
-					placeholder="Nombre de usuario" required>
+					value="{{ form.username.value |default:'' }}" placeholder="Nombre de usuario" required>
 			</div>
 
 			<div class="form-element">
@@ -29,6 +29,14 @@
 					<input id="password" name="password" type="password" placeholder="Contraseña" required>
 					<span id="toggle_password_visibility" title="Mostrar contraseña"><i class="fa fa-eye"></i></span>
 				</div>
+			</div>
+
+			<div class="form-element">
+				{% for message in messages %}
+				<div class="alert alert-danger" style="border-radius: 20px;">
+					{{ message }}
+				</div>
+				{% endfor %}
 			</div>
 
 			<div class="form-element">
