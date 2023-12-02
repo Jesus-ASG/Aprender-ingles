@@ -47,10 +47,10 @@ class Login(FormView):
 
 class Logout(APIView):
     def get(self, request, format=None):
-        # if a token auth exists, leave session and delete token
+        # if a token auth exists, close session
         try:
             if request.user.auth_token is not None:
-                request.user.auth_token.delete()
+                #request.user.auth_token.delete()
                 logout(request)
                 return HttpResponseRedirect(reverse_lazy('index'))
         except AttributeError:
